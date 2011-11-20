@@ -1,0 +1,85 @@
+<%!
+
+	import sys,os 
+	sys.path.append(os.path.abspath(os.path.join( os.path.dirname(os.path.abspath("./")), "../../lib" )) )
+	import powlib
+	
+%>
+
+<%def name="generate_actions()">
+    actlist = ["list", "edit", "create", "show"]
+</%def>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<link rel="stylesheet" type="text/css" href="/static/css/global.css" />
+	<title>${powdict["POW_APP_NAME"]}</title>
+	
+</head>
+
+<body>
+<div id="masthead">
+
+	<h1><a href="#">${powdict["POW_APP_NAME"]}</a></h1>
+	
+	<div id="mastheadBox">
+		<h2>Welcome to Python On Wheels</h2>
+		<p>The small, quick and easy to use rapid web appliction generator framework, based on python. <a href="/app/welcome">Read more...</a></p>
+	</div>
+	
+</div>
+
+<ul id="breadCrumbs">
+	<li><a href="http://www.pythononwheels.org:8080">Home</a></li>
+	<li><a href="https://groups.google.com/group/pythononwheels">PoW google.group</a></li>
+	%for elem in model.pbo.getMetaData().sorted_tables:
+		<li><a href="../${powlib.singularize(elem.name)}/list">${elem.name} list</a></li>
+	%endfor
+	<li>
+	%if powdict["SESSION"]["user.id"] != 0:
+		<a href="../user/logout">logout</a>
+	%else:
+		<a href="../user/login">login</a>
+	%endif
+	</li>
+	<li>
+	<a href="../app/welcome">PoW welcome</a>
+	</li>
+</ul>
+
+<!-- Begin Main Column -->
+
+<div id="mainContent">
+	
+	<!--h2>Python On Wheels</h2-->
+	
+	<p>The POW Principle</p>
+	
+	<blockquote><p>Python on wheels is the plain, simple, quick and easy to use web generator framework. 
+	If you want start to develop your application instead of spending weeks to learn the framework, you are in the right place.
+	PoW feels right if you do not reconize that you use it.</p></blockquote>
+
+<center><font color="#FF0000" size="4">	${powdict["FLASHTEXT"]}</font></center>	
+	##
+	## Render content
+	##
+	<!-- hand over to complex_layout_sidebox -->
+	${next.body()}
+
+<!-- Begin Footer -->
+
+<ul id="footer">
+	<li>PoW &copy; 2011 by <a href="mailto: khz@pythononwheels.org">khz@pythononwheels.org</a></li>
+	<li><a href="mailto:khz@tzi.org">PoW Contact</a></li>
+	<li><a href="http://www.opensource.org/licenses/mit-license.php">PoW Licence</a></li>
+	<br>
+	<li>This <a href="http://www.gorotron.com">free CSS template</a> based on <a href="http://www.drfunnel.com">Beer Bongs</a>! by <a href="http://www.gorotron.com">gorotron</a>.</li>
+	<li>counter:  ${str(powdict["SESSION"]["counter"])}
+</ul>
+
+</body>
+</html>

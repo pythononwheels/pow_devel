@@ -1,0 +1,19 @@
+<h2>Edit ${model.__table__} Form:</h2>
+
+  <fieldset>
+  <form action="./update" method="post">
+    %for colname in model.getColumns():
+	<p>
+	%if colname != "id" and colname != "created" and colname != "last_updated":
+		<label for="${colname}">${colname}:</label>
+		<input type="text" name="${colname}" value="${model.get(colname)}"/>
+	%else:
+		<input type="hidden" name="${colname}" value="${model.get(colname)}"/>
+	%endif
+	</p>
+    %endfor
+    <p>
+      <input type="submit" id="submit" value="Submit" />
+    </p>
+  </form>
+  </fieldset>

@@ -1,0 +1,78 @@
+#nav {
+	background:#F90 url(../images/nav_bg.gif) bottom repeat-x;
+	height:3.1em;
+	border-right:0.1em solid #ff7800;
+}
+
+#nav li a {
+	text-decoration:none;
+	display:block;
+	float:left;
+	background:#F90 url(../images/nav_bg.gif) bottom repeat-x;
+	line-height:1.6em;
+	color:#FFF;
+	font-weight:bold;
+	padding:0.5em 2em;
+	border-right:0.1em solid #F90;
+}
+
+#nav li a:hover {
+	background:#F90 url(../images/nav_bg_over.gif) bottom repeat-x;
+}
+
+#nav li {
+	float:left;
+	font-size:1.2em;
+	border-right:0.1em solid #ff7800;
+	position:relative;
+}
+
+/* dropdown */
+
+#nav li li {
+	padding:0;
+	margin:0;
+	height:2.5em;
+	line-height:2.5em;
+	float:none;
+	font-size: 0.9em;
+	border:0;
+	text-indent:0.2em;
+	display:inline;
+}
+
+#nav li li a {
+	color:#CCC;
+	display:block;
+	text-align:left;
+	width:15em;
+	border:0;
+	* font-size:0.9em;
+	* width:17.2em;
+	background:transparent;
+	float:none;
+}
+
+#nav li ul {
+	position:absolute;
+	margin-top:2.6em;
+	left:-999em;
+	background:#242424;
+}
+
+#nav li ul li a:hover { 
+	color:#FFF; 
+	background:#F90 url(../images/nav_bg.gif) bottom repeat-x;
+}
+
+#nav li:hover ul, #nav li:hover ul, #nav li.sfhover ul {
+	position:absolute;
+	left:-999em;
+}
+
+#nav li:hover ul, #nav li.sfhover ul {
+	left:0;
+	width:17.1em;
+	padding:0;
+	z-index:1000;
+}
