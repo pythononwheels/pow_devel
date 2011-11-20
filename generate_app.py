@@ -77,6 +77,7 @@ def gen_app(appname, appdir, force=False):
     powlib.check_create_dir(appbase + "/models/basemodels/pow")
     powlib.check_create_dir(appbase + "/models/powmodels")
     powlib.check_create_dir(appbase + "/public/media")
+    powlib.check_create_dir(appbase + "/public/media/images")
     powlib.check_create_dir(appbase + "/public/scripts")
     powlib.check_create_dir(appbase + "/public/stylesheets")
     powlib.check_create_dir(appbase + "/views/layouts")
@@ -90,6 +91,7 @@ def gen_app(appname, appdir, force=False):
 						("stubs", "stubs"),
 						("stubs/public/stylesheets", "public/stylesheets"),
 						("stubs/public/media","/public/media"),
+						("stubs/public/media/images","/public/media/images"),
 						("stubs/public/scripts", "public/scripts"),
 						("stubs/lib", "lib"), 
 						("stubs/controllers", "controllers"),

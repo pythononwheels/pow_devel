@@ -9,4 +9,210 @@
 ## inherits the app_layout.tmpl
 ## is there rendered as self.body()
 ##
-<%inherit file="/default_welcome.tmpl"/>
+##<%inherit file="/default_welcome.tmpl"/>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link rel="stylesheet" type="text/css" media="print" href="print.css" />
+<title>Welcome to Python On Wheels &amp; Welcome aboard ;)</title>
+<style type="text/css">
+html {
+	overflow-Y: scroll;
+}
+body {
+	font: 10px normal Arial, Helvetica, sans-serif;
+	margin: 0;
+	padding: 0;
+	line-height: 1.7em;
+}
+*, * focus {
+	outline: none;
+	margin: 0;
+	padding: 0;
+}
+
+.container {
+	width: 500px;
+	margin: 0 auto;
+}
+h1 {
+	font: 4em normal Georgia, 'Times New Roman', Times, serif;
+	text-align:center;
+	padding: 20px 0;
+	color: #666;
+}
+h1 span { color: #ff9900; }
+h1 small{
+	font: 0.3em normal Verdana, Arial, Helvetica, sans-serif;
+	text-transform:uppercase;
+	letter-spacing: 1.5em;
+	display: block;
+	color: #aaa;
+}
+h2.trigger {
+	padding: 0 0 0 50px;
+	margin: 0 0 5px 0;
+	background: url(/static/media/h2_trigger_a.gif) no-repeat;
+	height: 46px;
+	line-height: 46px;
+	width: 450px;
+	font-size: 2em;
+	font-weight: normal;
+	float: left;
+}
+h2.trigger a {
+	color: #fff;
+	text-decoration: none;
+	display: block;
+}
+h2.trigger a p{
+	color: #ff9900;
+	text-decoration: none;
+	display: block;
+}
+
+h2.trigger a:hover {
+	color: #ccc;
+}
+h2.active {background-position: left bottom;}
+.toggle_container {
+	margin: 0 0 5px;
+	padding: 0;
+	border-top: 1px solid #d6d6d6;
+	background: #f0f0f0 url(/static/media/toggle_block_stretch.gif) repeat-y left top;
+	overflow: hidden;
+	font-size: 1.2em;
+	width: 500px;
+	clear: both;
+}
+.toggle_container .block {
+	padding: 20px;
+	background: url(/static/media/toggle_block_btm.gif) no-repeat left bottom;
+}
+.toggle_container .block p {
+	padding: 5px 0;
+	margin: 5px 0;
+}
+.toggle_container h3 {
+	font: 2.5em normal Georgia, "Times New Roman", Times, serif;
+	margin: 0 0 10px;
+	padding: 0 0 5px 0;
+	border-bottom: 1px dashed #ccc;
+}
+.toggle_container img {
+	float: left;
+	margin: 10px 15px 15px 0;
+	padding: 5px;
+	background: #ddd;
+	border: 1px solid #ccc;
+}
+</style>
+<!--script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script-->
+<script type="text/javascript" src="/static/scripts/jquery-1.6.1.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	
+	$(".toggle_container").hide();
+
+	$("h2.trigger").click(function(){
+		$(this).toggleClass("active").next().slideToggle("slow");
+	});
+
+});
+</script>
+</head>
+
+<body>
+
+<h1>Welcome to<span> Python On Wheels</span><small> and welcome aboard ;)</small></h1>
+
+<div class="container">
+
+	<h2 class="trigger"><a href="#"><p>Want to start?</p></a></h2>
+	<div class="toggle_container">
+		<div class="block">
+
+			<h3>Start it!</h3>
+			<ul>
+			<li>
+				<p><b>1st: generate the models</b> for your application using: <br> <code>python generate_model.py -m <i>modelname</i></code>
+				You have to specify at least the model name. Run it with ---help paramter to see all options. 
+				</p>
+			</li>
+			<li>
+				<p><b>2nd Generate Controllers</b> for the models using: <br><code>python generate_controller.py -m </code><i>modelname</i>
+				You have to specify at least the model name. Run it with ---help paramter to see all options.
+				</p>
+			</li>
+			<li>
+				<p><b>3rd: Create the Model Tables</b> in your Database using: <br><code>python do_migrate.py -d up</code>.<br>
+				Run it with ---help paramter to see all options. 
+				</p>
+			</li>
+			<li>
+				<p><b>4th: Create the Views</b> running: <br><code>python generate_scaffold.py -m <i>modelname</i></code>.<br>
+				It creates all the relevant views for you. Run it with ---help paramter to see all options.
+				</p>
+			</li>
+			<li>
+				<p><b>finally: Run <code>python simple_server.py</code></b>, start a browser and go to http://localhost:8080/appname <br>
+				(or config and start your web server). <br>
+				<h3>enjoy and have fun!</h3>
+				</p>
+			</li>
+			</ul>
+		</div>
+	</div>
+	
+	<h2 class="trigger"><a href="#">Want a session and authentication?</a></h2>
+
+	<div class="toggle_container">
+		<div class="block">
+			<h3>Have it!</h3>
+			
+			<ul>
+				<li>
+					<p>Python On Wheels automatically adds session support to your app. <br>
+					It is always available through the <code>powdict["SESSION"]</code> variable.<br>
+					You can call it in any controller (and pass it from there to models).
+					</p>
+				</li>
+				<li>
+					<p>Python On Wheels has an integrated support for basic authentication. Just call:<br>
+					<code>python generate_authentication.py</code> and PoW will setup a basic auth system for you.
+					This is purely standard by creating a user model, table and controller which is absolutely PoW standard and
+					which you can adapt to your needs. <br>
+					Check out <code>controller/BaseController.py (Methods: login, do_login), views/User_login.tmpl</code><br>
+					</p>
+				</li>
+			</ul>
+			
+		</div>
+
+	</div>
+	
+	<h2 class="trigger"><a href="#">Want to be Heard?</a></h2>
+	<div class="toggle_container">
+		<div class="block">
+			<h3>Say it!</h3>
+			<p>Check out our google group <a href="https://groups.google.com/group/pythononwheels">PoW google.group</a>
+		</div>
+	</div>
+	
+	<h2 class="trigger"><a href="#">Want it?</a></h2>
+	<div class="toggle_container">
+		<div class="block">
+			<h3>Get it!</h3>
+
+			<!-- img src="/static/media/pow_logo_small.gif" alt="" /-->
+			<p>get all the news, docs, sources and files on: <a href="http://code.google.com/p/pythononwheels/">our google code page</a></p>
+		</div>
+	</div>
+	<p style="text-align: center; font-size: 1.1em;">This great css/jQuery toggle was created by <strong>Soh Tanaka</strong> Check out his <a href="http://www.sohtanaka.com/web-design-blog/">Web Design Blog</a></p>
+
+</div>
+	
+</body>
+</html>

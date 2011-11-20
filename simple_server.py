@@ -27,13 +27,19 @@ def powapp(environ, start_response):
 	# (Same as for apache the declarations in the httpd.conf file
 	#
 	
+	# redirect static media from the meta link static to the real source dir
+	# advantage is: you can alway refer safely to /static/<something> inside your css o .tmpl
+	# files and the real source can be anywhere. sometimes the real static source differs from
+	# prod-webserver A to prod-webserver B. with this litte tirck you can leave your links unchanged.
+	# for apache the redirection is done in http.conf
 	alias_dict ={	
 		"/static/css/" :	"./public/stylesheets/",
 		"/static/media/":	"./public/media/",
 		"/static/scripts/" : "./public/scripts/"
 		}
-	environ["SCRIPT_FILENAME"] =__file__
+	environ["SCRIPT_FILENAME"] = __file__
 	powdict["POW_APP_NAME"] = "PythonOnWheels"
+	powdict["POW_APP_URL"] = "www.pythononwheels.org"
 	powdict["POW_APP_DIR"] = environ.get("pow.wsgi_dir")
 		
 	

@@ -28,7 +28,7 @@ class BaseController(PowObject.PowObject):
 	current_action = "list"
 	moddir="/../views/mako_modules"
 	mylookup = None
-	login_required = []
+	
 	
 	def __init__(self):
 		# example how to instanciate the model:
@@ -38,6 +38,11 @@ class BaseController(PowObject.PowObject):
 					] )
 		self.model = powlib.load_class(self.modelname, self.modelname)
 		self.session = self.model.pao.getSession()
+		# put the actions that require a login into login_required list.
+		self.login_required = []
+		# put the actions you implemented but do not want to be callable via web request 
+		# into the locked_actions list
+		self.locked_actions = []
 		
 		
 	def index(self):
@@ -47,15 +52,16 @@ class BaseController(PowObject.PowObject):
 		powdict = kwargs["powdict"]
 		kwargs["powdict"] = powdict
 		kwargs["template"] = powlib.readconfig("pow.cfg","global","DEFAULT_TEMPLATE", powdict["POW_APP_DIR"])
-		if self.access_granted(**kwargs) == True:
-			fname = os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)),"../views/") + self.modelname + "_" + self.current_action +".tmpl")
-			mytemplate = Template(filename=fname, lookup=self.mylookup)
-			return mytemplate.render(**kwargs)
-		else:
-			self.setCurrentAction("login")
-			fname = os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)),"../views/") + self.modelname + "_" + self.current_action +".tmpl")
-			mytemplate = Template(filename=fname, lookup=self.mylookup)
-			return mytemplate.render(**kwargs)
+		if self.current_action not in self.locked_actions:
+			if self.access_granted(**kwargs) == True:
+				fname = os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)),"../views/") + self.modelname + "_" + self.current_action +".tmpl")
+				mytemplate = Template(filename=fname, lookup=self.mylookup)
+				return mytemplate.render(**kwargs)
+			else:
+				self.setCurrentAction("login")
+				fname = os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)),"../views/") + self.modelname + "_" + self.current_action +".tmpl")
+				mytemplate = Template(filename=fname, lookup=self.mylookup)
+				return mytemplate.render(**kwargs)
 	
 	def redirect(self, action, **kwargs):
 		self.setCurrentAction(action)
