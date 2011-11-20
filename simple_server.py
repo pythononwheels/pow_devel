@@ -141,6 +141,7 @@ def powapp(environ, start_response):
 	#
 	# get controller and action
 	#
+	print "environ[\"PATH_INFO\"] = ", environ["PATH_INFO"]
 	pathdict = get_controller_and_action(environ["PATH_INFO"])
 	#(controller,action) = os.path.split(pathinfo)
 	print "(controller,action) -> ", pathdict
@@ -149,10 +150,10 @@ def powapp(environ, start_response):
 	powdict["PATHDICT"]=pathdict
 	
 	#TO_DO: include the real, mod re based routing instead of seting it hard to user/list here.
-	if controller == '':
+	if controller == "":
 	    defroute = powlib.readconfig("pow.cfg","routes","default")
-		
-        pathdict = get_controller_and_action(environ["PATH_INFO"])
+        #print get_controller_and_action(defroute)
+        pathdict = get_controller_and_action(defroute)
     	#(controller,action) = os.path.split(pathinfo)
     	print "(controller,action) -> ", pathdict
     	controller = powdict["CONTROLLER"] = pathdict["controller"]
