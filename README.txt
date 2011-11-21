@@ -6,10 +6,9 @@
 Announcement:
 ---------------------------------------------
 I'm very happy to announce the  first public release of pyhton on wheels, or short: pow. A plain and easy to use web generator framework for python.
-The release version is 0.3 (alpha).
 
-You might say: oh, no! What the world needs is more lawyers and another web app framework for python, but let me quickly explain 
-why I think there is room for python on wheels.
+You might say: "oh, no! What the world needs is more lawyers and another web app framework for python!", 
+but let me quickly explain why I think there is room for python on wheels.
 
 
 The pow principle:
@@ -74,19 +73,20 @@ Have a look and give it a try:
   * get an impression: a-weblog-in-8-minutes-with-pow
   * homepage: www.pythononwheels.org
 
-  Although it is an alpha release, it is fully usable. For example the www.pythononwheels.org page is hosted on pow.
-  I really appreciate all of your feedback on pow. 
+  Although it is an early release, it is fully usable. For example the www.pythononwheels.org page is hosted on pow.
+  we really appreciate all of your feedback on pow. 
 
 
 Thanks:
 ---------------------------------------------
-  With respect to rails which started it all off, we are 'only' on 'wheels but it feels like having wings ;) 
-  Just try it yourself.
+  * to rails which started it all off, 
+    we are 'only' on 'wheels but it feels like having wings ;) 
+    Just try it yourself.
 
-  Also to all developers of the tools and frameworks pow is based on. Really amazing work.
+  * to all developers of the tools and frameworks pow is based on. Really amazing work.
 
-  To the snake ;)
+  * To the snake ;)
 
-  To My family who let me work on it (from 23:00 to 01:00 - so I call pow internally 1121)
+  * To My family who let me work on it (from 23:00 to 01:00 - so I call pow internally 1121)
   
-  To Beckzman who added the flush messages.
+  * To Beckzman no team can be just one man ;)

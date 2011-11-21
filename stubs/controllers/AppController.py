@@ -29,8 +29,8 @@ class AppController(BaseController.BaseController):
 	def __init__(self):
 		self.modelname = "App"
 		BaseController.BaseController.__init__(self)
-		self.login_required = [ ]
-	
+		self.login_required = []
+		self.locked_actions = [ "login", "do_login", "logout"]
 	
 	def welcome( self,powdict ):
 		return self.render(model=self.model, powdict=powdict)

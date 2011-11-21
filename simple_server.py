@@ -41,7 +41,7 @@ def powapp(environ, start_response):
 	powdict["POW_APP_NAME"] = "PythonOnWheels"
 	powdict["POW_APP_URL"] = "www.pythononwheels.org"
 	powdict["POW_APP_DIR"] = environ.get("pow.wsgi_dir")
-		
+	powdict["ERROR_INFO"] = "Undefined ERROR occured or there is no Error specific info available "
 	
 	# Get the session object from the environ
 	session = environ['beaker.session']
@@ -148,20 +148,21 @@ def powapp(environ, start_response):
 	controller = powdict["CONTROLLER"] = pathdict["controller"]
 	action = powdict["ACTION"] = pathdict["action"]
 	powdict["PATHDICT"]=pathdict
-	
+
 	#TO_DO: include the real, mod re based routing instead of seting it hard to user/list here.
 	if controller == "":
-	    defroute = powlib.readconfig("pow.cfg","routes","default")
-        #print get_controller_and_action(defroute)
-        pathdict = get_controller_and_action(defroute)
-    	#(controller,action) = os.path.split(pathinfo)
-    	print "(controller,action) -> ", pathdict
-    	controller = powdict["CONTROLLER"] = pathdict["controller"]
-    	action = powdict["ACTION"] = pathdict["action"]
-    	powdict["PATHDICT"]=pathdict
-    	
-    	print "Using the DEFAULT_ROUTE: ",
-    	print "(controller,action) -> ", pathdict
+		defroute = powlib.readconfig("pow.cfg","routes","default")
+		#print get_controller_and_action(defroute)
+		pathdict = get_controller_and_action(defroute)
+		#(controller,action) = os.path.split(pathinfo)
+		print "(controller,action) -> ", pathdict
+		controller = powdict["CONTROLLER"] = pathdict["controller"]
+		action = powdict["ACTION"] = pathdict["action"]
+		powdict["PATHDICT"]=pathdict
+
+		print "Using the DEFAULT_ROUTE: ",
+		print "(controller,action) -> ", pathdict
+	
 	# get rid of the first / in front of the controller. string[1:] returns the string from char1 to len(string)
 	controller = string.capitalize(controller) + "Controller"
 	
