@@ -64,7 +64,7 @@ class BaseController(PowObject.PowObject):
 				return mytemplate.render(**kwargs)
 		else:
 			kwargs["ERROR_INFO"] = "The action you have called (", self.current_action, "is locked from outside access."
-			self.error(**kwargs)
+			return self.error(**kwargs)
 			
 	
 	def redirect(self, action, **kwargs):
@@ -94,7 +94,6 @@ class BaseController(PowObject.PowObject):
 		fname = os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)),"../views/error.tmpl"))
 		mytemplate = Template(filename=fname, lookup=self.mylookup)
 		return mytemplate.render(**kwargs)
-		self.render
 		
 		
 	def setCurrentAction(self, action ):
