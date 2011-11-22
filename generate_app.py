@@ -26,12 +26,11 @@ pow_tab= powlib.tab
 def main():
     parser = OptionParser()
     mode= MODE_CREATE
-    parser.add_option("-n", "--name",  action="store", type="string", dest="name", help="set the app name", default ="powapp")
+    parser.add_option("-n", "--name",  action="store", type="string", dest="name", help="set the app name", default ="None")
     parser.add_option("-d", "--directory",  action="store", type="string", dest="directory", help="app base dir", default ="./")
     parser.add_option("-f", "--force",  action="store_true",  dest="force", help="forces overrides of existing app",default="False")
     #parser.add_option("-c", "--comment",  action="store", type="string", dest="comment", help="defines a comment for this migration.", default ="No Comment")
 
-    
 
     (options, args) = parser.parse_args()
     #print options
@@ -78,6 +77,7 @@ def gen_app(appname, appdir, force=False):
     powlib.check_create_dir(appbase + "/models/powmodels")
     powlib.check_create_dir(appbase + "/public/media")
     powlib.check_create_dir(appbase + "/public/media/images")
+    powlib.check_create_dir(appbase + "/public/media/documents")
     powlib.check_create_dir(appbase + "/public/scripts")
     powlib.check_create_dir(appbase + "/public/stylesheets")
     powlib.check_create_dir(appbase + "/views/layouts")
@@ -103,17 +103,18 @@ def gen_app(appname, appdir, force=False):
     for source_dir, dest_dir in deep_copy_list:
         for source_file in os.listdir(source_dir):
             #print "ext:", os.path.splitext(source_file)
-            if os.path.splitext(source_file)[1] in exclude_patterns:
+            #print "source:", os.path.abspath(source_file), " is file:", os.path.isfile(os.path.abspath(source_file))
+            if not source_file in exclude_patterns:
+                #print " copying src:", os.path.join(source_dir,source_file)
+                #print "   -> to dest:", os.path.join(appbase,source_file)
+                powlib.check_copy_file(
+                    os.path.join(source_dir,source_file),
+                    os.path.join(appbase+"/"+dest_dir,source_file)
+                )
+            else:
                 print " excluded: \t", source_file
                 continue
-            if os.path.isdir(source_file):
-                continue
-            #print " copying src:", os.path.join(source_dir,source_file)
-            #print "   -> to dest:", os.path.join(appbase,source_file)
-            powlib.check_copy_file(
-                os.path.join(source_dir,source_file),
-                os.path.join(appbase+"/"+dest_dir,source_file)
-                )
+                
     #print "...done"
 
     #
@@ -126,8 +127,8 @@ def gen_app(appname, appdir, force=False):
     powlib.check_copy_file("generate_migration.py", appbase)
     powlib.check_copy_file("generate_scaffold.py", appbase)
     powlib.check_copy_file("simple_server.py", appbase)
-    powlib.check_copy_file("Licence.txt", appbase)
-    powlib.check_copy_file("README.txt", appbase)
+    powlib.check_copy_file("Licence.txt", "public/media/documents")
+    powlib.check_copy_file("README.txt", "public/media/documents")
 
     #
     # copy the initial db's

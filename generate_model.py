@@ -26,17 +26,17 @@ pow_tab= powlib.tab
 def main():
 	parser = OptionParser()
 	mode= MODE_CREATE
-	parser.add_option("-m", "--model-name",  action="store", type="string", dest="name", help="creates model named model-name", default ="None")
+	parser.add_option("-n", "--name",  action="store", type="string", dest="name", help="creates model named model-name", default ="None")
 	parser.add_option("-a", "--attributes",  action="store", type="string", dest="actions", help="defines the attributes included in the model.", default ="None")
 	parser.add_option("-f", "--force",  action="store_true",  dest="force", help="forces overrides of existing files",default="False")
 	parser.add_option("-c", "--comment",  action="store", type="string", dest="comment", help="defines a comment for this migration.", default ="No Comment")
-	parser.add_option("-n", "--no-migration",  action="store_true",  dest="nomig", help="supress creation of the related migration for this model",default="False")	
+	#parser.add_option("-n", "--no-migration",  action="store_true",  dest="nomig", help="supress creation of the related migration for this model",default="False")	
 	
 	
 	(options, args) = parser.parse_args()
 	#print options
 	if options.name == "None":
-		parser.error("You must at least specify a modelname by giving -m <name>.")
+		parser.error("You must at least specify a modelname by giving -n <name>.")
 	else:
 		model_dir = os.path.normpath("./models/")
 		modelname = options.name
@@ -44,7 +44,7 @@ def main():
 		end = None
 		start = datetime.datetime.now()
 		
-		render_model(modelname, options.force, options.comment, nomig=options.nomig)
+		render_model(modelname, options.force, options.comment)
 		
 		end = datetime.datetime.now()
 		duration = None
@@ -53,11 +53,10 @@ def main():
 
 
 	
-def render_model(modelname, force, comment, properties=None, nomig=False):
+def render_model(modelname, force, comment, properties=None):
 	
 	print "generate_model: " + modelname
-	print "nomig:", nomig
-	print "force: ", force
+	#print "force: ", force
 	infile = None
 	infile = open (os.path.normpath("./stubs/can_be_edited.txt"), "r")
 	ostr = infile.read()
@@ -150,15 +149,6 @@ def render_model(modelname, force, comment, properties=None, nomig=False):
 		# copy the BaseClass
 		powlib.check_copy_file(os.path.normpath( "./stubs/App.py"), os.path.normpath( "./models/powmodels/"))
 		
-	#
-	# generating the appropriate migration if neccessary
-	#
-	if nomig != True:
-		# to-do: can be optimized, since it is possible that a user deletes a model. file_exists will be
-		# False and a migration will be generated - which is wrong
-		generate_migration.render_db_migration(modelname,modelname, comment)
-	else:
-		print "no migration created"
 
 def reset_model(modelname):
 	return render_model(modelname, True, "", properties=None, nomig=True)

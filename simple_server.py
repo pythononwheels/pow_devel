@@ -35,7 +35,8 @@ def powapp(environ, start_response):
 	alias_dict ={	
 		"/static/css/" :	"./public/stylesheets/",
 		"/static/media/":	"./public/media/",
-		"/static/scripts/" : "./public/scripts/"
+		"/static/scripts/" : "./public/scripts/",
+		"/static/documents/" : "./public/media/documents"
 		}
 	environ["SCRIPT_FILENAME"] = __file__
 	powdict["POW_APP_NAME"] = "PythonOnWheels"

@@ -22,12 +22,12 @@ import powlib
 import PowObject
 
 class BaseController(PowObject.PowObject):
-	model = None
-	session = None
-	modelname = "None"
-	current_action = "list"
+	#model = None
+	#session = None
+	#modelname = "None"
+	#current_action = "list"
 	moddir="/../views/mako_modules"
-	mylookup = None
+	#mylookup = None
 	
 	
 	def __init__(self):
@@ -43,6 +43,7 @@ class BaseController(PowObject.PowObject):
 		# put the actions you implemented but do not want to be callable via web request 
 		# into the locked_actions list
 		self.locked_actions = []
+		self.current_action = "NOT_DEFINED"
 		
 		
 	def index(self):
@@ -64,7 +65,7 @@ class BaseController(PowObject.PowObject):
 				return mytemplate.render(**kwargs)
 		else:
 			kwargs["ERROR_INFO"] = "The action you have called (", self.current_action, "is locked from outside access."
-			self.error(**kwargs)
+			return self.error(**kwargs)
 			
 	
 	def redirect(self, action, **kwargs):
@@ -94,7 +95,6 @@ class BaseController(PowObject.PowObject):
 		fname = os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)),"../views/error.tmpl"))
 		mytemplate = Template(filename=fname, lookup=self.mylookup)
 		return mytemplate.render(**kwargs)
-		self.render
 		
 		
 	def setCurrentAction(self, action ):

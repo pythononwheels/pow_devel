@@ -1,11 +1,12 @@
 #
-# Readme.txt for pythononwheels, the The small, quick and easy to use rapid web appliction generator framework, based on python
+# Readme.txt for pythononwheels, 
+# the The small, quick and easy to use rapid web appliction generator framework, based on python
 # by khz, Aug, 2011
 #
 
 Announcement:
 ---------------------------------------------
-I'm very happy to announce the  first public release of pyhton on wheels, or short: pow. A plain and easy to use web generator framework for python.
+We are very happy to announce the  first public release of pyhton on wheels, or short: pow. A plain and easy to use web generator framework for python.
 
 You might say: "oh, no! What the world needs is more lawyers and another web app framework for python!", 
 but let me quickly explain why I think there is room for python on wheels.
