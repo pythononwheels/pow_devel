@@ -127,8 +127,7 @@ def gen_app(appname, appdir, force=False):
     powlib.check_copy_file("generate_migration.py", appbase)
     powlib.check_copy_file("generate_scaffold.py", appbase)
     powlib.check_copy_file("simple_server.py", appbase)
-    powlib.check_copy_file("Licence.txt", "public/media/documents")
-    powlib.check_copy_file("README.txt", "public/media/documents")
+    powlib.check_copy_file("generate_bang.py", appbase)
 
     #
     # copy the initial db's
