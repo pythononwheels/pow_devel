@@ -29,8 +29,8 @@ MODE_REMOVE = 0
 def main():
 	parser = OptionParser()
 	mode= MODE_CREATE
-	parser.add_option("-n", "--name",  action="store", type="string", dest="name", help="creates migration with name = <name>", default ="None")
-	#parser.add_option("-m", "--model",  action="store", type="string", dest="model", help="defines the model for this migration.", default ="None")
+	#parser.add_option("-n", "--name",  action="store", type="string", dest="name", help="creates migration with name = <name>", default ="None")
+	parser.add_option("-m", "--model",  action="store", type="string", dest="model", help="defines the model for this migration.", default ="None")
 	parser.add_option("-f", "--force",  action="store_false",  dest="noforce", help="forces overrides of existing files",default="True")
 	
 	controller_name = "None"
@@ -40,12 +40,12 @@ def main():
 	start = datetime.datetime.now()
 	
 	(options, args) = parser.parse_args()
-	print options
-	if options.name == "None":
-		parser.error("You must at least specify a model name by giving -n <name>.")
+	#print options
+	if options.model == "None":
+		parser.error("You must at least specify a model name by giving -m <modelname>.")
 		return
 	else:
-		controller_name = options.name
+		controller_name = options.model
 	
 	renderController(controller_name, options.noforce)
 	

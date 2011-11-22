@@ -175,6 +175,7 @@ def do_migrate( goalversion, direction):
 	app.currentversion =  currentversion
 	#sess.dirty
 	sess.commit()
+	return
 
 def drop_table(tablename, **kwargs):
 	model = PowTable.PowTable()

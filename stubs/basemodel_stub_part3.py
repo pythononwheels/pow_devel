@@ -77,8 +77,8 @@
 			exec(mstr)
 			self.__dict__[method_name] = types.MethodType(foo,self)
 			
-			cmd_str = "self.__table__." + item + "=property(" + getter + "," + setter + ")"
-			eval(cmd_str)
+			#cmd_str = "self.__table__." + item + "=property(" + getter + "," + setter + ")"
+			#eval(cmd_str)
 			
 	def generate_find_by( self ):
 		pass

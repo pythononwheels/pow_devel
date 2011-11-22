@@ -36,9 +36,12 @@
 <ul id="breadCrumbs">
 	<li><a href="http://www.pythononwheels.org:8080">Home</a></li>
 	<li><a href="https://groups.google.com/group/pythononwheels">PoW google.group</a></li>
-	%for elem in model.pbo.getMetaData().sorted_tables:
-		<li><a href="../${powlib.singularize(elem.name)}/list">${elem.name} list</a></li>
-	%endfor
+	##Model: ${model.name}
+	%if model.pbo != None:
+		%for elem in model.pbo.getMetaData().sorted_tables:
+			<li><a href="../${powlib.singularize(elem.name)}/list">${elem.name} list</a></li>
+		%endfor
+	%endif
 	<li>
 	%if powdict["SESSION"]["user.id"] != 0:
 		<a href="../user/logout">logout</a>
