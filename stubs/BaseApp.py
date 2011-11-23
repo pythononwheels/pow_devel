@@ -24,8 +24,7 @@ Base = declarative_base(bind=x.__engine__, metadata = x.__metadata__)
 Base.metadata.reflect()
 
 class BaseApp(Base):
-    """reflects the app table
-    """
+	"""reflects the app table"""
 	__table__ = Base.metadata.tables['app']
 	pao = x
 	#__mapper_args__ = {}
