@@ -15,7 +15,7 @@ import powlib
 
 if __name__ == "__main__":
 	generate_model.render_model("user", True, "User Model")
-	generate_migration.render_db_migration("user", "user", "User Migration")
+	generate_migration.render_migration("user", "user", "User Migration")
 	do_migrate.do_migrate(-1, "up")
-	generate_controller.renderController("user", True)
+	generate_controller.render_controller("user", True)
 	generate_scaffold.scaffold("user", True)

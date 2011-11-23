@@ -17,19 +17,23 @@ import powlib
 
 
 # setting the right defaults
-MODE_CREATE = 1
-MODE_REMOVE = 0
+#MODE_CREATE = 1
+#MODE_REMOVE = 0
 
-pow_newline = powlib.linesep
-pow_tab= powlib.tab
+#pow_newline = powlib.linesep
+#pow_tab = powlib.tab
 
 def main():
     parser = OptionParser()
-    mode= MODE_CREATE
-    parser.add_option("-n", "--name",  action="store", type="string", dest="name", help="set the app name", default ="None")
-    parser.add_option("-d", "--directory",  action="store", type="string", dest="directory", help="app base dir", default ="./")
-    parser.add_option("-f", "--force",  action="store_true",  dest="force", help="forces overrides of existing app",default="False")
-    #parser.add_option("-c", "--comment",  action="store", type="string", dest="comment", help="defines a comment for this migration.", default ="No Comment")
+    #mode = MODE_CREATE
+    parser.add_option("-n", "--name",  action="store", type="string", dest="name", 
+        help="set the app name", default ="None")
+    parser.add_option("-d", "--directory",  action="store", type="string", dest="directory", 
+        help="app base dir", default ="./")
+    parser.add_option("-f", "--force",  action="store_true",  dest="force", 
+        help="forces overrides of existing app", default="False")
+    #parser.add_option("-c", "--comment",  action="store", type="string", dest="comment", 
+        #help="defines a comment for this migration.", default ="No Comment")
 
 
     (options, args) = parser.parse_args()
@@ -52,7 +56,15 @@ def main():
         duration = end - start
         print " -- generated_app in("+ str(duration) +")"
 
-
+def render_db_config( appname, appbase ):
+    infile = open("./stubs/config/db.cfg")
+    instr = infile.read()
+    infile.close()
+    instr = instr.replace("please_rename_the_db", appname)
+    ofile = open( os.path.normpath(appbase + "/config/db.cfg"), "w" )
+    ofile.write(instr)
+    ofile.close()
+    
 
 def gen_app(appname, appdir, force=False):
 
@@ -100,13 +112,16 @@ def gen_app(appname, appdir, force=False):
 						]
     print " -- copying files ..."
     exclude_patterns = [".pyc", ".pyo", ".DS_STORE"]
+    exclude_files = [ "db.cfg" ]
     for source_dir, dest_dir in deep_copy_list:
         for source_file in os.listdir(source_dir):
             #print "ext:", os.path.splitext(source_file)
             #print "source:", os.path.abspath(source_file), " is file:", os.path.isfile(os.path.abspath(source_file))
-            if not source_file in exclude_patterns:
+            fname, fext = os.path.splitext(source_file)
+            if not fext in exclude_patterns and not source_file in exclude_files:
                 #print " copying src:", os.path.join(source_dir,source_file)
                 #print "   -> to dest:", os.path.join(appbase,source_file)
+                #print "ext:", os.path.splitext(source_file)
                 powlib.check_copy_file(
                     os.path.join(source_dir,source_file),
                     os.path.join(appbase+"/"+dest_dir,source_file)
@@ -134,7 +149,14 @@ def gen_app(appname, appdir, force=False):
     #
     powlib.check_copy_file("stubs/db/empty.db", os.path.normpath(appbase + "/db/" + appname + ".db") )
     powlib.check_copy_file("stubs/db/empty_app.db", os.path.normpath(appbase + "/db/app.db") )
-
+    
+    #
+    # initiate the db.cfg file
+    #
+    render_db_config(appname, appbase)
+    
     return
+    
+    
 if __name__ == "__main__":
     main()

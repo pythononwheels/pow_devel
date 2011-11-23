@@ -47,14 +47,14 @@ def main():
 	else:
 		controller_name = options.model
 	
-	renderController(controller_name, options.noforce)
+	render_controller(controller_name, options.noforce)
 	
 	end = datetime.datetime.now()
 	duration = None
 	duration = end - start 
 	print "generated_model in("+ str(duration) +")"	
 	
-def renderController(name, noforce):
+def render_controller(name, noforce):
 	# 
 	print "creating controller: " + name 
 	

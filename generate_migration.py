@@ -52,7 +52,7 @@ def main():
 	if options.job != "None":
 		render_migration_job(options.job)
 	else:
-		render_db_migration(migration_name, migration_model,options.comment)
+		render_migration(migration_name, migration_model,options.comment)
 	
 	end = datetime.datetime.now()
 	duration = None
@@ -60,7 +60,7 @@ def main():
 	
 	print "generated_migration in("+ str(duration) +")"
 	
-def render_db_migration(name,model, comment):
+def render_migration(name,model, comment):
 	# 
 	
 	#print "generate_migration: " + name + "  for model: " + model

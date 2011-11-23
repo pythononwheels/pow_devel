@@ -73,13 +73,13 @@ def singularize(word):
 	return singleword
 
 def check_for_dir( path ):
-    ret = -1
+    ret = False
     #print "check_for_dir(" + os.path.normpath(path) + ")"
     if os.path.isdir( os.path.normpath(path) ):
-        ret = 1
+        ret = True
         #print "is a dir"
     else:
-        ret = -1
+        ret = False
         #print "is NOT a dir"
     return ret
 
@@ -140,14 +140,17 @@ def check_copy_file( src, dest, force=True, details=False):
 		print " exists ...\t", src_file
 		return ret
     else:
-        try:
-            shutil.copy(src,dest)
-            ret = 1
-            print " copied" + "...\t", src
-        except IOError, (errno, strerror):
-            print " I/O error(%s): %s. File: %s" % (errno, strerror, src)
-            ret = -1
-            return ret
+        if not check_for_dir(src):
+            try:
+                shutil.copy(src,dest)
+                ret = 1
+                print " copied" + "...\t", src
+            except IOError, (errno, strerror):
+                print " I/O error(%s): %s. File: %s" % (errno, strerror, src)
+                ret = -1
+                return ret
+        else:
+            print " skipped...\t", src, " ( it's a directory )"
 
     #print src + " to " + os.path.normpath(dest)
 	#src_path, src_file = os.path.split(src)
