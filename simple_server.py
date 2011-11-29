@@ -8,6 +8,7 @@ import re
 from pprint import pformat
 from beaker.middleware import SessionMiddleware
 from cgi import parse_qs, escape
+
 import traceback, StringIO
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./lib" )))
 import urllib
@@ -195,7 +196,7 @@ session_opts = {
 }
 
 #application= SessionMiddleware(powapp, key='mysession', secret='randomsecret')
-application = SessionMiddleware(powapp, session_opts)
+#application = SessionMiddleware(powapp, session_opts)
 
 def pre_route(path_info):
 	# description:
@@ -314,9 +315,37 @@ def get_controller_and_action(pi):
 	
 	return nicedict
 
+#
+# reference: http://pylonsbook.com/en/1.1/the-web-server-gateway-interface-wsgi.html
+import cgitb
+import sys
+from StringIO import StringIO
 
+class Middleware(object):
+	def __init__(self, app):
+		self.app = app
+
+	def format_exception(self, exc_info):
+		dummy_file = StringIO()
+		hook = cgitb.Hook(file=dummy_file)
+		hook(*exc_info)
+		return [dummy_file.getvalue()]
+
+	def __call__(self, environ, start_response):
+		try:
+			return self.app(environ, start_response)
+		except:
+			exc_info = sys.exc_info()
+			start_response(
+			'500 Internal Server Error,',
+			[('content-type', 'text/html')],
+			exc_info + "PythonOnWheels Team is sorry for the Error ;()"
+			)
+			return self.format_exception(exc_info)
 
 if __name__ == "__main__":
+	application = Middleware(SessionMiddleware(powapp, session_opts))
+	
 	httpd = make_server('', 8080, application)
 	print "Serving HTTP on port 8080..."
 
