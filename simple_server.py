@@ -317,6 +317,7 @@ def get_controller_and_action(pi):
 
 #
 # reference: http://pylonsbook.com/en/1.1/the-web-server-gateway-interface-wsgi.html
+# also see: http://svn.python.org/projects/python/branches/release25-maint/Lib/cgitb.py
 import cgitb
 import sys
 from StringIO import StringIO
@@ -327,6 +328,8 @@ class Middleware(object):
 
 	def format_exception(self, exc_info):
 		dummy_file = StringIO()
+		# see: ViewClass in cgitb.Hook
+		# here: http://wstein.org/home/wstein/www/home/mhansen/moin-1.7.2/src/MoinMoin/support/cgitb.py
 		hook = cgitb.Hook(file=dummy_file)
 		hook(*exc_info)
 		return [dummy_file.getvalue()]
