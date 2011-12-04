@@ -90,7 +90,7 @@ def powapp(environ, start_response):
 	environ["PATH_INFO"] = pinfo
 	
 	if found_static == True:
-		#print "-- Static REQUEST --------------------------------------------------------- "
+		print "-- Static REQUEST --------------------------------------------------------- "
 		non_binary = [".css", ".html",".js",".tmpl"]
 		ctype = "UNINITIALIZED"
 		ftype = os.path.splitext(pinfo)[1]
@@ -120,6 +120,7 @@ def powapp(environ, start_response):
 		]
 		start_response(status, response_headers)
 		return [ostr]
+		
 	print "-- Dynamic REQUEST --------------------------------------------------------- "		
 	print "Request: " + environ["REQUEST_METHOD"] + " " + environ["PATH_INFO"] + " " + environ["SERVER_PROTOCOL"] + " " + environ["QUERY_STRING"]	
 	print "PATH_INFO before: ", pinfo_before
@@ -343,7 +344,7 @@ class Middleware(object):
 			start_response(
 			'500 Internal Server Error,',
 			[('content-type', 'text/html')],
-			exc_info + "PythonOnWheels Team is sorry for the Error ;()"
+			exc_info 
 			)
 			return self.format_exception(exc_info)
 

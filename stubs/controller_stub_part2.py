@@ -6,7 +6,7 @@
 	
 	def show( self,powdict ):
 		res = self.model.find_by("id",powdict["PARAMETERS"]["id"])
-		return self.render(model=self.model, powdict=powdict)
+		return self.render(model=res, powdict=powdict)
 		
 	def new( self, powdict ):
 		self.model.__init__()
