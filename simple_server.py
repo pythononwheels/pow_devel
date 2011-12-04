@@ -343,7 +343,7 @@ class Middleware(object):
 			start_response(
 			'500 Internal Server Error,',
 			[('content-type', 'text/html')],
-			exc_info + "PythonOnWheels Team is sorry for the Error ;()"
+			exc_info
 			)
 			return self.format_exception(exc_info)
 
