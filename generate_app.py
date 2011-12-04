@@ -89,6 +89,8 @@ def gen_app(appname, appdir, force=False):
     powlib.check_create_dir(appbase + "/models/powmodels")
     powlib.check_create_dir(appbase + "/public/media")
     powlib.check_create_dir(appbase + "/public/media/images")
+    powlib.check_create_dir(appbase + "/public/media/images/pow_home")
+    powlib.check_create_dir(appbase + "/public/media/images/simple_blog")
     powlib.check_create_dir(appbase + "/public/media/documents")
     powlib.check_create_dir(appbase + "/public/scripts")
     powlib.check_create_dir(appbase + "/public/stylesheets")
@@ -97,19 +99,21 @@ def gen_app(appname, appdir, force=False):
     # copy the files in subdirs
      #
     deep_copy_list = [  ("stubs/config", "config"), 
-						("stubs/lib", "lib"), 
-						("stubs/models/basemodels/pow","models/basemodels/pow"), 
-						("stubs/models/powmodels","models/powmodels"), 
-						("stubs", "stubs"),
-						("stubs/public/stylesheets", "public/stylesheets"),
-						("stubs/public/media","/public/media"),
-						("stubs/public/media/images","/public/media/images"),
-						("stubs/public/scripts", "public/scripts"),
-						("stubs/lib", "lib"), 
-						("stubs/controllers", "controllers"),
-						("stubs/views", "views"),
-						("stubs/views/layouts", "views/layouts")
-						]
+                        ("stubs/lib", "lib"), 
+                        ("stubs/models/basemodels/pow","models/basemodels/pow"), 
+                        ("stubs/models/powmodels","models/powmodels"), 
+                        ("stubs", "stubs"),
+                        ("stubs/public/stylesheets", "public/stylesheets"),
+                        ("stubs/public/media","/public/media"),
+                        ("stubs/public/media/images","/public/media/images"),
+                        ("stubs/public/media/images/pow_home","/public/media/images/pow_home"),
+                        ("stubs/public/media/images/simple_blog","/public/media/images/simple_blog"),
+                        ("stubs/public/scripts", "public/scripts"),
+                        ("stubs/lib", "lib"), 
+                        ("stubs/controllers", "controllers"),
+                        ("stubs/views", "views"),
+                        ("stubs/views/layouts", "views/layouts")
+                        ]
     print " -- copying files ..."
     exclude_patterns = [".pyc", ".pyo", ".DS_STORE"]
     exclude_files = [ "db.cfg" ]
