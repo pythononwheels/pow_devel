@@ -59,6 +59,7 @@ def main():
 	duration = end - start 
 	
 	print "generated_migration in("+ str(duration) +")"
+	return
 	
 def render_migration(name,model, comment):
 	# 
@@ -103,7 +104,7 @@ def render_migration(name,model, comment):
 	version += 1
 	
 	verstring = powlib.version_to_string(version)
-	print verstring + "  generate_migration: " + name + " for model: " + model
+	print "generate_migration: " + name + " for model: " + model
 	#print "version: " + str(version)
 	#print "version2string: " + verstring
 	filename = os.path.normpath ( "./migrations/" + verstring +"_" + name +".py" )
@@ -121,6 +122,7 @@ def render_migration(name,model, comment):
 	print  " -- created file:" + str(filename)
 	ofile.write( ostr )
 	ofile.close()
+	return
 	
 def render_migration_job(filename):
 		"""create a 'job' or task that has to be done on the database.

@@ -34,10 +34,11 @@ def powapp(environ, start_response):
 	# prod-webserver A to prod-webserver B. with this litte tirck you can leave your links unchanged.
 	# for apache the redirection is done in http.conf
 	alias_dict ={	
-		"/static/css/" :	"./public/stylesheets/",
-		"/static/media/":	"./public/media/",
-		"/static/scripts/" : "./public/scripts/",
-		"/static/documents/" : "./public/media/documents"
+		"/static/css/" 			:	"./public/stylesheets/",
+		"/static/stylesheets/" 	:	"./public/stylesheets/",
+		"/static/media/"		:	"./public/media/",
+		"/static/scripts/" 		: 	"./public/scripts/",
+		"/static/documents/" 	: 	"./public/media/documents"
 		}
 	environ["SCRIPT_FILENAME"] = __file__
 	powdict["POW_APP_NAME"] = "PythonOnWheels"
@@ -74,12 +75,12 @@ def powapp(environ, start_response):
 	#
 	# handling static files
 	#
-	
-	
 	pinfo = environ.get("PATH_INFO")
 	pinfo_before = pinfo
 	ostr = ""
-	
+	#
+	# check for static links and replace them when found.
+	#
 	found_static = False
 	for elem in alias_dict:
 		if string.find(pinfo,  elem) != -1:

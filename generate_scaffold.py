@@ -33,6 +33,10 @@ def main():
 	parser.add_option("-m", "--model",  action="store", type="string", dest="model", help="defines the model for this migration.", default ="None")
 	parser.add_option("-f", "--force",  action="store_false",  dest="noforce", help="forces overrides of existing files",default="True")
 
+	start = None
+	end = None
+	start = datetime.datetime.now()
+	
 	(options, args) = parser.parse_args()
 	print options
 	if options.model == "None":
@@ -40,7 +44,12 @@ def main():
 		return
 	else:
 		scaffold(options.model, options.noforce)
-			
+
+		end = datetime.datetime.now()
+		duration = None
+		duration = end - start 
+		print "generated_scaffold in("+ str(duration) +")"
+		return
 	
 def scaffold(modelname, noforce):
 	# 
@@ -78,10 +87,10 @@ def scaffold(modelname, noforce):
 			print filename + " already exists..."
 		else:
 			ofile = open(  filename , "w+") 
-			print  "created scaffold " + filename
+			print  " -- created scaffold " + filename
 			ofile.write( ostr )
 			ofile.close()
-	
+	return
 	
 	
 def render_method( self, name, vars=[] ):

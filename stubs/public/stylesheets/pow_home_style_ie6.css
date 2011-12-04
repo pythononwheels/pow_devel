@@ -1,0 +1,20 @@
+.image1 
+{ background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='css/images/slide-image.png', sizingMethod='image');}
+
+#slider-navigation ul li a
+{ background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='css/images/slide-button.png', sizingMethod='image');}
+
+#slider-navigation ul li a em.ico1 
+{ background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='css/images/ico1.png', sizingMethod='image');}
+
+#slider-navigation ul li a em.ico2 
+{ background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='css/images/ico2.png', sizingMethod='image');}
+
+#slider-navigation ul li a em.ico3
+{ background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='css/images/ico3.png', sizingMethod='image');}
+
+#slider-navigation ul li a.active,
+#slider-navigation ul li a:hover 
+{ background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='css/images/slide-button-active.png', sizingMethod='image');}
+
+	

@@ -37,6 +37,7 @@ def main():
 	#print options
 	if options.name == "None":
 		parser.error("You must at least specify a modelname by giving -n <name>.")
+		return
 	else:
 		model_dir = os.path.normpath("./models/")
 		modelname = options.name
@@ -50,7 +51,7 @@ def main():
 		duration = None
 		duration = end - start 
 		print "generated_model in("+ str(duration) +")"
-
+		return
 
 	
 def render_model(modelname, force, comment, properties=None):
@@ -92,7 +93,7 @@ def render_model(modelname, force, comment, properties=None):
 		print filename + " (exists)...(Use -f to force override)"
 	else:
 		ofile = open(  filename , "w+") 
-		print  filename + " (created)"
+		print " --", filename + " (created)"
 		ofile.write( ostr )
 		ofile.close()
 	#
@@ -130,7 +131,7 @@ def render_model(modelname, force, comment, properties=None):
 		print filename + " (exists)...(Use -f to force override)"
 	else:
 		ofile = open(  filename , "w+") 
-		print  filename + " (created)"
+		print  " --", filename + " (created)"
 		ofile.write( ostr )
 		ofile.close()
 		
