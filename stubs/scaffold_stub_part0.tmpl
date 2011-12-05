@@ -3,5 +3,11 @@
 ## inherits the layout defined in pow.cfg as default_layout
 ## is there rendered as self.body()
 ##
+<%!
 
+	import sys,os 
+	sys.path.append(os.path.abspath(os.path.join( os.path.dirname(os.path.abspath("./")), "../../lib" )) )
+	import powlib
+	
+%>
 <%inherit file="/${context.get('template')}"/>

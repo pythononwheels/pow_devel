@@ -83,7 +83,7 @@
 	def generate_find_by( self ):
 		pass
 
-	def get_by(self, name):
+	def get_by_name(self, name):
 		return eval("self." + str(name))
 
 
