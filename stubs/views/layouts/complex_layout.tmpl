@@ -37,7 +37,7 @@
 	<li><a href="http://www.pythononwheels.org:8080">Home</a></li>
 	<li><a href="https://groups.google.com/group/pythononwheels">PoW google.group</a></li>
 	##Model: ${model.name}
-	%if model.pbo != None:
+	%if hasattr(model, "pbo") == True:
 		%for elem in model.pbo.getMetaData().sorted_tables:
 			<li><a href="../${powlib.singularize(elem.name)}/list">${elem.name} list</a></li>
 		%endfor

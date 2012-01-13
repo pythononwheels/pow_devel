@@ -27,13 +27,23 @@
 		#for elem in res:
 		#	elem.__init__()
 		return res
-
+	
+	def find_first(self):
+		mstr = "self.session.query(Base" + self.__class__.__name__ + ").first()"
+		print mstr
+		res= eval(mstr)
+		#for elem in res:
+		#	elem.__init__()
+		return res
+		
 	def get(self, name):
 		return eval("self.get_"+ str(name)+"()")
 
 	def set(self,name,val):
-		#eval("self.set_"+ str(name)+"("+val + ")" )
-		eval("self.set_"+ str(name)+"(\""+str(val) + "\")" )
+		val = urllib.unquote(unicode(val))
+		print " ++ Model, updating: ", name, " -> ", val, " # ", type(val)
+		eval("self.set_"+ str(name)+"(\""+ val + "\")" )
+		return
 
 	def getColumns(self):
 		rlist = []
@@ -92,7 +102,7 @@
 		ostr += str(type(self)) + powlib.newline
 		ostr += "-------------------------------" + powlib.newline
 		for col in self.__table__.columns:
-			ostr += col.name + "-->" + str(self.get_by(col.name)) + powlib.newline
+			ostr += col.name + "-->" + str(self.get(col.name)) + powlib.newline
 		return ostr
 
 	def __reprhtml__(self):
@@ -105,12 +115,14 @@
 
 	def update(self):
 		dt = datetime.datetime.strftime(datetime.datetime.now(),"%Y-%m-%d %H:%M:%S")
+		dt = urllib.unquote(unicode(dt))
 		self.set("last_updated", dt)
 		self.session.merge(self)
 		self.session.commit()
 
 	def create(self):
 		dt = datetime.datetime.strftime(datetime.datetime.now(),"%Y-%m-%d %H:%M:%S")
+		dt = urllib.unquote(unicode(dt))
 		self.set("created", dt)
 		self.set("last_updated", dt)
 		self.session.merge(self)
