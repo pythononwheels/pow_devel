@@ -180,8 +180,8 @@ def powapp(environ, start_response):
 		real_action = eval("aclass." + action)
 	#output.append("real_action: " + str(real_action) + "<br>")
 	
-	#output.append(real_action(powdict).encode('utf-8'))
-	output.append(real_action(powdict))
+	output.append(real_action(powdict).encode('utf-8'))
+	
 	#
 	# error handling wsgi see:
 	#	1. http://www.python.org/dev/peps/pep-0333/#error-handling
