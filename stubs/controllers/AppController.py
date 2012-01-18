@@ -34,6 +34,12 @@ class AppController(BaseController.BaseController):
 	
 	def welcome( self,powdict ):
 		return self.render(model=self.model, powdict=powdict)
+	def thanks( self,powdict ):
+		return self.render(model=self.model, powdict=powdict)
+        
+	def howto_start( self,powdict ):
+		return self.render(model=self.model, powdict=powdict)
+    
 
 	
 	def login( self, powdict):

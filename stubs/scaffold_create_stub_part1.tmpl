@@ -1,7 +1,7 @@
 <h2>Create ${model.__table__} Form:</h2>
 
   <fieldset>
-  <form action="./new" method="post">
+  <form action="./new" method="post" accept-charset="utf-8">
     %for colname in model.getColumns():
 	<p>
 	%if colname != "id" and colname != "created" and colname != "last_updated":
