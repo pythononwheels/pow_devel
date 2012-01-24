@@ -11,3 +11,44 @@
 ##
 ##<%inherit file="/default_welcome.tmpl"/>
 <%inherit file="/${context.get('template')}"/>
+
+<h2 class="trigger"><a href="#"><p>Welcome to PythonOnWheels</p></a></h2>
+
+<hr>
+<br>
+
+<p>
+<h3>Congratulations, you have succesfully genrated your first PythonONwheels WebApp! </h3>(not too big business, right).
+</p>
+
+<p>
+<h3>What you see right now is the default template</h3>, which is configured in <code>config/pow.cfg</code>.
+
+What to do from here:<br>
+
+<ul>
+    <li><b>You can look around a bit and to get an impression of PoW the parts</b> <br>
+    The call sequence is generally: Controller->Action->View<br>
+    For the current page you see this is concrete /App/Welcome which renders the App_welcome view with the
+    Template configured in <code>config/pow.cfg</code>. <br>
+    <b>You can find the according files in:</b>
+    </li>
+    <ul>
+        <li>App Controler in <code>/Controllers/App.py</code><br>
+        Have a look a the <code>welcome</code> Method. It renders The view named <code>CONTROLLERNAME_viewname. <br>
+        <code>App_welcome.tmpl</code> in this concrete case.
+        </li>
+        <li>App_welcome.tmpl in <code>/views/App_welcome.tmpl</code><br>
+        Just change something in this file and reload the page to see what happens. The according (and
+        surrounding) template is defines in <code>config/pow.cfg DEFAULT_TEMPLATE=default.tmpl</code>. <br>
+        Change the template to nay of the tempaltes you can find in <code>/views/layouts</code>, reload and see what happens.
+        </li>
+        <li>App Controler in <code>/Controllers/App.py</code></li>
+    </ul>
+        
+    
+    <li><b>Or you can jump right of and generate the Applikation you planned.</b> 
+    Follow the <a href="/App/howto_start">How to start your own WebApp</a> quick guide.</li>
+</ul>
+    
+</p>

@@ -8,6 +8,6 @@
 	import sys,os 
 	sys.path.append(os.path.abspath(os.path.join( os.path.dirname(os.path.abspath("./")), "../../lib" )) )
 	import powlib
-	
+	hidden_list = ["created", "last_updated", "group", "user", "id"]
 %>
 <%inherit file="/${context.get('template')}"/>

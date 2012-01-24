@@ -5,6 +5,8 @@ http://www.freecsstemplates.org
 Released for free under a Creative Commons Attribution 2.5 License
 */
 
+
+
 body {
 	margin: 0;
 	padding: 0;
@@ -57,6 +59,31 @@ img.right {
 }
 
 hr { display: none; }
+
+/*** FORM STYLES ***/ 
+/* taken from: http://www.style-sheets.de/guide/formulare/formulare_per_css_layouten */
+.niceform {
+}
+
+.niceform label, input, select { /* Alle Labels UND Formularelemente auswählen */
+  display: block;
+  float: left;
+  width: 100px; /* Breite.*/
+}
+
+.niceform form br { /* Alle Zeilenumbrüche in Formularen auswählen */
+  clear: left; /* das floating der labels und inputs aufheben */
+}
+
+
+/*** End FORM STYLES ***/
+
+.niceform input#submit { /* den Submit-Button */
+  float: none;
+  width: auto;
+}
+
+
 
 .list1 {
 }

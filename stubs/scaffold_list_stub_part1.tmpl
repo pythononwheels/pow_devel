@@ -5,7 +5,7 @@ You see the List Template<br>
 	<thead>
 		<tr>
 			%for colname in model.getColumns():
-				%if colname != "created" and colname != "last_updated" and colname != "id" and colname != "password":	
+				%if colname not in hidden_list::	
 					<th>${colname}</th>
 				%endif
 			%endfor
