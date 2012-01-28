@@ -32,7 +32,7 @@ def main():
 	parser.add_option("-m", "--model",  action="store", type="string", dest="model", help="defines the model for this migration.", default ="None")
 	parser.add_option("-c", "--comment",  action="store", type="string", dest="comment", help="defines a comment for this migration.", default ="No Comment")
 	parser.add_option("-j", "--job",  action="store", type="string", dest="job", help="creates migration job, e.g for backups, restores etc.",default="None")
-    sys.
+
 	(options, args) = parser.parse_args()
 	#print options
 	if options.model == "None" and options.job == "None":
