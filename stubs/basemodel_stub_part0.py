@@ -16,6 +16,7 @@ from sqlalchemy import event, DDL
 import sys,os,datetime
 import string
 import types
+import urllib
 
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../lib" )))
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../powmodels" )))
