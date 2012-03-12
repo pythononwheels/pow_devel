@@ -20,6 +20,7 @@ if __name__ == "__main__":
     b.title = unicode_title
     b.utitle = unicode_title
     b.strtitle = unicode_title
+    b.example_column = unicode_title
     #print b.title, type(b.title)
     b.create()
     
