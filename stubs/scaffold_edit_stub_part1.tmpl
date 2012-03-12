@@ -4,7 +4,7 @@
           <form action="./update" method="post" accept-charset="utf-8">
             %for colname in model.getColumns():
             <p>
-            %if colname not in %if colname not in hidden_list:
+            %if colname not in hidden_list:
                 <label for="${colname}">${colname}:</label>
                 <input type="text" name="${colname}" value="${model.get(colname)}"/>
             %else:

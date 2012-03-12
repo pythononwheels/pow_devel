@@ -9,9 +9,20 @@ import os
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./lib" )))
 import urllib
 import re
-
+import cgi
 
 import powlib
+
+#
+# session management default values.
+#
+session_opts = {
+	'session.type': 'file',
+	'session.data_dir': './db',
+	'session.cookie_expires': True,
+	'session.auto': True
+}
+
 
 def pre_route(path_info):
     # description:

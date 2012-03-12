@@ -5,7 +5,7 @@ You see the List Template<br>
 	<thead>
 		<tr>
 			%for colname in model.getColumns():
-				%if colname not in hidden_list::	
+				%if colname not in hidden_list:	
 					<th>${colname}</th>
 				%endif
 			%endfor

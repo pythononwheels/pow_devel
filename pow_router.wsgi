@@ -17,13 +17,15 @@ import traceback, StringIO
 
 
 
-def powapp(environ, start_response):
-	
+def powapp_router(environ, start_response):
+	#
+	# set the include path according to the wsgi basepath of the script.
 	basepath = environ.get("pow.wsgi_dir")
 	sys.path.append(os.path.normpath(basepath + "/lib"))
 	sys.path.append(os.path.normpath(basepath + "/controllers"))
 	sys.path.append(os.path.normpath(basepath + "/models"))
 	import powlib
+	import pow_web_lib
 	
 	output = []
 	powdict =  {}	
@@ -52,9 +54,9 @@ def powapp(environ, start_response):
 	powdict["SESSION"] = session
 	
 	if is_get_request(environ):
-		plist = get_http_get_parameters(environ)
+		plist = pow_web_lib.get_http_get_parameters(environ)
 	elif is_post_request(environ):
-		plist = get_http_post_parameters(environ)
+		plist = pow_web_lib.get_http_post_parameters(environ)
 	else:
 		return
 	
@@ -67,7 +69,6 @@ def powapp(environ, start_response):
 	powdict["PATH_INFO"] = environ.get("PATH_INFO")
 	powdict["ENVIRON"] = show_environ( environ )
 	powdict["DOCUMENT_ROOT"] = environ.get("DOCUMENT_ROOT")
-	
 	powdict["POW_APP_NAME"] = environ.get("pow.app_name")
 	powdict["POW_APP_DIR"] = environ.get("pow.wsgi_dir")
 	powdict["FLASHTEXT"] = ""
@@ -77,7 +78,7 @@ def powapp(environ, start_response):
 	#
 	# get controller and action
 	#
-	pathdict = get_controller_and_action(environ["PATH_INFO"])
+	pathdict = pow_web_lib.get_controller_and_action(environ["PATH_INFO"])
 	#(controller,action) = os.path.split(pathinfo)
 	
 	controller = powdict["CONTROLLER"] = pathdict["controller"]
@@ -127,92 +128,10 @@ def powapp(environ, start_response):
 	
 	start_response(status, response_headers)
 	return output
-		
-session_opts = {
-	'session.type': 'file',
-	'session.data_dir': './db',
-	'session.cookie_expires': True,
-	'session.auto': True
-}
+
 
 #application= SessionMiddleware(powapp, key='mysession', secret='randomsecret')
-application = SessionMiddleware(powapp, session_opts)
+application = SessionMiddleware(powapp_router, pow_web_lib.session_opts)
 
 	
 
-def show_environ( environ ):
-	ostr = ""
-	ostr +=  "<h1>Sorted Keys an Values in <tt>environ</tt></h1>" 
-	
-	sorted_keys = environ.keys()
-	sorted_keys.sort()
-	
-	for key in sorted_keys:
-		ostr += str(key) + " = " + str(environ.get(key)) + "<br>"
-		
-	return ostr
-		
-def get_http_get_parameters( environ):
-	#
-	# parameters are in query sting
-	#
-	plist = []
-	pstr = ""
-	pstr = environ.get("QUERY_STRING")
-	if pstr != "":
-		plist = pstr.split("&")		
-	odict = {}
-	for elem in plist:
-		key,val = string.split(elem,"=")
-		odict[key]= val
-	return odict
-
-def get_http_post_parameters( environ ):
-	instr = None
-	plist = None
-	odict = {}
-	instr= environ['wsgi.input'].read(int(environ['CONTENT_LENGTH']))
-	plist = string.split(instr,"&")
-	for elem in plist:
-		key,val = string.split(elem,"=")
-		newval = val.replace("+", " ")
-		odict[key] = newval
-	return odict
-
-def is_post_request( environ ):
-	if environ['REQUEST_METHOD'].upper() != 'POST':
-		return False
-	else:
-		return True
-
-def is_get_request( environ ):
-	if environ['REQUEST_METHOD'].upper() != 'GET':
-		return False
-	else:
-		return True
-	
-def get_controller_and_action(pi):
-	# converts a path_info: /user/list/1/2/3/4
-	# into al list ol = ['4', '3', '2', '1', 'list', 'user']
-	# where the controller is always the last element and the action the one before that (len(ol)-1) and len(ol)-2)
-	ol = []
-	l = []
-	l= os.path.split(pi)
-	ol.append(l[1])
-	while l[0] != "/":
-		#print "l[0]:" + l[0]
-		#print "l[1]:" + l[1]
-		l = os.path.split(l[0])
-		ol.append(l[1])
-		print ol
-	
-	pl = []
-	nicedict = {}
-	nicedict["controller"]=ol[len(ol)-1]
-	nicedict["action"]=ol[len(ol)-2]
-	for c in range(0,len(ol)-2):
-		pl.append(ol[c])
-	nicedict["parameters"]=pl
-	
-	return nicedict
-	

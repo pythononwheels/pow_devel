@@ -146,6 +146,7 @@ def gen_app(appname, appdir, force=False):
     powlib.check_copy_file("generate_migration.py", appbase)
     powlib.check_copy_file("generate_scaffold.py", appbase)
     powlib.check_copy_file("simple_server.py", appbase)
+    powlib.check_copy_file("pow_router.wsgi", appbase)
     powlib.check_copy_file("generate_bang.py", appbase)
 
     #
