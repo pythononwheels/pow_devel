@@ -52,7 +52,7 @@ def powapp_simple_server(environ, start_response):
     #TO_DO: set the right status in the end, according to the situatio instead of setting it hard-coded here
     status = '200 OK'
     response_headers = [
-        ('Content-type', 'text/html')
+        ('Content-type', 'text/html; charset=utf-8')
         ]
 
     
