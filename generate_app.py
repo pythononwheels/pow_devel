@@ -37,24 +37,27 @@ def main():
 
 
     (options, args) = parser.parse_args()
-    #print options
+    #print options, args
     if options.name == "None":
-        parser.error("You must at least specify an appname by giving -n <name>.")
-    else:
-        modelname = options.name
-        appdir = options.directory
-        appname = options.name
-        force = options.force
-        start = None
-        end = None
-        start = datetime.datetime.now()
+        if len(args) > 0:
+            options.name = args[0]
+        else:
+            parser.error("You must at least specify an appname by giving -n <name>.")
+    
+    modelname = options.name
+    appdir = options.directory
+    appname = options.name
+    force = options.force
+    start = None
+    end = None
+    start = datetime.datetime.now()
 
-        gen_app(appname, appdir, force)
+    gen_app(appname, appdir, force)
 
-        end = datetime.datetime.now()
-        duration = None
-        duration = end - start
-        print " -- generated_app in("+ str(duration) +")"
+    end = datetime.datetime.now()
+    duration = None
+    duration = end - start
+    print " -- generated_app in("+ str(duration) +")"
 
 def render_db_config( appname, appbase ):
     infile = open("./stubs/config/db.cfg")
@@ -148,6 +151,7 @@ def gen_app(appname, appdir, force=False):
     powlib.check_copy_file("simple_server.py", appbase)
     powlib.check_copy_file("pow_router.wsgi", appbase)
     powlib.check_copy_file("generate_bang.py", appbase)
+    powlib.check_copy_file("pow_console.py", appbase)
 
     #
     # copy the initial db's
