@@ -79,28 +79,27 @@ def gen_app(appname, appdir, force=False):
     powlib.check_create_dir(appdir + appname)
     appbase = os.path.abspath(os.path.normpath(appdir +"/"+ appname + "/"))
     #print appbase
-
-    subdirs = ["config","controllers","db","lib", "migrations","models","public","stubs","views"]
+    #subdirs = [ "config", "db","lib", "migrations","models","public","stubs","views", "test"]
+    subdirs = [ {"config" : [] },  
+                        {"db" : [] },
+                        {"lib" : [] },
+                        {"migrations" : ["backup"] },
+                        {"models" : ["basemodels", "basemodels/pow", "powmodels"] },
+                        {"controllers" : [] },
+                        {"public" : ["media", "media/images", "media/images/pow_home", "media/images/simple_blog", "media/documents", "scripts", "stylesheets"] },
+                        {"stubs" : [] },
+                        {"views" : ["layouts"] },
+                        {"test" : ["models", "controllers", "other"] } ]
     for elem in subdirs:
-        powlib.check_create_dir( os.path.join(appbase,elem))
-    #
-    # create subdirs
-    #
-    powlib.check_create_dir(appbase + "/migrations/backup")
-    powlib.check_create_dir(appbase + "/models/basemodels")
-    powlib.check_create_dir(appbase + "/models/basemodels/pow")
-    powlib.check_create_dir(appbase + "/models/powmodels")
-    powlib.check_create_dir(appbase + "/public/media")
-    powlib.check_create_dir(appbase + "/public/media/images")
-    powlib.check_create_dir(appbase + "/public/media/images/pow_home")
-    powlib.check_create_dir(appbase + "/public/media/images/simple_blog")
-    powlib.check_create_dir(appbase + "/public/media/documents")
-    powlib.check_create_dir(appbase + "/public/scripts")
-    powlib.check_create_dir(appbase + "/public/stylesheets")
-    powlib.check_create_dir(appbase + "/views/layouts")
+        for key in elem:
+            subdir = os.path.join(appbase,str(key))
+            powlib.check_create_dir( subdir)
+            for subs in elem[key]:
+                powlib.check_create_dir( os.path.join(subdir,str(subs)))
+    
     #
     # copy the files in subdirs
-     #
+    #
     deep_copy_list = [  ("stubs/config", "config"), 
                         ("stubs/lib", "lib"), 
                         ("stubs/models/basemodels/pow","models/basemodels/pow"), 
@@ -134,7 +133,7 @@ def gen_app(appname, appdir, force=False):
                     os.path.join(appbase+"/"+dest_dir,source_file)
                 )
             else:
-                print " excluded: \t", source_file
+                print " excluded:     ", source_file
                 continue
                 
     #print "...done"
