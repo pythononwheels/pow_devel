@@ -91,7 +91,7 @@ def gen_app(appname, appdir, force=False):
                         {"public" : ["media", "media/images", "media/images/pow_home", "media/images/simple_blog", "media/documents", "scripts", "stylesheets"] },
                         {"stubs" : [] },
                         {"views" : ["layouts"] },
-                        {"tests" : ["models", "controllers", "other"] } ]
+                        {"tests" : ["models", "controllers", "others"] } ]
     for elem in subdirs:
         for key in elem:
             subdir = os.path.join(appbase,str(key))
