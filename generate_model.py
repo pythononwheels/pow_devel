@@ -96,7 +96,6 @@ def render_model(modelname, force, comment, properties=None):
 		print " --", filename + " (created)"
 		ofile.write( ostr )
 		ofile.close()
-	#
 	### genrate BaseModel if neccessary
 	filename = "Base" + classname + ".py"
 	
@@ -150,9 +149,27 @@ def render_model(modelname, force, comment, properties=None):
 		# copy the BaseClass
 		powlib.check_copy_file(os.path.normpath( "./stubs/App.py"), os.path.normpath( "./models/powmodels/"))
 		
+	render_test_stub(modelname, classname)
+	return 
 
 def reset_model(modelname):
 	return render_model(modelname, True, "", properties=None, nomig=True)
+	
+def render_test_stub (modelname, classname ):
+	#print "rendering Testcase for:", classname, " ", " ", modelname
+	print " -- generating TestCase...",
+	infile = open( os.path.normpath("./stubs/test_model_stub.py"), "r")
+	ofile = open( os.path.normpath("./tests/models/Test"+classname+".py"), "w")
+	instr = infile.read()
+	instr = instr.replace("#CLASSNAME", classname)
+	ofile.write(instr)
+	infile.close()
+	ofile.close()
+	print " ..(created)"
+	
+	
+	
+	return
 
 def render_method( name, vars=[], body = []):
 	#

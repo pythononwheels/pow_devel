@@ -63,7 +63,9 @@ def render_db_config( appname, appbase ):
     infile = open("./stubs/config/db.cfg")
     instr = infile.read()
     infile.close()
-    instr = instr.replace("please_rename_the_db", appname)
+    instr = instr.replace("please_rename_the_development_db", appname + "_devel")
+    instr = instr.replace("please_rename_the_test_db", appname + "_test")
+    instr = instr.replace("please_rename_the_production_db", appname + "_prod")
     ofile = open( os.path.normpath(appbase + "/config/db.cfg"), "w" )
     ofile.write(instr)
     ofile.close()
@@ -89,7 +91,7 @@ def gen_app(appname, appdir, force=False):
                         {"public" : ["media", "media/images", "media/images/pow_home", "media/images/simple_blog", "media/documents", "scripts", "stylesheets"] },
                         {"stubs" : [] },
                         {"views" : ["layouts"] },
-                        {"test" : ["models", "controllers", "other"] } ]
+                        {"tests" : ["models", "controllers", "other"] } ]
     for elem in subdirs:
         for key in elem:
             subdir = os.path.join(appbase,str(key))
@@ -100,7 +102,7 @@ def gen_app(appname, appdir, force=False):
     #
     # copy the files in subdirs
     #
-    deep_copy_list = [  ("stubs/config", "config"), 
+    deep_copy_list = [  ("stubs/config", "config"),  
                         ("stubs/lib", "lib"), 
                         ("stubs/models/basemodels/pow","models/basemodels/pow"), 
                         ("stubs/models/powmodels","models/powmodels"), 

@@ -1,9 +1,8 @@
-Pythononwheels.
+## Pythononwheels.
 
-plain,simple and easy to use
-web generator framework for python.
+the plain,simple and easy to use web generator framework for python.
 
-Based on reliable 'standards'
+### Based on reliable python 'standards' and frameworks
 
 	* SQLAlchemy 	ORM / DB Access
 	* Beaker		Session Management
@@ -12,7 +11,7 @@ Based on reliable 'standards'
 	* JQuery	Javascript 
 	* Bootstrap	Twitter Layout Framwork 
 
-Key Features:
+### Key Features:
 
 	* Model View Controller
 	* Uses the well proven Ruby On Rails principles
@@ -20,17 +19,18 @@ Key Features:
 	* JQuery integration
 	* Responsible Layout
 	* Lightweight
+	* Nose Tests
 	
-Focus was to develop a Framework in between the existing Big Ones
+The clear Focus was to develop a Framework in between the existing Big Ones,
 which have quite some learning curve to get started and
 the small, very low level ones, which make it neccessary to develop
 quite a lot yourself.
 There are good examples of both in the python community and there are 
-good reasons for those frameworks as well (enterprise and up or 
-fine grained tayloring at the bottom)
+good reasons for those frameworks to exists as well, such as enterprise and up or 
+fine grained tayloring at the bottom.
 
-But PythonOnWheels main objective is making you focus on your webapp
-and not on the Framework. Is therefore (hopefully)
+**PythonOnWheels' main objective is making you focus on your webapp
+and not on the Framework**. Is therefore (hopefully)
 	* working just as you nexpexct it
 	* using the proven rails principles
 		* convention over configuration
