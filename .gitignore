@@ -6,8 +6,11 @@
 *.pydevproject
 .project
 .metadata
+testapp/
+test/
 bin/
 tmp/
+.DS_Store/
 *.tmp
 *.bak
 *.swp

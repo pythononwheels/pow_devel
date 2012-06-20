@@ -24,8 +24,8 @@ Base = declarative_base(bind=x.__engine__, metadata = x.__metadata__)
 Base.metadata.reflect()
 
 class BaseRelation(Base):
-	__table__ = Base.metadata.tables['relations']
-	pao = x
-	#__mapper_args__ = {}
-	def __init__(self):
-		pass
+    __table__ = Base.metadata.tables['relations']
+    pao = x
+    #__mapper_args__ = {}
+    def __init__(self):
+        pass

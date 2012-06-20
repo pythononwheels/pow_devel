@@ -34,7 +34,8 @@
 </div>
 
 <ul id="breadCrumbs">
-	<li><a href="http://www.pythononwheels.org:8080">Home</a></li>
+	<li><a href="/app/welcome">Home</a></li>
+	<li><a href="https://github.com/pythononwheels/pow_devel">PoW github</a></li>
 	<li><a href="https://groups.google.com/group/pythononwheels">PoW google.group</a></li>
 	##Model: ${model.name}
 	%if hasattr(model, "pbo") == True:
@@ -44,13 +45,10 @@
 	%endif
 	<li>
 	%if powdict["SESSION"]["user.id"] != 0:
-		<a href="../user/logout">logout</a>
+		<a href="/app/logout">logout</a>
 	%else:
-		<a href="../user/login">login</a>
+		<a href="/app/login">login</a>
 	%endif
-	</li>
-	<li>
-	<a href="../app/welcome">PoW welcome</a>
 	</li>
 </ul>
 

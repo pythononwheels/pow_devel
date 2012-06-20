@@ -14,8 +14,8 @@ sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(_
 import powlib
 
 if __name__ == "__main__":
-	generate_model.render_model("user", True, "User Model")
-	generate_migration.render_migration("user", "user", "User Migration")
-	do_migrate.do_migrate(-1, "up")
-	generate_controller.render_controller("user", True)
-	generate_scaffold.scaffold("user", True)
+    generate_model.render_model("user", True, "User Model")
+    generate_migration.render_migration("user", "user", "User Migration")
+    do_migrate.do_migrate(-1, "up")
+    generate_controller.render_controller("user", True)
+    generate_scaffold.scaffold("user", True)

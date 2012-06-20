@@ -1,3 +1,3 @@
 class BaseController(PowObject.PowObject):
-	model = None
-	session = None
+    model = None
+    session = None

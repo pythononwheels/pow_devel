@@ -6,5 +6,5 @@ import powlib
 import BaseRelation
 
 class Relation(BaseRelation.BaseRelation):
-	pass
+    pass
 

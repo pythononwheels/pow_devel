@@ -11,37 +11,37 @@ import powlib
 from PowObject import PowObject
 
 class PowTable(sqlalchemy.Table):
-	
-	def has_many(self, tablename):
-		pass
-	
-	def belongs_to(self, tablename):
-		pass
-	
-	def many_to_many(self, tablename):
-		pass
-	
-	def append_column_to_db(self, column):
-		print dir(column)
-		estr = "self.c." + column.name + ".create()"
-		print estr
-		eval( estr )
-	
-	def alter_column_name(self, colname, newname):
-		 eval("self.c." + colname + ".alter(name=\"" + newname + "\")")
-		 
-	def create(self, **kwargs):
-		col = Column('created', Text, default=datetime.datetime.now())
-		self.append_column( col )
-		col = Column('last_updated', Text, default=datetime.datetime.now())
-		self.append_column( col )
-		col = Column('user', Integer, default="0")
-		self.append_column( col )
-		col = Column('group', Integer, default="0")
-		self.append_column( col )
-		col = Column('id', Integer, Sequence(self.name+'_id_seq'), primary_key=True)
-		self.append_column( col )
-		sqlalchemy.Table.create(self, **kwargs)
-		
-	def drop(self, **kwargs):
-		sqlalchemy.Table.drop(self, **kwargs)
+    
+    def has_many(self, tablename):
+        pass
+    
+    def belongs_to(self, tablename):
+        pass
+    
+    def many_to_many(self, tablename):
+        pass
+    
+    def append_column_to_db(self, column):
+        print dir(column)
+        estr = "self.c." + column.name + ".create()"
+        print estr
+        eval( estr )
+    
+    def alter_column_name(self, colname, newname):
+         eval("self.c." + colname + ".alter(name=\"" + newname + "\")")
+         
+    def create(self, **kwargs):
+        col = Column('created', Text, default=datetime.datetime.now())
+        self.append_column( col )
+        col = Column('last_updated', Text, default=datetime.datetime.now())
+        self.append_column( col )
+        col = Column('user', Integer, default="0")
+        self.append_column( col )
+        col = Column('group', Integer, default="0")
+        self.append_column( col )
+        col = Column('id', Integer, Sequence(self.name+'_id_seq'), primary_key=True)
+        self.append_column( col )
+        sqlalchemy.Table.create(self, **kwargs)
+        
+    def drop(self, **kwargs):
+        sqlalchemy.Table.drop(self, **kwargs)

@@ -23,12 +23,12 @@ Base = declarative_base(bind=x.__engine__, metadata = x.__metadata__)
 Base.metadata.reflect()
 
 class PostRelation():
-	#
-	# Class: PostRelation
-	#
-	def relation(self, rel):	
-		pass
-		
+    #
+    # Class: PostRelation
+    #
+    def relation(self, rel):    
+        pass
+        
 if __name__ == "__main__":
-	pass
-	
+    pass
+    

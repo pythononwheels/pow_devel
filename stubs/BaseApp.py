@@ -24,15 +24,15 @@ Base = declarative_base(bind=x.__engine__, metadata = x.__metadata__)
 Base.metadata.reflect()
 
 class BaseApp(Base):
-	"""reflects the app table"""
-	__table__ = Base.metadata.tables['app']
-	pao = x
-	#__mapper_args__ = {}
-	session = x.getSession()
-	
-	def __init__(self):
-		self.session = self.pao.getSession()
+    """reflects the app table"""
+    __table__ = Base.metadata.tables['app']
+    pao = x
+    #__mapper_args__ = {}
+    session = x.getSession()
+    
+    def __init__(self):
+        self.session = self.pao.getSession()
 
-	def update(self):
-		self.session.merge(self)
-		self.session.commit()
+    def update(self):
+        self.session.merge(self)
+        self.session.commit()

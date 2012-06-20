@@ -17,10 +17,10 @@ import powlib
 # session management default values.
 #
 session_opts = {
-	'session.type': 'file',
-	'session.data_dir': './db',
-	'session.cookie_expires': True,
-	'session.auto': True
+    'session.type': 'file',
+    'session.data_dir': './db',
+    'session.cookie_expires': True,
+    'session.auto': True
 }
 
 

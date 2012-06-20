@@ -91,7 +91,7 @@ def gen_app(appname, appdir, force=False):
                         {"public" : ["media", "media/images", "media/images/pow_home", "media/images/simple_blog", "media/documents", "scripts", "stylesheets"] },
                         {"stubs" : [] },
                         {"views" : ["layouts"] },
-                        {"tests" : ["models", "controllers", "others"] } ]
+                        {"tests" : ["models", "controllers", "integration", "fixtures"] } ]
     for elem in subdirs:
         for key in elem:
             subdir = os.path.join(appbase,str(key))
@@ -153,6 +153,7 @@ def gen_app(appname, appdir, force=False):
     powlib.check_copy_file("pow_router.wsgi", appbase)
     powlib.check_copy_file("generate_bang.py", appbase)
     powlib.check_copy_file("pow_console.py", appbase)
+    powlib.check_copy_file("runtests.py", appbase)
 
     #
     # copy the initial db's
