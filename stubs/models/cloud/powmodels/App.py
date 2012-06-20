@@ -9,4 +9,4 @@ import powlib
 import BaseApp
 
 class App(BaseApp.BaseApp):
-    pass
+	pass

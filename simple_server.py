@@ -19,14 +19,11 @@ import pow_web_lib
 
 def powapp_simple_server(environ, start_response):
     
-    ##print show_environ_cli(environ)
-    output = ["POW_NOTHING"]
+    #print show_environ_cli(environ)
+    output = []
     powdict =  {}    
     real_action = None
-    has_session = False
-    status500 = '500 Internal Server Error'
-    status200 = "200 OK"
-    return_code = 500
+    
     #
     # relevant parameters have to be defined here
     # (Same as for apache the declarations in the httpd.conf file
@@ -40,11 +37,10 @@ def powapp_simple_server(environ, start_response):
     alias_dict ={    
         "/static/css/"             :    "./public/stylesheets/",
         "/static/stylesheets/"     :    "./public/stylesheets/",
-        "/static/media/"           :    "./public/media/",
-        "/static/scripts/"         :    "./public/scripts/",
-        "/static/documents/"       :    "./public/media/documents"
+        "/static/media/"        :    "./public/media/",
+        "/static/scripts/"         :     "./public/scripts/",
+        "/static/documents/"     :     "./public/media/documents"
         }
-    
     environ["SCRIPT_FILENAME"] = __file__
     powdict["POW_APP_NAME"] = "PythonOnWheels"
     powdict["POW_APP_URL"] = "www.pythononwheels.org"
@@ -54,67 +50,44 @@ def powapp_simple_server(environ, start_response):
     # Get the session object from the environ
     session = environ['beaker.session']
     #TO_DO: set the right status in the end, according to the situatio instead of setting it hard-coded here
-    status = status500
+    status = '200 OK'
     response_headers = [
         ('Content-type', 'text/html; charset=utf-8')
         ]
 
-    #
-    # check if already in a session
-    #
-    if session.has_key('user.id'):
-        has_session = True
-    else:
-        has_session = False
+    
+    if not session.has_key('user.id'):
         session['user.id'] = 0
-        
-    powdict["SESSION"] = session  
-        
+    
     #session.save()
     
-    
-    ##print "Check request type!"
-    ##print pow_web_lib.show_environ_cli(environ)
-    #
-    # check whether it is a get or put request
-    #
+    powdict["SESSION"] = session
+    print "Check request type!"
+    print pow_web_lib.show_environ_cli(environ)
     if pow_web_lib.is_get_request(environ):
         plist = pow_web_lib.get_http_get_parameters(environ)
     elif pow_web_lib.is_post_request(environ):
         plist = pow_web_lib.get_http_post_parameters_new(environ)
     else:
-        start_response(status, response_headers)
-        return ["Not identified as either HTTP/Get or HTTP/Put request. Not handled by PythonOnWheels"]
+        return
+    #print show_environ_cli(environ)
     
-    #
-    # ErrFix: Check the unicode issue
-    #
-    ##print plist
-    #print plist.keys()
-    #for item in plist:
-        #print Type(item)
-    
-    ##print show_environ_cli(environ)
-    
-    # save the parameters in the dictionary.
     powdict["PARAMETERS"] = plist
-    ##print plist
-    ##print plist.keys()
-    #if plist.has_key("image"):
-    #    #print "Image found: ", plist['image'].filename
-    #    ofile = file("tmp.out", "wb")
-    #    infile = plist['image'].file
-    #    ofile.write( infile.read() )
-    #    #ofile.write( plist["image"].value )
-    #    ofile.close()
-    
+    print plist
+    print plist.keys()
+    if plist.has_key("image"):
+        print "Image found: ", plist['image'].filename
+        ofile = file("tmp.out", "wb")
+        infile = plist['image'].file
+        ofile.write( infile.read() )
+        #ofile.write( plist["image"].value )
+        ofile.close()
     #
     # handling static files
     #
     pinfo = environ.get("PATH_INFO")
     pinfo_before = pinfo
     ostr = ""
-    
     #
     # check for static links and replace them when found.
     #
@@ -122,14 +95,13 @@ def powapp_simple_server(environ, start_response):
     for elem in alias_dict:
         if string.find(pinfo,  elem) != -1:
             found_static = True
-            print "pinfo before: ", pinfo
             pinfo = string.replace(pinfo,elem, alias_dict[elem])
-            print "pinfo after: ", pinfo
+    
     environ["PATH_INFO"] = pinfo
     
     if found_static == True:
-        #print "-- Static REQUEST --------------------------------------------------------- "
-        non_binary = [".css", ".html",".js",".tmpl", ".txt"]
+        print "-- Static REQUEST --------------------------------------------------------- "
+        non_binary = [".css", ".html",".js",".tmpl"]
         ctype = "UNINITIALIZED"
         ftype = os.path.splitext(pinfo)[1]
         
@@ -139,7 +111,7 @@ def powapp_simple_server(environ, start_response):
             infile = open (os.path.normpath(pinfo), "rb")
         ostr = infile.read()
         infile.close()
-        ##print "file type is: ", ftype, " -> ", ctype
+        #print "file type is: ", ftype, " -> ", ctype
         if string.lower(ftype) == ".gif":
             ctype = "image/gif"
         elif string.lower(ftype) == ".jpg" or string.lower(ftype) ==".jpeg":
@@ -152,24 +124,21 @@ def powapp_simple_server(environ, start_response):
             ctype= "application/x-javascript"
         else:
             ctype = "text/html"
-        print "file type is: ", ftype, " responding with type-> ", ctype
+        #print "file type is: ", ftype, " responding with type-> ", ctype
         response_headers = [
-                            ('Content-type', ctype )
+        ('Content-type', ctype )
         ]
-        status  = status200
         start_response(status, response_headers)
         return [ostr]
         
-    #print "-- Dynamic REQUEST --------------------------------------------------------- "        
-    #print "Request: " + environ["REQUEST_METHOD"] + " " + environ["PATH_INFO"] + " " + environ["SERVER_PROTOCOL"] + " " + environ["QUERY_STRING"]    
-    #print "PATH_INFO before: ", pinfo_before
-    #print "PATH_INFO after: ", pinfo
+    print "-- Dynamic REQUEST --------------------------------------------------------- "        
+    print "Request: " + environ["REQUEST_METHOD"] + " " + environ["PATH_INFO"] + " " + environ["SERVER_PROTOCOL"] + " " + environ["QUERY_STRING"]    
+    print "PATH_INFO before: ", pinfo_before
+    print "PATH_INFO after: ", pinfo
         
-    
     if not session.has_key('counter'):
         session['counter'] = 0
-    else:
-        session['counter'] += 1
+    session['counter'] += 1
 
     powdict["SCRIPT_FILENAME"] = environ.get("SCRIPT_FILENAME")
     powdict["SCRIPT_DIR"] = os.path.dirname(environ.get("SCRIPT_FILENAME"))
@@ -177,7 +146,7 @@ def powapp_simple_server(environ, start_response):
     powdict["STYLESHEET_LINK_TAG"] = os.path.abspath(os.path.join(os.path.dirname(environ.get("SCRIPT_FILENAME")) + "/views/stylesheets/"))
     # PATH_INFO contains the path beginning from the app-root url.     # first part is the controller,      # second part is the action
     powdict["PATH_INFO"] = environ.get("PATH_INFO")
-    ##print os.path.split(powdict["PATH_INFO"])
+    #print os.path.split(powdict["PATH_INFO"])
     powdict["ENVIRON"] = pow_web_lib.show_environ( environ )
     powdict["DOCUMENT_ROOT"] = environ.get("DOCUMENT_ROOT")
     powdict["FLASHTEXT"] = ""
@@ -186,10 +155,10 @@ def powapp_simple_server(environ, start_response):
     #
     # get controller and action
     #
-    #print "environ[\"PATH_INFO\"] = ", environ["PATH_INFO"]
+    print "environ[\"PATH_INFO\"] = ", environ["PATH_INFO"]
     pathdict = pow_web_lib.get_controller_and_action(environ["PATH_INFO"])
     #(controller,action) = os.path.split(pathinfo)
-    #print "(controller,action) -> ", pathdict
+    print "(controller,action) -> ", pathdict
     controller = powdict["CONTROLLER"] = pathdict["controller"]
     action = powdict["ACTION"] = pathdict["action"]
     powdict["PATHDICT"]=pathdict
@@ -197,16 +166,16 @@ def powapp_simple_server(environ, start_response):
     #TO_DO: include the real, mod re based routing instead of seting it hard to user/list here.
     if controller == "":
         defroute = powlib.readconfig("pow.cfg","routes","default")
-        ##print get_controller_and_action(defroute)
+        #print get_controller_and_action(defroute)
         pathdict = pow_web_lib.get_controller_and_action(defroute)
         #(controller,action) = os.path.split(pathinfo)
-        #print "(controller,action) -> ", pathdict
+        print "(controller,action) -> ", pathdict
         controller = powdict["CONTROLLER"] = pathdict["controller"]
         action = powdict["ACTION"] = pathdict["action"]
         powdict["PATHDICT"]=pathdict
 
-        #print "Using the DEFAULT_ROUTE: ",
-        print pathdict
+        print "Using the DEFAULT_ROUTE: ",
+        print "(controller,action) -> ", pathdict
     
     # get rid of the first / in front of the controller. string[1:] returns the string from char1 to len(string)
     controller = string.capitalize(controller) + "Controller"
@@ -217,25 +186,18 @@ def powapp_simple_server(environ, start_response):
     aclass = powlib.load_class(controller,controller)
     aclass.setCurrentAction(action)
     #output.append(action + "<br>")
-    
     if hasattr( aclass, action ):
-        # real_action is the actual method to be called in the controller. 
-        # AppController.welcome() for example
         real_action = eval("aclass." + action)
-        #output.append("real_action: " + str(real_action) + "<br>")
-        # powdict is the parameter for the method.
-        output.append(real_action(powdict).encode("utf-8"))
-        #output.append(powdict)
-        return_code = 200
-    else:
-        output = ["Error calling requested Controller->Action  method"]
-        return_code = 500
-
+    #output.append("real_action: " + str(real_action) + "<br>")
+    
+    output.append(real_action(powdict).encode('utf-8'))
+    
     #
     # error handling wsgi see:
     #    1. http://www.python.org/dev/peps/pep-0333/#error-handling
     #     2. 
-    start_response(eval("status"+str(return_code)), response_headers)
+        
+    start_response(status, response_headers)
     return output
         
 session_opts = {
@@ -253,8 +215,7 @@ if __name__ == "__main__":
     application = pow_web_lib.Middleware(SessionMiddleware(powapp_simple_server, session_opts))
     
     httpd = make_server('', 8080, application)
-    
-    #print "Serving HTTP on port 8080..."
+    print "Serving HTTP on port 8080..."
 
     # Respond to requests until process is killed
     httpd.serve_forever()

@@ -25,43 +25,43 @@ Base = declarative_base(bind=x.__engine__, metadata = x.__metadata__)
 Base.metadata.reflect()
 
 class BaseVersion(Base):
-    __table__ = Base.metadata.tables['versions']
-    pao = x
-    #__mapper_args__ = {}
-    session = x.getSession()
-    
-    def __init__(self):
-        self.session = self.pao.getSession()
+	__table__ = Base.metadata.tables['versions']
+	pao = x
+	#__mapper_args__ = {}
+	session = x.getSession()
+	
+	def __init__(self):
+		self.session = self.pao.getSession()
 
-    def update(self):
-        self.session.merge(self)
-        self.session.commit()
-    
-    def delete(self, id):
-        s = delete(self.__table__, self.__table__.columns.id==id)
-        self.session.execute(s)
-        self.session.commit()
-    
-    def find_by(self, att, val, first=True):
-        mstr = "self.session.query(Base" + self.__class__.__name__ +").filter_by(" + str(att) + "=val)"
-        if first == True:
-            mstr += ".first()"
-        #print mstr
-        res= eval(mstr)
-        #res.__init__()
-        return res
-            
-    def find_all(self):
-        mstr = "self.session.query(Base" + self.__class__.__name__ + ").all()"
-        #print mstr
-        res= eval(mstr)
-        for elem in res:
-            elem.__init__()
-        return res
-    
-    def get(self, name):
-        return eval("self.get_"+ str(name)+"()")
-    
-    def set(self,name,val):
-        #eval("self.set_"+ str(name)+"("+val + ")" )
-        eval("self.set_"+ str(name)+"(\""+str(val) + "\")" )
+	def update(self):
+		self.session.merge(self)
+		self.session.commit()
+	
+	def delete(self, id):
+		s = delete(self.__table__, self.__table__.columns.id==id)
+		self.session.execute(s)
+		self.session.commit()
+	
+	def find_by(self, att, val, first=True):
+		mstr = "self.session.query(Base" + self.__class__.__name__ +").filter_by(" + str(att) + "=val)"
+		if first == True:
+			mstr += ".first()"
+		#print mstr
+		res= eval(mstr)
+		#res.__init__()
+		return res
+			
+	def find_all(self):
+		mstr = "self.session.query(Base" + self.__class__.__name__ + ").all()"
+		#print mstr
+		res= eval(mstr)
+		for elem in res:
+			elem.__init__()
+		return res
+	
+	def get(self, name):
+		return eval("self.get_"+ str(name)+"()")
+	
+	def set(self,name,val):
+		#eval("self.set_"+ str(name)+"("+val + ")" )
+		eval("self.set_"+ str(name)+"(\""+str(val) + "\")" )

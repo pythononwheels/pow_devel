@@ -6,7 +6,7 @@
 #
 # 
 
-# date created:     2011-06-21
+# date created: 	2011-06-21
 
 import sys
 import os
@@ -25,45 +25,45 @@ import BaseController
 import App
 
 class AppController(BaseController.BaseController):
-    
-    def __init__(self):
-        self.modelname = "App"
-        BaseController.BaseController.__init__(self)
-        self.login_required = []
-        self.locked_actions = [ "login", "do_login", "logout"]
-    
-    def welcome( self,powdict ):
-        return self.render(model=self.model, powdict=powdict)
-    def thanks( self,powdict ):
-        return self.render(model=self.model, powdict=powdict)
+	
+	def __init__(self):
+		self.modelname = "App"
+		BaseController.BaseController.__init__(self)
+		self.login_required = []
+		self.locked_actions = [ "login", "do_login", "logout"]
+	
+	def welcome( self,powdict ):
+		return self.render(model=self.model, powdict=powdict)
+	def thanks( self,powdict ):
+		return self.render(model=self.model, powdict=powdict)
         
-    def howto_start( self,powdict ):
-        return self.render(model=self.model, powdict=powdict)
+	def howto_start( self,powdict ):
+		return self.render(model=self.model, powdict=powdict)
     
 
-    
-    def login( self, powdict):
-        self.model.__init__()
-        return self.render(model=self.model, powdict=powdict)
-    
-    def do_login( self, powdict ):
-        user = User.User()
-        session = powdict["SESSION"]
-        try:
-            user = self.model.find_by("loginname",powdict["PARAMETERS"]["loginname"])
-            if user.password == powdict["PARAMETERS"]["password"]:
-                #login ok
-                session["user.id"] = user.id
-                session.save()
-                return self.redirect("list",powdict=powdict)
-            else:
-                return self.redirect("login",powdict=powdict)
-        except:
-            return self.redirect("login", powdict=powdict)
-    
-    def logout( self, powdict):
-        session = powdict["SESSION"]
-        session["user.id"] = 0
-        return self.redirect("list", powdict=powdict)
-        
-    
+	
+	def login( self, powdict):
+		self.model.__init__()
+		return self.render(model=self.model, powdict=powdict)
+	
+	def do_login( self, powdict ):
+		user = User.User()
+		session = powdict["SESSION"]
+		try:
+			user = self.model.find_by("loginname",powdict["PARAMETERS"]["loginname"])
+			if user.password == powdict["PARAMETERS"]["password"]:
+				#login ok
+				session["user.id"] = user.id
+				session.save()
+				return self.redirect("list",powdict=powdict)
+			else:
+				return self.redirect("login",powdict=powdict)
+		except:
+			return self.redirect("login", powdict=powdict)
+	
+	def logout( self, powdict):
+		session = powdict["SESSION"]
+		session["user.id"] = 0
+		return self.redirect("list", powdict=powdict)
+		
+	

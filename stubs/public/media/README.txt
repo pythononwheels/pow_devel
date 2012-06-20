@@ -26,11 +26,11 @@ Main value and design goals for pow:
   * Simple to understand. 
   * Generative. 
   * Based on proven python standards, tools and frameworks. (thank you very much for the tremendous work.)
-    ** wsgi
-    ** sqlAlchemy
-    ** Mako Templates 
-    ** Beaker Sessions
-    ** jQuery
+	** wsgi
+	** sqlAlchemy
+	** Mako Templates 
+	** Beaker Sessions
+	** jQuery
   * Keep the developer focus on the web app, not on the framework 
   * Shall offer the rails way to python users but beeing even a little more focused on simplicity. 
   
@@ -39,8 +39,8 @@ Main features:
 ---------------------------------------------
   * Model, View, Controller Pattern
   * web app batteries included:
-    ** Session support
-    ** basic authentication
+	** Session support
+	** basic authentication
   * apache mod_wsgi ready 
   * includes a ready to run simple_server
   * no installation needed, just unpack the archive and you are ready to run

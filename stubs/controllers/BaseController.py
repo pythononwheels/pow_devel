@@ -6,7 +6,7 @@
 #
 # 
 
-# date created:     2011-04-27
+# date created: 	2011-04-27
 
 
 import sys
@@ -22,81 +22,81 @@ import powlib
 import PowObject
 
 class BaseController(PowObject.PowObject):
-    #model = None
-    #session = None
-    #modelname = "None"
-    #current_action = "list"
-    moddir="/../views/mako_modules"
-    #mylookup = None
-    
-    
-    def __init__(self):
-        # example how to instanciate the model:
-        self.mylookup = TemplateLookup(directories=[os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)),"../views/")),
-                    os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)),"../views/layouts/")),
-                    os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)),"../views/stylesheets/"))
-                    ] )
-        self.model = powlib.load_class(self.modelname, self.modelname)
-        self.session = self.model.pao.getSession()
-        # put the actions that require a login into login_required list.
-        self.login_required = []
-        # put the actions you implemented but do not want to be callable via web request 
-        # into the locked_actions list
-        self.locked_actions = []
-        self.current_action = "NOT_DEFINED"
-        
-        
-    def index(self):
-        return self.render()
-        
-    def render(self, **kwargs):
-        powdict = kwargs["powdict"]
-        kwargs["powdict"] = powdict
-        kwargs["template"] = powlib.readconfig("pow.cfg","global","DEFAULT_TEMPLATE", powdict["POW_APP_DIR"])
-        if self.current_action not in self.locked_actions:
-            if self.access_granted(**kwargs) == True:
-                fname = os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)),"../views/") + self.modelname + "_" + self.current_action +".tmpl")
-                mytemplate = Template(filename=fname, lookup=self.mylookup)
-                return mytemplate.render(**kwargs)
-            else:
-                self.setCurrentAction("login")
-                fname = os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)),"../views/") + self.modelname + "_" + self.current_action +".tmpl")
-                mytemplate = Template(filename=fname, lookup=self.mylookup)
-                return mytemplate.render(**kwargs)
-        else:
-            kwargs["ERROR_INFO"] = "The action you have called (", self.current_action, "is locked from outside access."
-            return self.error(**kwargs)
-            
-    
-    def redirect(self, action, **kwargs):
-        self.setCurrentAction(action)
-        return eval("self." + action + "(**kwargs)")
-    
-    def access_granted(self,**kwargs):
-        # returns true if access is ok, meaning that:
-        # no login required or login required AND user already lgged in.
-        powdict = kwargs.get("powdict",None)
-        session = powdict["SESSION"]
-        is_logged_in = False
-        if self.current_action in self.login_required:
-            # login required, so check if user is logged in. 
-            try:
-                if session["user.id"] != 0:
-                    return True
-            except KeyError:
-                    return False
-        # by default return False
-        else:
-            # no login required
-            return True
-        return False
-    
-    def error(self, **kwargs):
-        fname = os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)),"../views/error.tmpl"))
-        mytemplate = Template(filename=fname, lookup=self.mylookup)
-        return mytemplate.render(**kwargs)
-        
-        
-    def setCurrentAction(self, action ):
-        self.current_action = action
-        
+	#model = None
+	#session = None
+	#modelname = "None"
+	#current_action = "list"
+	moddir="/../views/mako_modules"
+	#mylookup = None
+	
+	
+	def __init__(self):
+		# example how to instanciate the model:
+		self.mylookup = TemplateLookup(directories=[os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)),"../views/")),
+					os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)),"../views/layouts/")),
+					os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)),"../views/stylesheets/"))
+					] )
+		self.model = powlib.load_class(self.modelname, self.modelname)
+		self.session = self.model.pao.getSession()
+		# put the actions that require a login into login_required list.
+		self.login_required = []
+		# put the actions you implemented but do not want to be callable via web request 
+		# into the locked_actions list
+		self.locked_actions = []
+		self.current_action = "NOT_DEFINED"
+		
+		
+	def index(self):
+		return self.render()
+		
+	def render(self, **kwargs):
+		powdict = kwargs["powdict"]
+		kwargs["powdict"] = powdict
+		kwargs["template"] = powlib.readconfig("pow.cfg","global","DEFAULT_TEMPLATE", powdict["POW_APP_DIR"])
+		if self.current_action not in self.locked_actions:
+			if self.access_granted(**kwargs) == True:
+				fname = os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)),"../views/") + self.modelname + "_" + self.current_action +".tmpl")
+				mytemplate = Template(filename=fname, lookup=self.mylookup)
+				return mytemplate.render(**kwargs)
+			else:
+				self.setCurrentAction("login")
+				fname = os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)),"../views/") + self.modelname + "_" + self.current_action +".tmpl")
+				mytemplate = Template(filename=fname, lookup=self.mylookup)
+				return mytemplate.render(**kwargs)
+		else:
+			kwargs["ERROR_INFO"] = "The action you have called (", self.current_action, "is locked from outside access."
+			return self.error(**kwargs)
+			
+	
+	def redirect(self, action, **kwargs):
+		self.setCurrentAction(action)
+		return eval("self." + action + "(**kwargs)")
+	
+	def access_granted(self,**kwargs):
+		# returns true if access is ok, meaning that:
+		# no login required or login required AND user already lgged in.
+		powdict = kwargs.get("powdict",None)
+		session = powdict["SESSION"]
+		is_logged_in = False
+		if self.current_action in self.login_required:
+			# login required, so check if user is logged in. 
+			try:
+				if session["user.id"] != 0:
+					return True
+			except KeyError:
+					return False
+		# by default return False
+		else:
+			# no login required
+			return True
+		return False
+	
+	def error(self, **kwargs):
+		fname = os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)),"../views/error.tmpl"))
+		mytemplate = Template(filename=fname, lookup=self.mylookup)
+		return mytemplate.render(**kwargs)
+		
+		
+	def setCurrentAction(self, action ):
+		self.current_action = action
+		

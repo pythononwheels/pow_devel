@@ -24,37 +24,37 @@ Base = declarative_base(bind=x.__engine__, metadata = x.__metadata__)
 Base.metadata.reflect()
 
 class BaseApp(Base):
-    __table__ = Base.metadata.tables['app']
-    pao = x
-    #__mapper_args__ = {}
-    session = x.getSession()
-    
-    def __init__(self):
-        self.session = self.pao.getSession()
+	__table__ = Base.metadata.tables['app']
+	pao = x
+	#__mapper_args__ = {}
+	session = x.getSession()
+	
+	def __init__(self):
+		self.session = self.pao.getSession()
 
-    def update(self):
-        self.session.merge(self)
-        self.session.commit()
-    
-    def find_by(self, att, val, first=True):
-        mstr = "self.session.query(Base" + self.__class__.__name__ +").filter_by(" + str(att) + "=val)"
-        if first == True:
-            mstr += ".first()"
-        #print mstr
-        res= eval(mstr)
-        res.__init__()
-        return res
-            
-    def find_all(self):
-        mstr = "self.session.query(Base" + self.__class__.__name__ + ").all()"
-        #print mstr
-        res= eval(mstr)
-        for elem in res:
-            elem.__init__()
-        return res
-    
-    def get(self, name):
-        return eval("self."+ str(name))
-    
-    def set(self,name,val):
-        eval("self." + str(name)+ " = " + str(val)  )
+	def update(self):
+		self.session.merge(self)
+		self.session.commit()
+	
+	def find_by(self, att, val, first=True):
+		mstr = "self.session.query(Base" + self.__class__.__name__ +").filter_by(" + str(att) + "=val)"
+		if first == True:
+			mstr += ".first()"
+		#print mstr
+		res= eval(mstr)
+		res.__init__()
+		return res
+			
+	def find_all(self):
+		mstr = "self.session.query(Base" + self.__class__.__name__ + ").all()"
+		#print mstr
+		res= eval(mstr)
+		for elem in res:
+			elem.__init__()
+		return res
+	
+	def get(self, name):
+		return eval("self."+ str(name))
+	
+	def set(self,name,val):
+		eval("self." + str(name)+ " = " + str(val)  )

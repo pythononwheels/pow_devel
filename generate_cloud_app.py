@@ -84,10 +84,10 @@ def gen_app(appname, appdir, force=False):
     # create subdirs
     #
     powlib.check_create_dir(appbase + "/migrations/backup")
-    powlib.check_create_dir(appbase + "/models/cloud")
+	powlib.check_create_dir(appbase + "/models/cloud")
     powlib.check_create_dir(appbase + "/models/cloud/basemodels")
     powlib.check_create_dir(appbase + "/models/cloud/basemodels/pow")
-    powlib.check_create_dir(appbase + "/models/cloud/powmodels")
+	powlib.check_create_dir(appbase + "/models/cloud/powmodels")
     #powlib.check_create_dir(appbase + "/models/powmodels")
     powlib.check_create_dir(appbase + "/public/media")
     powlib.check_create_dir(appbase + "/public/media/images")
@@ -149,7 +149,7 @@ def gen_app(appname, appdir, force=False):
     powlib.check_copy_file("generate_scaffold.py", appbase)
     #powlib.check_copy_file("simple_server.py", appbase)
     #powlib.check_copy_file("generate_bang.py", appbase)
-    powlib.check_copy_file("pow_cloud.py", appbase)
+	powlib.check_copy_file("pow_cloud.py", appbase)
     #
     # copy the initial db's
     #

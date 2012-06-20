@@ -29,115 +29,115 @@ Base = declarative_base(bind=x.__engine__, metadata = x.__metadata__)
 Base.metadata.reflect()
 
 class BaseRelation(Base):
-    __table__ = Base.metadata.tables['relations']
-    pao = x
-    #__mapper_args__ = {}
-    session = None
-    has_accessor_methods = False
-    #__mapper_args__ = {}
-        
-    def __init__(self):
-        self.session = self.pao.getSession()
-        self.generate_accessor_methods()
-    
-    def find_by(self, att, val, first=True):
-        mstr = "self.session.query(Base" + self.__class__.__name__ +").filter_by(" + str(att) + "=val)"
-        if first == True:
-            mstr += ".first()"
-        print mstr
-        res= eval(mstr)
-        #res.__init__()
-        return res
-            
-    def find_all(self):
-        mstr = "self.session.query(Base" + self.__class__.__name__ + ").all()"
-        print mstr
-        res= eval(mstr)
-        #for elem in res:
-        #    elem.__init__()
-        return res
-    
-    def get(self, name):
-        return eval("self.get_"+ str(name)+"()")
-    
-    def set(self,name,val):
-        #eval("self.set_"+ str(name)+"("+val + ")" )
-        eval("self.set_"+ str(name)+"(\""+str(val) + "\")" )
-    
-    def getColumns(self):
-        rlist = []
-        for col in self.__table__.columns:
-            rlist.append( string.split(str(col), ".")[1])
-        return rlist
-    
-    def getName(self):
-        return self.__class__.__name__
-        
-    def generate_accessor_methods(self):
-        #
-        # generates the convenient getAttribute() and setAttribute Methods
-        mstr = ""
-        self.has_accessor_methods = True
-        for item in self.__table__.columns:
-            #getter
-            mstr = ""
-            method_name = "get_"+ item.name
-            tmp_meth_name = "foo"
-            mstr +=     "def foo(self):" + powlib.newline
-            mstr += powlib.tab + "return self." + str(item.name) + powlib.newline
-            #print mstr
-            exec(mstr)
-            self.__dict__[method_name] = types.MethodType(foo,self)
-            
-            # setter
-            mstr = ""
-            method_name = "set_"+ item.name
-            tmp_meth_name = "foo"
-            mstr +=     "def foo(self, value):" + powlib.newline
-            mstr += powlib.tab + "self." + str(item.name) + " = value " + powlib.newline
-            #print mstr
-            exec(mstr)
-            self.__dict__[method_name] = types.MethodType(foo,self)
-    
-    def generate_find_by( self ):
-        pass
-        
-    def get_by(self, name):
-        return eval("self." + str(name))
-    
-        
-    def __repr__(self):
-        ostr=""
-        ostr += str(type(self)) + powlib.newline
-        ostr += "-------------------------------" + powlib.newline
-        for col in self.__table__.columns:
-            ostr += col.name + "-->" + str(self.get_by(col.name)) + powlib.newline
-        return ostr
-    
-    def __reprhtml__(self):
-        ostr=""
-        ostr += str(type(self)) + "<br>"
-        ostr += "<hr>"
-        for col in self.__table__.columns:
-            ostr += col.name + "-->" + str(self.get_by(col.name)) + "<br>"
-        return ostr
+	__table__ = Base.metadata.tables['relations']
+	pao = x
+	#__mapper_args__ = {}
+	session = None
+	has_accessor_methods = False
+	#__mapper_args__ = {}
+		
+	def __init__(self):
+		self.session = self.pao.getSession()
+		self.generate_accessor_methods()
+	
+	def find_by(self, att, val, first=True):
+		mstr = "self.session.query(Base" + self.__class__.__name__ +").filter_by(" + str(att) + "=val)"
+		if first == True:
+			mstr += ".first()"
+		print mstr
+		res= eval(mstr)
+		#res.__init__()
+		return res
+			
+	def find_all(self):
+		mstr = "self.session.query(Base" + self.__class__.__name__ + ").all()"
+		print mstr
+		res= eval(mstr)
+		#for elem in res:
+		#	elem.__init__()
+		return res
+	
+	def get(self, name):
+		return eval("self.get_"+ str(name)+"()")
+	
+	def set(self,name,val):
+		#eval("self.set_"+ str(name)+"("+val + ")" )
+		eval("self.set_"+ str(name)+"(\""+str(val) + "\")" )
+	
+	def getColumns(self):
+		rlist = []
+		for col in self.__table__.columns:
+			rlist.append( string.split(str(col), ".")[1])
+		return rlist
+	
+	def getName(self):
+		return self.__class__.__name__
+		
+	def generate_accessor_methods(self):
+		#
+		# generates the convenient getAttribute() and setAttribute Methods
+		mstr = ""
+		self.has_accessor_methods = True
+		for item in self.__table__.columns:
+			#getter
+			mstr = ""
+			method_name = "get_"+ item.name
+			tmp_meth_name = "foo"
+			mstr +=	 "def foo(self):" + powlib.newline
+			mstr += powlib.tab + "return self." + str(item.name) + powlib.newline
+			#print mstr
+			exec(mstr)
+			self.__dict__[method_name] = types.MethodType(foo,self)
+			
+			# setter
+			mstr = ""
+			method_name = "set_"+ item.name
+			tmp_meth_name = "foo"
+			mstr +=	 "def foo(self, value):" + powlib.newline
+			mstr += powlib.tab + "self." + str(item.name) + " = value " + powlib.newline
+			#print mstr
+			exec(mstr)
+			self.__dict__[method_name] = types.MethodType(foo,self)
+	
+	def generate_find_by( self ):
+		pass
+		
+	def get_by(self, name):
+		return eval("self." + str(name))
+	
+		
+	def __repr__(self):
+		ostr=""
+		ostr += str(type(self)) + powlib.newline
+		ostr += "-------------------------------" + powlib.newline
+		for col in self.__table__.columns:
+			ostr += col.name + "-->" + str(self.get_by(col.name)) + powlib.newline
+		return ostr
+	
+	def __reprhtml__(self):
+		ostr=""
+		ostr += str(type(self)) + "<br>"
+		ostr += "<hr>"
+		for col in self.__table__.columns:
+			ostr += col.name + "-->" + str(self.get_by(col.name)) + "<br>"
+		return ostr
 
-    def update(self):
-        self.session.merge(self)
-        self.session.commit()
-    
-    def create(self):
-        self.session.merge(self)
-        self.session.commit()
-        
-    def delete(self, id):
-        s = delete(self.__table__, self.__table__.columns.id==id)
-        self.session.execute(s)
-        self.session.commit()
-    
-    @orm.reconstructor
-    def init_on_load(self):
-        if self.session == None:
-            self.session = self.pao.getSession()
-        if self.has_accessor_methods == False:
-            self.generate_accessor_methods()
+	def update(self):
+		self.session.merge(self)
+		self.session.commit()
+	
+	def create(self):
+		self.session.merge(self)
+		self.session.commit()
+		
+	def delete(self, id):
+		s = delete(self.__table__, self.__table__.columns.id==id)
+		self.session.execute(s)
+		self.session.commit()
+	
+	@orm.reconstructor
+	def init_on_load(self):
+		if self.session == None:
+			self.session = self.pao.getSession()
+		if self.has_accessor_methods == False:
+			self.generate_accessor_methods()

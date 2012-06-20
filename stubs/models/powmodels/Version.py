@@ -8,10 +8,10 @@ import powlib
 import BaseVersion
 
 class Version(BaseVersion.BaseVersion):
-    def __init__(self):
-        #print "__init__ was called on App"
-        BaseVersion.BaseVersion.__init__(self)
+	def __init__(self):
+		#print "__init__ was called on App"
+		BaseVersion.BaseVersion.__init__(self)
 
-    def __new__(klass, *args, **kwargs):
-        #print "__new__ was called on %s" % str(klass)
-        return super(Version, klass).__new__(klass, *args, **kwargs)
+	def __new__(klass, *args, **kwargs):
+		#print "__new__ was called on %s" % str(klass)
+		return super(Version, klass).__new__(klass, *args, **kwargs)

@@ -1,10 +1,10 @@
 * { padding:0; margin:0; outline:0; }
 body {
-    background:#000;
-    font-family: Arial, sans-serif;
-    font-size:12px;
-    line-height:20px;
-    color:#252525;
+	background:#000;
+	font-family: Arial, sans-serif;
+	font-size:12px;
+	line-height:20px;
+	color:#252525;
 }
 input, textarea, select { font-family: Georgia, sans-serif; font-size:12px; }
 
@@ -24,20 +24,20 @@ a:hover { text-decoration: none; }
 .ar { text-align: right; }
 .ac { text-align: center; }
 h1 {
-    font: 2.6em normal Georgia, 'Times New Roman', Times, serif; 
-    /* font-size: 2.6em; */
-    float:left;
-    padding: 30px 0;
-    color: #666;
+	font: 2.6em normal Georgia, 'Times New Roman', Times, serif; 
+	/* font-size: 2.6em; */
+	float:left;
+	padding: 30px 0;
+	color: #666;
 }
 h1 span { color: #ff9900; }
 h1 small{
-    font: 0.32em normal Verdana, Arial, Helvetica, sans-serif;
-    text-transform:uppercase;
-    /*padding: 10px 0;*/
-    letter-spacing: 1em;
-    display: block;
-    color: #aaa;
+	font: 0.32em normal Verdana, Arial, Helvetica, sans-serif;
+	text-transform:uppercase;
+	/*padding: 10px 0;*/
+	letter-spacing: 1em;
+	display: block;
+	color: #aaa;
 }
 h2 { font-size:34px; line-height:34px; text-transform: uppercase; color: #666; }
 /* h2 span{ color:#f4d359; } */
@@ -56,16 +56,16 @@ h1#logo a{ display:block; height:90px; text-indent: -4000px; }
 
 body { min-width:1030px;}
 .header { 
-    font: 1.6em normal Georgia, 'Times New Roman', Times, serif;
-    float: right;
-    padding: 20px 0;
-    color: #ff9900;
-    }
+	font: 1.6em normal Georgia, 'Times New Roman', Times, serif;
+	float: right;
+	padding: 20px 0;
+	color: #ff9900;
+	}
 .slide-image { 
-        float:right; 
-        width:219px; 
-        /* height:140px; */
-        }
+		float:right; 
+		width:219px; 
+		/* height:140px; */
+		}
 #header { height:90px; background:url(/static/media/images/pow_home/header.gif); }
 
 #navigation { float:right; }
@@ -100,8 +100,8 @@ body { min-width:1030px;}
 #slider-navigation ul li{ float:left; display:inline; position:relative; margin:-35px 95px -22px 0;}
 #slider-navigation ul li.last{ margin-right:0;}
 #slider-navigation ul li a{ float:left; width:171px; height:79px; background:url(/static/media/images/pow_home/slide-button.png) no-repeat 0 0; position:relative; 
-    left:-10px; color:#686767; font-size:14px; text-decoration: none; font-weight: bold; padding:45px 0 0 100px;}
-    
+	left:-10px; color:#686767; font-size:14px; text-decoration: none; font-weight: bold; padding:45px 0 0 100px;}
+	
 #slider-navigation ul li a strong { display:block; font-size:23px; line-height:23px; color:#fff;}
 #slider-navigation ul li a em{ position:absolute; top:43px; left:20px; }
 

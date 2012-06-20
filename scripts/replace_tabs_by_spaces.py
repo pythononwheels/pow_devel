@@ -4,17 +4,16 @@ import string
 
 if __name__ == "__main__":
 
-    exclude_dirs=["git"]
+    
     for (path, dirs, files) in os.walk("../"):
+        print path
         for file in files:
-            print path
-            if "git" in path or "scripts" in path:
-                print "skip ", path
-            else:
+            if not path.find(".git"):
                 print "process", path + file
                 infile = os.path.join(path, file)
                 f = open(infile,"r")
                 out = ""
+                
                 for line in f.readlines():
                     out += line.replace("\t", "    ")
                 f.close()
@@ -22,5 +21,5 @@ if __name__ == "__main__":
                 outfile = open(infile, "w")
                 outfile.write(out)
                 outfile.close()
+            
     sys.exit(0)
-    
