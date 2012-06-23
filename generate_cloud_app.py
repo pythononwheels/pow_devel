@@ -37,30 +37,35 @@ def main():
 
 
     (options, args) = parser.parse_args()
-    #print options
+    #print options, args
     if options.name == "None":
-        parser.error("You must at least specify an appname by giving -n <name>.")
-    else:
-        modelname = options.name
-        appdir = options.directory
-        appname = options.name
-        force = options.force
-        start = None
-        end = None
-        start = datetime.datetime.now()
+        if len(args) > 0:
+            options.name = args[0]
+        else:
+            parser.error("You must at least specify an appname by giving -n <name>.")
+    
+    modelname = options.name
+    appdir = options.directory
+    appname = options.name
+    force = options.force
+    start = None
+    end = None
+    start = datetime.datetime.now()
 
-        gen_app(appname, appdir, force)
+    gen_app(appname, appdir, force)
 
-        end = datetime.datetime.now()
-        duration = None
-        duration = end - start
-        print " -- generated_app in("+ str(duration) +")"
+    end = datetime.datetime.now()
+    duration = None
+    duration = end - start
+    print " -- generated_app in("+ str(duration) +")"
 
 def render_db_config( appname, appbase ):
     infile = open("./stubs/config/db.cfg")
     instr = infile.read()
     infile.close()
-    instr = instr.replace("please_rename_the_db", appname)
+    instr = instr.replace("please_rename_the_development_db", appname + "_devel")
+    instr = instr.replace("please_rename_the_test_db", appname + "_test")
+    instr = instr.replace("please_rename_the_production_db", appname + "_prod")
     ofile = open( os.path.normpath(appbase + "/config/db.cfg"), "w" )
     ofile.write(instr)
     ofile.close()
@@ -76,34 +81,29 @@ def gen_app(appname, appdir, force=False):
     powlib.check_create_dir(appdir + appname)
     appbase = os.path.abspath(os.path.normpath(appdir +"/"+ appname + "/"))
     #print appbase
-
-    subdirs = ["config","controllers","lib","models","public","stubs","views"]
+    #subdirs = [ "config", "db","lib", "migrations","models","public","stubs","views", "test"]
+    subdirs = [         {"config" : [] },  
+                        {"lib" : [] },
+                        {"models" : ["basemodels", "basemodels/pow", "powmodels"] },
+                        {"controllers" : [] },
+                        {"public" : ["media", "media/images", "media/images/pow_home", "media/images/simple_blog", "media/documents", "scripts", "stylesheets"] },
+                        {"stubs" : [] },
+                        {"views" : ["layouts"] },
+                        {"tests" : ["models", "controllers", "integration", "fixtures"] } ]
     for elem in subdirs:
-        powlib.check_create_dir( os.path.join(appbase,elem))
-    #
-    # create subdirs
-    #
-    powlib.check_create_dir(appbase + "/migrations/backup")
-    powlib.check_create_dir(appbase + "/models/cloud")
-    powlib.check_create_dir(appbase + "/models/cloud/basemodels")
-    powlib.check_create_dir(appbase + "/models/cloud/basemodels/pow")
-    powlib.check_create_dir(appbase + "/models/cloud/powmodels")
-    #powlib.check_create_dir(appbase + "/models/powmodels")
-    powlib.check_create_dir(appbase + "/public/media")
-    powlib.check_create_dir(appbase + "/public/media/images")
-    powlib.check_create_dir(appbase + "/public/media/images/pow_home")
-    powlib.check_create_dir(appbase + "/public/media/images/simple_blog")
-    powlib.check_create_dir(appbase + "/public/media/documents")
-    powlib.check_create_dir(appbase + "/public/scripts")
-    powlib.check_create_dir(appbase + "/public/stylesheets")
-    powlib.check_create_dir(appbase + "/views/layouts")
+        for key in elem:
+            subdir = os.path.join(appbase,str(key))
+            powlib.check_create_dir( subdir)
+            for subs in elem[key]:
+                powlib.check_create_dir( os.path.join(subdir,str(subs)))
+    
     #
     # copy the files in subdirs
     #
-    deep_copy_list = [  ("stubs/config", "config"), 
+    deep_copy_list = [  ("stubs/config", "config"),  
                         ("stubs/lib", "lib"), 
-                        ("stubs/models/cloud/basemodels/pow","models/cloud/basemodels/pow"), 
-                        ("stubs/models/cloud/powmodels","models/powmodels"), 
+                        ("stubs/models/basemodels/pow","models/basemodels/pow"), 
+                        ("stubs/models/powmodels","models/powmodels"), 
                         ("stubs", "stubs"),
                         ("stubs/public/stylesheets", "public/stylesheets"),
                         ("stubs/public/media","/public/media"),
@@ -116,6 +116,7 @@ def gen_app(appname, appdir, force=False):
                         ("stubs/views", "views"),
                         ("stubs/views/layouts", "views/layouts")
                         ]
+    
     print " -- copying files ..."
     exclude_patterns = [".pyc", ".pyo", ".DS_STORE"]
     exclude_files = [ "db.cfg" ]
@@ -133,7 +134,7 @@ def gen_app(appname, appdir, force=False):
                     os.path.join(appbase+"/"+dest_dir,source_file)
                 )
             else:
-                print " excluded: \t", source_file
+                print " excluded:     ", source_file
                 continue
                 
     #print "...done"
@@ -146,10 +147,15 @@ def gen_app(appname, appdir, force=False):
     #powlib.check_copy_file("do_migrate.py", appbase)
     powlib.check_copy_file("generate_controller.py", appbase)
     #powlib.check_copy_file("generate_migration.py", appbase)
-    powlib.check_copy_file("generate_scaffold.py", appbase)
+    #powlib.check_copy_file("generate_scaffold.py", appbase)
     #powlib.check_copy_file("simple_server.py", appbase)
+    #powlib.check_copy_file("pow_router.wsgi", appbase)
     #powlib.check_copy_file("generate_bang.py", appbase)
-    powlib.check_copy_file("pow_cloud.py", appbase)
+    powlib.check_copy_file("pow_console.py", appbase)
+    powlib.check_copy_file("runtests.py", appbase)
+    
+    #´create the app.yaml file
+    make_app_yaml(appname, appbase)
     #
     # copy the initial db's
     #
@@ -162,6 +168,18 @@ def gen_app(appname, appdir, force=False):
     render_db_config(appname, appbase)
     
     return
+    
+def make_app_yaml(appname, appbase):
+    """creates the GAE app.yaml file"""
+    infile = open("./app.yaml","r")
+    ofile = open(os.path.join( os.path.abspath(appbase), "app.yaml"), "w")
+    instr = infile.read()
+    instr = instr.replace("#APPNAME", appname)
+    ostr.write(instr)
+    infile.close()
+    ofile.close()
+    return 
+    
     
     
 if __name__ == "__main__":
