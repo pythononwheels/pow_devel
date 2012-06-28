@@ -60,6 +60,7 @@ def main():
     print " -- generated_app in("+ str(duration) +")"
 
 def render_db_config( appname, appbase ):
+    """ Creates the db.cfg file for this application and puts it in appname/config/db.cfg"""
     infile = open("./stubs/config/db.cfg")
     instr = infile.read()
     infile.close()
@@ -72,7 +73,10 @@ def render_db_config( appname, appbase ):
     
 
 def gen_app(appname, appdir, force=False):
-
+    """ Generates the complete App Filesystem Structure for Non-GAE Apps.
+        Filesystem action like file and dir creation, copy fiels etc. NO DB action in this function 
+    """
+    
     appname = str(appname)
     appname = str.strip(appname)
     appname = str.lower(appname)
