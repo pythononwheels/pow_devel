@@ -8,6 +8,7 @@
 .metadata
 testapp/
 test/
+atest/
 bin/
 tmp/
 .DS_Store/
