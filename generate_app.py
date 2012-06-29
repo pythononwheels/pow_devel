@@ -40,6 +40,7 @@ def main():
     #print options, args
     if options.name == "None":
         if len(args) > 0:
+            # if no option flag (like -n) is given, it is assumed that the first argument is the appname. (representing -n arg1)
             options.name = args[0]
         else:
             parser.error("You must at least specify an appname by giving -n <name>.")
@@ -85,7 +86,7 @@ def gen_app(appname, appdir, force=False):
     powlib.check_create_dir(appdir + appname)
     appbase = os.path.abspath(os.path.normpath(appdir +"/"+ appname + "/"))
     #print appbase
-    #subdirs = [ "config", "db","lib", "migrations","models","public","stubs","views", "test"]
+    # defines the subdirts to be created. Form { dir : subdirs }
     subdirs = [ {"config" : [] },  
                         {"db" : [] },
                         {"lib" : [] },
@@ -104,12 +105,10 @@ def gen_app(appname, appdir, force=False):
                 powlib.check_create_dir( os.path.join(subdir,str(subs)))
     
     #
-    # copy the files in subdirs
+    # copy the files in subdirs. Form ( from, to )
     #
     deep_copy_list = [  ("stubs/config", "config"),  
                         ("stubs/lib", "lib"), 
-                        ("stubs/models/basemodels/pow","models/basemodels/pow"), 
-                        ("stubs/models/powmodels","models/powmodels"), 
                         ("stubs", "stubs"),
                         ("stubs/public/stylesheets", "public/stylesheets"),
                         ("stubs/public/media","/public/media"),

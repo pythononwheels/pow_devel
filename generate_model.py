@@ -35,9 +35,12 @@ def main():
     
     (options, args) = parser.parse_args()
     #print options
-    if options.name == "None":
-        parser.error("You must at least specify a modelname by giving -n <name>.")
-        return
+     if options.name == "None":
+        if len(args) > 0:
+            # if no option flag (like -n) is given, it is assumed that the first argument is the model name. (representing -n arg1)
+            options.name = args[0]
+        else:
+            parser.error("You must at least specify an appname by giving -n <name>.")
     else:
         model_dir = os.path.normpath("./models/")
         modelname = options.name

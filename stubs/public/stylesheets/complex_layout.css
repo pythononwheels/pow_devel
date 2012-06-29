@@ -33,7 +33,7 @@ body {
 	margin:2em auto;
 	background:#FFF;
 	padding:1.3em;
-	background:#FFF url(/static/media/body_bg.gif) bottom repeat-x;
+	background:#FFF url(/static/media/images/complex_layout/body_bg.gif) bottom repeat-x;
 	border:0.1em solid #EAEAEA;
 }
 
@@ -49,7 +49,7 @@ a {
 }
 
 p a, td a, th a {
-	background:url(/static/media/link_underline.gif) bottom repeat-x;
+	background:url(/static/media/images/complex_layout/link_underline.gif) bottom repeat-x;
 	padding-bottom:0.1em;
 }
 
@@ -62,7 +62,7 @@ ul {
 	height:14em;
 	position:relative;
 	margin-bottom:0.3em;
-	background:url(/static/media/masthead_bg_black.gif) repeat-x;
+	background:url(/static/media/images/complex_layout/masthead_bg_black.gif) repeat-x;
 	line-height:14em;
 }
 
@@ -83,7 +83,7 @@ ul {
 }
 
 #mastheadBox {
-	background:url(/static/media/masthead_box.gif) left center no-repeat;
+	background:url(/static/media/images/complex_layout/masthead_box.gif) left center no-repeat;
 	z-index:11;
 	position:absolute;
 	height:8em;
@@ -109,7 +109,7 @@ ul {
 	clear:both;
 	padding:0.5em 2em;
 	margin-top:0.3em;
-	background:#EAEAEA url(/static/media/breadcrumbs_bg_black.gif);
+	background:#EAEAEA url(/static/media/images/complex_layout/breadcrumbs_bg_black.gif);
 }
 
 #breadCrumbs li {
@@ -119,7 +119,7 @@ ul {
 #breadCrumbs li a {
 	margin-right:0.5em;
 	padding-right:1em;
-	background:url(/static/media/breadcrumbs_bullet.gif) right 0.7em no-repeat;
+	background:url(/static/media/images/complex_layout/breadcrumbs_bullet.gif) right 0.7em no-repeat;
 }
 
 #breadCrumbs li a:hover, #footer li a:hover {
@@ -160,7 +160,7 @@ ul {
 }
 
 #mainContent li {
-	background:url(/static/media/li_bullet.gif) left center no-repeat;
+	background:url(/static/media/images/complex_layout/li_bullet.gif) left center no-repeat;
 	font-size:1.2em;
 	padding-left:1em;
 	margin:0 0 0.5em 1em;
@@ -240,7 +240,7 @@ input:hover, input:focus, textarea:hover, textarea:focus {
 	font-size:1em;
 	font-weight:bold;
 	width:auto;
-	background:#F90 url(/static/media/nav_bg.gif) bottom repeat-x;
+	background:#F90 url(/static/media/images/complex_layout/nav_bg.gif) bottom repeat-x;
 }
 
 input#submit:hover {
@@ -279,11 +279,11 @@ input#submit:hover {
 	font-style:italic;
 	font-size:0.9em;
 	padding:0.5em 0 0 2em;
-	background:url(/static/media/left_quote.gif) no-repeat;
+	background:url(/static/media/images/complex_layout/left_quote.gif) no-repeat;
 }
 
 #secondaryContent blockquote p {
-	background:url(/static/media/right_quote.gif) right bottom no-repeat;
+	background:url(/static/media/images/complex_layout/right_quote.gif) right bottom no-repeat;
 	padding-bottom:1em;
 }
 
@@ -301,7 +301,7 @@ input#submit:hover {
 	text-align:center;
 	clear:both;
 	padding:1em 0 0;
-	background:url(/static/media/footer_hr.gif) repeat-x;
+	background:url(/static/media/images/complex_layout/footer_hr.gif) repeat-x;
 }
 
 #footer li {

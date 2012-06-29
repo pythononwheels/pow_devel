@@ -36,8 +36,12 @@ def main():
     (options, args) = parser.parse_args()
     #print options
     if options.model == "None" and options.job == "None":
-        parser.error("You must at least specify a migration model by giving -m <modelname>.")
-        return
+        if len(args) > 0:
+            # if no option flag (like -m) is given, it is assumed that the first argument is the model. (representing -m arg1)
+            options.model = args[0]
+        else:
+            parser.error("You must at least specify an appname by giving -n <name>.")
+            return
     else:
         if options.name == "None":
             migration_name = options.model
