@@ -9,6 +9,7 @@
 testapp/
 test/
 atest/
+pystorm/
 bin/
 tmp/
 .DS_Store/

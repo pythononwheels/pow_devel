@@ -23,6 +23,7 @@ import powlib
 #pow_newline = powlib.linesep
 #pow_tab = powlib.tab
 
+    
 def main():
     parser = OptionParser()
     #mode = MODE_CREATE
@@ -67,7 +68,7 @@ def render_db_config( appname, appbase ):
     infile.close()
     instr = instr.replace("please_rename_the_development_db", appname + "_devel")
     instr = instr.replace("please_rename_the_test_db", appname + "_test")
-    instr = instr.replace("please_rename_the_production_db", appname + "_prod")
+    instr = instr.replace("please_rename_the_production_db", appname )
     ofile = open( os.path.normpath(appbase + "/config/db.cfg"), "w" )
     ofile.write(instr)
     ofile.close()
@@ -138,7 +139,7 @@ def gen_app(appname, appdir, force=False):
                     os.path.join(appbase+"/"+dest_dir,source_file)
                 )
             else:
-                print " excluded:     ", source_file
+                print " excluded:.EXCL", source_file
                 continue
                 
     #print "...done"
@@ -162,7 +163,7 @@ def gen_app(appname, appdir, force=False):
     # copy the initial db's
     #
     powlib.check_copy_file("stubs/db/empty.db", os.path.normpath(appbase + "/db/" + appname + ".db") )
-    powlib.check_copy_file("stubs/db/empty_app.db", os.path.normpath(appbase + "/db/app.db") )
+    #powlib.check_copy_file("stubs/db/empty_app.db", os.path.normpath(appbase + "/db/app.db") )
     
     #
     # initiate the db.cfg file

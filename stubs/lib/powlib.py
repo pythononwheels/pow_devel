@@ -19,6 +19,7 @@ sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(_
 linesep = "\n"
 newline = linesep
 tab = "    "
+MAX_SYSOUT = 50
 
 #
 # (pattern, search, replace) regex english plural rules tuple
@@ -146,11 +147,11 @@ def check_copy_file( src, dest, force=True, details=False):
                 ret = 1
                 print " copied" + "...\t", src
             except IOError, (errno, strerror):
-                print " I/O error(%s): %s. File: %s" % (errno, strerror, src)
+                print " I/O error...(%s): %s. File: %s" % (errno, strerror, src)
                 ret = -1
                 return ret
         else:
-            print " skipped...\t", src, " ( it's a directory )"
+            print " skipped...DIR\t", src
 
     #print src + " to " + os.path.normpath(dest)
     #src_path, src_file = os.path.split(src)
