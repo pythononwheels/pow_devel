@@ -35,11 +35,14 @@ def powapp_simple_server(environ, start_response):
     # prod-webserver A to prod-webserver B. with this litte tirck you can leave your links unchanged.
     # for apache the redirection is done in http.conf
     alias_dict ={    
-        "/static/css/"             :    "./public/stylesheets/",
-        "/static/stylesheets/"     :    "./public/stylesheets/",
-        "/static/media/"        :    "./public/media/",
-        "/static/scripts/"         :     "./public/scripts/",
-        "/static/documents/"     :     "./public/media/documents"
+        "/static/css/"             :    "./public/css/",
+        "/static/stylesheets/"     :    "./public/css/",
+        "/static/scripts/"         :     "./public/js/",
+        "/static/js/"               :     "./public/js/",
+        "/static/documents/"     :     "./public/doc",
+        "/static/doc/"           :     "./public/doc",
+        "/static/ico/"           :     "./public/ico"
+        
         }
     environ["SCRIPT_FILENAME"] = __file__
     powdict["POW_APP_NAME"] = "PythonOnWheels"

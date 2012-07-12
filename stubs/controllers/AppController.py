@@ -22,18 +22,17 @@ sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(_
 import powlib
 import PowObject
 import BaseController
-import App
 
 class AppController(BaseController.BaseController):
     
     def __init__(self):
-        self.modelname = "App"
+        self.modelname = None
         BaseController.BaseController.__init__(self)
         self.login_required = []
         self.locked_actions = [ "do_login"]
     
     def welcome( self,powdict ):
-        return self.render(model=self.model, powdict=powdict)
+        return self.render(special_tmpl="hero.tmpl",model=self.model, powdict=powdict)
         
     def thanks( self,powdict ):
         return self.render(model=self.model, powdict=powdict)
