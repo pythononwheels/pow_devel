@@ -20,7 +20,7 @@ class Shell(code.InteractiveConsole):
         code.InteractiveConsole.__init__(self)
         # importing the pow modules as well as 
         # current Models, Controllers for this project
-        importdirs = ["models/basemodels","models/powmodels", "models", "controllers" ]
+        importdirs = ["models/basemodels", "models", "controllers" ]
         include_ext_list = [".py"]
         for adir in importdirs:
             sys.path.append(os.path.abspath(adir))

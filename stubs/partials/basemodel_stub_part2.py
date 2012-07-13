@@ -1,5 +1,4 @@
     
-    pao = y
     pbo = x
     session = None
     t = None

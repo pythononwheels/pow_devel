@@ -20,7 +20,7 @@ linesep = "\n"
 newline = linesep
 tab = "    "
 MAX_SYSOUT = 50
-
+PARTS_DIR = "./stubs/partials/"
 #
 # (pattern, search, replace) regex english plural rules tuple
 # taken from : http://www.daniweb.com/software-development/python/threads/70647

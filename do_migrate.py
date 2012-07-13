@@ -17,12 +17,11 @@ from sqlalchemy.orm import mapper
 
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./lib" )))
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./models" )))
-sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./models/powmodels" )))
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./controllers" )))
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./migrations" )))
 
 import powlib
-import App
+import Appinfo
 import PowTable
 
 # setting the right defaults
@@ -99,16 +98,16 @@ def do_job(options, filename, method):
     elif options.direction == "down":
         mig.down()
     else:
-        raise StandardError("Migration Direction is neitehr <up> nor <down>.")
+        raise StandardError("Migration Direction is neither <up> nor <down>.")
     return
 
 def do_migrate( goalversion, direction):
-    #powlib.load_module("App")
+    #powlib.load_module("Appinfo")
     print "migrating "
-    app = powlib.load_class( "App", "App")
+    app = powlib.load_class( "Appinfo", "Appinfo")
     app_versions = powlib.load_class( "Version", "Version")
-    sess = app.pao.getSession()
-    app = sess.query(App.App).first()
+    sess = app.pbo.getSession()
+    app = sess.query(Appinfo.Appinfo).first()
     #print app
     #print "name: " + app.name
     #print "path: " + app.path
@@ -191,12 +190,12 @@ def drop_table(tablename, **kwargs):
     return
     
 def set_currentversion( ver ):
-    #powlib.load_module("App")
+    
     print "migrating "
-    app = powlib.load_class( "App", "App")
+    app = powlib.load_class( "Appinfo", "Appinfo")
     app_versions = powlib.load_class( "Version", "Version")
-    sess = app.pao.getSession()
-    app = sess.query(App.App).first()
+    sess = app.pbo.getSession()
+    app = sess.query(Appinfo.Appinfo).first()
     #print app
     #print "name: " + app.name
     #print "path: " + app.path
@@ -214,10 +213,10 @@ def set_currentversion( ver ):
     
     
 def do_erase():
-    app = powlib.load_class( "App", "App")
+    app = powlib.load_class( "Appinfo", "Appinfo")
     app_version = powlib.load_class( "Version", "Version")
-    sess = app.pao.getSession()
-    app = sess.query(App.App).first()
+    sess = app.pbo.getSession()
+    app = sess.query(Appinfo.Appinfo).first()
     print " -- erasing migration version:", str(app.maxversion)
 
     sess.add(app)
@@ -238,14 +237,12 @@ def do_erase():
     filename_pyc = filename + "c"
     
     print "attempting to delete version: " + str(maxversion) + "->" + filename
-    if powlib.check_copy_file(os.path.normpath("./migrations/" + filename ), os.path.normpath("./migrations/backup/")): 
-        print " -- backed up migration: ", filename
-        if os.path.isfile( os.path.normpath("./migrations/" + filename) ):
-            os.remove( os.path.normpath("./migrations/" + filename) )
-            print " -- deleted: ", filename
-        if os.path.isfile( os.path.normpath("./migrations/" + filename_pyc) ):
-            os.remove( os.path.normpath("./migrations/" + filename_pyc) )
-            print " -- deleted: ", filename_pyc
+    if os.path.isfile( os.path.normpath("./migrations/" + filename) ):
+        os.remove( os.path.normpath("./migrations/" + filename) )
+        print " -- deleted: ", filename
+    if os.path.isfile( os.path.normpath("./migrations/" + filename_pyc) ):
+        os.remove( os.path.normpath("./migrations/" + filename_pyc) )
+        print " -- deleted: ", filename_pyc
 
     #  delete the app.db.version entry
     ver.delete(ver.id)
@@ -260,10 +257,10 @@ def do_erase():
     
 
 def show_info():
-    app = powlib.load_class( "App", "App")
+    app = powlib.load_class( "Appinfo", "Appinfo")
     app_versions = powlib.load_class( "Version", "Version")
-    sess = app.pao.getSession()
-    app = sess.query(App.App).first()
+    sess = app.pbo.getSession()
+    app = sess.query(Appinfo.Appinfo).first()
     print "showing migration information for"
     print " -- Appname: " + app.name
     print " -- currentversion is : " + str(app.currentversion)

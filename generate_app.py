@@ -3,8 +3,8 @@
 #  pow model generator.
 #
 # options are:
-#    no option or -create         means create
-#    -remove             removes
+#   see: python generate_app.py --help
+
 
 from optparse import OptionParser
 import sqlite3, sys, os, datetime
@@ -46,7 +46,6 @@ def main():
         else:
             parser.error("You must at least specify an appname by giving -n <name>.")
     
-    modelname = options.name
     appdir = options.directory
     appname = options.name
     force = options.force
@@ -73,7 +72,6 @@ def render_db_config( appname, appbase ):
     ofile.write(instr)
     ofile.close()
     
-
 def gen_app(appname, appdir, force=False):
     """ Generates the complete App Filesystem Structure for Non-GAE Apps.
         Filesystem action like file and dir creation, copy fiels etc. NO DB action in this function 
@@ -91,11 +89,11 @@ def gen_app(appname, appdir, force=False):
     subdirs = [ {"config" : [] },  
                         {"db" : [] },
                         {"lib" : [] },
-                        {"migrations" : ["backup"] },
-                        {"models" : ["basemodels", "basemodels/pow", "powmodels"] },
+                        {"migrations" : [] },
+                        {"models" : ["basemodels", "basemodels/pow"] },
                         {"controllers" : [] },
                         {"public" : ["img", "img/bs", "ico", "css", "css/bs", "js", "js/bs", "doc"] },
-                        {"stubs" : [] },
+                        {"stubs" : ["partials"] },
                         {"views" : ["layouts"] },
                         {"tests" : ["models", "controllers", "integration", "fixtures"] } ]
     for elem in subdirs:
@@ -111,6 +109,8 @@ def gen_app(appname, appdir, force=False):
     deep_copy_list = [  ("stubs/config", "config"),  
                         ("stubs/lib", "lib"), 
                         ("stubs", "stubs"),
+                         ("stubs/migrations","migrations"),
+                        ("stubs/partials","stubs/partials"),
                         ("stubs/public/doc","/public/doc"),
                         ("stubs/public/ico","/public/ico"),
                         ("stubs/public/img","/public/img"),
@@ -149,7 +149,6 @@ def gen_app(appname, appdir, force=False):
     #
     # copy the generator files
     #
-    #powlib.check_copy_file("generate_app.py", appbase)
     powlib.check_copy_file("generate_model.py", appbase)
     powlib.check_copy_file("do_migrate.py", appbase)
     powlib.check_copy_file("generate_controller.py", appbase)
@@ -157,14 +156,15 @@ def gen_app(appname, appdir, force=False):
     powlib.check_copy_file("generate_scaffold.py", appbase)
     powlib.check_copy_file("simple_server.py", appbase)
     powlib.check_copy_file("pow_router.wsgi", appbase)
-    powlib.check_copy_file("generate_bang.py", appbase)
     powlib.check_copy_file("pow_console.py", appbase)
     powlib.check_copy_file("runtests.py", appbase)
 
     #
     # copy the initial db's
     #
-    powlib.check_copy_file("stubs/db/empty.db", os.path.normpath(appbase + "/db/" + appname + ".db") )
+    powlib.check_copy_file("stubs/db/app_db_including_app_versions.db", os.path.normpath(appbase + "/db/" + appname + ".db") )
+    powlib.check_copy_file("stubs/db/app_db_including_app_versions.db", os.path.normpath(appbase + "/db/" + appname + "_test.db") )
+    powlib.check_copy_file("stubs/db/app_db_including_app_versions.db", os.path.normpath(appbase + "/db/" + appname + "_devel.db") )
     #powlib.check_copy_file("stubs/db/empty_app.db", os.path.normpath(appbase + "/db/app.db") )
     
     #

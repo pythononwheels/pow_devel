@@ -18,18 +18,20 @@ import string
 import types
 import urllib
 
-sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../lib" )))
-sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../powmodels" )))
+# the libraries
+sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../../lib" )))
+# the models
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../" )))
+# the generators
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../../" )))
+
 import powlib
 from PowBaseObject import PowBaseObject
-from PowAppObject import PowAppObject
-import Relation
+
 import generate_model
 
 x = PowBaseObject()
-y = PowAppObject()
+
 Base = declarative_base(bind=x.__engine__, metadata = x.__metadata__)
 Base.metadata.reflect()
 

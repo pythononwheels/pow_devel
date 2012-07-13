@@ -3,8 +3,7 @@
 #  pow model generator.
 #
 # options are: 
-#    no option or -create         means create
-#    -remove             removes 
+#   see: python generate_migration.py --help
 
 
 import os, datetime, time
@@ -17,14 +16,14 @@ from sqlalchemy import *
 
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./lib" )))
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./models" )))
-sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./models/powmodels" )))
+
 import powlib
-import App
+import Appinfo
 
 # setting the right defaults
 MODE_CREATE = 1
 MODE_REMOVE = 0
-
+PARTS_DIR = powlib.PARTS_DIR
 def main():
     parser = OptionParser()
     mode= MODE_CREATE
@@ -65,13 +64,13 @@ def main():
     print "generated_migration in("+ str(duration) +")"
     return
     
-def render_migration(name,model, comment):
+def render_migration(name, model, comment):
     # 
     
     #print "generate_migration: " + name + "  for model: " + model
     
     # add the auto generated warning to the outputfile
-    infile = open (os.path.normpath("./stubs/can_be_edited.txt"), "r")
+    infile = open (os.path.normpath(PARTS_DIR + "/can_be_edited.txt"), "r")
     ostr = infile.read()
     infile.close()
     
@@ -81,7 +80,7 @@ def render_migration(name,model, comment):
     ostr = ostr + os.linesep
     
     # Add the model_stub part1 content to the newly generated file. 
-    infile = open (os.path.normpath("./stubs/db_migration_stub2_part1.py"), "r")
+    infile = open (os.path.normpath( PARTS_DIR + "db_migration_stub2_part1.py"), "r")
     ostr = ostr + infile.read()
     infile.close()
     
@@ -91,17 +90,17 @@ def render_migration(name,model, comment):
     #print "modelname was: " + model + "  pluralized table_name is:" + pluralname
     
     # Add the model_stub part2 content to the newly generated file. 
-    infile = open (os.path.normpath("./stubs/db_migration_stub2_part2.py"), "r")
+    infile = open (os.path.normpath( PARTS_DIR + "db_migration_stub2_part2.py"), "r")
     ostr = ostr + infile.read()
     infile.close()
     
     #ostr += powlib.tab + powlib.tab + powlib.tab +  "Column('id', Integer, Sequence('" + model +"_id_seq'), primary_key=True),"
     #ostr += powlib.newline
     
-    app = powlib.load_class( "App", "App")
+    app = powlib.load_class( "Appinfo", "Appinfo")
     app_versions = powlib.load_class( "Version", "Version")
-    sess = app.pao.getSession()
-    app = sess.query(App.App).first()
+    sess = app.pbo.getSession()
+    app = sess.query(Appinfo.Appinfo).first()
     
     version = app.maxversion
     oldmaxversion = version
@@ -135,7 +134,7 @@ def render_migration_job(filename):
         They can be executed with python migrate.py -f <migrationname>
         """
         print " -- creating migration job:"
-        powlib.check_copy_file(os.path.normpath("./stubs/migration_job.py"), "./migrations/" + filename + "_migration.py")
+        powlib.check_copy_file(os.path.normpath( PARTS_DIR + "migration_job.py"), "./migrations/" + filename + "_migration.py")
         return
         
 

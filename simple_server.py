@@ -17,6 +17,16 @@ import urllib
 import powlib
 import pow_web_lib
 
+# one of: 
+#    NORMAL  = print almost nothing
+#    INFO    = more Info printed (But especially NOT the whole WSGI environment)
+#    DEBUG   = All Info printed, including WSGI environment. (LONG)
+MODE_NORMAL = 1
+MODE_INFO = 2
+MODE_DEBUG = 3
+
+MODE = MODE_NORMAL
+
 def powapp_simple_server(environ, start_response):
     
     #print show_environ_cli(environ)
@@ -66,18 +76,20 @@ def powapp_simple_server(environ, start_response):
     
     powdict["SESSION"] = session
     print "Check request type!"
-    print pow_web_lib.show_environ_cli(environ)
+    if MODE > MODE_INFO:
+        print pow_web_lib.show_environ_cli(environ)
     if pow_web_lib.is_get_request(environ):
         plist = pow_web_lib.get_http_get_parameters(environ)
     elif pow_web_lib.is_post_request(environ):
         plist = pow_web_lib.get_http_post_parameters_new(environ)
     else:
         return
-    #print show_environ_cli(environ)
+    
     
     powdict["PARAMETERS"] = plist
-    print plist
-    print plist.keys()
+    if MODE > MODE_NORMAL: 
+        print plist
+        print plist.keys()
     if plist.has_key("image"):
         print "Image found: ", plist['image'].filename
         ofile = file("tmp.out", "wb")
