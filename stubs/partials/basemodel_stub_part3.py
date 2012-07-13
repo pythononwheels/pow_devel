@@ -40,8 +40,8 @@
         return eval("self.get_"+ str(name)+"()")
 
     def set(self,name,val):
-        val = urllib.unquote(unicode(val))
-        print " ++ Model, updating: ", name, " -> ", val, " # ", type(val)
+        val = urllib.unquote(val)
+        print " ++ Model, setting: ", name, " -> ", val, " # ", type(val)
         eval("self.set_"+ str(name)+"(\""+ val + "\")" )
         return
 

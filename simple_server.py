@@ -82,6 +82,12 @@ def powapp_simple_server(environ, start_response):
         plist = pow_web_lib.get_http_get_parameters(environ)
     elif pow_web_lib.is_post_request(environ):
         plist = pow_web_lib.get_http_post_parameters_new(environ)
+        odict = {}
+        for k in plist.keys():
+            odict[k] = plist[k].value
+        print odict
+        print type(odict)
+        plist = odict
     else:
         return
     

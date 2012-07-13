@@ -90,7 +90,7 @@ def gen_app(appname, appdir, force=False):
                         {"db" : [] },
                         {"lib" : [] },
                         {"migrations" : [] },
-                        {"models" : ["basemodels", "basemodels/pow"] },
+                        {"models" : ["basemodels"] },
                         {"controllers" : [] },
                         {"public" : ["img", "img/bs", "ico", "css", "css/bs", "js", "js/bs", "doc"] },
                         {"stubs" : ["partials"] },

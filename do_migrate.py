@@ -47,7 +47,7 @@ def main():
         return
     
     if options.version == "None":
-        ver = -1
+        ver = None
     else:
         ver = int(options.version)
     
@@ -103,7 +103,7 @@ def do_job(options, filename, method):
 
 def do_migrate( goalversion, direction):
     #powlib.load_module("Appinfo")
-    print "migrating "
+    print "..migrating "
     app = powlib.load_class( "Appinfo", "Appinfo")
     app_versions = powlib.load_class( "Version", "Version")
     sess = app.pbo.getSession()
@@ -118,7 +118,7 @@ def do_migrate( goalversion, direction):
     maxversion = int(app.maxversion)
     
     times = 1
-    if goalversion == -1:
+    if goalversion == None:
         pass
     elif goalversion > maxversion:
         print " -- Error: version would become greater than Maxversion.. bailing out"
@@ -137,6 +137,10 @@ def do_migrate( goalversion, direction):
         print " -- Running " + str(times) + " times: " 
     sess.add(app)
     
+    if goalversion <2:
+        #then the appinfo or versions table would be migrated down which will break the environment.
+        print " -- Error: you are attemting to migrate down the sytem tables version and/or appinfo.. bailing out"
+        return
         
     for run in range(0,times):
         #
@@ -262,7 +266,7 @@ def show_info():
     sess = app.pbo.getSession()
     app = sess.query(Appinfo.Appinfo).first()
     print "showing migration information for"
-    print " -- Appname: " + app.name
+    #print " -- Appname: " + app.name
     print " -- currentversion is : " + str(app.currentversion)
     print " -- max version is : " + str(app.maxversion)
 

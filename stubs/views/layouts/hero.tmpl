@@ -14,10 +14,10 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Bootstrap, from Twitter</title>
+    <title>Python On Wheels</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="pow welcome page for local projects">
+    <meta name="author" content="khz">
 
     <!-- Le styles -->
     <!-- <link href="/static/css/bs/bootstrap.css" rel="stylesheet"> -->
@@ -87,7 +87,7 @@
         </div>
         <div class="span4">
           <h2>How</h2>
-            <p>PythonOnWheels doesn't reinvent the wheel but is based on the brilliant frameworks out there. Namely:
+            <p>PythonOnWheels doesnt reinvent the wheel but is based on the brilliant frameworks out there. Namely:
 			<ul>
                 <li><a href="http://www.sqlalchemy.org">SQLAlchemy</a> for Database abstraction, </li>
                 <li><a href="http://www.makotemplates.org">Mako</a> as the Template engine </li>
@@ -110,7 +110,11 @@
           <p><a class="btn" href="#">View Screencast &raquo;</a></p>
         </div>
       </div>
-
+      
+      <div class="span12">
+        ${self.body()}
+      </div>
+      
       <hr>
 
       <footer>
