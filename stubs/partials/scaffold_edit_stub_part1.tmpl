@@ -1,14 +1,14 @@
 <h2>Edit ${model.__table__} Form:</h2>
     <div class="niceform">
         <fieldset>
-          <form action="./update" method="post" accept-charset="utf-8">
+          <form action="./update" method="post" accept-charset="utf-8" class="well">
             %for colname in model.getColumns():
             <p>
             %if colname not in hidden_list:
                 <label for="${colname}">${colname}:</label>
                 <input type="text" name="${colname}" value="${model.get(colname)}"/>
-            %else:
-                <input type="hidden" name="${colname}" value="${model.get(colname)}"/>
+            <!-- %else: -->
+            <!--     <input type="hidden" name="${colname}" value="${model.get(colname)}"/> -->
             %endif
             </p>
             %endfor

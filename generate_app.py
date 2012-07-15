@@ -162,9 +162,10 @@ def gen_app(appname, appdir, force=False):
     #
     # copy the initial db's
     #
-    powlib.check_copy_file("stubs/db/app_db_including_app_versions.db", os.path.normpath(appbase + "/db/" + appname + ".db") )
-    powlib.check_copy_file("stubs/db/app_db_including_app_versions.db", os.path.normpath(appbase + "/db/" + appname + "_test.db") )
-    powlib.check_copy_file("stubs/db/app_db_including_app_versions.db", os.path.normpath(appbase + "/db/" + appname + "_devel.db") )
+    appdb = "stubs/db/app_db_including_app_versions_small.db"
+    powlib.check_copy_file(appdb, os.path.normpath(appbase + "/db/" + appname + "_prod.db") )
+    powlib.check_copy_file(appdb, os.path.normpath(appbase + "/db/" + appname + "_test.db") )
+    powlib.check_copy_file(appdb, os.path.normpath(appbase + "/db/" + appname + "_devel.db") )
     #powlib.check_copy_file("stubs/db/empty_app.db", os.path.normpath(appbase + "/db/app.db") )
     
     #

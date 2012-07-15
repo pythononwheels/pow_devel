@@ -41,16 +41,18 @@ def main():
     (options, args) = parser.parse_args()
     print options
     if options.model == "None":
-        parser.error("You must at least specify a name by giving -m <modelname>.")
-        return
-    else:
-        scaffold(options.model, options.noforce)
-
-        end = datetime.datetime.now()
-        duration = None
-        duration = end - start 
-        print "generated_scaffold in("+ str(duration) +")"
-        return
+        if len(args) > 0:
+            # if no option flag (like -n) is given, it is assumed that the first argument is the model name. (representing -n arg1)
+            options.name = args[0]
+        else:
+            parser.error("You must at least specify an appname by giving -n <name>.")
+    
+    scaffold(options.model, options.noforce)
+    end = datetime.datetime.now()
+    duration = None
+    duration = end - start 
+    print "generated_scaffold in("+ str(duration) +")"
+    return
     
 def scaffold(modelname, noforce):
     # 

@@ -59,8 +59,12 @@ class BaseController(PowObject.PowObject):
         powdict = kwargs["powdict"]
         kwargs["powdict"] = powdict
         kwargs["template"] = powlib.readconfig("pow.cfg","global","DEFAULT_TEMPLATE", powdict["POW_APP_DIR"])
-        special_tmpl = kwargs["special_tmpl"]
-        del kwargs["special_tmpl"]
+
+        special_tmpl = None
+        if kwargs.has_key("special_tmpl"):
+            special_tmpl = kwargs["special_tmpl"]
+            del kwargs["special_tmpl"]
+
         if self.current_action not in self.locked_actions:
             if self.access_granted(**kwargs) == True:
                 first_part = os.path.join( os.path.dirname(os.path.abspath(__file__)),"../views/")

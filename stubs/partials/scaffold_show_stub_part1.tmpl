@@ -1,7 +1,7 @@
 <h2>show  ${model.__table__} Form:</h2>
 
   <fieldset>
-    <table>
+    <table class="table">
 	<thead>
 		<tr>
 			<th>Attribute Name</th>
@@ -19,7 +19,7 @@
 		%endfor
 	</table>
     <p>
-      <a href="/user/list">Back to the list</a>
+      <a href="/${model._name}/list">Back to the list</a>
     </p>
   </form>
   </fieldset>

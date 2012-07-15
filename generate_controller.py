@@ -46,20 +46,19 @@ def main():
             options.model = args[0]
         else:
             parser.error("You must at least specify an appname by giving -n <name>.")
-    else:
-        controller_name = options.model
-    
-        render_controller(controller_name, options.noforce)
-    
-        end = datetime.datetime.now()
-        duration = None
-        duration = end - start 
-        print "generated_controller in("+ str(duration) +")"
-        return
+            
+    controller_name = options.model
+    render_controller(controller_name, options.noforce)
+
+    end = datetime.datetime.now()
+    duration = None
+    duration = end - start 
+    print "generated_controller in("+ str(duration) +")"
+    return
     
 def render_controller(name, noforce):
     # 
-    print "creating controller: " 
+    print " creating controller: " 
     print " -- ", name 
     
     # add the auto generated warning to the outputfile
@@ -103,7 +102,7 @@ def render_controller(name, noforce):
         print " --", filename + " already exists... (Not overwrtitten. Use -f to force ovewride)"
     else:
         ofile = open(  filename , "w+") 
-        print  "created controller " + filename
+        print  " -- created controller " + filename
         ofile.write( ostr )
         ofile.close()
     #
