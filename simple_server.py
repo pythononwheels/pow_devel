@@ -36,7 +36,9 @@ def powapp_simple_server(environ, start_response):
     real_action = None
     
     req = Request(environ)
-    print(req.params)
+    req.charset = 'utf8'
+    print "webob: req.params", req.params
+    #print dir(req.params)
     #
     # relevant parameters have to be defined here
     # (Same as for apache the declarations in the httpd.conf file
@@ -68,7 +70,8 @@ def powapp_simple_server(environ, start_response):
     #TO_DO: set the right status in the end, according to the situatio instead of setting it hard-coded here
     status = '200 OK'
     response_headers = [
-        ('Content-type', 'text/html; charset=utf-8')
+        #('Content-type', 'text/html; charset=utf-8')
+        ('Content-type', 'text/html')
         ]
 
     
@@ -79,33 +82,35 @@ def powapp_simple_server(environ, start_response):
     
     powdict["SESSION"] = session
     print "Check request type!"
-    if MODE > MODE_INFO:
-        print pow_web_lib.show_environ_cli(environ)
-    if pow_web_lib.is_get_request(environ):
-        plist = pow_web_lib.get_http_get_parameters(environ)
-    elif pow_web_lib.is_post_request(environ):
-        plist = pow_web_lib.get_http_post_parameters_new(environ)
-        odict = {}
-        for k in plist.keys():
-            odict[k] = plist[k].value
-        print odict
-        print type(odict)
-        plist = odict
-    else:
-        return
-    
-    
+    #if MODE > MODE_INFO:
+    #    print pow_web_lib.show_environ_cli(environ)
+    #if pow_web_lib.is_get_request(environ):
+    #    plist = pow_web_lib.get_http_get_parameters(environ)
+    #elif pow_web_lib.is_post_request(environ):
+    #    plist = pow_web_lib.get_http_post_parameters_new(environ)
+    #    odict = {}
+    #    for k in plist.keys():
+    #        odict[k] = plist[k].value
+    #    print odict
+    #    print type(odict)
+    #    plist = odict
+    #else:
+    #    return
+    print "webob: ", req.method
+    plist = req.params
     powdict["PARAMETERS"] = plist
+    
     if MODE > MODE_NORMAL: 
         print plist
         print plist.keys()
-    if plist.has_key("image"):
-        print "Image found: ", plist['image'].filename
-        ofile = file("tmp.out", "wb")
-        infile = plist['image'].file
-        ofile.write( infile.read() )
-        #ofile.write( plist["image"].value )
-        ofile.close()
+    
+    #if plist.has_key("image"):
+    #    print "Image found: ", plist['image'].filename
+    #    ofile = file("tmp.out", "wb")
+    #    infile = plist['image'].file
+    #    ofile.write( infile.read() )
+    #   #ofile.write( plist["image"].value )
+    #    ofile.close()
     #
     # handling static files
     #
@@ -150,15 +155,16 @@ def powapp_simple_server(environ, start_response):
             ctype = "text/html"
         #print "file type is: ", ftype, " responding with type-> ", ctype
         response_headers = [
-        ('Content-type', ctype )
+            ('Content-type', ctype )
         ]
         start_response(status, response_headers)
         return [ostr]
         
-    print "-- Dynamic REQUEST --------------------------------------------------------- "        
-    print "Request: " + environ["REQUEST_METHOD"] + " " + environ["PATH_INFO"] + " " + environ["SERVER_PROTOCOL"] + " " + environ["QUERY_STRING"]    
-    print "PATH_INFO before: ", pinfo_before
-    print "PATH_INFO after: ", pinfo
+    print "-- Dynamic REQUEST --------------------------------------------------------- "
+    if MODE > MODE_INFO :
+        print "Request: " + environ["REQUEST_METHOD"] + " " + environ["PATH_INFO"] + " " + environ["SERVER_PROTOCOL"] + " " + environ["QUERY_STRING"]    
+        print "PATH_INFO before: ", pinfo_before
+        print "PATH_INFO after: ", pinfo
         
     if not session.has_key('counter'):
         session['counter'] = 0
@@ -167,7 +173,6 @@ def powapp_simple_server(environ, start_response):
     powdict["SCRIPT_FILENAME"] = environ.get("SCRIPT_FILENAME")
     powdict["SCRIPT_DIR"] = os.path.dirname(environ.get("SCRIPT_FILENAME"))
     powdict["SCRIPT_VIEWS_DIR"] = os.path.abspath(os.path.join(os.path.dirname(environ.get("SCRIPT_FILENAME")) + "/views/"))
-    powdict["STYLESHEET_LINK_TAG"] = os.path.abspath(os.path.join(os.path.dirname(environ.get("SCRIPT_FILENAME")) + "/views/stylesheets/"))
     # PATH_INFO contains the path beginning from the app-root url.     # first part is the controller,      # second part is the action
     powdict["PATH_INFO"] = environ.get("PATH_INFO")
     #print os.path.split(powdict["PATH_INFO"])
@@ -215,7 +220,7 @@ def powapp_simple_server(environ, start_response):
     #output.append("real_action: " + str(real_action) + "<br>")
     
     output.append(real_action(powdict).encode('utf-8'))
-    
+
     #
     # error handling wsgi see:
     #    1. http://www.python.org/dev/peps/pep-0333/#error-handling
