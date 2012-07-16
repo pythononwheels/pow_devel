@@ -7,8 +7,8 @@
             %if colname not in hidden_list:
                 <label for="${colname}">${colname}:</label>
                 <input type="text" name="${colname}" value="${model.get(colname)}"/>
-            <!-- %else: -->
-            <!--     <input type="hidden" name="${colname}" value="${model.get(colname)}"/> -->
+            %else:
+                <input type="hidden" name="${colname}" value="${model.get(colname)}"/> 
             %endif
             </p>
             %endfor
@@ -17,4 +17,8 @@
             </p>
           </form>
         </fieldset>
+        
     </div> <!-- Niceform -->
+    <p>
+        <i class="icon-fast-backward"></i><a href="/${model.modelname}/list">Back to the list</a>
+    </p>

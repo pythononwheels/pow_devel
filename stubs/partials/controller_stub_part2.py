@@ -25,8 +25,10 @@
         return self.render(model=res, powdict=powdict)
     
     def update( self, powdict ):
-        #self.model.__init__()
+        self.model.__init__()
+        #print powdict["PARAMETERS"]
         self.model = self.model.find_by("id",powdict["PARAMETERS"]["id"])
+        #print self.model
         dict = powdict["PARAMETERS"]
         for key in dict:
             self.model.set(key, dict[key] )

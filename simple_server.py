@@ -49,9 +49,10 @@ def powapp_simple_server(environ, start_response):
         "/static/stylesheets/"     :    "./public/css/",
         "/static/scripts/"         :     "./public/js/",
         "/static/js/"               :     "./public/js/",
-        "/static/documents/"     :     "./public/doc",
-        "/static/doc/"           :     "./public/doc",
-        "/static/ico/"           :     "./public/ico"
+        "/static/documents/"     :     "./public/doc/",
+        "/static/doc/"           :     "./public/doc/",
+        "/static/ico/"           :     "./public/ico/",
+        "/static/img/"           :     "./public/img/"
         
         }
     environ["SCRIPT_FILENAME"] = __file__

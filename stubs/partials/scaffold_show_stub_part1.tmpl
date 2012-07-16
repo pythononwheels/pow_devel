@@ -12,14 +12,17 @@
 			<tr>
 				<td>${colname}</td>
 				<td>${model.get(colname)}</td>
-				<td><a href="./edit?id=${model.get("id")}">edit</a></td>
-				<td><a href="./show?id=${model.get("id")}">show</a></td>
-				<td><a href="./delete?id=${model.get("id")}">delete</a></td>
+				<td><i class="icon-edit"></i><a href="./edit?id=${model.get("id")}">edit</a></td>
+				<td><i class="icon-eye-open"></i><a href="./show?id=${model.get("id")}">show</a></td>
+				<td><i class="icon-remove"></i><a href="./delete?id=${model.get("id")}">delete</a></td>
 			</tr>
 		%endfor
 	</table>
     <p>
-      <a href="/${model._name}/list">Back to the list</a>
+      <a href="/${model.modelname}/list">Back to the list</a>
     </p>
   </form>
   </fieldset>
+  <p>
+    <i class="icon-fast-backward"></i><a href="/${model.modelname}/list">Back to the list</a>
+  </p>
