@@ -29,6 +29,7 @@ def main():
     parser.add_option("-a", "--attributes",  action="store", type="string", dest="actions", help="defines the attributes included in the model.", default ="None")
     parser.add_option("-f", "--force",  action="store_true",  dest="force", help="forces overrides of existing files",default="False")
     parser.add_option("-c", "--comment",  action="store", type="string", dest="comment", help="defines a comment for this model.", default ="No Comment")
+    parser.add_option("-p", "--path",  action="store", type="string", dest="path", help="sets the model output psth.", default ="./")
     #parser.add_option("-n", "--no-migration",  action="store_true",  dest="nomig", help="supress creation of the related migration for this model",default="False")    
     
     
@@ -41,13 +42,14 @@ def main():
        else:
            parser.error("You must at least specify an appname by giving -n <name>.")
 
-    model_dir = os.path.normpath("./models/")
+    #model_dir = os.path.normpath("./models/")
+    model_dir = os.path.normpath(options.path)
     modelname = options.name
     start = None
     end = None
     start = datetime.datetime.now()
     
-    render_model(modelname, options.force, options.comment)
+    render_model(modelname, options.force, options.comment, model_dir)
     
     end = datetime.datetime.now()
     duration = None
@@ -56,7 +58,7 @@ def main():
     return
 
     
-def render_model(modelname, force, comment, properties=None):
+def render_model(modelname, force, comment, prefix_path, properties=None):
     
     print "generate_model: " + modelname
     #print "force: ", force
@@ -85,7 +87,7 @@ def render_model(modelname, force, comment, properties=None):
         
     # write the output file to disk
     filename = classname + ".py"
-    filename = os.path.normpath( "./models/" + filename)
+    filename = os.path.normpath( prefix_path+ "/models/" + filename)
     file_exists = False
     if os.path.isfile( os.path.normpath(  filename) ):
         file_exists = True
@@ -127,7 +129,7 @@ def render_model(modelname, force, comment, properties=None):
     infile.close()
         
         
-    filename = os.path.normpath( "./models/basemodels/" + filename)
+    filename = os.path.normpath( prefix_path + "/models/basemodels/" + filename)
     if os.path.isfile( os.path.normpath(  filename) ) and force != True:
         print filename + " (exists)...(Use -f to force override)"
     else:
@@ -151,18 +153,18 @@ def render_model(modelname, force, comment, properties=None):
     #    # copy the BaseClass
     #    powlib.check_copy_file(os.path.normpath( PARTS_DIR +  "App.py"), os.path.normpath( "./models/powmodels/"))
         
-    render_test_stub(modelname, classname)
+    render_test_stub(modelname, classname, prefix_path)
     return 
 
 def reset_model(modelname):
     return render_model(modelname, True, "", properties=None, nomig=True)
     
-def render_test_stub (modelname, classname ):
+def render_test_stub (modelname, classname, prefix_path ):
     #print "rendering Testcase for:", classname, " ", " ", modelname
     print " -- generating TestCase...",
     infile = open( os.path.normpath( PARTS_DIR +  "test_model_stub.py"), "r")
     test_name = "Test" + classname + ".py"
-    ofile = open( os.path.normpath("./tests/models/" + test_name ), "w")
+    ofile = open( os.path.normpath(prefix_path + "/tests/models/" + test_name ), "w")
     instr = infile.read()
     instr = instr.replace("#CLASSNAME", classname)
     ofile.write(instr)

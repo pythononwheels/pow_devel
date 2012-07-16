@@ -14,7 +14,7 @@ import shutil
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./stubs/lib" )))
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./stubs/models/powmodels" )))
 import powlib
-
+import generate_model
 
 # setting the right defaults
 #MODE_CREATE = 1
@@ -173,6 +173,8 @@ def gen_app(appname, appdir, force=False):
     #
     render_db_config(appname, appbase)
     
+    generate_model.render_model("Appinfo", False, "System class containing the Appinfo", appname)
+    generate_model.render_model("Version", False, "System class containing the Versions", appname)
     return
     
     
