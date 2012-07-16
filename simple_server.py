@@ -16,6 +16,7 @@ import urllib
 
 import powlib
 import pow_web_lib
+from webob import Request, Response
 
 # one of: 
 #    NORMAL  = print almost nothing
@@ -34,11 +35,12 @@ def powapp_simple_server(environ, start_response):
     powdict =  {}    
     real_action = None
     
+    req = Request(environ)
+    print(req.params)
     #
     # relevant parameters have to be defined here
     # (Same as for apache the declarations in the httpd.conf file
     #
-    
     # redirect static media from the meta link static to the real source dir
     # advantage is: you can alway refer safely to /static/<something> inside your css o .tmpl
     # files and the real source can be anywhere. sometimes the real static source differs from
