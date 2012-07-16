@@ -43,7 +43,7 @@ def main():
     if options.model == "None":
         if len(args) > 0:
             # if no option flag (like -n) is given, it is assumed that the first argument is the model name. (representing -n arg1)
-            options.name = args[0]
+            options.model = args[0]
         else:
             parser.error("You must at least specify an appname by giving -n <name>.")
     

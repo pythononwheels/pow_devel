@@ -26,13 +26,14 @@ import BaseController
 class AppController(BaseController.BaseController):
     
     def __init__(self):
-        self.modelname = None
+        self.modelname = "Appinfo"
         BaseController.BaseController.__init__(self)
         self.login_required = []
         self.locked_actions = [ "do_login"]
     
     def welcome( self,powdict ):
-        return self.render(special_tmpl="hero.tmpl",model=self.model, powdict=powdict)
+        #return self.render(special_tmpl="hero.tmpl",model=self.model, powdict=powdict)
+        return self.render(model=self.model, powdict=powdict)
         
     def thanks( self,powdict ):
         return self.render(model=self.model, powdict=powdict)
