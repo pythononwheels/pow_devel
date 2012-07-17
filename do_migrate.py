@@ -137,7 +137,7 @@ def do_migrate( goalversion, direction):
         print " -- Running " + str(times) + " times: " 
     sess.add(app)
     
-    if goalversion <2:
+    if goalversion < 2 and goalversion != None:
         #then the appinfo or versions table would be migrated down which will break the environment.
         print " -- Error: you are attemting to migrate down the sytem tables version and/or appinfo.. bailing out"
         return
@@ -155,7 +155,7 @@ def do_migrate( goalversion, direction):
             filename = ver.filename
             mig = powlib.load_class( filename, "Migration" )
             mig.up()
-            print '{0:18} ==> {1:5} ==> {2:30}'.format(" -- Migration run", str(run+1).zfill(5), filename)
+            print '{0:18} ==> {1:5} ==> {2:30}'.format(" -- Migration run #", str(run+1).zfill(3), filename)
         #
         # migrate down
         #

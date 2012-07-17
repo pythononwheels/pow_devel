@@ -15,14 +15,14 @@
         mstr = "self.session.query(Base" + self.__class__.__name__ +").filter_by(" + str(att) + "=val)"
         if first == True:
             mstr += ".first()"
-        print mstr
+        print " -- ", mstr
         res= eval(mstr)
         #res.__init__()
         return res
 
     def find_all(self):
         mstr = "self.session.query(Base" + self.__class__.__name__ + ").all()"
-        print mstr
+        print " -- ", mstr
         res= eval(mstr)
         #for elem in res:
         #    elem.__init__()
@@ -30,7 +30,7 @@
     
     def find_first(self):
         mstr = "self.session.query(Base" + self.__class__.__name__ + ").first()"
-        print mstr
+        print " -- ", mstr
         res= eval(mstr)
         #for elem in res:
         #    elem.__init__()
@@ -41,7 +41,7 @@
 
     def set(self,name,val):
         val = urllib.unquote(val)
-        print " ++ Model, setting: ", name, " -> ", val, " # ", type(val)
+        print " -- Model, setting: ", name, " -> ", val, " # ", type(val)
         #eval("self.set_"+ str(name)+"(\""+ val + "\")" )
         statement = "self.%s=u'%s'" % (name,val)
         exec(statement)
@@ -171,7 +171,7 @@
     def release_belongs_to(self,rel_table):
         return
 
-    def release_has_many(self,rel_table):
+    def release_has_many(self,rel_table, prefix_path="./"):
         if rel_table in self.properties_list:
             # remove raltion from the living model
             self.properties_list.remove(rel_table)
@@ -179,13 +179,13 @@
             mod = powlib.load_module( "generate_model" )
             # daclaration of render_model: def render_model(modelname, force, comment, properties=None, nomig=False):
             # remove relation from the persistent model
-            mod.render_model( str.lower(self.modelname), True, "", str(self.properties_list), True)
+            mod.render_model( str.lower(self.modelname), True, "", prefix_path, str(self.properties_list) )
         else:
             print "Model: ", self.modelname, " has no has_many relation to ", rel_table
         return
 
 
-    def has_many(self,rel_table):
+    def has_many(self,rel_table, prefix_path="./"):
         ### has_many property is the plural form of the modelname
         #modelname = string.capitalize(powlib.singularize(rel_table))
         #rel_model = powlib.load_class(modelname, modelname)
@@ -199,7 +199,8 @@
             self.properties_list.append(rel_table)
             mod = powlib.load_module( "generate_model" )
             # daclaration of render_model: def render_model(modelname, force, comment, properties=None, nomig=False):
-            mod.render_model( str.lower(self.modelname), True, "", str(self.properties_list), True)
+            mod.render_model( str.lower(self.modelname), True, "", prefix_path, str(self.properties_list))
+            #def render_model(modelname, force, comment, prefix_path, properties=None):
             return
         
 if __name__ == "__main__":
