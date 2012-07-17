@@ -1,5 +1,13 @@
-You see the List Template<br>
-<i class="icon-plus"></i><a href="./create">Create</a> a new ${model.getName()}.
+This is the scaffolded template for the <strong>List</strong> action <br>
+
+%if powdict["FLASHTEXT"] != "":
+	<div class="alert alert-${powdict["FLASHTYPE"]}">
+		<button class="close" data-dismiss="alert">x</button>
+		${powdict["FLASHTEXT"]}
+	</div
+%endif
+
+<i class="icon-plus"></i>&nbsp;<a href="./create">Create</a> a new ${model.getName()}.
 <br>
 <table class="table">
 	<thead>
@@ -19,15 +27,15 @@ You see the List Template<br>
 						<td>${elem.get(colname)}</td>
 					%endif
 				%endfor
-				<td><i class="icon-edit"></i><a href="./edit?id=${elem.get("id")}">edit</a></td>
-				<td><i class="icon-eye-open"></i><a href="./show?id=${elem.get("id")}">show</a></td>
-				<td><i class="icon-remove"></i><a href="./delete?id=${elem.get("id")}">delete</a></td>
-				<td><i class="icon-plus"></i><a href="./create">create</a></td>
+				<td><i class="icon-edit"></i>&nbsp;<a href="./edit?id=${elem.get("id")}">edit</a></td>
+				<td><i class="icon-eye-open"></i>&nbsp;<a href="./show?id=${elem.get("id")}">show</a></td>
+				<td><i class="icon-remove"></i>&nbsp;<a href="./delete?id=${elem.get("id")}">delete</a></td>
+				<td><i class="icon-plus"></i>&nbsp;<a href="./create">create</a></td>
 			</tr>
 				
 		%endfor
 	</tbody>
 </table>
 <p>
-    <i class="icon-fast-backward"></i><a href="/${model.modelname}/list">Back to the list</a>
+    <i class="icon-fast-backward"></i>&nbsp;<a href="/${model.modelname}/list">Back to the list</a>
 </p>

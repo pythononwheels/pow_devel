@@ -32,8 +32,10 @@
         #print self.model
         dict = powdict["PARAMETERS"]
         for key in dict:
-            statement = "self.model.%s=dict['%s']" % (key,key)
-            exec(statement)
+            #statement = "self.model.%s=dict['%s']" % (key,key)
+            #exec(statement)
+            self.model.set(key, dict[key])
+            
         self.model.update()
         return self.render(model=self.model, powdict=powdict)
     

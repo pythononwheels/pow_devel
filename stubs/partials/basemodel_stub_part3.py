@@ -42,7 +42,9 @@
     def set(self,name,val):
         val = urllib.unquote(val)
         print " ++ Model, setting: ", name, " -> ", val, " # ", type(val)
-        eval("self.set_"+ str(name)+"(\""+ val + "\")" )
+        #eval("self.set_"+ str(name)+"(\""+ val + "\")" )
+        statement = "self.%s=u'%s'" % (name,val)
+        exec(statement)
         return
 
     def getColumns(self):

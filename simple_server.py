@@ -179,6 +179,7 @@ def powapp_simple_server(environ, start_response):
     powdict["ENVIRON"] = pow_web_lib.show_environ( environ )
     powdict["DOCUMENT_ROOT"] = environ.get("DOCUMENT_ROOT")
     powdict["FLASHTEXT"] = ""
+    powdict["FLASHTYPE"] ="error"
     #output.append( show_environ( output, environ ) )
     
     #
