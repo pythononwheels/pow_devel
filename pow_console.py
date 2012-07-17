@@ -1,6 +1,7 @@
 ## {{{ http://code.activestate.com/recipes/355319/ (r1)
 import code
-import sys,os
+import sys,os, string
+import readline
 
 class FileCacher:
     "Cache the stdout text so we can analyze it before returning it"
@@ -30,7 +31,7 @@ class Shell(code.InteractiveConsole):
             for elem in os.listdir(os.path.normpath(path)):
                 fname, fext = os.path.splitext(elem)
                 if fext in include_ext_list:
-                    statement = "import " + str(fname)
+                    statement = "from "+ str(fname)+ " import " + str(fname)
                     print "executing statement: ", statement
                     #exec statement
                     self.push(statement)
@@ -56,7 +57,6 @@ class Shell(code.InteractiveConsole):
 
 if __name__ == '__main__':
     sh = Shell()
-    
     
     pow_banner = "pow console v0.1 " + os.linesep
     pow_banner += "Using python " + str(sys.version)[:6] + os.linesep
