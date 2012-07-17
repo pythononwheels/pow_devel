@@ -48,7 +48,7 @@ Main features:
   * jQuery support included
   * includes scaffolding.
   * includes migrations
-  * automatically create and remove realtions (has_many, belongs_to, has_many_and_belongs_to)
+  * automatically create and remove relations (has_many, belongs_to, has_many_and_belongs_to)
   * includes migration jobs to backup or restore tables or do any other db related task.
   
 

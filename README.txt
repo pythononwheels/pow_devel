@@ -4,6 +4,7 @@ the plain,simple and easy to use web generator framework for python.
 
 ### Based on reliable python 'standards' and frameworks
 
+	* WeboB		WSGI Request (response) handling
 	* SQLAlchemy 	ORM / DB Access
 	* Beaker		Session Management
 	* Mako		Template engine for Views
@@ -20,6 +21,12 @@ the plain,simple and easy to use web generator framework for python.
 	* Responsible Layout
 	* Lightweight
 	* Nose Tests
+	* Database Migrations
+	* * web app batteries included:
+		** Session support
+		** basic authentication
+	* apache mod_wsgi ready 
+	* includes a ready to run simple_server
 	
 The clear Focus was to develop a Framework in between the existing Big Ones,
 which have quite some learning curve to get started and
