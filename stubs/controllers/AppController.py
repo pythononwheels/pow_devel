@@ -35,8 +35,8 @@ class AppController(BaseController.BaseController):
     def ajax( self, powdict ):
         print "AJAX-Request"
         now = datetime.datetime.now()
-        return str("AJAX with python rocks totally now: &nbsp;" + now.strftime("%Y-%m-%d %H:%M"))
-        return str("AJAX with python rocks totally")
+        return str("AJAX with python rocks totally now: &nbsp;&nbsp;" + now.strftime("%Y-%m-%d %H:%M"))
+        
     
     def welcome( self,powdict ):
         #return self.render(special_tmpl="hero.tmpl",model=self.model, powdict=powdict)

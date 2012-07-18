@@ -38,6 +38,9 @@ def powapp_simple_server(environ, start_response):
     req = Request(environ)
     req.charset = 'utf8'
     print "webob: req.params", req.params
+    print "webob: req.body", req.body
+    
+    
     #print dir(req.params)
     #
     # relevant parameters have to be defined here

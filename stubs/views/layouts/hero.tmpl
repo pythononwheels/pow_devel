@@ -65,7 +65,7 @@
                 }
             }
         }
-        alert("Sending AJAX request!");
+        
         req.open("POST", url, true);
         req.onreadystatechange = function() {
             if (req.readyState == 4) {
@@ -76,8 +76,8 @@
     }
 
     function test_button() {
-        var data =document.getElementById('test_result');           
-        xml_http_post("/app/ajax", data, test_handle)
+        var data =document.getElementById('ajax_input').value;           
+        xml_http_post("/post/ajax", data, test_handle)
     }
 
     function test_handle(req) {
@@ -118,8 +118,8 @@
         <h1>Welcome to PythonOnWheels</h1>
         <h2>and the world of Rapid Web Development!</h2>
         <span id="test_result">If Ajax works something will happen here</span>
-        <!-- <input type=button onClick="test_button();" value="start" title="start"> -->
-        <p><a class="btn btn-warning btn-large pull-right" onClick="test_button();">Ajax Test &raquo;</a></p>
+        <p><input id="ajax_input" name="ajax_input" type=text value="Hello Ajax World" size="30" maxlength="30"> </p>
+        <p><a class="btn btn-warning btn-large pull-right" onClick="test_button();">Learn more &raquo;</a></p>
       
       </div>
 
