@@ -58,7 +58,7 @@ def main():
     return
 
     
-def render_model(modelname, force, comment, prefix_path, properties=None):
+def render_model(modelname, force, comment, prefix_path="./", properties=None):
     
     print "generate_model: " + modelname
     #print "force: ", force

@@ -41,6 +41,52 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/static/ico/bs/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/static/ico/bs/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="/static/ico/bs/apple-touch-icon-57-precomposed.png">
+      <!-- Start AJAX Test, see: http://stackoverflow.com/questions/336866/how-to-implement-a-minimal-server-for-ajax-in-python -->
+     <script type="text/javascript">
+
+    function xml_http_post(url, data, callback) {
+        var req = false;
+        try {
+            // Firefox, Opera 8.0+, Safari
+            req = new XMLHttpRequest();
+        }
+        catch (e) {
+            // Internet Explorer
+            try {
+                req = new ActiveXObject("Msxml2.XMLHTTP");
+            }
+            catch (e) {
+                try {
+                    req = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                catch (e) {
+                    alert("Your browser does not support AJAX!");
+                    return false;
+                }
+            }
+        }
+        alert("Sending AJAX request!");
+        req.open("POST", url, true);
+        req.onreadystatechange = function() {
+            if (req.readyState == 4) {
+                callback(req);
+            }
+        }
+        req.send(data);
+    }
+
+    function test_button() {
+        var data =document.getElementById('test_result');           
+        xml_http_post("/app/ajax", data, test_handle)
+    }
+
+    function test_handle(req) {
+        var elem = document.getElementById('test_result')
+        elem.innerHTML =  req.responseText
+    }
+
+    </script> <!-- End AJAX Test -->
+  
   </head>
 
   <body>
@@ -56,9 +102,9 @@
           <a class="brand" href="#">${powdict["POW_APP_NAME"]}</a>
           <div class="nav-collapse">
             <ul class="nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="#about">About</a></li>
-              <li><a href="#contact">Contact</a></li>
+              <li class="active"><a href="/app/welcome">Home</a></li>
+              <li><a href="/post/list">Posts</a></li>
+              <li><a href="/comment/list">Comments</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -71,8 +117,9 @@
       <div class="hero-unit">
         <h1>Welcome to PythonOnWheels</h1>
         <h2>and the world of Rapid Web Development!</h2>
-        
-        <p><a class="btn btn-warning btn-large pull-right">Learn more &raquo;</a></p>
+        <span id="test_result">If Ajax works something will happen here</span>
+        <!-- <input type=button onClick="test_button();" value="start" title="start"> -->
+        <p><a class="btn btn-warning btn-large pull-right" onClick="test_button();">Ajax Test &raquo;</a></p>
       
       </div>
 

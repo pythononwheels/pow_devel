@@ -31,6 +31,10 @@ class AppController(BaseController.BaseController):
         self.login_required = []
         self.locked_actions = [ "do_login"]
     
+    def ajax( self, powdict ):
+        print "AJAX-Request"
+        return str("AJAX with python rocks totally")
+    
     def welcome( self,powdict ):
         #return self.render(special_tmpl="hero.tmpl",model=self.model, powdict=powdict)
         return self.render(model=self.model, powdict=powdict)

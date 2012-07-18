@@ -213,14 +213,18 @@ def powapp_simple_server(environ, start_response):
     #
     # route the request
     #
+    print "Loading Class:", controller
     aclass = powlib.load_class(controller,controller)
+    print "setting Action: ", action
     aclass.setCurrentAction(action)
     #output.append(action + "<br>")
     if hasattr( aclass, action ):
         real_action = eval("aclass." + action)
-    #output.append("real_action: " + str(real_action) + "<br>")
+        output.append(real_action(powdict).encode('utf-8'))
+    else:
+        msg = "ERROR: No such class or action  %s.%s " % (controller, action)  
+        output.append(msg)
     
-    output.append(real_action(powdict).encode('utf-8'))
 
     #
     # error handling wsgi see:
