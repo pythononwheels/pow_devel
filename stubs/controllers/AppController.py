@@ -22,6 +22,7 @@ sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(_
 import powlib
 import PowObject
 import BaseController
+import datetime
 
 class AppController(BaseController.BaseController):
     
@@ -33,6 +34,8 @@ class AppController(BaseController.BaseController):
     
     def ajax( self, powdict ):
         print "AJAX-Request"
+        now = datetime.datetime.now()
+        return str("AJAX with python rocks totally now: &nbsp;" + now.strftime("%Y-%m-%d %H:%M"))
         return str("AJAX with python rocks totally")
     
     def welcome( self,powdict ):
