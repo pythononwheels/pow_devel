@@ -42,7 +42,10 @@ rule_tuple = (
     ('$', '$', 's')
     )
 
-
+def uc(instr):
+    encoding = readconfig("pow.cfg","global","DEFAULT_ENCODING")
+    return unicode(instr, encoding)
+    
 def regex_rules(rules=rule_tuple):
     # also to pluralize
     for line in rules:

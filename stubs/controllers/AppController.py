@@ -20,6 +20,7 @@ sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(_
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../controllers" )) )
 
 import powlib
+from powlib import uc
 import PowObject
 import BaseController
 import datetime
@@ -40,7 +41,7 @@ class AppController(BaseController.BaseController):
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
                 <strong>Yeah! AJAX with python rocks totally now:</strong>&nbsp %s &nbsp; %s 
               </div>""" % (now, powdict["PARAMS_BODY"] ))
-        return ret_str
+        return ret_str 
         
     
     def welcome( self,powdict ):

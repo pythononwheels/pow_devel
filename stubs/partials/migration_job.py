@@ -19,28 +19,16 @@ sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(_
 import powlib
 from PowTable import PowTable
 from BaseMigration import BaseMigration
-import User
+#import User
 
 class Migration(BaseMigration):
-    table_name="comments"
+    table_name="#TABLENAME"
     table = None
         
     def up(self):
-            #
-            # here is where you define your table (Format see example below)
-            # the columns below are just examples.
-            # Remember that PoW automatically adds an id and a timestamp column (ID,TIMESTAMP)
-        self.table = PowTable(self.table_name, self.__metadata__,
-            Column('title', String(50)),
-            Column('content', String(50)),
-            Column('post_id', Integer, ForeignKey('posts.id'))
-        )
-        #self.create_table()
         
-        user = User.User()
-        create_table_ddl = DDL(str(CreateTable(user.__table__)))
-        print str(CreateTable(user.__table__))
-        
+        #create_table_ddl = DDL(str(CreateTable(user.__table__)))
+        #print str(CreateTable(user.__table__))
         #self.getEngine().connect().execute(create_table_ddl)
         
     def down(self):
