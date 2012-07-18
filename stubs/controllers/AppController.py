@@ -35,7 +35,12 @@ class AppController(BaseController.BaseController):
     def ajax( self, powdict ):
         print "AJAX-Request"
         now = datetime.datetime.now()
-        return str("AJAX with python rocks totally now: &nbsp;&nbsp;" + now.strftime("%Y-%m-%d %H:%M"))
+        now = now.strftime("%Y-%m-%d %H:%M:%S")
+        ret_str = uc("""<div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Yeah! AJAX with python rocks totally now:</strong>&nbsp %s &nbsp; %s 
+              </div>""" % (now, powdict["PARAMS_BODY"] ))
+        return ret_str
         
     
     def welcome( self,powdict ):

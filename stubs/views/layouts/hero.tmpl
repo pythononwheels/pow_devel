@@ -3,7 +3,7 @@
 	import sys,os 
 	sys.path.append(os.path.abspath(os.path.join( os.path.dirname(os.path.abspath("./")), "../../lib" )) )
 	import powlib
-	
+	import pow_html_helper as helper
 %>
 
 <%def name="generate_actions()">
@@ -41,52 +41,8 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/static/ico/bs/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/static/ico/bs/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="/static/ico/bs/apple-touch-icon-57-precomposed.png">
-      <!-- Start AJAX Test, see: http://stackoverflow.com/questions/336866/how-to-implement-a-minimal-server-for-ajax-in-python -->
-     <script type="text/javascript">
-
-    function xml_http_post(url, data, callback) {
-        var req = false;
-        try {
-            // Firefox, Opera 8.0+, Safari
-            req = new XMLHttpRequest();
-        }
-        catch (e) {
-            // Internet Explorer
-            try {
-                req = new ActiveXObject("Msxml2.XMLHTTP");
-            }
-            catch (e) {
-                try {
-                    req = new ActiveXObject("Microsoft.XMLHTTP");
-                }
-                catch (e) {
-                    alert("Your browser does not support AJAX!");
-                    return false;
-                }
-            }
-        }
-        
-        req.open("POST", url, true);
-        req.onreadystatechange = function() {
-            if (req.readyState == 4) {
-                callback(req);
-            }
-        }
-        req.send(data);
-    }
-
-    function test_button() {
-        var data =document.getElementById('ajax_input').value;           
-        xml_http_post("/post/ajax", data, test_handle)
-    }
-
-    function test_handle(req) {
-        var elem = document.getElementById('test_result')
-        elem.innerHTML =  req.responseText
-    }
-
-    </script> <!-- End AJAX Test -->
-  
+      
+    ${helper.enable_ajax()}
   </head>
 
   <body>
@@ -117,10 +73,16 @@
       <div class="hero-unit">
         <h1>Welcome to PythonOnWheels</h1>
         <h2>and the world of Rapid Web Development!</h2>
-        <span id="test_result">If Ajax works something will happen here</span>
+        <br>
+        <span id="test_result">If Ajax works something will happen here if you click the 
+        <strong>Send Ajax Request</strong> button</span>
+        
         <p><input id="ajax_input" name="ajax_input" type=text value="Hello Ajax World" size="30" maxlength="30"> </p>
-        <p><a class="btn btn-warning btn-large pull-right" onClick="test_button();">Learn more &raquo;</a></p>
-      
+        <p><a class="btn btn-warning btn-large pull-right" onClick="test_button();">Send Ajax Request &raquo;</a></p>
+        <span>
+            This is an example of the <code>link_to</code> tag in PoW: &nbsp;
+            ${helper.link_to("http://google.com", "google", { "class" : "btn btn-primary"} )}
+        </span>
       </div>
 
     
