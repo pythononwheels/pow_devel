@@ -143,6 +143,12 @@
             self.generate_accessor_methods()
 
     def belongs_to(self,rel_table):
+        """ Description:
+                Creates the foreign_key for the table relation. 
+                Remark: The old table is dropped. 
+            input parameters:    
+                rel_table (type:string) Name of the table to be related.
+        """
         #
         # Now creating the foreign_key
         #
@@ -172,6 +178,7 @@
         return
 
     def release_has_many(self,rel_table, prefix_path="./"):
+        
         if rel_table in self.properties_list:
             # remove raltion from the living model
             self.properties_list.remove(rel_table)
@@ -186,6 +193,13 @@
 
 
     def has_many(self,rel_table, prefix_path="./"):
+        """ Description:
+                Creates the relation property in the model class text definition.                  
+            input parameters:    
+                rel_table     (type:string) Name of the table to be related.
+                prefix_path   (type:string) The new model code will be generated into
+                                            prefix_path/models/ 
+        """
         ### has_many property is the plural form of the modelname
         #modelname = string.capitalize(powlib.singularize(rel_table))
         #rel_model = powlib.load_class(modelname, modelname)

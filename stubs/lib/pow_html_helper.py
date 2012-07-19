@@ -7,20 +7,51 @@ def css_include_tag(base, cssfile):
 
 def test_helper():
     return "test_helper() worked"
+
+def form_input(name, value, options_dict=None, model=None, type=None):
+    if model == None:
+        # No model given, so always generate a standard text type or the given type input html field
+        if type == None:
+            input_first = "<input type='text' name='%s' value='%s'" % (name, value)
+        else:
+            input_first = "<input type='%s' name='%s' value='%s'" % (type, name, value)
+    else:
+        # model given, so create the right input-type according to the models datatype
+        # the field is the same as the given name. So type of model.name determines the input-type
+        pass
+        
+        
+    input_last = ">"
+    if options_dict != None:
+        add_html_options(options_dict)
+    input = inpout_first + inpuot_last
+    return input
     
 def mail_to(email):
-    mailto = "<a href=\"mailto:%s\">%s</a>" % (email,email)
+    mailto_first = "<a href=\"mailto:%s\"" % (email)
+    mailto_last = ">%s</a>" % (email)
+    if options_dict != None:
+        add_html_options(options_dict)
+    mailto = mailto_first + mailto_last
     return mailto
+
 
 def link_to(link, text, options_dict = None):
     linkto_first = "<a href=\"%s\" " % (link)
     linkto_last = ">%s</a>" % (text)
     # Add html-options if there are any
     if options_dict != None:
-        for key in options_dict:
-            linkto_first += "%s=\"%s\"" % (key, options_dict[key])
+        add_html_options(options_dict)
     linkto = linkto_first + linkto_last
     return linkto
+
+
+def add_html_options(options_dict=None):
+    ostr = ""
+    if options_dict != None:
+        for key in options_dict:
+            ostr += "%s=\"%s\"" % (key, options_dict[key])
+    return ostr
 
 def enable_ajax():
     return enable_xml_http_post()
