@@ -2,6 +2,7 @@
 import code
 import sys,os, string
 import readline
+sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./lib" )))
 
 class FileCacher:
     "Cache the stdout text so we can analyze it before returning it"

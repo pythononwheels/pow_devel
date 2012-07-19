@@ -35,7 +35,13 @@
         #for elem in res:
         #    elem.__init__()
         return res
-        
+    
+    def will_paginate(page=1, per_page=10):
+        res = self.find_all()
+        start = page * per_page
+        end = (page*per_page)+per_page
+        return res[start:end]    
+    
     def get(self, name):
         return eval("self.get_"+ str(name)+"()")
 
