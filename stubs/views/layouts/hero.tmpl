@@ -43,6 +43,7 @@
     <link rel="apple-touch-icon-precomposed" href="/static/ico/bs/apple-touch-icon-57-precomposed.png">
       
     ${helper.enable_ajax()}
+    
   </head>
 
   <body>
@@ -78,18 +79,16 @@
         <strong>Send Ajax Request</strong> button</span>
         
         <p><input id="ajax_input" name="ajax_input" type=text value="Hello Ajax World" size="30" maxlength="30"> </p>
-        <p><a class="btn btn-warning btn-large pull-right" onClick="test_button();">Send Ajax Request &raquo;</a></p>
+        <p><a class="btn btn-warning btn-large pull-right" onClick="send_request();">Send AJAX reuest &raquo;</a></p>
         <span>
             This is an example of the <code>link_to</code> tag in PoW: &nbsp;
-            ${helper.link_to("http://google.com", "google", { "class" : "btn btn-primary"} )}
+            ${helper.link_to("http://google.com", "google", { "class" : "btn btn-primary" } )}
         </span>
       </div>
-
-    
       
-      <div class="span12">
+      
         ${next.body()}
-      </div>
+   
       
       <hr>
 

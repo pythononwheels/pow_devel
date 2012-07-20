@@ -27,21 +27,60 @@ def form_input(name, value, options_dict=None, model=None, type=None):
     input = inpout_first + inpuot_last
     return input
     
+def create_link(model, text=None):
+    if text == None:
+        retstr = '<i class="icon-plus"></i>&nbsp;<a href="./create">create</a>' 
+    else:
+        retstr = '<i class="icon-plus"></i>&nbsp;<a href="./create">%s</a>' % (text)
+    return retstr
+    
+def delete_link( model, text=None ):
+    if text == None:
+        retstr = '<i class="icon-remove"></i>&nbsp;<a href="./delete?id=%s">delete</a>' % (model)
+    else:
+        retstr = '<i class="icon-remove"></i>&nbsp;<a href="./delete?id=%s">%s</a>' % (model,text)
+    return retstr
+
+def show_link( model, text=None):
+    if text == None:
+        retstr ='<i class="icon-eye-open"></i>&nbsp;<a href="./show?id=%s">show</a>' % (model)
+    else:
+        retstr = '<i class="icon-eye-open"></i>&nbsp;<a href="./show?id=%s">%s</a>' % (model,text)
+    return retstr
+    
+def edit_link(model_id, text=None):
+    if text == None:
+        retstr = '<i class="icon-edit"></i>&nbsp;<a href="./edit?id=%s">edit</a>' % (model_id)
+    else:
+        retstr = '<i class="icon-edit"></i>&nbsp;<a href="./edit?id=%s">%s</a>' % (model_id,text)
+    return retstr
+        
+def flash_message():
+    msg = """
+    %if powdict["FLASHTEXT"] != "":
+    	<div class="alert alert-${powdict["FLASHTYPE"]}">
+    		<button class="close" data-dismiss="alert">x</button>
+    		${powdict["FLASHTEXT"]}
+    	</div
+    %endif
+    """
+    return msg
+    
 def mail_to(email):
     mailto_first = "<a href=\"mailto:%s\"" % (email)
     mailto_last = ">%s</a>" % (email)
     if options_dict != None:
-        add_html_options(options_dict)
+        mailto_first += add_html_options(options_dict)
     mailto = mailto_first + mailto_last
     return mailto
 
 
-def link_to(link, text, options_dict = None):
+def link_to(link, text, options_dict=None):
     linkto_first = "<a href=\"%s\" " % (link)
     linkto_last = ">%s</a>" % (text)
     # Add html-options if there are any
     if options_dict != None:
-        add_html_options(options_dict)
+        linkto_first += add_html_options(options_dict)
     linkto = linkto_first + linkto_last
     return linkto
 
@@ -92,12 +131,12 @@ def enable_xml_http_post():
         req.send(data);
     }
 
-    function test_button() {
-        var data =document.getElementById('ajax_input').value;           
-        xml_http_post("/app/ajax", data, test_handle)
+    function send_request() {
+        var data=document.getElementById('ajax_input').value;           
+        xml_http_post("/app/ajax", data, handle_response)
     }
 
-    function test_handle(req) {
+    function handle_response(req) {
         var elem = document.getElementById('test_result')
         elem.innerHTML =  req.responseText
     }
