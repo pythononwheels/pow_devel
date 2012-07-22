@@ -84,12 +84,13 @@ def powapp_simple_server(environ, start_response):
     #session.save()
     
     powdict["SESSION"] = session
-    print "Check request type!"
+    print "-- request info:"
+    print "-- webob: req.content_type: ", req.content_type
+    print "-- webob: ", req.method
     
-    print "webob: ", req.method
-    
-    powdict["PARAMETERS"] = req.params
-    powdict["PARAMS_BODY"] = req.body
+    powdict["REQ_CONTENT_TYPE"] = req.content_type
+    powdict["REQ_PARAMETERS"] = req.params
+    powdict["REQ_BODY"] = req.body
     
     #print powdict["PARAMETERS"]
     
@@ -162,7 +163,8 @@ def powapp_simple_server(environ, start_response):
         
     if not session.has_key('counter'):
         session['counter'] = 0
-    session['counter'] += 1
+    else:
+        session['counter'] += 1
 
     powdict["SCRIPT_FILENAME"] = environ.get("SCRIPT_FILENAME")
     powdict["SCRIPT_DIR"] = os.path.dirname(environ.get("SCRIPT_FILENAME"))
@@ -218,13 +220,9 @@ def powapp_simple_server(environ, start_response):
     else:
         msg = "ERROR: No such class or action  %s.%s " % (controller, action)  
         output.append(msg)
-    
-
     #
-    # error handling wsgi see:
-    #    1. http://www.python.org/dev/peps/pep-0333/#error-handling
-    #     2. 
-        
+    # error handling wsgi see: http://www.python.org/dev/peps/pep-0333/#error-handling
+    #
     start_response(status, response_headers)
     return output
         
@@ -241,9 +239,9 @@ session_opts = {
 
 if __name__ == "__main__":
     application = pow_web_lib.Middleware(SessionMiddleware(powapp_simple_server, session_opts))
-    
-    httpd = make_server('', 8080, application)
-    print "Serving HTTP on port 8080..."
+    port = powlib.readconfig("pow.cfg","global","PORT")
+    httpd = make_server('', int(port), application)
+    print "Serving HTTP on port %s..." % (port)
 
     # Respond to requests until process is killed
     httpd.serve_forever()

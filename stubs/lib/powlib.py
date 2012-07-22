@@ -16,6 +16,7 @@ sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(_
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../models" )))
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../controllers" )) )
 
+hidden_list = ["created", "last_updated", "group", "user", "id", "password"]
 linesep = "\n"
 newline = linesep
 tab = "    "

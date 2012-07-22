@@ -5,12 +5,12 @@
         return self.render(model=self.model, powdict=powdict, list=res)
     
     def show( self,powdict ):
-        res = self.model.find_by("id",powdict["PARAMETERS"]["id"])
+        res = self.model.find_by("id",powdict["REQ_PARAMETERS"]["id"])
         return self.render(model=res, powdict=powdict)
         
     def new( self, powdict ):
         self.model.__init__()
-        dict = powdict["PARAMETERS"]
+        dict = powdict["REQ_PARAMETERS"]
         for key in dict:
             statement = "self.model.%s=dict['%s']" % (key,key)
             exec(statement)
@@ -22,15 +22,15 @@
         return self.render(model=self.model, powdict=powdict)
     
     def edit( self, powdict ):
-        res = self.model.find_by("id",powdict["PARAMETERS"]["id"])
+        res = self.model.find_by("id",powdict["REQ_PARAMETERS"]["id"])
         return self.render(model=res, powdict=powdict)
     
     def update( self, powdict ):
         self.model.__init__()
         #print powdict["PARAMETERS"]
-        self.model = self.model.find_by("id",powdict["PARAMETERS"]["id"])
+        self.model = self.model.find_by("id",powdict["REQ_PARAMETERS"]["id"])
         #print self.model
-        dict = powdict["PARAMETERS"]
+        dict = powdict["REQ_PARAMETERS"]
         for key in dict:
             #statement = "self.model.%s=dict['%s']" % (key,key)
             #exec(statement)
@@ -41,6 +41,6 @@
     
     def delete( self, powdict ):
         self.model.__init__()
-        self.model = self.model.find_by("id",powdict["PARAMETERS"]["id"])
+        self.model = self.model.find_by("id",powdict["REQ_PARAMETERS"]["id"])
         self.model.delete(self.model.get_id())
         return self.render(model=self.model, powdict=powdict)

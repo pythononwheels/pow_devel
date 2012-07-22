@@ -40,7 +40,7 @@ class AppController(BaseController.BaseController):
         ret_str = uc("""<div class="alert alert-success">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
                 <strong>Yeah! AJAX with python rocks totally now:</strong>&nbsp %s &nbsp; %s 
-              </div>""" % (now, powdict["PARAMS_BODY"] ))
+              </div>""" % (now, powdict["REQ_BODY"] ))
         return ret_str 
         
     
@@ -62,8 +62,8 @@ class AppController(BaseController.BaseController):
         user = User.User()
         session = powdict["SESSION"]
         try:
-            user = self.model.find_by("loginname",powdict["PARAMETERS"]["loginname"])
-            if user.password == powdict["PARAMETERS"]["password"]:
+            user = self.model.find_by("loginname",powdict["REQ_PARAMETERS"]["loginname"])
+            if user.password == powdict["REQ_PARAMETERS"]["password"]:
                 #login ok
                 session["user.id"] = user.id
                 session.save()

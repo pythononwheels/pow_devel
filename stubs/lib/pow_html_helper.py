@@ -1,6 +1,7 @@
 #
 # POW Helpers for mako and html
 # 
+import powlib
 
 def css_include_tag(base, cssfile):
     return (os.path.normpath(os.path.join(base,cssfile)))
@@ -8,6 +9,16 @@ def css_include_tag(base, cssfile):
 def test_helper():
     return "test_helper() worked"
 
+def generate_hidden(model, hidden_list=None):
+    ostr = ""
+    if hidden_list == None:
+        hidden_list = powlib.hidden_list
+    for colname in model.getColumns():
+        if colname in hidden_list:
+            ostr += '<input type="hidden" name="%s" value="%s"/>' % (colname, model.get(colname))
+    
+    return ostr
+    
 def form_input(name, value, options_dict=None, model=None, type=None):
     if model == None:
         # No model given, so always generate a standard text type or the given type input html field
@@ -18,8 +29,16 @@ def form_input(name, value, options_dict=None, model=None, type=None):
     else:
         # model given, so create the right input-type according to the models datatype
         # the field is the same as the given name. So type of model.name determines the input-type
-        pass
-        
+        mod = pow_lib.load_class(string.capitalize(model), model)
+        input_first = "<"
+        statement = "mod.%s" % (name)
+        curr_type = eval(statement)
+        if curr_type == sqlalchemy.types.INTEGER:
+            pass
+        elif curr_type == sqlalchemy.types.TEXT:
+            pass
+        elif curr_type == sqlalchemy.types.VARCHAR:
+            pass
         
     input_last = ">"
     if options_dict != None:
@@ -65,32 +84,33 @@ def flash_message():
     %endif
     """
     return msg
-    
-def mail_to(email):
-    mailto_first = "<a href=\"mailto:%s\"" % (email)
-    mailto_last = ">%s</a>" % (email)
-    if options_dict != None:
-        mailto_first += add_html_options(options_dict)
-    mailto = mailto_first + mailto_last
-    return mailto
-
-
-def link_to(link, text, options_dict=None):
-    linkto_first = "<a href=\"%s\" " % (link)
-    linkto_last = ">%s</a>" % (text)
-    # Add html-options if there are any
-    if options_dict != None:
-        linkto_first += add_html_options(options_dict)
-    linkto = linkto_first + linkto_last
-    return linkto
-
 
 def add_html_options(options_dict=None):
     ostr = ""
     if options_dict != None:
         for key in options_dict:
-            ostr += "%s=\"%s\"" % (key, options_dict[key])
-    return ostr
+            # handle options_dict as dict (had problems with Mako before 0.72 ??)
+            ostr += '%s="%s"' % (key, options_dict[key])
+            # handle options_dict as list of tupels. So enable this with Mako before 0.72
+            #ostr += "%s=\"%s\"" % (key[0],key[1])
+    return ostr  
+
+def mail_to(email):
+    mailto_first = "<a href=\"mailto:%s\"" % (email)
+    mailto_last = ">%s</a>" % (email)
+    mailto_first += add_html_options(options_dict)
+    mailto = mailto_first + mailto_last
+    return mailto
+
+
+def link_to(link, text, options_dict=None):
+    linkto_first = "<a href=\"%s\"" % (link)
+    linkto_last = ">%s</a>" % (text)
+    linkto = ""
+    # Add html-options if there are any
+    linkto_first += add_html_options(options_dict)
+    linkto = linkto_first + linkto_last
+    return linkto
 
 def enable_ajax():
     return enable_xml_http_post()
