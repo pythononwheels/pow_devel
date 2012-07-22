@@ -37,8 +37,8 @@ def powapp_simple_server(environ, start_response):
     
     req = Request(environ)
     req.charset = 'utf8'
-    print "webob: req.params", req.params
-    print "webob: req.body", req.body
+    #print "webob: req.params", req.params
+    #print "webob: req.body", req.body
     
     
     #print dir(req.params)
@@ -91,13 +91,16 @@ def powapp_simple_server(environ, start_response):
     powdict["PARAMETERS"] = req.params
     powdict["PARAMS_BODY"] = req.body
     
+    #print powdict["PARAMETERS"]
+    
     if MODE > MODE_NORMAL: 
         print plist
         print plist.keys()
+    plist = req.params
     
     #if plist.has_key("image"):
     #    print "Image found: ", plist['image'].filename
-    #    ofile = file("tmp.out", "wb")
+    #    ofile = file(plist['image'].filename, "wb")
     #    infile = plist['image'].file
     #    ofile.write( infile.read() )
     #   #ofile.write( plist["image"].value )

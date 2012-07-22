@@ -46,11 +46,16 @@
         return eval("self.get_"+ str(name)+"()")
 
     def set(self,name,val):
-        val = urllib.unquote(val)
+        #val = urllib.unquote(val)
         print " -- Model, setting: ", name, " -> ", val, " # ", type(val)
+        funcname = "self.set_%s" % (name)
+        func = eval(funcname)
         #eval("self.set_"+ str(name)+"(\""+ val + "\")" )
-        statement = "self.%s=u'%s'" % (name,val)
-        exec(statement)
+        #statement = "self.%s=u'%s'" % (name,val)
+        #exec(statement)
+        #print type(func)
+        #print func
+        func(val)
         return
 
     def getColumns(self):
