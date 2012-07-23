@@ -16,19 +16,10 @@
 %>
 <%inherit file="/${context.get('template')}"/>
 
-<<<<<<< HEAD
-Parameters: ${powdict["REQ_PARAMETERS"]}
-=======
 ##${powdict["REQ_PARAMETERS"]}
->>>>>>> login / logout now works.
 
 
-%if powdict["FLASHTEXT"] != "":
-	<div class="alert alert-${powdict["FLASHTYPE"]}">
-		<button class="close" data-dismiss="alert">x</button>
-		${powdict["FLASHTEXT"]}
-	</div
-%endif
+${helper.flash_message(powdict)}
 
 <div class="row">
     <div class="span2">
