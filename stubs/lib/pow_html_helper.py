@@ -3,6 +3,67 @@
 # 
 import powlib
 
+
+def paginate( list, powdict=None, per_page=3 ):
+    max_paginators = 10
+    if powdict["REQ_PARAMETERS"].has_key("page"):
+        page = int(powdict["REQ_PARAMETERS"]["page"])
+    else:
+        page = 0
+    print " -- page: ", str(page)
+    ostr = '<div class="pagination"><ul>'
+    link = "#"
+    # Prev Link
+    if page != 0:
+        link = "/post/blog?page=%s" % (str(page-1))
+    ostr += '<li><a href="%s">Prev</a></li>' % (link)           
+    # paginators
+    for elem in range(0, len(list)/per_page):
+        link = "/post/blog?page=%s" % (str(elem+1))
+        if elem+1 == page:
+            ostr += '<li class="active"><a href="%s">%s</a></li>' % (link,str(elem+1))
+        else:
+            ostr += '<li><a href="%s">%s</a></li>' % (link,str(elem+1))
+        if elem >= max_paginators:
+            break
+    
+    # next link
+    link = "/post/blog?page=%s" % (str(page+1))
+    ostr += '<li><a href="%s">Next</a></li>' % (link)
+    
+    # Last link
+    link = "/post/blog?page=%s" % (str(len(list)/per_page))
+    ostr += '<li><a href="%s">Last</a></li>' % (link)
+    
+    #finish
+    ostr += "</ul></div>"
+    
+    if page == 0:
+        return (ostr, list[0:per_page*(page+1)])
+    else:
+        return (ostr, list[(page-1)*per_page:per_page*(page)])
+    #return ostr
+
+def test2():
+    return "test",2
+    
+def paginate_static():
+    ostr = """
+    <div class="pagination">
+        <ul>
+            <li><a href="#">Prev</a></li>
+                <li class="active">
+                    <a href="#">1</a>
+                </li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                
+        </ul>
+    </div>
+    """
+    return ostr
+    
 def css_include_tag(base, cssfile):
     return (os.path.normpath(os.path.join(base,cssfile)))
 
