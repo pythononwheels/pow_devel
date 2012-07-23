@@ -1,0 +1,130 @@
+<%!
+
+	import sys,os 
+	sys.path.append(os.path.abspath(os.path.join( os.path.dirname(os.path.abspath("./")), "../../lib" )) )
+	import powlib
+	import pow_html_helper as helper
+%>
+
+<%def name="generate_actions()">
+    actlist = ["list", "edit", "create", "show"]
+</%def>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Python On Wheels</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="pow welcome page for local projects">
+    <meta name="author" content="khz">
+
+    <!-- Le styles -->
+    <!-- <link href="/static/css/bs/bootstrap.css" rel="stylesheet"> -->
+    <link href="/static/css/bs/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+    </style>
+    <link href="/static/css/bs/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="/static/ico/bs/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/static/ico/bs/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/static/ico/bs/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/static/ico/bs/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="/static/ico/bs/apple-touch-icon-57-precomposed.png">
+      
+    ${helper.enable_ajax()}
+    
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">${powdict["POW_APP_NAME"]}</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li class="active"><a href="/app/welcome">Home</a></li>
+              <li><a href="/post/list">Posts</a></li>
+              <li><a href="/post/blog">Posts blog</a></li>
+              <li><a href="/comment/list">Comments</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+          <ul class="nav pull-right">
+          %if powdict["SESSION"]["user.id"] != 0:
+                <li><a href="#">${powdict["SESSION"]["user.loginname"]}</a></li>
+                <li class="divider-vertical"></li>
+                <li><a href="/app/logout">logout</a></li>
+          %else:
+                <li><a href="/app/login">login</a></li>
+          %endif
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <!-- Main hero unit for a primary marketing message or call to action -->
+      <div class="hero-unit">
+        <h1>Welcome to PythonOnWheels</h1>
+        <h2>and the world of Rapid Web Development!</h2>
+        <br>
+        <span id="test_result">If Ajax works something will happen here if you click the 
+        <strong>Send Ajax Request</strong> button</span>
+        
+        <p><input id="ajax_input" name="ajax_input" type=text value="Hello Ajax World" size="30" maxlength="30"> </p>
+        <p><a class="btn btn-warning btn-large pull-right" onClick="send_request();">Send AJAX reuest &raquo;</a></p>
+        <span>
+            This is an example of the <code>link_to</code> tag in PoW: &nbsp;
+            ${helper.link_to("http://google.com", "google", { "class" : "btn btn-primary" } )}
+        </span>
+      </div>
+      
+      
+        ${next.body()}
+   
+      
+      <hr>
+
+      <footer>
+        <p>&copy; Softwarekombinat 2012 / khz</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/static/js/bs/jquery.js"></script>
+    <script src="/static/js/bs/bootstrap-transition.js"></script>
+    <script src="/static/js/bs/bootstrap-alert.js"></script>
+    <script src="/static/js/bs/bootstrap-modal.js"></script>
+    <script src="/static/js/bs/bootstrap-dropdown.js"></script>
+    <script src="/static/js/bs/bootstrap-scrollspy.js"></script>
+    <script src="/static/js/bs/bootstrap-tab.js"></script>
+    <script src="/static/js/bs/bootstrap-tooltip.js"></script>
+    <script src="/static/js/bs/bootstrap-popover.js"></script>
+    <script src="/static/js/bs/bootstrap-button.js"></script>
+    <script src="/static/js/bs/bootstrap-collapse.js"></script>
+    <script src="/static/js/bs/bootstrap-carousel.js"></script>
+    <script src="/static/js/bs/bootstrap-typeahead.js"></script>
+
+  </body>
+</html>

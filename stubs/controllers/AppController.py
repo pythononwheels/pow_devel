@@ -24,6 +24,7 @@ from powlib import uc
 import PowObject
 import BaseController
 import datetime
+import User
 
 class AppController(BaseController.BaseController):
     
@@ -62,20 +63,33 @@ class AppController(BaseController.BaseController):
         user = User.User()
         session = powdict["SESSION"]
         try:
+<<<<<<< HEAD
             user = self.model.find_by("loginname",powdict["REQ_PARAMETERS"]["loginname"])
+=======
+            user = user.find_by("loginname",powdict["REQ_PARAMETERS"]["loginname"])
+            print user
+>>>>>>> login / logout now works.
             if user.password == powdict["REQ_PARAMETERS"]["password"]:
                 #login ok
                 session["user.id"] = user.id
+                session["user.loginname"] = user.loginname
                 session.save()
-                return self.redirect("list",powdict=powdict)
+                powdict["FLASHTEXT"] = "You successfully logged in, %s " % (user.loginname)
+                powdict["FLASHTYPE"] = "success"
+                return self.redirect("welcome",powdict=powdict)
             else:
+                powdict["FLASHTEXT"] = "Error logging you in, %s " % (user.loginname)
+                powdict["FLASHTYPE"] = "error"
                 return self.redirect("login",powdict=powdict)
         except:
+            powdict["FLASHTEXT"] = "Error logging you in, %s " % (user.loginname)
+            powdict["FLASHTYPE"] = "error"
             return self.redirect("login", powdict=powdict)
     
     def logout( self, powdict):
         session = powdict["SESSION"]
         session["user.id"] = 0
-        return self.redirect("list", powdict=powdict)
+        session.save()
+        return self.redirect("welcome", powdict=powdict)
         
     

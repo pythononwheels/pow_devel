@@ -5,7 +5,11 @@ import powlib
 
 
 def paginate( list, powdict=None, per_page=3 ):
+<<<<<<< HEAD
     max_paginators = 10
+=======
+    max_paginators = 5
+>>>>>>> login / logout now works.
     if powdict["REQ_PARAMETERS"].has_key("page"):
         page = int(powdict["REQ_PARAMETERS"]["page"])
     else:
@@ -13,17 +17,31 @@ def paginate( list, powdict=None, per_page=3 ):
     print " -- page: ", str(page)
     ostr = '<div class="pagination"><ul>'
     link = "#"
+<<<<<<< HEAD
+=======
+    # first link
+    ostr += '<li><a href="/post/blog?page=1">Last</a></li>' 
+>>>>>>> login / logout now works.
     # Prev Link
     if page != 0:
         link = "/post/blog?page=%s" % (str(page-1))
     ostr += '<li><a href="%s">Prev</a></li>' % (link)           
     # paginators
+<<<<<<< HEAD
     for elem in range(0, len(list)/per_page):
         link = "/post/blog?page=%s" % (str(elem+1))
         if elem+1 == page:
             ostr += '<li class="active"><a href="%s">%s</a></li>' % (link,str(elem+1))
         else:
             ostr += '<li><a href="%s">%s</a></li>' % (link,str(elem+1))
+=======
+    for elem in range(1, len(list)/per_page):
+        link = "/post/blog?page=%s" % (str(elem))
+        if elem == page:
+            ostr += '<li class="active"><a href="%s">%s</a></li>' % (link,str(elem))
+        else:
+            ostr += '<li><a href="%s">%s</a></li>' % (link,str(elem))
+>>>>>>> login / logout now works.
         if elem >= max_paginators:
             break
     
