@@ -1,7 +1,11 @@
 ## {{{ http://code.activestate.com/recipes/355319/ (r1)
 import code
 import sys,os, string
-import readline
+try:
+  import pyreadline as readline
+except ImportError:
+  import readline
+
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./lib" )))
 
 class FileCacher:

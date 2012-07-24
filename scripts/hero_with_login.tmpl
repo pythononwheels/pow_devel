@@ -96,7 +96,11 @@
             ${helper.link_to("http://google.com", "google", { "class" : "btn btn-primary" } )}
         </span>
       </div>
-      
+      <div class="row">
+      	<div class="span12">
+      		${helper.flash_message(powdict)}
+      	</div>
+      </div>
       
         ${next.body()}
    

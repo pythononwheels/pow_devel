@@ -36,17 +36,6 @@
 		${paginator}
 	    % for elem in paginator_list:
 	       
-<<<<<<< HEAD
-	                <p><h3>${elem.get_title()}</h3> ${helper.edit_link(elem.id)} ${helper.delete_link(elem.id)}</p>
-	                    <hr>
-				        ${elem.get_content()}
-	                </p>
-	                <p>
-	                    <img src="/static/img/blog/${elem.get_image()}"/>
-	                </p>
-			        <p>&nbsp;</p>
-			 
-=======
 	       <h3>${elem.get_title()}</h3> 
                ${helper.edit_link(elem.id)} ${helper.delete_link(elem.id)}</p>
             <hr>
@@ -65,7 +54,6 @@
 			        <p>&nbsp;</p>
 			    </div>
 			</div> <!-- inner row end -->
->>>>>>> login / logout now works.
 	    %endfor
 	    	${paginator}
 		</div>

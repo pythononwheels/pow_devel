@@ -25,7 +25,8 @@ class PostController(BaseController.BaseController):
     def __init__(self):
         self.modelname = "Post"
         BaseController.BaseController.__init__(self)
-    
+        self.login_required = ["edit", "update", "create", "new"]
+        
     def list( self, powdict ):
         res = self.model.find_all()
         return self.render(model=self.model, powdict=powdict, list=res)
@@ -41,9 +42,19 @@ class PostController(BaseController.BaseController):
     def new( self, powdict ):
         self.model.__init__()
         dict = powdict["REQ_PARAMETERS"]
-        for key in dict:
-            statement = "self.model.%s=dict['%s']" % (key,key)
-            exec(statement)
+        if dict.has_key("title"):
+            self.model.set("title", dict["title"])
+        if dict.has_key("content"):
+            self.model.set("content", dict["content"])
+            
+        if dict.has_key("image") and dict["image"].has_key("file"): 
+            data = dict["image"].file.read()
+            ofiledir = os.path.normpath("./public/img/blog/")
+            ofilename = os.path.join(ofiledir, dict["image"].filename)
+            ofile = open( ofilename , "wb")
+            ofile.write(data)
+            ofile.close()
+            self.model.set("image", dict["image"].filename )
         self.model.create()
         return self.render(model=self.model, powdict=powdict)
     
@@ -66,7 +77,8 @@ class PostController(BaseController.BaseController):
         if dict.has_key("content"):
             self.model.set("content", dict["content"])
             
-        if dict.has_key("image"):
+        if dict.has_key("image") and dict["image"] :
+            print dir(dict["image"])
             data = dict["image"].file.read()
             ofiledir = os.path.normpath("./public/img/blog/")
             ofilename = os.path.join(ofiledir, dict["image"].filename)

@@ -3,8 +3,10 @@
     
     
     def __init__(self):
-        # example how to instanciate the model:
-        #self.model =User.User()
+        # define all actions which need alogged in User here
+        self.login_required = []
+        # define all actions which cannot be called via Http at all here:
+        self.locked_actions = []
         
         
     
