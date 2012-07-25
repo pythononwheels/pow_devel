@@ -95,7 +95,9 @@ def gen_app(appname, appdir, force=False):
                         {"public" : ["img", "img/bs", "ico", "css", "css/bs", "js", "js/bs", "doc"] },
                         {"stubs" : ["partials"] },
                         {"views" : ["layouts"] },
-                        {"tests" : ["models", "controllers", "integration", "fixtures"] } ]
+                        {"tests" : ["models", "controllers", "integration", "fixtures"] },
+                        {"ext" : ["auth", "validate"] }  
+                        ]
     for elem in subdirs:
         for key in elem:
             subdir = os.path.join(appbase,str(key))
@@ -122,7 +124,9 @@ def gen_app(appname, appdir, force=False):
                         ("stubs/lib", "lib"), 
                         ("stubs/controllers", "controllers"),
                         ("stubs/views", "views"),
-                        ("stubs/views/layouts", "views/layouts")
+                        ("stubs/views/layouts", "views/layouts"),
+                        ("stubs/ext/auth", "ext/auth"),
+                        ("stubs/ext/validate", "ext/validate")
                         ]
     print " -- copying files ..."
     exclude_patterns = [".pyc", ".pyo", ".DS_STORE"]

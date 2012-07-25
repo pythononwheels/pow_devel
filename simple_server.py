@@ -12,8 +12,9 @@ import cgi
 
 import traceback, StringIO
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./lib" )))
+sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./config" )))
 import urllib
-
+import pow
 import powlib
 import pow_web_lib
 from webob import Request, Response
@@ -191,8 +192,9 @@ def powapp_simple_server(environ, start_response):
 
     #TO_DO: include the real, mod re based routing instead of seting it hard to user/list here.
     if controller == "":
-        defroute = powlib.readconfig("pow.cfg","routes","default")
-        #print get_controller_and_action(defroute)
+        defroute = pow.routes["default"]
+        #defroute = powlib.readconfig("pow.cfg","routes","default")
+        print pow_web_lib.get_controller_and_action(defroute)
         pathdict = pow_web_lib.get_controller_and_action(defroute)
         #(controller,action) = os.path.split(pathinfo)
         print "(controller,action) -> ", pathdict
@@ -202,7 +204,6 @@ def powapp_simple_server(environ, start_response):
 
         print "Using the DEFAULT_ROUTE: ",
         print "(controller,action) -> ", pathdict
-    
     # get rid of the first / in front of the controller. string[1:] returns the string from char1 to len(string)
     controller = string.capitalize(controller) + "Controller"
     
@@ -216,7 +217,7 @@ def powapp_simple_server(environ, start_response):
     #output.append(action + "<br>")
     if hasattr( aclass, action ):
         real_action = eval("aclass." + action)
-        output.append(real_action(powdict).encode('utf-8'))
+        output.append(real_action(powdict).encode("utf-8"))
     else:
         msg = "ERROR: No such class or action  %s.%s " % (controller, action)  
         output.append(msg)
@@ -239,7 +240,7 @@ session_opts = {
 
 if __name__ == "__main__":
     application = pow_web_lib.Middleware(SessionMiddleware(powapp_simple_server, session_opts))
-    port = powlib.readconfig("pow.cfg","global","PORT")
+    port = pow.global_conf["PORT"]
     httpd = make_server('', int(port), application)
     print "Serving HTTP on port %s..." % (port)
 

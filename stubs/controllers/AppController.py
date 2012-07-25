@@ -24,7 +24,7 @@ from powlib import uc
 import PowObject
 import BaseController
 import datetime
-import User
+
 
 class AppController(BaseController.BaseController):
     
