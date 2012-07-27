@@ -127,9 +127,9 @@
         return ostr
 
     def update(self):
-        #dt = datetime.datetime.strftime(datetime.datetime.now(),"%Y-%m-%d %H:%M:%S")
-        #dt = urllib.unquote(dt)
-        #self.set("last_updated", dt)
+        dt = datetime.datetime.strftime(datetime.datetime.now(),"%Y-%m-%d %H:%M:%S")
+        dt = urllib.unquote(dt)
+        self.set("last_updated", dt)
         self.session.merge(self)
         self.session.commit()
 

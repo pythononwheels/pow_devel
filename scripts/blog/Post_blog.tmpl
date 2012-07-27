@@ -21,24 +21,48 @@
 
 
 <br>
-
+    ##${powdict}
 	<div class="row">
     	<div class="span1">
 			&nbsp;
 		</div>
 		<div class="span10">
-	    % for elem in list:
+		<%
+		    paginator,paginator_list = helper.paginate(list, powdict)
+		    ##context.write(paginator)
+		    
+		%>
+		
+		${paginator}
+	    % for elem in paginator_list:
 	       
-	                <p><h3>${elem.get_title()}</h3> ${helper.edit_link(elem.id)} ${helper.delete_link(elem.id)}</p>
-	                    <hr>
-				        ${elem.get_content()}
-	                </p>
-	                <p>
+	       <h3>${elem.get_title()}</h3> 
+               <span class="pull-left">
+                   ${helper.edit_link(elem.id)} ${helper.delete_link(elem.id)}
+               </span>
+               <span class="pull-right">  
+                    <small>
+                        <i class="icon-ok"></i>: ${elem.get_created()} &nbsp;&nbsp;
+                        <i class="icon-refresh"></i>: ${elem.get_last_updated()}</small>
+               </span>
+            <hr>
+            
+	       <div class="row"> <!-- inner row start -->
+           	   <div class="span3">
+       			   <p>
 	                    <img src="/static/img/blog/${elem.get_image()}"/>
 	                </p>
+       		    </div>
+       	        <div class="span7">
+	                <p>
+				        ${elem.get_content()}
+	                </p>
+	                
 			        <p>&nbsp;</p>
-			 
+			    </div>
+			</div> <!-- inner row end -->
 	    %endfor
+	    	${paginator}
 		</div>
 		<div class="span1">
 			&nbsp;
