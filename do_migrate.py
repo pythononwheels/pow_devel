@@ -21,7 +21,7 @@ sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(_
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./migrations" )))
 
 import powlib
-import Appinfo
+import App
 import PowTable
 
 # setting the right defaults
@@ -102,12 +102,12 @@ def do_job(options, filename, method):
     return
 
 def do_migrate( goalversion, direction):
-    #powlib.load_module("Appinfo")
+    #powlib.load_module("App")
     print "..migrating "
-    app = powlib.load_class( "Appinfo", "Appinfo")
+    app = powlib.load_class( "App", "App")
     app_versions = powlib.load_class( "Version", "Version")
     sess = app.pbo.getSession()
-    app = sess.query(Appinfo.Appinfo).first()
+    app = sess.query(App.App).first()
     #print app
     #print "name: " + app.name
     #print "path: " + app.path
@@ -138,8 +138,8 @@ def do_migrate( goalversion, direction):
     sess.add(app)
     
     if goalversion < 2 and goalversion != None:
-        #then the appinfo or versions table would be migrated down which will break the environment.
-        print " -- Error: you are attemting to migrate down the sytem tables version and/or appinfo.. bailing out"
+        #then the App or versions table would be migrated down which will break the environment.
+        print " -- Error: you are attemting to migrate down the sytem tables version and/or App.. bailing out"
         return
         
     for run in range(0,times):
@@ -196,10 +196,10 @@ def drop_table(tablename, **kwargs):
 def set_currentversion( ver ):
     
     print "migrating "
-    app = powlib.load_class( "Appinfo", "Appinfo")
+    app = powlib.load_class( "App", "App")
     app_versions = powlib.load_class( "Version", "Version")
     sess = app.pbo.getSession()
-    app = sess.query(Appinfo.Appinfo).first()
+    app = sess.query(App.App).first()
     #print app
     #print "name: " + app.name
     #print "path: " + app.path
@@ -217,10 +217,10 @@ def set_currentversion( ver ):
     
     
 def do_erase():
-    app = powlib.load_class( "Appinfo", "Appinfo")
+    app = powlib.load_class( "App", "App")
     app_version = powlib.load_class( "Version", "Version")
     sess = app.pbo.getSession()
-    app = sess.query(Appinfo.Appinfo).first()
+    app = sess.query(App.App).first()
     print " -- erasing migration version:", str(app.maxversion)
 
     sess.add(app)
@@ -261,10 +261,10 @@ def do_erase():
     
 
 def show_info():
-    app = powlib.load_class( "Appinfo", "Appinfo")
+    app = powlib.load_class( "App", "App")
     app_versions = powlib.load_class( "Version", "Version")
     sess = app.pbo.getSession()
-    app = sess.query(Appinfo.Appinfo).first()
+    app = sess.query(App.App).first()
     print "showing migration information for"
     #print " -- Appname: " + app.name
     print " -- currentversion is : " + str(app.currentversion)

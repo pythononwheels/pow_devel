@@ -192,7 +192,7 @@ def powapp_simple_server(environ, start_response):
 
     #TO_DO: include the real, mod re based routing instead of seting it hard to user/list here.
     if controller == "":
-        defroute = pow.routes["default"]
+        #defroute = pow.routes["default"]
         #defroute = powlib.readconfig("pow.cfg","routes","default")
         print pow_web_lib.get_controller_and_action(defroute)
         pathdict = pow_web_lib.get_controller_and_action(defroute)

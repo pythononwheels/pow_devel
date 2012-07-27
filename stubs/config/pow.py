@@ -19,5 +19,5 @@ global_conf = {
 }
 
 routes = {
-     "default"  :   "app/welcome" 
+     "default"  :   "/app/welcome" 
 }

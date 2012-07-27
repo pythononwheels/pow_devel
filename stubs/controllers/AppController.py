@@ -29,7 +29,7 @@ import datetime
 class AppController(BaseController.BaseController):
     
     def __init__(self):
-        self.modelname = "Appinfo"
+        self.modelname = "App"
         BaseController.BaseController.__init__(self)
         self.login_required = []
         self.locked_actions = [ "do_login"]

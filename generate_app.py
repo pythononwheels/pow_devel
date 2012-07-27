@@ -177,7 +177,7 @@ def gen_app(appname, appdir, force=False):
     #
     render_db_config(appname, appbase)
     
-    generate_model.render_model("Appinfo", False, "System class containing the Appinfo", appname)
+    generate_model.render_model("App", False, "System class containing the App Base Informations", appname)
     generate_model.render_model("Version", False, "System class containing the Versions", appname)
     return
     
