@@ -37,9 +37,14 @@
 	    % for elem in paginator_list:
 	       
 	       <h3>${elem.get_title()}</h3> 
-               ${helper.edit_link(elem.id)} ${helper.delete_link(elem.id)}</p>
+               <span class="pull-left">
+                   ${helper.edit_link(elem.id)} ${helper.delete_link(elem.id)}
+               </span>
+               <span class="pull-right">  
+                    created: ${elem.get_created()}
+               </span>
             <hr>
-               
+            
 	       <div class="row"> <!-- inner row start -->
            	   <div class="span3">
        			   <p>

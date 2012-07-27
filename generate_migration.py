@@ -18,7 +18,7 @@ sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(_
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./models" )))
 
 import powlib
-import Appinfo
+import App
 
 # setting the right defaults
 MODE_CREATE = 1
@@ -103,10 +103,10 @@ def render_migration(name, model, comment):
     #ostr += powlib.tab + powlib.tab + powlib.tab +  "Column('id', Integer, Sequence('" + model +"_id_seq'), primary_key=True),"
     #ostr += powlib.newline
     
-    app = powlib.load_class( "Appinfo", "Appinfo")
+    app = powlib.load_class( "App", "App")
     app_versions = powlib.load_class( "Version", "Version")
     sess = app.pbo.getSession()
-    app = sess.query(Appinfo.Appinfo).first()
+    app = sess.query(App.App).first()
     
     version = app.maxversion
     oldmaxversion = version

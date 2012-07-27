@@ -31,10 +31,10 @@ class PowTable(sqlalchemy.Table):
          eval("self.c." + colname + ".alter(name=\"" + newname + "\")")
          
     def create(self, **kwargs):
-        #col = Column('created', Text, default=datetime.datetime.now())
-        #self.append_column( col )
-        #col = Column('last_updated', Text, default=datetime.datetime.now())
-        #self.append_column( col )
+        col = Column('created', Text, default=datetime.datetime.now())
+        self.append_column( col )
+        col = Column('last_updated', Text, default=datetime.datetime.now())
+        self.append_column( col )
         col = Column('id', Integer, Sequence(self.name+'_id_seq'), primary_key=True)
         self.append_column( col )
         sqlalchemy.Table.create(self, **kwargs)

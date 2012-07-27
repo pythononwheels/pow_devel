@@ -80,12 +80,11 @@ class PostController(BaseController.BaseController):
         ofiledir  = os.path.normpath("./public/img/blog/")
         if pow_web_lib.get_form_image_data( "image", dict, ofiledir):
             # if form contains file data AND file could be written, update model
-            self.model.set("image", dict["image"].filename )   
-            self.model.update()
+            self.model.set("image", dict["image"].filename )     
         else:
             # dont update model
             pass
-        
+        self.model.update()
         return self.render(model=self.model, powdict=powdict)
     
     def delete( self, powdict ):

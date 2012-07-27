@@ -79,7 +79,7 @@ class BaseController(PowObject.PowObject):
                 #self.setCurrentAction("login")
                 kwargs["powdict"]["FLASHTEXT"] = "You need to be logged in to access method: %s" % (str(self.current_action))
                 kwargs["powdict"]["FLASHTYPE"] = "error"
-                fname = os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)),"../views/Appinfo_login.tmpl"))
+                fname = os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)),"../views/App_login.tmpl"))
                 mytemplate = Template(filename=fname, lookup=self.mylookup)
                 return mytemplate.render(**kwargs)
         else:

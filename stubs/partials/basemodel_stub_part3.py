@@ -134,10 +134,10 @@
         self.session.commit()
 
     def create(self):
-        #dt = datetime.datetime.strftime(datetime.datetime.now(),"%Y-%m-%d %H:%M:%S")
+        dt = datetime.datetime.strftime(datetime.datetime.now(),"%Y-%m-%d %H:%M:%S")
         #dt = urllib.unquote(dt)
-        #self.set("created", dt)
-        #self.set("last_updated", dt)
+        self.set("created", dt)
+        self.set("last_updated", dt)
         self.session.merge(self)
         self.session.commit()
 
