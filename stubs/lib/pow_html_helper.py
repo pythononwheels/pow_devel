@@ -5,37 +5,72 @@ import powlib
 
 
 def paginate( list, powdict=None, per_page=3 ):
-    max_paginators = 5
+    """ returns a tupel ( t1 , 2 )
+        where     t1 = html for a bootstrap paginator 
+        and       t2 = list of results sliced so it fits to the current paginator page.
+        
+        Always shows     FIRST curent_page +1 +2 +3 +4 LAST
+        So if current page =3 it will show
+                         FIRST 3 4 5 6 7 LAST
+        Example: 
+                you give a list of 40 Posts and the current page is 3, per_page is 3
+                the the paginator will show:  first 3 4 5 6 7 last
+                and the returned list contains the entries 10,11,12 since 
+                these are the results that should be displayed on page 3
+                You have to loop over the returned list yourself in the according view template.
+                see demo blog Post_blog.tmpl for an example
+    """
+    max_paginators = 4
     if powdict["REQ_PARAMETERS"].has_key("page"):
         page = int(powdict["REQ_PARAMETERS"]["page"])
     else:
-        page = 0
-    print " -- page: ", str(page)
+        page = 1
+    #print " -- page: ", str(page)
     ostr = '<div class="pagination"><ul>'
     link = "#"
     # first link
-    ostr += '<li><a href="/post/blog?page=1">Last</a></li>' 
+    ostr += '<li><a href="/post/blog?page=1">First</a></li>' 
     # Prev Link
-    if page != 0:
-        link = "/post/blog?page=%s" % (str(page-1))
+    link = "/post/blog?page=%s" % (str(page-1))
     ostr += '<li><a href="%s">&laquo;</a></li>' % (link)           
     # paginators
-    for elem in range(1, len(list)/per_page):
+    print " -- paginator: len(list) > len(list)/per_page : ", str(len(list)), "  >   ", str(len(list)/per_page)
+    
+    rest = len(list) % per_page
+    if rest > 0:
+        # if there is a rest while dividing the list / page (INTEGER) then there is one more page
+        # with less then per_page entries that must be added. So +2 in this case
+        real_end =  (len(list)/per_page)+1
+    else:
+        real_end = (len(list)/per_page)
+        
+    if page <= max_paginators/2:
+        # make forward pagination page, page +1, page+2  ... and so on
+        start = page
+        end = page + max_paginators + 1 
+    else:
+         # make pagination forward and backwards aroiund page: page-2, page-1 page, page+1, page+2 (for example)
+         start = (page - (max_paginators/2))
+         end =  (page + (max_paginators/2))+1
+         
+    for elem in range(start, end):
         link = "/post/blog?page=%s" % (str(elem))
         if elem == page:
             ostr += '<li class="active"><a href="%s">%s</a></li>' % (link,str(elem))
         else:
             ostr += '<li><a href="%s">%s</a></li>' % (link,str(elem))
-        if elem >= max_paginators:
+        if elem >= real_end:
             break
+    
     
     # next link
     link = "/post/blog?page=%s" % (str(page+1))
     ostr += '<li><a href="%s">&raquo;</a></li>' % (link)
     
+   
     # Last link
-    link = "/post/blog?page=%s" % (str(len(list)/per_page))
-    ostr += '<li><a href="%s">Last</a></li>' % (link)
+    link = "/post/blog?page=%s" % (str(real_end))
+    ostr += '<li><a href="%s">Last (%s)</a></li>' % (link, str(real_end))
     
     #finish
     ostr += "</ul></div>"
