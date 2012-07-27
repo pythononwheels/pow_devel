@@ -24,6 +24,25 @@ session_opts = {
     'session.auto': True
 }
 
+def get_form_image_data( form_fieldname, dict, ofiledir ):
+    """ safely checks if a given form field has binary data attached to it
+        and safes it into the given filename. Often used for html form <input type="file" ...>
+    """
+    if dict.has_key(form_fieldname):
+        try:
+            #print dir(dict["image"])
+            #print dict["image"].__dict__.viewkeys()
+            data = dict["image"].file.read()
+            #ofiledir = os.path.normpath("./public/img/blog/")
+            ofilename = os.path.join(ofiledir, dict["image"].filename)
+            ofile = open( ofilename , "wb")
+            ofile.write(data)
+            ofile.close()
+            return True
+        except AttributeError:
+            # no image data
+            return False
+    return False
 
 def pre_route(path_info):
     # description:

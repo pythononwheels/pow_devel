@@ -31,6 +31,9 @@ def main():
     parser.add_option("-m", "--model",  action="store", type="string", dest="model", help="defines the model for this migration.", default ="None")
     parser.add_option("-c", "--comment",  action="store", type="string", dest="comment", help="defines a comment for this migration.", default ="No Comment")
     parser.add_option("-j", "--job",  action="store", type="string", dest="job", help="creates migration job, e.g for backups, restores etc.",default="None")
+    parser.add_option("-cd", "--column-definitions",  action="store", 
+                        type="string", dest="col_defs", 
+                        help="Pre define the column definitions. Name, type, options (all SQLAlchemy style).",default="None")
 
     (options, args) = parser.parse_args()
     #print options

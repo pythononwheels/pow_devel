@@ -16,7 +16,7 @@ sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(_
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../models" )))
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../controllers" )) )
 
-import powlib
+import powlib, pow_web_lib
 import PowObject
 import BaseController
 import Post
@@ -76,18 +76,17 @@ class PostController(BaseController.BaseController):
             self.model.set("title", dict["title"])
         if dict.has_key("content"):
             self.model.set("content", dict["content"])
-            
-        if dict.has_key("image") and dict["image"] :
-            print dir(dict["image"])
-            data = dict["image"].file.read()
-            ofiledir = os.path.normpath("./public/img/blog/")
-            ofilename = os.path.join(ofiledir, dict["image"].filename)
-            ofile = open( ofilename , "wb")
-            ofile.write(data)
-            ofile.close()
-            self.model.set("image", dict["image"].filename )
-
-        self.model.update()
+        print dir(powdict["REQ_BODY"])  
+        
+        ofiledir  = os.path.normpath("./public/img/blog/")
+        if pow_web_lib.get_form_image_data( "image", dict, ofiledir):
+            # if form contains file data AND file could be written, update model
+            self.model.set("image", dict["image"].filename )   
+            self.model.update()
+        else:
+            # dont update model
+            pass
+        
         return self.render(model=self.model, powdict=powdict)
     
     def delete( self, powdict ):
