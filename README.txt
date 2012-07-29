@@ -5,7 +5,7 @@ the plain,simple and easy to use rapid web App generator framework for python.
 ### Based on reliable python 'standards' and frameworks
 
 	* WeboB		    WSGI Request (response) handling
-	* SQLAlchemy 	ORM / DB Access
+	* SQLAlchemy    ORM / DB Access
 	* Beaker		Session Management
 	* Mako		    Template engine for Views
 	* WSGI		    Web Service
@@ -32,7 +32,7 @@ the plain,simple and easy to use rapid web App generator framework for python.
 		** basic authentication
 	* apache mod_wsgi ready 
 	* includes a ready to run simple_server
-	    * full environment on your laptop, macc or pc
+	    * full environment on your laptop, mac or pc
 	
 The clear Focus was to develop a Framework in between the existing Big Ones,
 which have quite some learning curve to get started and
