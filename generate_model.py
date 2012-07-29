@@ -18,7 +18,7 @@ import powlib
 MODE_CREATE = 1
 MODE_REMOVE = 0
 PARTS_DIR = powlib.PARTS_DIR
-
+MODEL_TEST_DIR = "/tests/models/" 
 pow_newline = powlib.linesep
 pow_tab= powlib.tab
 
@@ -159,18 +159,18 @@ def render_model(modelname, force, comment, prefix_path="./", properties=None):
 def reset_model(modelname):
     return render_model(modelname, True, "", properties=None, nomig=True)
     
-def render_test_stub (modelname, classname, prefix_path ):
+def render_test_stub (modelname, classname, prefix_path = "" ):
     #print "rendering Testcase for:", classname, " ", " ", modelname
     print " -- generating TestCase...",
     infile = open( os.path.normpath( PARTS_DIR +  "test_model_stub.py"), "r")
     test_name = "Test" + classname + ".py"
-    ofile = open( os.path.normpath(prefix_path + "/tests/models/" + test_name ), "w")
+    ofile = open( os.path.normpath(prefix_path + MODEL_TEST_DIR + test_name ), "w")
     instr = infile.read()
-    instr = instr.replace("#CLASSNAME", classname)
+    instr = instr.replace("#CLASSNAME", "Test" +  classname )
     ofile.write(instr)
     infile.close()
     ofile.close()
-    print " ..(created)"
+    print  " %s...(created)" % (prefix_path + MODEL_TEST_DIR + test_name)
     
     return
 

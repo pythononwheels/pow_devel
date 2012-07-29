@@ -24,6 +24,8 @@ import PowObject
 MODE_CREATE = 1
 MODE_REMOVE = 0
 PARTS_DIR = powlib.PARTS_DIR
+CONTROLLER_TEST_DIR = "/tests/controllers/"
+
 
 def main():
     parser = OptionParser()
@@ -86,12 +88,12 @@ def render_controller(name, noforce):
     classname = string.capitalize( name ) + "Controller"
     ostr += "class " + classname + "(BaseController.BaseController):"
     
-    # Add the controlle_stub part 1 content to the newly generated file. 
+    # Add the controller_stub part 1 content to the newly generated file. 
     infile = open (os.path.normpath(PARTS_DIR + "controller_stub_part1.py"), "r")
     ostr = ostr + infile.read()
     ostr+= powlib.tab + powlib.tab + "self.modelname = \"" + string.capitalize( name ) + "\"" + powlib.linesep
     
-    # Add the controlle_stub part2 content to the newly generated file. 
+    # Add the controller_stub part2 content to the newly generated file. 
     infile = open (os.path.normpath(PARTS_DIR + "controller_stub_part2.py"), "r")
     ostr = ostr + infile.read()
     infile.close()
@@ -113,6 +115,24 @@ def render_controller(name, noforce):
     else:
         # copy the BaseClass
         powlib.check_copy_file(os.path.normpath( "./stubs/controllers/BaseController.py"), os.path.normpath( "./controllers/"))
+    
+    render_test_stub( name, classname )
+    return
+    
+    
+def render_test_stub (controllername, classname, prefix_path ="" ):
+    #print "rendering Testcase for:", classname, " ", " ", modelname
+    print " -- generating TestCase...",
+    infile = open( os.path.normpath( PARTS_DIR +  "test_controller_stub.py"), "r")
+    test_name = "Test" + classname + ".py"
+    ofile = open( os.path.normpath(prefix_path + CONTROLLER_TEST_DIR + test_name ), "w")
+    instr = infile.read()
+    instr = instr.replace("#CLASSNAME", "Test" + classname  )
+    ofile.write(instr)
+    infile.close()
+    ofile.close()
+    print  " %s...(created)" % (prefix_path + CONTROLLER_TEST_DIR + test_name)
+    return
 
 
 if __name__ == '__main__':
