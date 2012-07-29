@@ -33,7 +33,8 @@ def main():
     parser.add_option("-j", "--job",  action="store", type="string", dest="job", help="creates migration job, e.g for backups, restores etc.",default="None")
     parser.add_option("-d", "--column-definitions",  action="store", 
                         type="string", dest="col_defs", 
-                        help="Pre define the column definitions. Name, type, options (all SQLAlchemy style).",default="None")
+                        help="Pre define the column definitions. Name, type, options (all SQLAlchemy style).",
+                        default="None")
 
     (options, args) = parser.parse_args()
     #print options
@@ -44,7 +45,7 @@ def main():
             migration_name = options.model
             migration_model = options.model
         else:
-            parser.error("You must at least specify an appname by giving -n <name>.")
+            parser.error("You must at least specify an migration name by giving -n <name>.")
             return
     else:
         if options.name == "None":
@@ -54,6 +55,7 @@ def main():
             #migration_name = options.name
         migration_model = options.model
     
+    
     start = None
     end = None
     start = datetime.datetime.now()
@@ -61,7 +63,7 @@ def main():
     if options.job != "None":
         render_migration_job(options.job)
     else:
-        render_migration(migration_name, migration_model,options.comment)
+        render_migration(migration_name, migration_model,options.comment, options.col_defs)
     
     end = datetime.datetime.now()
     duration = None
@@ -70,10 +72,10 @@ def main():
     print "generated_migration in("+ str(duration) +")"
     return
     
-def render_migration(name, model, comment):
+def render_migration(name, model, comment, col_defs):
     # 
-    
     #print "generate_migration: " + name + "  for model: " + model
+    #
     
     # add the auto generated warning to the outputfile
     infile = open (os.path.normpath(PARTS_DIR + "/can_be_edited.txt"), "r")
