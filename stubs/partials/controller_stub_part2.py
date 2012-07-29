@@ -10,11 +10,28 @@
         
     def new( self, powdict ):
         self.model.__init__()
+        #print powdict["REQ_PARAMETERS"]
+        #print self.model
         dict = powdict["REQ_PARAMETERS"]
         for key in dict:
-            statement = "self.model.%s=dict['%s']" % (key,key)
-            exec(statement)
+            statement = 'type(self.model.__table__.columns["%s"].type)' % (key)
+            curr_type = eval(statement)
+            if curr_type == type(sqlalchemy.types.BLOB()) or curr_type == type(sqlalchemy.types.BINARY()):
+                ofiledir  = os.path.normpath("./public/img/")
+                print "key: ", key
+                if pow_web_lib.get_form_binary_data( key, dict, ofiledir):
+                    # if form contains file data AND file could be written, update model
+                    self.model.set(key, dict[key].filename )   
+                else:
+                    # dont update model
+                    print " ##### -_______>>>>>>>   BINARY DATA but couldnt update model"
+            else:
+                self.model.set(key, dict[key])
+        
         self.model.create()
+        powdict["FLASHTEXT"] ="Yep, record successfully created."
+        powdict["FLASHTYPE"] ="success"
+        
         return self.render(model=self.model, powdict=powdict)
     
     def create( self, powdict):
@@ -27,15 +44,24 @@
     
     def update( self, powdict ):
         self.model.__init__()
-        #print powdict["PARAMETERS"]
+        #print powdict["REQ_PARAMETERS"]
         self.model = self.model.find_by("id",powdict["REQ_PARAMETERS"]["id"])
         #print self.model
         dict = powdict["REQ_PARAMETERS"]
         for key in dict:
-            #statement = "self.model.%s=dict['%s']" % (key,key)
-            #exec(statement)
-            self.model.set(key, dict[key])
-            
+            statement = 'type(self.model.__table__.columns["%s"].type)' % (key)
+            curr_type = eval(statement)
+            if curr_type == type(sqlalchemy.types.BLOB()) or curr_type == type(sqlalchemy.types.BINARY()):
+                ofiledir  = os.path.normpath("./public/img/")
+                print "key: ", key
+                if pow_web_lib.get_form_binary_data( key, dict, ofiledir):
+                    # if form contains file data AND file could be written, update model
+                    self.model.set(key, dict[key].filename )   
+                else:
+                    # dont update model
+                    print " ##### -_______>>>>>>>   BINARY DATA but couldnt update model"
+            else:
+                self.model.set(key, dict[key])
         self.model.update()
         return self.render(model=self.model, powdict=powdict)
     
@@ -43,4 +69,6 @@
         self.model.__init__()
         self.model = self.model.find_by("id",powdict["REQ_PARAMETERS"]["id"])
         self.model.delete(self.model.get_id())
+        powdict["FLASHTEXT"] ="Yep, record successfully deleted."
+        powdict["FLASHTYPE"] ="success"
         return self.render(model=self.model, powdict=powdict)

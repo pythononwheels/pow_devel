@@ -12,10 +12,16 @@
 # 
 
 global_conf = { 
-    "ENV"   :   "development",
+    "ENV"               :   "development",
     "DEFAULT_TEMPLATE"  :   "hero.tmpl",
     "DEFAULT_ENCODING"  :   "utf-8",
-    "PORT"  :   "8080"
+    "PORT"              :   "8080",
+    "MAX_FILE_UPLOAD"   :   "100000",
+    "STD_BINARY_PATH"   :   "/static/img/",
+    "DEFAULT_IMAGE_NAME":   "image",
+    "DEFAULT_VIDEO_NAME":   "video",
+    "DEFAULT_AUDIO_NAME":   "audio",
+    "DEFAULT_TEXT_NAME" :   "text"
 }
 
 routes = {

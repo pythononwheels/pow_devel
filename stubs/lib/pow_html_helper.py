@@ -2,6 +2,11 @@
 # POW Helpers for mako and html
 # 
 import powlib
+import sys, os, os.path
+import string
+sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../config" )))
+import pow
+import sqlalchemy.types
 
 
 def paginate( list, powdict=None, per_page=3 ):
@@ -80,26 +85,6 @@ def paginate( list, powdict=None, per_page=3 ):
     else:
         return (ostr, list[(page-1)*per_page:per_page*(page)])
     #return ostr
-
-def test2():
-    return "test",2
-    
-def paginate_static():
-    ostr = """
-    <div class="pagination">
-        <ul>
-            <li><a href="#">Prev</a></li>
-                <li class="active">
-                    <a href="#">1</a>
-                </li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                
-        </ul>
-    </div>
-    """
-    return ostr
     
 def css_include_tag(base, cssfile):
     return (os.path.normpath(os.path.join(base,cssfile)))
@@ -116,33 +101,76 @@ def generate_hidden(model, hidden_list=None):
             ostr += '<input type="hidden" name="%s" value="%s"/>' % (colname, model.get(colname))
     
     return ostr
+
+
+def smart_list(model, colname = None):
+    """
+     Generates the right html tags to display the model attribute content in the model.list view
+     according to the model.attribute's column type
+        Basically:
+            default, text and VArchar   =>      plain type=text
+            binary and blob             =>      if colname == image     =>      <img
+                                                if colname == other     =>      plain text
+            integer, Text               =>      plain text
+    """
+    ostr = ""
+    print " ##### ----------------> in smart list"
+    curr_type = type(model.__table__.columns[colname].type)
+    if curr_type == type(sqlalchemy.types.BLOB()) or curr_type == type(sqlalchemy.types.BINARY()):
+        print "smart_list: curr_type: BINARY"
+        if string.lower(colname) == pow.global_conf["DEFAULT_IMAGE_NAME"]:
+            if model.get(colname) != None or model.get(colname) != "None":
+                ostr += '<img src="%s"/>' % (os.path.normpath( pow.global_conf["STD_BINARY_PATH"] + model.get(colname)))
+            else:
+                ostr += ""
+    else:
+        print "smart_list: curr_type: ", curr_type
+        ostr += model.get(colname)
+    return ostr
     
-def form_input(name, value, options_dict=None, model=None, type=None):
-    if model == None:
+def smart_form_input( modelname = None, colname = None, value = "", accept = "", options_dict = None ):
+    """
+        Generates the right form input for the given model.column type.
+        Basically:
+            default, text and VArchar   =>      <input type=text
+            binary and blob             =>      <input type=file
+            Text                        =>      <textarea
+            
+    """
+    
+    colname = string.lower(colname)
+    input_first = '<label for="%s">%s:</label>' % (colname, colname)
+    if modelname == None:
         # No model given, so always generate a standard text type or the given type input html field
         if type == None:
-            input_first = "<input type='text' name='%s' value='%s'" % (name, value)
+            input_first += "<input type='text' name='%s' value='%s'>" % (colname, value)
         else:
-            input_first = "<input type='%s' name='%s' value='%s'" % (type, name, value)
+            input_first += "<input type='%s' name='%s' value='%s'>" % (type, colname, value)
     else:
         # model given, so create the right input-type according to the models datatype
         # the field is the same as the given name. So type of model.name determines the input-type
-        mod = pow_lib.load_class(string.capitalize(model), model)
-        input_first = "<"
-        statement = "mod.%s" % (name)
+        mod = powlib.load_class(string.capitalize(modelname), string.capitalize(modelname))
+        statement = 'type(mod.__table__.columns["%s"].type)' % (colname)
         curr_type = eval(statement)
-        if curr_type == sqlalchemy.types.INTEGER:
-            pass
-        elif curr_type == sqlalchemy.types.TEXT:
-            pass
-        elif curr_type == sqlalchemy.types.VARCHAR:
-            pass
-        
-    input_last = ">"
-    if options_dict != None:
-        add_html_options(options_dict)
-    input = inpout_first + inpuot_last
-    return input
+        print curr_type
+        if curr_type == type(sqlalchemy.types.INTEGER()) or curr_type == type(sqlalchemy.types.VARCHAR()):
+            input_first += "<input type='text' name='%s' value='%s'>" % (colname, value)
+        elif curr_type == type(sqlalchemy.types.TEXT()):
+            input_first += '<textarea name="%s" class="input-xxlarge" rows="15">%s</textarea>' % (colname, value)
+        elif curr_type == type(sqlalchemy.types.BLOB()) or curr_type == type(sqlalchemy.types.BINARY()):
+            if string.lower(colname) == pow.global_conf["DEFAULT_IMAGE_NAME"]:
+                input_first += '<input name="%s" type="file" size="50" maxlength="%s" accept="image/*">' % (colname, pow.global_conf["MAX_FILE_UPLOAD"])
+            elif string.lower(colname) == pow.global_conf["DEFAULT_VIDEO_NAME"]:
+                input_first += '<input name="%s" type="file" size="50" maxlength="%s" accept="video/*">' % (colname, pow.global_conf["MAX_FILE_UPLOAD"])
+            elif string.lower(colname) == pow.global_conf["DEFAULT_AUDIO_NAME"]:
+                input_first += '<input name="%s" type="file" size="50" maxlength="%s" accept="audio/*">' % (colname, pow.global_conf["MAX_FILE_UPLOAD"])
+            elif string.lower(colname) == pow.global_conf["DEFAULT_TEXT_NAME"]:
+                input_first += '<input name="%s" type="file" size="50" maxlength="%s" accept="text/*">' % (colname, pow.global_conf["MAX_FILE_UPLOAD"])
+        else:   
+            input_first += "<ERROR in smart_form_input()>"
+    
+    
+    return input_first
     
 def create_link(model, text=None):
     if text == None:

@@ -37,7 +37,7 @@ def powapp_simple_server(environ, start_response):
     real_action = None
     
     req = Request(environ)
-    req.charset = 'utf8'
+    req.charset = pow.global_conf["DEFAULT_ENCODING"]
     #print "webob: req.params", req.params
     #print "webob: req.body", req.body
     
@@ -93,7 +93,7 @@ def powapp_simple_server(environ, start_response):
     powdict["REQ_PARAMETERS"] = req.params
     powdict["REQ_BODY"] = req.body
     
-    #print powdict["PARAMETERS"]
+    print powdict["REQ_PARAMETERS"]
     
     if MODE > MODE_NORMAL: 
         print plist

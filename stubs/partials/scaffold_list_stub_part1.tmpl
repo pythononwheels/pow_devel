@@ -1,4 +1,4 @@
-This is the scaffolded template for the <strong>List</strong> action <br>
+This is the scaffolded template for the <strong>${model.getName()}.list</strong> action <br>
 
 %if powdict["FLASHTEXT"] != "":
 	<div class="alert alert-${powdict["FLASHTYPE"]}">
@@ -7,7 +7,8 @@ This is the scaffolded template for the <strong>List</strong> action <br>
 	</div
 %endif
 
-<i class="icon-plus"></i>&nbsp;<a href="./create">Create</a> a new ${model.getName()}.
+<!-- <i class="icon-plus"></i>&nbsp; -->
+<a class="btn btn-success"  href="./create">Create a new ${model.getName()}</a>
 <br>
 <table class="table">
 	<thead>
@@ -24,13 +25,12 @@ This is the scaffolded template for the <strong>List</strong> action <br>
 			<tr>
 				%for colname in elem.getColumns():
 					%if colname not in hidden_list:
-						<td>${elem.get(colname)}</td>
+						<td><% context.write(helper.smart_list(elem, colname)) %></td>
 					%endif
 				%endfor
 				<td><i class="icon-edit"></i>&nbsp;<a href="./edit?id=${elem.get("id")}">edit</a></td>
 				<td><i class="icon-eye-open"></i>&nbsp;<a href="./show?id=${elem.get("id")}">show</a></td>
 				<td><i class="icon-remove"></i>&nbsp;<a href="./delete?id=${elem.get("id")}">delete</a></td>
-				<td><i class="icon-plus"></i>&nbsp;<a href="./create">create</a></td>
 			</tr>
 				
 		%endfor

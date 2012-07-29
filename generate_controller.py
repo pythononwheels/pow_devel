@@ -24,7 +24,7 @@ import PowObject
 MODE_CREATE = 1
 MODE_REMOVE = 0
 PARTS_DIR = powlib.PARTS_DIR
-CONTROLLER_TEST_DIR = "/tests/controllers/"
+CONTROLLER_TEST_DIR = "./tests/controllers/"
 
 
 def main():
