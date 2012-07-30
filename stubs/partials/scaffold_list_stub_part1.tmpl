@@ -10,32 +10,36 @@ This is the scaffolded template for the <strong>${model.getName()}.list</strong>
 <!-- <i class="icon-plus"></i>&nbsp; -->
 <a class="btn btn-success"  href="./create">Create a new ${model.getName()}</a>
 <br>
-<table class="table">
-	<thead>
-		<tr>
-			%for colname in model.getColumns():
-				%if colname not in hidden_list:	
-					<th>${colname}</th>
-				%endif
-			%endfor
-		</tr>
-	</thead>
-	<tbody>
-		% for elem in list:
-			<tr>
-				%for colname in elem.getColumns():
-					%if colname not in hidden_list:
-						<td><% context.write(helper.smart_list(elem, colname)) %></td>
-					%endif
-				%endfor
-				<td><i class="icon-edit"></i>&nbsp;<a href="./edit?id=${elem.get("id")}">edit</a></td>
-				<td><i class="icon-eye-open"></i>&nbsp;<a href="./show?id=${elem.get("id")}">show</a></td>
-				<td><i class="icon-remove"></i>&nbsp;<a href="./delete?id=${elem.get("id")}">delete</a></td>
-			</tr>
-				
-		%endfor
-	</tbody>
-</table>
+<div class="row">
+		<div class="span12">
+			<table class="table" width="100%">
+				<thead>
+					<tr>
+						%for colname in model.getColumns():
+							%if colname not in hidden_list:	
+								<th>${colname}</th>
+							%endif
+						%endfor
+					</tr>
+				</thead>
+				<tbody>
+					% for elem in list:
+						<tr>
+							%for colname in elem.getColumns():
+								%if colname not in hidden_list:
+									<td><% context.write(helper.smart_list(elem, colname)) %></td>
+								%endif
+							%endfor
+							<td><i class="icon-edit"></i>&nbsp;<a href="./edit?id=${elem.get("id")}">edit</a></td>
+							<td><i class="icon-eye-open"></i>&nbsp;<a href="./show?id=${elem.get("id")}">show</a></td>
+							<td><i class="icon-remove"></i>&nbsp;<a href="./delete?id=${elem.get("id")}">delete</a></td>
+						</tr>
+							
+					%endfor
+				</tbody>
+			</table>
+		</div> <!-- span 12 -->
+</div>
 <p>
     <i class="icon-fast-backward"></i>&nbsp;<a href="/${model.modelname}/list">Back to the list</a>
 </p>

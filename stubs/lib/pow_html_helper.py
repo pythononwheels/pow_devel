@@ -119,10 +119,10 @@ def smart_list(model, colname = None):
     if curr_type == type(sqlalchemy.types.BLOB()) or curr_type == type(sqlalchemy.types.BINARY()):
         print "smart_list: curr_type: BINARY"
         if string.lower(colname) == pow.global_conf["DEFAULT_IMAGE_NAME"]:
-            if model.get(colname) != None or model.get(colname) != "None":
-                ostr += '<img src="%s"/>' % (os.path.normpath( pow.global_conf["STD_BINARY_PATH"] + model.get(colname)))
+            if model.get(colname) != None and model.get(colname) != "None":
+                ostr += '<img src="%s" alt="%s"/>' % ( pow.global_conf["STD_BINARY_PATH"] + model.get(colname),  model.get(colname))
             else:
-                ostr += ""
+                ostr += "None"
     else:
         print "smart_list: curr_type: ", curr_type
         ostr += model.get(colname)
