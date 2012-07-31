@@ -60,7 +60,7 @@
           <div class="nav-collapse">
             <ul class="nav">
               <li class="active"><a href="/app/welcome">Home</a></li>
-              <!-- <li><a href="/post/list">Posts</a></li> -->
+ 				
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -70,21 +70,29 @@
     <div class="container">
 
       <!-- Main hero unit for a primary marketing message or call to action -->
-      <div class="hero-unit">
-        <h1>Welcome to </h1>
-        <h1>PythonOnWheels</h1>
-        <h2>and the world of Rapid Web Development!</h2>
-        <br>
-        <span id="test_result">If Ajax works something will happen here if you click the 
-        <strong>Send Ajax Request</strong> button</span>
+      <!-- <div class="hero-unit"> -->
+      	<div class="row">
+        	<div class="span8">
+        		<h1>Welcome to PythonOnWheels</h1>
+        		<h2>and the world of Rapid Web Development!</h2>
+        		<br />
+        		<span id="test_result">If Ajax works something will happen here if you click the 
+        		<strong>Send Ajax Request</strong> button</span>
         
-        <p><input id="ajax_input" name="ajax_input" type=text value="Hello Ajax World" size="30" maxlength="30"> </p>
-        <p><a class="btn btn-warning btn-large pull-right" onClick="send_request();">click to send AJAX request &raquo;</a></p>
-        <span>
-            This is an example of the <code>link_to</code> tag in PoW: &nbsp;
-            ${helper.link_to("http://google.com", "google", { "class" : "btn btn-primary" } )}
+        		<input id="ajax_input" name="ajax_input" type=text value="type something here" size="30" maxlength="30"> 	
+        		<a class="btn btn-warning btn-small pull-left" onClick="send_request();">Send AJAX reuest &raquo;</a>
+        	
         </span>
-      </div>
+        <span>
+        	</div>
+        	<div class="span4">
+        		<img src="/static/img/bs/pow_logo3.png" />
+        		
+        	</div>
+        </div>
+        <hr>
+      
+      <!-- </div> --> 
       
       
         ${next.body()}
@@ -93,8 +101,17 @@
       <hr>
 
       <footer>
-        <span class="pull-left">khz / Softwarekombinat 2012</span>
-        <span class="pull-right">Apache 2.0 Licence</span>
+        
+        	
+        	
+        	<span class="pull-left">khz / Softwarekombinat 2012 &nbsp;
+        	<a href="mailto:khz@pythononwheels.org">send an email: @khz</a>
+        	</span>
+        	
+        	<span class="pull-right">
+        		<a href="https://twitter.com/pythononwheels" class="twitter-follow-button" data-show-count="false">Follow @pythononwheels</a>
+				<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+      		</span>
       </footer>
 
     </div> <!-- /container -->
