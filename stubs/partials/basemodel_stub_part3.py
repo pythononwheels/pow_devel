@@ -47,7 +47,7 @@
 
     def set(self,name,val):
         #val = urllib.unquote(val)
-        print " -- Model, setting: ", name, " -> ", val, " # ", type(val)
+        #print " -- Model, setting: ", name, " -> ", val, " # ", type(val)
         funcname = "self.set_%s" % (name)
         func = eval(funcname)
         #eval("self.set_"+ str(name)+"(\""+ val + "\")" )

@@ -1,4 +1,8 @@
         BaseController.BaseController.__init__(self)
+        self.login_required = ["create", "edit", "update", "new", "delete"]
+        # put the actions you implemented but do not want to be callable via web request 
+        # into the locked_actions list
+        self.locked_actions = []
     
     def list( self, powdict ):
         res = self.model.find_all()

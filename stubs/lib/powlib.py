@@ -14,7 +14,9 @@ from sqlalchemy import create_engine
 
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../lib" )))
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../models" )))
+sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../config" )))
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../controllers" )) )
+import pow
 
 hidden_list = ["created", "last_updated", "group", "user", "id", "password"]
 linesep = "\n"
@@ -44,7 +46,8 @@ rule_tuple = (
     )
 
 def uc(instr):
-    encoding = readconfig("pow.cfg","global","DEFAULT_ENCODING")
+    #encoding = readconfig("pow.cfg","global","DEFAULT_ENCODING")
+    encoding = pow.global_conf["DEFAULT_ENCODING"]
     return unicode(instr, encoding)
     
 def regex_rules(rules=rule_tuple):
@@ -244,7 +247,8 @@ def get_app_db_conn_str():
 
 
 def get_db_conn_str():
-    env = readconfig("pow.cfg","global","ENV")
+    #env = readconfig("pow.cfg","global","ENV")
+    env = pow.global_conf["ENV"]
     #appdir = readconfig( "pow.cfg","global","APP_DIR")
     appdir = get_app_dir()
     #print "APP_DIR: " + appdir

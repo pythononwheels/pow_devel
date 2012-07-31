@@ -1,4 +1,4 @@
-Copyright [2012] [khz@tzi.org]
+Copyright 2012 by khz@tzi.org
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,12 +13,12 @@ Copyright [2012] [khz@tzi.org]
    limitations under the License.
 
 
-If you like the software we would like to ask you to mention PythonOnWheels 
+If you like the software, we would like to ask you to mention PythonOnWheels 
 somewhere on your projects site.  
 
 It is our pleasure to ease your life ;)
 
 Kind regards,
 your pow-team (June 2011)
-website: www.pythononwheels.org
+check our website: www.pythononwheels.org
 

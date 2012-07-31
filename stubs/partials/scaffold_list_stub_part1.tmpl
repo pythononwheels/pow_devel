@@ -1,11 +1,7 @@
 This is the scaffolded template for the <strong>${model.getName()}.list</strong> action <br>
 
-%if powdict["FLASHTEXT"] != "":
-	<div class="alert alert-${powdict["FLASHTYPE"]}">
-		<button class="close" data-dismiss="alert">x</button>
-		${powdict["FLASHTEXT"]}
-	</div
-%endif
+${helper.flash_message(powdict)}
+
 
 <!-- <i class="icon-plus"></i>&nbsp; -->
 <a class="btn btn-success"  href="./create">Create a new ${model.getName()}</a>

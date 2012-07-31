@@ -64,7 +64,7 @@ def powapp_simple_server(environ, start_response):
         
         }
     environ["SCRIPT_FILENAME"] = __file__
-    powdict["POW_APP_NAME"] = "PythonOnWheels"
+    powdict["POW_APP_NAME"] = "#POWAPPNAME"
     powdict["POW_APP_URL"] = "www.pythononwheels.org"
     powdict["POW_APP_DIR"] = environ.get("pow.wsgi_dir")
     powdict["ERROR_INFO"] = "Undefined ERROR occured or there is no Error specific info available "
@@ -217,7 +217,7 @@ def powapp_simple_server(environ, start_response):
     #output.append(action + "<br>")
     if hasattr( aclass, action ):
         real_action = eval("aclass." + action)
-        output.append(real_action(powdict).encode("utf-8"))
+        output.append(real_action(powdict).encode(pow.global_conf["DEFAULT_ENCODING"]))
     else:
         msg = "ERROR: No such class or action  %s.%s " % (controller, action)  
         output.append(msg)

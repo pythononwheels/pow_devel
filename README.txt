@@ -47,7 +47,7 @@ and not on the Framework or the low-level coding.
 If you dont recognize you use it, it's just the way it's ment to be.
 
 
-Just give it a try.
+Just give it a try. Any comments are very welcome. mail to khz@pythononwheels.org
 
 Kind regards,
 klaas
