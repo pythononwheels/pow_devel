@@ -19,10 +19,14 @@ import powlib
 #
 session_opts = {
     'session.type': 'file',
-    'session.data_dir': './db',
+    'session.data_dir': './sessions',
     'session.cookie_expires': True,
     'session.auto': True
 }
+
+def log( instr ):
+    print >> environ['wsgi.errors'], instr
+    return
 
 def get_form_binary_data( form_fieldname, dict, ofiledir ):
     """ safely checks if a given form field has binary data attached to it
@@ -159,7 +163,7 @@ def is_get_request( environ ):
     else:
         return True
     
-def get_controller_and_action(pi):
+def get_controller_and_action(pi="/"):
     # converts a path_info: /user/list/1/2/3/4
     # into al list ol = ['4', '3', '2', '1', 'list', 'user']
     # where the controller is always the last element and the action the one before that (len(ol)-1) and len(ol)-2)

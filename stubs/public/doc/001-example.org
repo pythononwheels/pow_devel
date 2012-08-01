@@ -1,0 +1,30 @@
+<VirtualHost www.pythononwheels.org:80>
+	ServerAdmin khz@pythononwheels.org
+
+	DocumentRoot /var/www/pow/
+	<Directory />
+		Options FollowSymLinks
+		AllowOverride None
+	</Directory>
+    # This rewrites all /static references to the public dir of you app.
+    # always use /static in your views since also simple_server.py knows
+    # to handle these links.
+	Alias /static /var/www/pow/public
+
+    # set the path to your app here
+	WSGIScriptAlias / /var/www/pow/pow_router.wsgi
+
+
+	<Directory "/var/www/pow/">
+		Order allow,deny
+		Allow from all
+	</Directory>
+
+	ErrorLog ${APACHE_LOG_DIR}/pow_error.log
+
+	# Possible values include: debug, info, notice, warn, error, crit,
+	# alert, emerg.
+	LogLevel warn
+
+	CustomLog ${APACHE_LOG_DIR}/pow_access.log combined
+</VirtualHost>
