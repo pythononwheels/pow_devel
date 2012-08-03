@@ -1,5 +1,5 @@
         BaseController.BaseController.__init__(self)
-        self.login_required = ["create", "edit", "update", "new", "delete"]
+        self.login_required = []
         # put the actions you implemented but do not want to be callable via web request 
         # into the locked_actions list
         self.locked_actions = []
