@@ -17,7 +17,8 @@ from mako.lookup import TemplateLookup
 
 sys.path.append(os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../models" )) )
 sys.path.append(os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../lib" )) )
-
+sys.path.append(os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../config" )) )
+import pow
 import powlib
 import PowObject
 
@@ -58,7 +59,7 @@ class BaseController(PowObject.PowObject):
     def render(self, **kwargs):
         powdict = kwargs["powdict"]
         kwargs["powdict"] = powdict
-        kwargs["template"] = powlib.readconfig("pow.cfg","global","DEFAULT_TEMPLATE", powdict["POW_APP_DIR"])
+        kwargs["template"] = pow.global_conf["DEFAULT_TEMPLATE"] 
 
         special_tmpl = None
         if kwargs.has_key("special_tmpl"):
