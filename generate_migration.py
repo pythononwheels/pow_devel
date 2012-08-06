@@ -24,6 +24,8 @@ import App
 MODE_CREATE = 1
 MODE_REMOVE = 0
 PARTS_DIR = powlib.PARTS_DIR
+
+
 def main():
     parser = OptionParser()
     mode= MODE_CREATE
@@ -33,11 +35,17 @@ def main():
     parser.add_option("-j", "--job",  action="store", type="string", dest="job", help="creates migration job, e.g for backups, restores etc.",default="None")
     parser.add_option("-d", "--column-definitions",  action="store", 
                         type="string", dest="col_defs", 
-                        help="Pre define the column definitions. Name, type, options (all SQLAlchemy style).",
+                        help="column definitions.Form: d- 'NAME TYPE opt, NAME2 TYPE2 opt2' Name, type, options (all SQLAlchemy style).",
                         default="None")
+    #
+    # column definition format: NAME TYPE opt1 opt2 optn, NAME2 TYPE2 opt1 opt2 optn ....
+    # 
+    
 
     (options, args) = parser.parse_args()
     #print options
+    #TODO: reorg and optimie the section below. more structure.
+    #
     if options.model == "None" and options.job == "None":
         if len(args) > 0:
             # if no option flag (like -m) is given, it is assumed that the first argument is the model. (representing -m arg1)
@@ -71,13 +79,45 @@ def main():
     
     print "generated_migration in("+ str(duration) +")"
     return
+
+def transform_col_defs( ostr, col_defs ):
+    """
+        Get the list of given column definitions of the form:
+        
+            NAME TYPE opt1 opt2 optn, NAME2 TYPE2 opt1 opt2 optn ....
+        And transform them to a valid SQLAlchemy Column definition for a migration.
+        Form:
+            Column('firstname', String(150), Options)
+        
+    """
     
-def render_migration(name, model, comment, col_defs):
+    cols = ""
+    clist = str(col_defs).split(",")
+    print clist
+    counter = 0
+    for elem in clist:
+        counter += 1
+        elem = elem.strip()
+        elem = elem.split(" ")
+        if len(elem) == 2:
+            cols += "Column('%s', %s)" % (elem[0], elem[1]) 
+        elif len(elem) == 3:
+            cols += "Column('%s', %s, %s)" % (elem[0], elem[1], elem[2])
+        else:
+            print "Error. Wrong number of arguments. You must give name, type (and optionally column options)"
+        if counter < len(clist):
+            cols += "," + os.linesep + powlib.tab*3
+
+    ostr = ostr.replace("Column('example_column', String(50))", cols)
+    
+    return ostr
+       
+def render_migration(name, model, comment, col_defs = ""):
     # 
     #print "generate_migration: " + name + "  for model: " + model
     #
     
-    # add the auto generated warning to the outputfile
+    # add the auto generated (but can be safely edited) warning to the outputfile
     infile = open (os.path.normpath(PARTS_DIR + "/can_be_edited.txt"), "r")
     ostr = infile.read()
     infile.close()
@@ -102,9 +142,11 @@ def render_migration(name, model, comment, col_defs):
     ostr = ostr + infile.read()
     infile.close()
     
-    #ostr += powlib.tab + powlib.tab + powlib.tab +  "Column('id', Integer, Sequence('" + model +"_id_seq'), primary_key=True),"
-    #ostr += powlib.newline
-    
+    #
+    # Add / Replace the column definitions with the given ones by -d (if there were any)
+    # 
+    ostr = transform_col_defs( ostr, col_defs )
+        
     app = powlib.load_class( "App", "App")
     app_versions = powlib.load_class( "Version", "Version")
     sess = app.pbo.getSession()
