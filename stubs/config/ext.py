@@ -19,10 +19,10 @@ extensions = [
 # module specifies the main extension module to load.
 auth = {
     "dir" : "auth",
-    "module" : "pow_auth"
+    "module" : "Auth"
 }
 
 validate = {
     "dir" : "validate",
-    "module" : "pow_validate"
+    "module" : "Validate"
 }

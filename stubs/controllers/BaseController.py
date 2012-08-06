@@ -53,10 +53,16 @@ class BaseController(PowObject.PowObject):
         self.current_action = "NOT_DEFINED"
         
         
-    def index(self):
-        return self.render()
-        
     def render(self, **kwargs):
+        """
+            Renders a template:
+            
+            Mandatory Parameters:
+            powdict    =    The powdict containing all the HTTP:Request Parameters, Body etc.
+            
+            Optional Parameters:
+            special_tmpl     =     a speciaol template to use. By default Controller_current_action.tmpl is chosen 
+        """
         powdict = kwargs["powdict"]
         kwargs["powdict"] = powdict
         kwargs["template"] = pow.global_conf["DEFAULT_TEMPLATE"] 
@@ -80,8 +86,10 @@ class BaseController(PowObject.PowObject):
                 #self.setCurrentAction("login")
                 kwargs["powdict"]["FLASHTEXT"] = "You need to be logged in to access method: %s" % (str(self.current_action))
                 kwargs["powdict"]["FLASHTYPE"] = "error"
-                fname = os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)),"../views/App_login.tmpl"))
-                mytemplate = Template(filename=fname, lookup=self.mylookup)
+                #fname = os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)),"../views/App_login.tmpl"))
+                fname = "App_login.tmpl"
+                #mytemplate = Template(filename=fname, lookup=self.mylookup)
+                mytemplate = self.mylookup.get_template(fname)
                 return mytemplate.render(**kwargs)
         else:
             kwargs["ERROR_INFO"] = "The action you have called (", self.current_action, "is locked from outside access."
@@ -89,12 +97,60 @@ class BaseController(PowObject.PowObject):
             
     
     def redirect(self, action, **kwargs):
+        """ sets the given action and executes it so that all prerequisites are correct """
         self.setCurrentAction(action)
         return eval("self." + action + "(**kwargs)")
     
+    def re_route(self, controller, action,**kwargs):
+        """ Loads another Controller and calls the given action"""
+        kwargs["template"] = pow.global_conf["DEFAULT_TEMPLATE"] 
+        controller = None
+        controller = powlib.load_class( string.capitalize(controller),string.capitalize(controller))
+        if controller != None:
+            if hasattr( aclass, action ):
+                controller.setCurrentAction(action)
+                real_action = eval("controller." + action)
+                return real_action(kwargs["powdict"])
+            else:
+                return render_message("Error, no such action: %s, for controller: %s" % (action, controller), "error", **kwargs)
+        else:
+            return render_message("Error, no such controller: %s" % (controller), "error", **kwargs)
+        return render_message("Error, this should never be reached" % (controller), "error", **kwargs)
+    
+    def render_message(self, message, type, **kwargs ):
+        """Renders the given message using the given type (one of error || success || info || warning)
+            as flashmessage, using the error.tmpl. This special tmpl displays the given message alone, embedded
+            in the default context.template
+            
+            Mandatory Parameters:
+            message = the flashmessagr
+            type    = the type of the message (different css styles)
+            powdict = powdict
+            Optional:
+            tmpl    = a special .tmpl file to use. 
+            """
+        
+        # set the context template.        
+        kwargs["template"] = pow.global_conf["DEFAULT_TEMPLATE"] 
+        # by default call the error.tmpl. You can give another template using tmpl="template_name.tmpl".
+
+        if kwargs.has_key("tmpl"):
+            tmpl = kwargs["tmpl"]
+        else:
+            tmpl = "error.tmpl"
+        # ste the flash messages 
+        kwargs["powdict"]["FLASHTEXT"] = message
+        kwargs["powdict"]["FLASHTYPE"] = type
+        
+        mytemplate = self.mylookup.get_template(tmpl)
+        return mytemplate.render(**kwargs)
+    
+    
     def access_granted(self,**kwargs):
-        # returns true if access is ok, meaning that:
-        # no login required or login required AND user already lgged in.
+        """ 
+            returns true if access is ok, meaning that:
+            no login required or login required AND user already lgged in.
+        """
         powdict = kwargs.get("powdict",None)
         session = powdict["SESSION"]
         is_logged_in = False
@@ -112,12 +168,8 @@ class BaseController(PowObject.PowObject):
         # by default return False
         return False
     
-    def error(self, **kwargs):
-        fname = os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)),"../views/error.tmpl"))
-        mytemplate = Template(filename=fname, lookup=self.mylookup)
-        return mytemplate.render(**kwargs)
-        
         
     def setCurrentAction(self, action ):
+        """ sets the cuurent action of this controller to action"""
         self.current_action = action
         
