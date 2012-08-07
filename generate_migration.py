@@ -145,7 +145,8 @@ def render_migration(name, model, comment, col_defs = ""):
     #
     # Add / Replace the column definitions with the given ones by -d (if there were any)
     # 
-    ostr = transform_col_defs( ostr, col_defs )
+    if col_defs != "None":
+        ostr = transform_col_defs( ostr, col_defs )
         
     app = powlib.load_class( "App", "App")
     app_versions = powlib.load_class( "Version", "Version")

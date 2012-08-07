@@ -119,7 +119,11 @@ def do_migrate( goalversion, direction):
     
     times = 1
     if goalversion == None:
-        pass
+        # -d up or down was given
+        if direction == "down" and currentversion == 2: 
+            #then the App or versions table would be migrated down which will break the environment.
+            print " -- Error: you are attemting to migrate down the sytem tables .. bailing out"
+            return
     elif goalversion > maxversion:
         print " -- Error: version would become greater than Maxversion.. bailing out"
         return
@@ -137,10 +141,12 @@ def do_migrate( goalversion, direction):
         print " -- Running " + str(times) + " times: " 
     sess.add(app)
     
-    if goalversion < 2 and goalversion != None:
+    if goalversion < 2 and goalversion != None: 
         #then the App or versions table would be migrated down which will break the environment.
-        print " -- Error: you are attemting to migrate down the sytem tables version and/or App.. bailing out"
+        print " -- Error: you are attemting to migrate down the sytem tables .. bailing out"
         return
+    
+    
         
     for run in range(0,times):
         #
@@ -160,8 +166,8 @@ def do_migrate( goalversion, direction):
         # migrate down
         #
         elif direction == "down":
-            if currentversion <= 0:
-                print " -- Error: version would become less than < 0 .. bailing out"
+            if currentversion <= 2:
+                print " -- Error: version would become less than 2 which would affect System tables .. bailing out"
                 return
 
             #filename = os.path.normpath ( powlib.version_to_string(currentversion) +"_" + "migration"  )

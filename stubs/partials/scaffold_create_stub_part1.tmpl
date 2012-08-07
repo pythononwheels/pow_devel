@@ -7,7 +7,7 @@
             %for colname in model.getColumns():
             <p>
             %if colname not in hidden_list:
-                <%  context.write( helper.smart_form_input("post", colname, model.get(colname) ) ) %>
+                <%  context.write( helper.smart_form_input(model.modelname, colname, model.get(colname) ) ) %>
             <!-- >%else: -->
             <!--     <input type="hidden" name="${colname}" value="${model.get(colname)}"/> -->
             %endif
