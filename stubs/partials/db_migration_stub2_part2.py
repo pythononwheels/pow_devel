@@ -1,10 +1,10 @@
     table = None
         
     def up(self):
-            #
-            # here is where you define your table (Format see example below)
-            # the columns below are just examples.
-            # Remember that PoW automatically adds an id and a timestamp column (ID,TIMESTAMP)
+        #
+        # here is where you define your table (Format see example below)
+        # the columns below are just examples.
+        # Remember that PoW automatically adds an id and a timestamp column (ID,TIMESTAMP)
         self.table = PowTable(self.table_name, self.__metadata__,
             
             Column('example_column', String(50))
