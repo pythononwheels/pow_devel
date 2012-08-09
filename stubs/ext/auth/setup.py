@@ -19,10 +19,12 @@ if __name__ == "__main__":
     
     print "setup plugin: Auth"
     #
-    # Copy the Controller
+    # Copy the Controllers
     #
-    print " -- copying the Controller... to " + os.path.normpath("../../" + ext.auth["controllers_dir"])
+    print " -- copying the AuthController... to " + os.path.normpath("../../" + ext.auth["controllers_dir"])
     powlib.check_copy_file("AuthController.py",os.path.join("../../" + ext.auth["controllers_dir"],"AuthController.py") )
+    rint " -- copying the UserController... to " + os.path.normpath("../../" + ext.auth["controllers_dir"])
+    powlib.check_copy_file("UserController.py",os.path.join("../../" + ext.auth["controllers_dir"],"UserController.py") )
     
     
     #
