@@ -54,10 +54,10 @@ def main():
     print "generated_scaffold in("+ str(duration) +")"
     return
     
-def scaffold(modelname, noforce):
+def scaffold(modelname, noforce, actions = ["list", "show","create", "edit", "message"], PARTS_DIR = powlib.PARTS_DIR, prefix_dir = "./" ):
     # 
     print "generating scaffold for model: " + str(modelname)
-    actions = ["list", "show","new","create", "edit", "update","delete"]
+   
     
     for act in actions:
         # add the auto generated warning to the outputfile
@@ -84,7 +84,7 @@ def scaffold(modelname, noforce):
         ostr = ostr + infile.read()
         infile.close()
         filename = string.capitalize(modelname)  + "_" + act +".tmpl"
-        filename = os.path.normpath( "./views/" + filename)
+        filename = os.path.normpath( prefix_dir + "/views/" + filename)
         
         if os.path.isfile( os.path.normpath(filename) ) and noforce:
             print filename + " already exists..."

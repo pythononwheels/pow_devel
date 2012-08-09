@@ -29,15 +29,15 @@
                     self.model.set(key, dict[key].filename )   
                 else:
                     # dont update model
-                    print " ##### -_______>>>>>>>   BINARY DATA but couldnt update model"
+                    print " ##### ________>>>>>>>   BINARY DATA but couldnt update model"
             else:
                 self.model.set(key, dict[key])
         
         self.model.create()
         powdict["FLASHTEXT"] ="Yep, record successfully created."
         powdict["FLASHTYPE"] ="success"
-        
-        return self.render(model=self.model, powdict=powdict)
+        spectmpl = string.capitalize(self.model.modelname) + "_message.tmpl"
+        return self.render(special_tmpl=spectmpl , model=self.model, powdict=powdict)
     
     def create( self, powdict):
         self.model.__init__()
@@ -68,7 +68,12 @@
             else:
                 self.model.set(key, dict[key])
         self.model.update()
-        return self.render(model=self.model, powdict=powdict)
+        powdict["FLASHTEXT"] ="Yep, record successfully updated."
+        powdict["FLASHTYPE"] ="success"
+        
+        spectmpl = string.capitalize(self.model.modelname) + "_message.tmpl"
+        return self.render(special_tmpl=spectmpl , model=self.model, powdict=powdict)
+        
     
     def delete( self, powdict ):
         self.model.__init__()
@@ -76,4 +81,5 @@
         self.model.delete(self.model.get_id())
         powdict["FLASHTEXT"] ="Yep, record successfully deleted."
         powdict["FLASHTYPE"] ="success"
-        return self.render(model=self.model, powdict=powdict)
+        spectmpl = string.capitalize(self.model.modelname) + "_message.tmpl"
+        return self.render(special_tmpl=spectmpl , model=self.model, powdict=powdict)

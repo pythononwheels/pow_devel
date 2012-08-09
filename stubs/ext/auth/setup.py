@@ -11,6 +11,7 @@ sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(_
 
 import generate_migration
 import generate_model
+import generate_scaffold
 import powlib
 import ext
 
@@ -23,14 +24,6 @@ if __name__ == "__main__":
     print " -- copying the Controller... to " + os.path.normpath("../../" + ext.auth["controllers_dir"])
     powlib.check_copy_file("AuthController.py",os.path.join("../../" + ext.auth["controllers_dir"],"AuthController.py") )
     
-    #
-    # Copy the Views
-    #
-    print " -- copying the Views... to " + os.path.normpath("../../" + ext.auth["views_dir"])
-    for elem in ["User_create.tmpl", "User_edit.tmpl", "User_list.tmpl","User_message.tmpl", "User_show.tmpl"]:
-        powlib.check_copy_file( elem ,os.path.join("../../" + ext.auth["views_dir"], elem))
-        print " -- -- ", elem
-        
     
     #
     # Generate The Model
@@ -39,6 +32,12 @@ if __name__ == "__main__":
     generate_model.render_model("user", False, "User model for py_auth", "../../", None, "../../stubs/partials/")
     
     
+    #
+    # render the User views
+    #
+    generate_scaffold.scaffold("user", True, 
+                              actions = ["list", "show","create", "edit", "message"], 
+                              PARTS_DIR = "../../stubs/partials/", prefix_dir = "../../" )
     
     #
     # render the user migration
