@@ -112,7 +112,7 @@ def transform_col_defs( ostr, col_defs ):
     
     return ostr
        
-def render_migration(name, model, comment, col_defs = ""):
+def render_migration(name, model, comment, col_defs = "", PARTS_DIR = powlib.PARTS_DIR, prefix_dir = "./"):
     # 
     #print "generate_migration: " + name + "  for model: " + model
     #
@@ -172,8 +172,8 @@ def render_migration(name, model, comment, col_defs = ""):
     app_versions.comment = str(comment)
     app_versions.update()
     print " -- maxversion (old,new): (" + str(oldmaxversion) + "," + str(app.maxversion) +")"
-    ofile = open(  filename , "w+") 
-    print  " -- created file:" + str(filename)
+    ofile = open(  os.path.normpath(os.path.join(prefix_dir,filename)) , "w+") 
+    print  " -- created file:" + str(os.path.normpath(os.path.join(prefix_dir,filename)))
     ofile.write( ostr )
     ofile.close()
     return

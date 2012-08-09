@@ -58,7 +58,7 @@ def main():
     return
 
     
-def render_model(modelname, force, comment, prefix_path="./", properties=None):
+def render_model(modelname, force, comment, prefix_path="./", properties=None, PARTS_DIR = powlib.PARTS_DIR ):
     
     print "generate_model: " + modelname
     #print "force: ", force
@@ -153,13 +153,13 @@ def render_model(modelname, force, comment, prefix_path="./", properties=None):
     #    # copy the BaseClass
     #    powlib.check_copy_file(os.path.normpath( PARTS_DIR +  "App.py"), os.path.normpath( "./models/powmodels/"))
         
-    render_test_stub(modelname, classname, prefix_path)
+    render_test_stub(modelname, classname, prefix_path, PARTS_DIR)
     return 
 
 def reset_model(modelname):
     return render_model(modelname, True, "", properties=None, nomig=True)
     
-def render_test_stub (modelname, classname, prefix_path = "" ):
+def render_test_stub (modelname, classname, prefix_path = "", PARTS_DIR = powlib.PARTS_DIR ):
     #print "rendering Testcase for:", classname, " ", " ", modelname
     print " -- generating TestCase...",
     infile = open( os.path.normpath( PARTS_DIR +  "test_model_stub.py"), "r")

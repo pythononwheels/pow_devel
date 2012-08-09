@@ -218,6 +218,17 @@ def powapp_simple_server(environ, start_response):
         print >> environ['wsgi.errors'], "setting Action: ", action
         aclass.setCurrentAction(action)
         #output.append(action + "<br>")
+        # checking if action is locked 
+        if aclass.is_locked(action):
+            # locked, so set the action to the given redirection and execute that instead.
+            # TODO: Could be aditionally coupled with a flashtext.
+            print >> environ['wsgi.errors'], "Action: ", action, " locked."
+            aclass.setCurrentAction(aclass.get_redirection_if_locked(action))
+            action = aclass.get_redirection_if_locked(action)
+            print >> environ['wsgi.errors'], " -- Redirecting to: ", action
+        #
+        # Now really execute the action
+        #
         if hasattr( aclass, action ):
             real_action = eval("aclass." + action)
             output.append(real_action(powdict).encode(pow.global_conf["DEFAULT_ENCODING"]))
@@ -225,6 +236,9 @@ def powapp_simple_server(environ, start_response):
             msg = "ERROR: No such class or action  %s.%s " % (controller, action)  
             output.append(msg)
     except Exception, e:
+        # TODO: needs to be really redesigned AND really to rely on request routing.
+        #   -> only enough for pre Beta 1
+        # if neither controller , nor action where found. Fallback to app/welcome.
         aclass = powlib.load_class("App","App")
         print >> environ['wsgi.errors'], "setting Action: ", "welcome"
         aclass.setCurrentAction("welcome")

@@ -48,11 +48,36 @@ class BaseController(PowObject.PowObject):
         # put the actions that require a login into login_required list.
         self.login_required = []
         # put the actions you implemented but do not want to be callable via web request 
-        # into the locked_actions list
-        self.locked_actions = []
+        # into the locked_actions dictionary. Format: "actionname" : "redirect_to" }
+        # simple_server and pow_router will not call locked actions but redirect to the given value, instead
+        self.locked_actions = {}
         self.current_action = "NOT_DEFINED"
         
-        
+    def get_locked_actions(self):
+        """ returns the dictionary of locked actions. 
+        Locked actions will not be executed by simple_server nor pow_router"""
+        return self.locked_actions
+    
+    def is_locked(self, action):
+        """ returns the the True, if the given action is locked. 
+        Locked actions will not be executed by simple_server nor pow_router"""
+        if self.locked_actions.has_key(action):
+            return self.locked_actions[action]
+        else:
+            return False
+        # should never be reached
+        return False
+
+    def get_redirection_if_locked(self, action): 
+        """returns the redirection, if the given action is locked. None otherwise. 
+        Locked actions will not be executed by simple_server nor pow_router"""
+        if self.is_locked(action):
+            return self.locked_actions[action]
+        else:
+            return "None"
+        # should never be reached
+        return "None"
+            
     def render(self, **kwargs):
         """
             Renders a template:

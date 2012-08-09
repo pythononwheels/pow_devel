@@ -32,7 +32,7 @@ class AuthController(BaseController.BaseController):
         self.modelname = "User"
         BaseController.BaseController.__init__(self)
         self.login_required = []
-        self.locked_actions = [ "do_login"]
+        self.locked_actions = {}
     
 
     def register(self, powdict):

@@ -10,7 +10,7 @@
 # list of available extensions.
 # Format: ( "ext_name", enabled? ), where enabled can be True or False
 extensions = [ 
-    ("auth", True)
+    ("auth", True),
     ("validate", False)
 ]
 
@@ -19,7 +19,10 @@ extensions = [
 # module specifies the main extension module to load.
 auth = {
     "dir" : "auth",
-    "module" : "Auth"
+    "module" : "auth",
+    "models_dir" : "models",
+    "controllers_dir" : "controllers",
+    "views_dir" : "views"
 }
 
 validate = {

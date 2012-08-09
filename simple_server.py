@@ -210,13 +210,24 @@ def powapp_simple_server(environ, start_response):
     #
     # route the request
     #
-    print "Loading Class:", controller
+    #print "Loading Class:", controller
     aclass = powlib.load_class(controller,controller)
-    print "setting Action: ", action
+    #print "setting Action: ", action
     aclass.setCurrentAction(action)
     #output.append(action + "<br>")
+    # checking if action is locked 
+    if aclass.is_locked(action):
+        # locked, so set the action to the given redirection and execute that instead.
+        # TODO: Could be aditionally coupled with a flashtext.
+        print "Action: ", action, " locked."
+        aclass.setCurrentAction(aclass.get_redirection_if_locked(action))
+        action = aclass.get_redirection_if_locked(action)
+        print " -- Redirecting to: ", action
+    #
+    # Now really execute the action
+    #
     if hasattr( aclass, action ):
-        real_action = eval("aclass." + action)
+        real_action = eval("aclass." + action)  
         output.append(real_action(powdict).encode(pow.global_conf["DEFAULT_ENCODING"]))
     else:
         msg = "ERROR: No such class or action  %s.%s " % (controller, action)  

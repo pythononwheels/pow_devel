@@ -32,7 +32,9 @@ class AppController(BaseController.BaseController):
         self.modelname = "App"
         BaseController.BaseController.__init__(self)
         self.login_required = []
-        self.locked_actions = [ "do_login"]
+        # example of locked actions and the redirections.
+        self.locked_actions = { "thanks" : "welcome", 
+                                "howto_start" : "welcome" }
     
     def ajax( self, powdict ):
         print "AJAX-Request"
@@ -46,6 +48,7 @@ class AppController(BaseController.BaseController):
         
     
     def welcome( self,powdict ):
+        # example of setting a special_template for an action not following the Controller_action.tmpl convention
         #return self.render(special_tmpl="hero.tmpl",model=self.model, powdict=powdict)
         return self.render(model=self.model, powdict=powdict)
         
@@ -55,42 +58,6 @@ class AppController(BaseController.BaseController):
     def howto_start( self,powdict ):
         return self.render(model=self.model, powdict=powdict)
     
-    def login( self, powdict):
-        self.model.__init__()
-        return self.render(model=self.model, powdict=powdict)
     
-    def do_login( self, powdict ):
-        user = User.User()
-        session = powdict["SESSION"]
-        if powdict["REQ_PARAMETERS"].has_key("loginname") and powdict["REQ_PARAMETERS"].has_key("password"):
-            try:
-                user = user.find_by("loginname",powdict["REQ_PARAMETERS"]["loginname"])
-                if user.password == powdict["REQ_PARAMETERS"]["password"]:
-                    #login ok
-                    session["user.id"] = user.id
-                    session["user.loginname"] = user.loginname
-                    session.save()
-                    powdict["FLASHTEXT"] = "You successfully logged in, %s " % (user.loginname)
-                    powdict["FLASHTYPE"] = "success"
-                    return self.redirect("welcome",powdict=powdict)
-                else:
-                    powdict["FLASHTEXT"] = "Error logging you in, %s " % (user.loginname)
-                    powdict["FLASHTYPE"] = "error"
-                    return self.redirect("login",powdict=powdict)
-            except:
-                powdict["FLASHTEXT"] = "Error logging you in " 
-                powdict["FLASHTYPE"] = "error"
-                return self.redirect("login", powdict=powdict)
-        else:
-            powdict["FLASHTEXT"] = "Error logging you in. You have to fill in username and password. " 
-            powdict["FLASHTYPE"] = "error"
-            return self.redirect("login", powdict=powdict)
-        return
-    
-    def logout( self, powdict):
-        session = powdict["SESSION"]
-        session["user.id"] = 0
-        session.save()
-        return self.redirect("welcome", powdict=powdict)
         
     
