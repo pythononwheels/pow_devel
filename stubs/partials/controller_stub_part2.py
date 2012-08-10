@@ -1,4 +1,4 @@
-        BaseController.BaseController.__init__(self)
+        BaseController.__init__(self)
         self.login_required = []
         # put the actions you implemented but do not want to be callable via web request 
         # into the locked_actions dictionary. Format: "actionname" : "redirect_to" }

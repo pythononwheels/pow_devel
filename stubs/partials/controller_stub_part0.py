@@ -11,6 +11,6 @@ sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(_
 import powlib
 import pow_web_lib
 import PowObject
-import BaseController
+from BaseController import BaseController
 import sqlalchemy.types
-import ApplicationController
+
