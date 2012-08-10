@@ -27,8 +27,8 @@ from ApplicationController import ApplicationController
 class AppController(ApplicationController):
     
     def __init__(self):
-        self.modelname = "App"
         super(AppController,self).__init__()
+        self.modelname = "App"
         self.login_required = []
         # example of locked actions and the redirections.
         self.locked_actions = {}
@@ -45,7 +45,7 @@ class AppController(ApplicationController):
         
     
     def welcome( self,powdict ):
-        # example of setting a special_template for an action not following the Controller_action.tmpl convention
+        #example of setting a special_template for an action not following the Controller_action.tmpl convention
         #return self.render(special_tmpl="hero.tmpl",model=self.model, powdict=powdict)
         return self.render(model=self.model, powdict=powdict)
         

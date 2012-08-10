@@ -17,25 +17,22 @@ sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(_
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../models" )))
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../models/powmodels" )))
 
-from BaseController import BaseController
+import BaseController
 import powlib
 import inspect
 
 
 
-class ApplicationController(BaseController):
+class ApplicationController(BaseController.BaseController):
     
     def __init__(self):
-        """
-        initialisation
-        """
-        
+        """        initialisation        """
+        super(ApplicationController,self).__init__()
         self.modelname = "None"
-        self.login_required = []
         self.locked_actions = {}
         # Format: { filter: ( selector, [list of actions] ) } 
         self.pre_filter_dict = {}
-        super(ApplicationController,self).__init__()
+        
     
     def pre_filter(self, filter, selector ,action_list = []):
         """
@@ -70,16 +67,18 @@ class ApplicationController(BaseController):
                 return False
         return False
     
-    def __getattribute__(self,name):
-        # check if pre_filter needs to be applied
-        if name != '__dict__':
-            #print '__getattribute__', name
-            if name in self.__dict__["pre_filter_dict"].keys():
-                print "filter found"
-            else:
-                #print "no filter found",  self.__dict__["pre_filter_dict"].keys()
-        ret = BaseController.__getattribute__(self,name)
-        return ret    
+    #def __getattribute__(self,name):
+    #    # check if pre_filter needs to be applied
+    #    if name != '__dict__':
+    #        #print '__getattribute__', name
+    #        if name in self.__dict__["pre_filter_dict"].keys():
+    #            print "filter found"
+    #        else:
+    #            print "no filter found",  self.__dict__["pre_filter_dict"].keys()
+    #            
+    #    ret = BaseController.__getattribute__(self,name)
+    #    
+    #    return ret    
         
 
 
