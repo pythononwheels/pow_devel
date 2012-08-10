@@ -19,17 +19,19 @@ sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(_
 
 import powlib
 from powlib import mixin, uc
-import BaseController
+from BaseController import BaseController
 import datetime
-from ApplicationController import ApplicationController
+
 #import AuthController 
 
 #@mixin(AuthController.AuthController)
-class AppController(ApplicationController):
+class AppController(BaseController):
     
     def __init__(self):
-        ApplicationController.__init__(self)
+        # it is needed to set a Modelname before calling the BaseControllers init
         self.modelname = "App"
+        BaseController.__init__(self)
+        
         self.login_required = []
         # example of locked actions and the redirections.
         self.locked_actions = {}

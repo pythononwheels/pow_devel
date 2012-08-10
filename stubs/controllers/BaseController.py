@@ -22,7 +22,7 @@ import pow
 import powlib
 import PowObject
 
-class BaseController(PowObject.PowObject):
+class BaseController(object):
     #model = None
     #session = None
     #modelname = "None"
@@ -32,6 +32,15 @@ class BaseController(PowObject.PowObject):
     
     
     def __init__(self):
+        # put the actions that require a login into login_required list.
+        self.login_required = []
+        # put the actions you implemented but do not want to be callable via web request 
+        # into the locked_actions dictionary. Format: "actionname" : "redirect_to" }
+        # simple_server and pow_router will not call locked actions but redirect to the given value, instead
+        self.locked_actions = {}
+        self.current_action = "NOT_DEFINED"
+        # Format: { filter: ( selector, [list of actions] ) } 
+        self.pre_filter_dict = {}
         
         self.mylookup = TemplateLookup(directories=[os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)),"../views/")),
                     os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)),"../views/layouts/")),
@@ -45,17 +54,56 @@ class BaseController(PowObject.PowObject):
             self.model = powlib.load_class(self.modelname, self.modelname)
             self.session = self.model.pbo.getSession()
        
-        # put the actions that require a login into login_required list.
-        self.login_required = []
-        # put the actions you implemented but do not want to be callable via web request 
-        # into the locked_actions dictionary. Format: "actionname" : "redirect_to" }
-        # simple_server and pow_router will not call locked actions but redirect to the given value, instead
-        self.locked_actions = {}
-        self.current_action = "NOT_DEFINED"
+        
     
     #def __getattribute__(self, key):
-     #   return super(BaseController, self).__getattribute__(key)
+    #   return super(BaseController, self).__getattribute__(key)
+    #def __getattribute__(self,name):
+    #    # check if pre_filter needs to be applied
+    #    if name != '__dict__':
+    #        #print '__getattribute__', name
+    #        if name in self.__dict__["pre_filter_dict"].keys():
+    #            print "filter found"
+    #        else:
+    #            print "no filter found",  self.__dict__["pre_filter_dict"].keys()
+    #            
+    #    ret = BaseController.__getattribute__(self,name)
+    #    
+    #    return ret
+    def pre_filter(self, filter, selector ,action_list = []):
         
+        """
+        set a pre_filter operation for controller actions.
+        @param filter:             Name of the filter to be executed before the action (Module.Class.Method) 
+                                  if there are no dots self.filter is assumed
+        @param selector:           One of: any, except,only
+        @param action_list:        If selector is except OR only, this defines the actions in scope.
+        """
+        # check if filter already set.
+        if not self.pre_filter_dict.has_key(filter):
+            # check if selector correct
+            if selector in ["any", "except", "only"]:
+                # set the filter
+                if selector == "any":
+                    import inspect
+                    alist =  inspect.getmembers(self, predicate=inspect.ismethod)
+                    for elem in alist:
+                        print elem[0]
+                elif selector == "only":
+                    for func in action_list:
+                        if self.pre_filter_dict.has_key(func):
+                            self.pre_filter_dict[func].append(filter)
+                        else:
+                            self.pre_filter_dict[func] = [filter]
+                elif selector == "except":
+                    pass
+                print "Added pre_filter: ", self.pre_filter_dict
+                return True
+            else:
+                raise NameError("selector must be one of: only, except or any. You gave %s" % (str(selector)))
+                return False
+        return False 
+       
     def get_locked_actions(self):
         """ returns the dictionary of locked actions. 
         Locked actions will not be executed by simple_server nor pow_router"""
