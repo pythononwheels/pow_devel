@@ -18,8 +18,9 @@ sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(_
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../controllers" )) )
 
 import powlib
-from powlib import mixin
+from powlib import mixin, uc
 import BaseController
+import datetime
 from ApplicationController import ApplicationController
 #import AuthController 
 
@@ -27,7 +28,7 @@ from ApplicationController import ApplicationController
 class AppController(ApplicationController):
     
     def __init__(self):
-        super(AppController,self).__init__()
+        ApplicationController.__init__(self)
         self.modelname = "App"
         self.login_required = []
         # example of locked actions and the redirections.

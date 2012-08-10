@@ -52,6 +52,9 @@ class BaseController(PowObject.PowObject):
         # simple_server and pow_router will not call locked actions but redirect to the given value, instead
         self.locked_actions = {}
         self.current_action = "NOT_DEFINED"
+    
+    #def __getattribute__(self, key):
+     #   return super(BaseController, self).__getattribute__(key)
         
     def get_locked_actions(self):
         """ returns the dictionary of locked actions. 

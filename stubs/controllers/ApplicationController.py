@@ -27,11 +27,12 @@ class ApplicationController(BaseController.BaseController):
     
     def __init__(self):
         """        initialisation        """
-        super(ApplicationController,self).__init__()
+        
         self.modelname = "None"
         self.locked_actions = {}
         # Format: { filter: ( selector, [list of actions] ) } 
         self.pre_filter_dict = {}
+        BaseController.BaseController.__init__(self)
         
     
     def pre_filter(self, filter, selector ,action_list = []):
@@ -67,6 +68,8 @@ class ApplicationController(BaseController.BaseController):
                 return False
         return False
     
+   
+
     #def __getattribute__(self,name):
     #    # check if pre_filter needs to be applied
     #    if name != '__dict__':
