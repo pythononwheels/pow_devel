@@ -86,7 +86,7 @@ def render_controller(name, noforce):
     ostr += powlib.linesep
     
     classname = string.capitalize( name ) + "Controller"
-    ostr += "class " + classname + "(BaseController.BaseController):"
+    ostr += "class " + classname + "(ApplicationController.ApplicationController):"
     
     # Add the controller_stub part 1 content to the newly generated file. 
     infile = open (os.path.normpath(PARTS_DIR + "controller_stub_part1.py"), "r")

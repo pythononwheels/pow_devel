@@ -10,9 +10,7 @@
 
 import sys
 import os
-from mako.template import Template
-from mako.lookup import TemplateLookup
-import datetime
+
 
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../lib" )))
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../models" )))
@@ -20,21 +18,20 @@ sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(_
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../controllers" )) )
 
 import powlib
-from powlib import uc
-import PowObject
+from powlib import mixin
 import BaseController
-import datetime
+from ApplicationController import ApplicationController
+#import AuthController 
 
-
-class AppController(BaseController.BaseController):
+#@mixin(AuthController.AuthController)
+class AppController(ApplicationController):
     
     def __init__(self):
         self.modelname = "App"
-        BaseController.BaseController.__init__(self)
+        super(AppController,self).__init__()
         self.login_required = []
         # example of locked actions and the redirections.
-        self.locked_actions = { "thanks" : "welcome", 
-                                "howto_start" : "welcome" }
+        self.locked_actions = {}
     
     def ajax( self, powdict ):
         print "AJAX-Request"
@@ -52,8 +49,8 @@ class AppController(BaseController.BaseController):
         #return self.render(special_tmpl="hero.tmpl",model=self.model, powdict=powdict)
         return self.render(model=self.model, powdict=powdict)
         
-    def thanks( self,powdict ):
-        return self.render(model=self.model, powdict=powdict)
+    def thanks( self ):
+        print "Das ist die thanks action"
         
     def howto_start( self,powdict ):
         return self.render(model=self.model, powdict=powdict)

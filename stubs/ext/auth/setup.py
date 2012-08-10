@@ -17,13 +17,28 @@ import ext
 
 if __name__ == "__main__":
     
+    
+    if os.path.isfile("./exec_once.nfo"):
+       print "#########################################################################" 
+       print "# ==> You already setup the auth plugin."
+       print "# if you want to setup the plugin again, be sure to run cleanup first."
+       print "#########################################################################"
+       sys.exit()
+       
+    print "######################################################"
+    print "# setting up auth plugin"
+    print "######################################################"
+    f = open("./exec_once.nfo", "w")
+    f.write("1")
+    f.close()
+    
     print "setup plugin: Auth"
     #
     # Copy the Controllers
     #
     print " -- copying the AuthController... to " + os.path.normpath("../../" + ext.auth["controllers_dir"])
     powlib.check_copy_file("AuthController.py",os.path.join("../../" + ext.auth["controllers_dir"],"AuthController.py") )
-    rint " -- copying the UserController... to " + os.path.normpath("../../" + ext.auth["controllers_dir"])
+    print " -- copying the UserController... to " + os.path.normpath("../../" + ext.auth["controllers_dir"])
     powlib.check_copy_file("UserController.py",os.path.join("../../" + ext.auth["controllers_dir"],"UserController.py") )
     
     
@@ -52,4 +67,8 @@ if __name__ == "__main__":
     generate_migration.render_migration("user", "user", "user model for py_auth", col_defs, "../../stubs/partials/", "../../")
     
     
-    
+    print "######################################################"
+    print "# Finished setting up the: auth plugin"
+    print "# ==> You have to execute do_migrate -d" 
+    print "#     up manually to create the accordung DB Tables"
+    print "######################################################"

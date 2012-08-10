@@ -56,6 +56,24 @@ def regex_rules(rules=rule_tuple):
         pattern, search, replace = line
         yield lambda word: re.search(pattern, word) and re.sub(search, replace, word)
 
+def mixin(*args):
+    """Decorator for mixing mixins
+        taken from: http://stackoverflow.com/questions/4139508/in-python-can-one-implement-mixin-behavior-without-using-inheritance
+        Adapted so that methods already in the Class will not be overwritten.
+        Could be chamged semantically to overwrite in the future but then will need to 
+        make sure that _meth and __methods are still kept original.
+    """
+    def inner(cls):
+        for a,k in ((a,k) for a in args for k,v in vars(a).items() if callable(v)):
+            #print a, type(a)
+            #print k, type(k)
+            if hasattr(cls, k): 
+                print 'method name conflict %s' % (str(k))
+            else:
+                setattr(cls, k, getattr(a, k))
+        return cls
+    return inner
+
 
 def plural(noun):
     # the final pluralisation method.

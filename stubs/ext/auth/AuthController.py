@@ -17,11 +17,9 @@ import datetime
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../lib" )))
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../models" )))
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../models/powmodels" )))
-sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../controllers" )) )
+
 
 import powlib
-from powlib import uc
-import PowObject
 import BaseController
 import datetime
 
@@ -34,7 +32,10 @@ class AuthController(BaseController.BaseController):
         self.login_required = []
         self.locked_actions = {}
     
-
+    def authenticate(self):
+        print "AuthController.authenticate()"
+        return
+        
     def register(self, powdict):
         """ registers a User """
         self.model.__init__()
