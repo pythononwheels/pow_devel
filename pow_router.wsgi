@@ -1,5 +1,9 @@
-#from wsgiref.simple_server import make_server
-
+# WSGI main script to be executed by WSGI capable
+# Webservers. 
+# www.pythononwheels.org runs with this script 
+# Served by Apache and mod_wsgi. (on Debian Linux)
+#
+# 
 import string
 import os.path
 import sys

@@ -1,4 +1,6 @@
-## {{{ http://code.activestate.com/recipes/355319/ (r1)
+## Thx to:
+##  http://code.activestate.com/recipes/355319/ (r1)
+## eased my life. Console and the  recipe above ;)
 import code
 import sys,os, string
 try:

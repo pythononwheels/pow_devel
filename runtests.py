@@ -1,3 +1,10 @@
+#
+# Runs the generated Tests.
+# All fail by defualt. You need to implement them
+# to make them pass.
+#
+#
+
 import nose
 import sys,os, os.path
 

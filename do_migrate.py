@@ -1,11 +1,9 @@
-#!C:\Python26\python.exe -u
-
-#  pow model generator.
+#  
+# do_migrate
+# execute db migrations and jobs.
+# also modify migrations (erase, set version etc)
 #
-# options are: 
-#    no option or -create         means create
-#    -remove             removes 
-
+# 
 
 import os
 from optparse import OptionParser

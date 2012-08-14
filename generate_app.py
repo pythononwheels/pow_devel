@@ -1,8 +1,7 @@
-#!C:\Python26\python.exe -u
-
-#  pow model generator.
 #
-# options are:
+#  pow app generator
+#  Generates the PoW Application.
+#  options are:
 #   see: python generate_app.py --help
 
 

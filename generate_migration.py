@@ -1,6 +1,4 @@
-#!C:\Python26\python.exe -u
-
-#  pow model generator.
+#  pow migration generator.
 #
 # options are: 
 #   see: python generate_migration.py --help

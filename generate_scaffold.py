@@ -1,6 +1,5 @@
-#!C:\Python26\python.exe -u
 
-#  pow model generator.
+#  pow scaffold generator.
 #
 # options are: 
 #    no option or -create         means create

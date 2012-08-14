@@ -1,5 +1,3 @@
-#!C:\Python26\python.exe -u
-
 #  pow model generator.
 #
 # options are: 

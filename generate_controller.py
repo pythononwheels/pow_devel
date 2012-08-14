@@ -1,6 +1,4 @@
-#!C:\Python26\python.exe -u
-
-#  pow model generator.
+#  pow controller generator.
 #
 # options are: 
 #   see: python generate_controller.py --help
