@@ -19,17 +19,17 @@ sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(_
 import powlib
 from PowTable import PowTable
 from BaseMigration import BaseMigration
-#import User
 
 class Migration(BaseMigration):
     table_name="#TABLENAME"
     table = None
         
     def up(self):
-        
+         """ up method will be executed when running do_migrate -d up"""
         #create_table_ddl = DDL(str(CreateTable(user.__table__)))
         #print str(CreateTable(user.__table__))
         #self.getEngine().connect().execute(create_table_ddl)
         
     def down(self):
+         """ up method will be executed when running do_migrate -d up"""
         self.drop_table()
