@@ -1,17 +1,74 @@
 
+from sqlalchemy import MetaData
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import create_engine
+from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy.orm import mapper
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import relationship
+from sqlalchemy import orm
+from sqlalchemy.sql import delete
+#import migrate.changeset
+#from migrate.changeset.constraint import ForeignKeyConstraint
+from sqlalchemy.schema import CreateTable
+from sqlalchemy import event, DDL
+
+import sys,os,datetime
+import string
+import types
+import urllib
+
+# the libraries
+sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../../lib" )))
+# the models
+sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../" )))
+# the generators
+sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../../" )))
+import powlib
+from PowBaseObject import PowBaseObject
+import generate_model
+#x = PowBaseObject()
+
+#Base = declarative_base(bind=x.__engine__, metadata = x.__metadata__)
+#Base.metadata.reflect()
+
+Base = declarative_base()
+Base.metadata.reflect(PowBaseObject().getEngine())
+
+class #MODELCLASS(Base):
+
+    __tablename__ = '#MODELTABLE'
+        
     def __init__(self):
+        """ initialize this model """
+        self.properties_list = #PROPERTIES_LIST
+        self.modelname = "#MODELNAME"
+        #self.__table__ = Base.metadata.tables['#MODELTABLE']
+        self.has_accessor_methods = False
+        self.pbo = PowBaseObject()
         self.session = self.pbo.getSession()
         self.generate_accessor_methods()
         self.t = self.__table__
         self.setup_properties()
+        #self.__mapper_args__ = {}
+        #self.__mapper__.add_properties({'posts': relationship(con.model.__mapper__)})
     
     def setup_properties(self):
+        """ sets up the properties of this model.
+            mainly one way of relationships is handled this way.
+            see:  http://docs.sqlalchemy.org/en/rel_0_7/orm/mapper_config.html. 
+            search: Mapper.add_property() on the page """
         for elem in self.properties_list:
             modelname = string.capitalize(powlib.singularize(elem))
             rel_model = powlib.load_class(modelname, modelname)
             self.__mapper__.add_properties({ elem : relationship(rel_model.__mapper__) })
         
     def find_by(self, att, val, first=True):
+        """ find one or all record(s) matching att = val
+            @param att : attribute to be queried
+            @param val : value of the query
+            @param first: if True only the first found result will be returned. 
+                          if False, all results will be returned """
         mstr = "self.session.query(Base" + self.__class__.__name__ +").filter_by(" + str(att) + "=val)"
         if first == True:
             mstr += ".first()"
@@ -21,59 +78,61 @@
         return res
 
     def find_all(self):
+        """ return all records of this model found in the DB """
         mstr = "self.session.query(Base" + self.__class__.__name__ + ").all()"
         print " -- ", mstr
         res= eval(mstr)
-        #for elem in res:
-        #    elem.__init__()
         return res
     
     def find_first(self):
+        """ return the first Model record found in the DB """
         mstr = "self.session.query(Base" + self.__class__.__name__ + ").first()"
         print " -- ", mstr
         res= eval(mstr)
-        #for elem in res:
-        #    elem.__init__()
         return res
     
     def will_paginate(page=1, per_page=10):
+        """ deprecated: functionality has been moved to pow_html_helper lib"""
+        # TODO: Unused since pagiantion is part of the html_helpers lib. 
+        # TODO: recheck that it's really not used anymore and delete it.
         res = self.find_all()
         start = page * per_page
         end = (page*per_page)+per_page
         return res[start:end]    
     
     def get(self, name):
+        """ return the attribute with the given name"""
+          # TODO: Should be rewritten using __getattr__ 
         return eval("self.get_"+ str(name)+"()")
 
     def set(self,name,val):
-        #val = urllib.unquote(val)
-        #print " -- Model, setting: ", name, " -> ", val, " # ", type(val)
+        """ set the given attribute with val using the generated set_attribute functions """
+         # TODO: Should be rewritten using __getattr__ 
         funcname = "self.set_%s" % (name)
         func = eval(funcname)
-        #eval("self.set_"+ str(name)+"(\""+ val + "\")" )
-        #statement = "self.%s=u'%s'" % (name,val)
-        #exec(statement)
-        #print type(func)
-        #print func
         func(val)
         return
 
     def getColumns(self):
+        """ return a list of this model's columns """
         rlist = []
         for col in self.__table__.columns:
             rlist.append( string.split(str(col), ".")[1])
         return rlist
 
     def getColumn(self, name):
+        """ return the given column """
+        # TODO: Should be rewritten using __getattr__ 
         return eval("self.__table__.c." + name)
 
     def getName(self):
+        """ return the classname """
         return self.__class__.__name__
 
     def generate_accessor_methods(self):
         #
-        # generates the convenient getAttribute() and setAttribute Methods
-        # and sets them as accessors for the variable
+        """generates the convenient getAttribute() and setAttribute Methods
+        and sets them as accessors for this models Attributes """
         mstr = ""
         self.has_accessor_methods = True
         for item in self.__table__.columns:
@@ -104,13 +163,18 @@
             #eval(cmd_str)
             
     def generate_find_by( self ):
+        """ TODO: generate find_by_ATTRIBUTENAME methods """
         pass
 
     def get_by_name(self, name):
+        """ returns the records attributefield: name """
+        # TODO: Was planned as an API way to filter before or validate. But
+        # this should be imlpemented via __getattr__ or __getattribute__ ...
         return eval("self." + str(name))
 
 
     def __repr__(self):
+        """ return this records attributes on the shell """
         ostr=""
         ostr += str(type(self)) + powlib.newline
         ostr += "-------------------------------" + powlib.newline
@@ -119,6 +183,7 @@
         return ostr
 
     def __reprhtml__(self):
+        """ returns this records attributes in rough html """
         ostr=""
         ostr += str(type(self)) + "<br>"
         ostr += "<hr>"
@@ -127,6 +192,7 @@
         return ostr
 
     def update(self):
+        """ updates this record """
         dt = datetime.datetime.strftime(datetime.datetime.now(),"%Y-%m-%d %H:%M:%S")
         dt = urllib.unquote(dt)
         self.set("last_updated", dt)
@@ -134,6 +200,7 @@
         self.session.commit()
 
     def create(self):
+        """ adds a new record to the db """
         dt = datetime.datetime.strftime(datetime.datetime.now(),"%Y-%m-%d %H:%M:%S")
         #dt = urllib.unquote(dt)
         self.set("created", dt)
@@ -142,16 +209,15 @@
         self.session.commit()
 
     def delete(self, id):
+        """ deletes the record with id = id """
         s = delete(self.__table__, self.__table__.columns.id==id)
         self.session.execute(s)
         self.session.commit()
 
     @orm.reconstructor
     def init_on_load(self):
-        if self.session == None:
-            self.session = self.pbo.getSession()
-        if self.has_accessor_methods == False:
-            self.generate_accessor_methods()
+        """ is called by sqlalchemy before a new instance is created """
+        self.__init__()
 
     def belongs_to(self,rel_table):
         """ Description:
@@ -230,3 +296,6 @@
         
 if __name__ == "__main__":
     pass
+
+
+

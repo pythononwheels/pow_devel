@@ -21,6 +21,7 @@ pow_newline = powlib.linesep
 pow_tab= powlib.tab
 
 def main():
+    """ Executes the render methods to generate a model, basemodel and basic tests according to the given options """
     parser = OptionParser()
     mode= MODE_CREATE
     parser.add_option("-n", "--name",  action="store", type="string", dest="name", help="creates model named model-name", default ="None")
@@ -57,107 +58,78 @@ def main():
 
     
 def render_model(modelname, force, comment, prefix_path="./", properties=None, PARTS_DIR = powlib.PARTS_DIR ):
-    
+    """
+    Renders the generated Model Class in prefix_path/models.
+    Renders the according BaseModel in prefix_path/models/basemodels.
+    Renders a basic test in tests dierctory.
+    Uses the stubs from stubs/partials.
+    """
     print "generate_model: " + modelname
-    #print "force: ", force
-    infile = None
-    infile = open (os.path.normpath( PARTS_DIR + "can_be_edited.txt"), "r")
-    ostr = infile.read()
-    infile.close()
-    
-    # add a creation date
-    ostr = ostr + pow_newline
-    ostr = ostr + "# date created: \t" + str(datetime.date.today())
-    ostr = ostr + pow_newline
-    
-    # Add the model_stub content to the newly generated file. 
-    infile = open (os.path.normpath( PARTS_DIR +  "model_stub_part1.py"), "r")
-    ostr = ostr + infile.read()
-    infile.close()
+    # new model filename
     classname = string.capitalize(modelname)  
     baseclassname = "Base" + classname
-    
-    ostr += "import " + baseclassname + powlib.newline
-    ostr += powlib.newline
-    #ostr += "import " + baseclassname + powlib.linesep + powlib.linesep
-    ostr += render_class(classname, baseclassname + "." + baseclassname)
-    ostr += powlib.tab + "pass" + powlib.newline
-        
-    # write the output file to disk
     filename = classname + ".py"
     filename = os.path.normpath( prefix_path+ "/models/" + filename)
-    file_exists = False
-    if os.path.isfile( os.path.normpath(  filename) ):
-        file_exists = True
-    else:
-        file_exists = False
-    if file_exists and force != True:
+    if os.path.isfile( os.path.normpath( filename ) ) and force != True:
         print filename + " (exists)...(Use -f to force override)"
     else:
-        ofile = open(  filename , "w+") 
+        infile = None
+        infile = open (os.path.normpath( PARTS_DIR +  "model_stub.py"), "r")
+        ostr = ""
+        ostr = ostr + infile.read()
+        infile.close()
+        
+        ostr = ostr.replace("#DATE", str(datetime.date.today()) )
+        ostr = ostr.replace("#MODELCLASS", classname)
+        
+        ostr = ostr.replace("#BASECLASS", baseclassname)
+   
+        # write the output file to disk
+        ofile = open( filename , "w+") 
         print " --", filename + " (created)"
         ofile.write( ostr )
         ofile.close()
-    ### genrate BaseModel if neccessary
+    
+    ### generate BaseModel if neccessary
     filename = "Base" + classname + ".py"
-    
-    ### generate the BaseClass
-    infile = None
-    infile = open (os.path.normpath( PARTS_DIR +  "basemodel_stub_part0.py"), "r")
-    ostr = infile.read()
-    infile.close()
-    
-    ostr += "class " + baseclassname +"(Base):" + powlib.newline
-    infile = open (os.path.normpath( PARTS_DIR +  "basemodel_stub_part1.py"), "r")
-    ostr += infile.read()
-    infile.close()
-    ostr += powlib.tab + "__table__ = Base.metadata.tables['" + powlib.plural(string.lower(modelname)) +"']" 
-    ostr += powlib.newline
-    infile = open (os.path.normpath( PARTS_DIR +  "basemodel_stub_part2.py"), "r")
-    ostr += infile.read()
-    infile.close()
-    ### adding the properties list
-    if properties == None:
-        ostr += powlib.tab + "properties_list = []" + powlib.newline
-    else:
-        ostr += powlib.tab + "properties_list = " + properties  + powlib.newline
-    ostr += powlib.tab + "modelname = '" + string.capitalize(modelname) + "'" + powlib.newline
-    infile = open (os.path.normpath( PARTS_DIR +  "basemodel_stub_part3.py"), "r")
-    ostr += infile.read()
-    infile.close()
-        
-        
-    filename = os.path.normpath( prefix_path + "/models/basemodels/" + filename)
-    if os.path.isfile( os.path.normpath(  filename) ) and force != True:
+    if os.path.isfile( os.path.normpath( filename ) ) and force != True:
         print filename + " (exists)...(Use -f to force override)"
     else:
+        infile = None
+        ### generate the BaseClass
+        infile = open (os.path.normpath( PARTS_DIR +  "basemodel_stub.py"), "r")
+        ostr = infile.read()
+        infile.close()
+        # Add Class declaration and Table relation for sqlalchemy
+        ostr = ostr.replace("#MODELCLASS",  baseclassname )
+        ostr = ostr.replace( "#MODELTABLE",  powlib.plural(string.lower(modelname))  ) 
+         
+        ### adding the properties list
+        # TODO: Needs to be tested. 
+        if properties == None:
+            ostr = ostr.replace("#PROPERTIES_LIST",  "[]")
+        else:
+            ostr = ostr.replace("#PROPERTIES_LIST",  "[" + properties + "]")
+            
+        ostr = ostr.replace("#MODELNAME" , string.capitalize(modelname) )        
+            
+        filename = os.path.normpath( prefix_path + "/models/basemodels/" + filename)
+    
         ofile = open(  filename , "w+") 
         print  " --", filename + " (created)"
         ofile.write( ostr )
         ofile.close()
         
-    # check if App / BaseApp exist and repair if necessary
-    #if os.path.isfile(os.path.normpath( "./models/basemodels/BaseApp.py")):
-    #    #BasApp exists, ok.
-    #    pass
-    #else:
-    #    # copy the BaseClass
-    #    powlib.check_copy_file(os.path.normpath(  PARTS_DIR +  "BaseApp.py"), os.path.normpath( "./models/basemodels/"))
-        
-    #if os.path.isfile(os.path.normpath( "./models/powmodels/App.py")):
-    #    #App exists, ok.
-    #    pass
-    #else:
-    #    # copy the BaseClass
-    #    powlib.check_copy_file(os.path.normpath( PARTS_DIR +  "App.py"), os.path.normpath( "./models/powmodels/"))
-        
+    # render a basic testcase 
     render_test_stub(modelname, classname, prefix_path, PARTS_DIR)
     return 
 
 def reset_model(modelname):
+    """ overwrites the generated Model, BaseModel and Test with empty / newly generated versions."""
     return render_model(modelname, True, "", properties=None, nomig=True)
     
 def render_test_stub (modelname, classname, prefix_path = "", PARTS_DIR = powlib.PARTS_DIR ):
+    """ renders the basic testcase for a PoW Model """
     #print "rendering Testcase for:", classname, " ", " ", modelname
     print " -- generating TestCase...",
     infile = open( os.path.normpath( PARTS_DIR +  "test_model_stub.py"), "r")
@@ -173,21 +145,6 @@ def render_test_stub (modelname, classname, prefix_path = "", PARTS_DIR = powlib
     return
 
 
-def render_class( classname, baseclass="object"):
-    #
-    # call with    name: class name
-    #
-    ostr = ""
-    ostr += "class " + classname + "(" + baseclass + "):" + pow_newline
-    
-    ostr += pow_tab + "#" + pow_newline
-    ostr += pow_tab + "# Class: " + classname  + pow_newline
-    ostr += pow_tab + "#" + pow_newline
-    #ostr += pow_newline
-    #print ostr
-    
-    return ostr
-    
     
 if __name__ == '__main__':
     main()
