@@ -23,7 +23,7 @@ MODE_CREATE = 1
 MODE_REMOVE = 0
 PARTS_DIR = powlib.PARTS_DIR
 
-
+    
 def main():
     parser = OptionParser()
     mode= MODE_CREATE
@@ -42,21 +42,30 @@ def main():
 
     (options, args) = parser.parse_args()
     #print options
-    #TODO: reorg and optimie the section below. more structure.
+    #TODO: reorg and optimize the section below. more structure.
     #
     if options.model == "None" and options.job == "None":
+        # no model- or job flag given
         if len(args) > 0:
-            # if no option flag (like -m) is given, it is assumed that the first argument is the model. (representing -m arg1)
+            # if no option flag (like -m) is given, it is assumed 
+            #that the first argument is the model. (representing -m arg1)
             options.model = args[0]
             migration_name = options.model
             migration_model = options.model
+            if migration_name.startswith("rel_") and ( migration_name.count("_") == 2 ):
+                # if the name is of the form: rel_name1_name2 it is assumed that you want to
+                # generate a relation between name1 and name2. So the mig is especially customized for that.
+                render_relation_migration(migration_name)
         else:
             parser.error("You must at least specify an migration name by giving -n <name>.")
             return
     else:
+        # we got a model or job.
         if options.name == "None":
+            # if no specifoc name for the migration is given, take the modelname
             migration_name = options.model
         else:
+            # else take the specific name
             migration_name = options.name
             #migration_name = options.name
         migration_model = options.model
@@ -109,73 +118,128 @@ def transform_col_defs( ostr, col_defs ):
     ostr = ostr.replace("Column('example_column', String(50))", cols)
     
     return ostr
-       
-def render_migration(name, model, comment, col_defs = "", PARTS_DIR = powlib.PARTS_DIR, prefix_dir = "./"):
+
+
+def render_relation_migration(name, PARTS_DIR = powlib.PARTS_DIR, prefix_dir = "./"):
     # 
-    #print "generate_migration: " + name + "  for model: " + model
-    #
+    splittxt = name.split(name, "_")
+    model1 = splittxt[1]
+    model2 = splittxt[2]
     
+    print "generate_migration: relation migration for models: " + model1 +  " & " + model2
+    print "following naming convention rel_model1_model2"
     # add the auto generated (but can be safely edited) warning to the outputfile
-    infile = open (os.path.normpath(PARTS_DIR + "/can_be_edited.txt"), "r")
+    infile = open (os.path.normpath(PARTS_DIR + "/db_relation_migration_stub.py"), "r")
     ostr = infile.read()
     infile.close()
     
     # add a creation date
-    ostr = ostr + os.linesep
-    ostr = ostr + "# date created: \t" + str(datetime.date.today())
-    ostr = ostr + os.linesep
+    ostr = ostr.replace( "#DATE", str(datetime.date.today() ))
+    # add model1 import
+    ostr = ostr.replace( "#IMPORT_MODEL1", "import " + model1)
+    # add model2 import
+    ostr = ostr.replace( "#IMPORT_MODEL2", "import " + model2)
     
-    # Add the model_stub part1 content to the newly generated file. 
-    infile = open (os.path.normpath( PARTS_DIR + "db_migration_stub2_part1.py"), "r")
-    ostr = ostr + infile.read()
+    # add the example migration for this models
+    ostr = ostr.replace( "#MODEL1", model1)
+    ostr = ostr.replace( "#MODEL2", model2)
+    
+    
+    print  " -- created file:" + str(os.path.normpath(os.path.join(prefix_dir,filename)))
+    return
+    
+
+def write_migration(name, model, comment, prefix_dir, ostr):
+    """
+    Writes a new migration.
+    It generates a new version, constructs the correct filename and path
+    Updates the App and Version tables and writes ostr to the new filen.
+    @param name:    Name of the new migration. 
+    @param ostr:    Content that will be written to the new migration.
+    """
+    version = get_new_version()
+    verstring = powlib.version_to_string(version)
+    # will be saved in the versions table and used to load the module by do_migrate
+    modulename = verstring +"_" + name 
+    filename = modulename + ".py"
+    
+    #update the app table with the new version
+    update_app_and_version(version, modulename, version, comment )
+    
+    ofile = open(  os.path.normpath(os.path.join(prefix_dir + "/migrations/", filename)) , "w+") 
+    ofile.write(ostr)
+    ofile.close()
+    return filename
+    
+def get_new_version():
+    """
+    Constructs the new version by queriing the App Table for maxversion
+    """
+    app = powlib.load_class( "App", "App")
+    
+    sess = app.pbo.getSession()
+    app = sess.query(App.App).first()
+    
+    version = app.maxversion
+    version += 1
+    return version
+    
+def update_app_and_version(maxversion, filename, version, comment=""):
+    """
+    update the app table with the new version
+    update the version table with:
+        filename, version and comment (if any).
+    """
+    app = powlib.load_class( "App", "App")
+    app_versions = powlib.load_class( "Version", "Version")
+    app = app.find_first()
+    app.maxversion = str(maxversion)
+    app.update()
+    app_versions.filename = str(filename)
+    app_versions.version = str(version)
+    app_versions.comment = str(comment)
+    app_versions.update()
+    return 
+    
+def render_migration(name, model, comment, col_defs = "", PARTS_DIR = powlib.PARTS_DIR, prefix_dir = "./"):
+    """
+    Renders a database migration file.
+    @param name:        A Name for the migration. By default the modelname is taken.
+    @param model:       Modelname for this migration (typically defining the model's base table)
+    @param comment:     a Comment for this migration
+    @param col_defs:    pre defined column definitions of the form NAME TYPE OPTIONS, NAME1 TYPE1 OPTIONS1, ...
+    @param PARTS_DIR:   A relative path to the stubs/partials dir from the executing script.
+    @param prefix_dir:  A prefix path to be added to migrations making prefix_dir/migrations the target dir
+    """
+    
+    # add the auto generated (but can be safely edited) warning to the outputfile
+    infile = open (os.path.normpath(PARTS_DIR + "/db_migration_stub.py"), "r")
+    ostr = infile.read()
     infile.close()
-    
+
+    # Replace the TAGGED Placeholders with the actual values
+    ostr = ostr.replace( "#DATE", str(datetime.date.today() ))
     pluralname = powlib.plural(model)
-    ostr += powlib.tab +  "table_name=\"" + pluralname + "\""
-    ostr += powlib.linesep
-    #print "modelname was: " + model + "  pluralized table_name is:" + pluralname
-    
-    # Add the model_stub part2 content to the newly generated file. 
-    infile = open (os.path.normpath( PARTS_DIR + "db_migration_stub2_part2.py"), "r")
-    ostr = ostr + infile.read()
-    infile.close()
+    ostr = ostr.replace("#TABLENAME", pluralname)
     
     #
     # Add / Replace the column definitions with the given ones by -d (if there were any)
     # 
     if col_defs != "None":
         ostr = transform_col_defs( ostr, col_defs )
-        
-    app = powlib.load_class( "App", "App")
-    app_versions = powlib.load_class( "Version", "Version")
-    sess = app.pbo.getSession()
-    app = sess.query(App.App).first()
-    
-    version = app.maxversion
-    oldmaxversion = version
-    version += 1
-    
+
+    # generate the new version
+    version = get_new_version()
     verstring = powlib.version_to_string(version)
+
     print "generate_migration: " + name + " for model: " + model
-    #print "version: " + str(version)
-    #print "version2string: " + verstring
-    filename = os.path.normpath ( "./migrations/" + verstring +"_" + name +".py" )
-    
-    #update the app table with the new version
-    #appTable.update().values(maxversion= str(version) ).execute()
-    app.maxversion = str(version)
-    app.update()
-    app_versions.filename = str(verstring +"_" + name )
-    app_versions.version = str(version)
-    app_versions.comment = str(comment)
-    app_versions.update()
-    print " -- maxversion (old,new): (" + str(oldmaxversion) + "," + str(app.maxversion) +")"
-    ofile = open(  os.path.normpath(os.path.join(prefix_dir,filename)) , "w+") 
-    print  " -- created file:" + str(os.path.normpath(os.path.join(prefix_dir,filename)))
-    ofile.write( ostr )
-    ofile.close()
+
+    # really write the migration now
+    write_migration(name, model, comment, prefix_dir, ostr)
+
     return
-    
+
+
 def render_migration_job(filename):
         """create a 'job' or task that has to be done on the database.
         typical examples are backup/restore scripts for dbs or tables or loading data into a table.
@@ -186,8 +250,6 @@ def render_migration_job(filename):
         powlib.check_copy_file(os.path.normpath( PARTS_DIR + "migration_job.py"), "./migrations/" + filename + "_migration.py")
         return
         
-
-
 
 if __name__ == '__main__':
     main()

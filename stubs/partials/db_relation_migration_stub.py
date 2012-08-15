@@ -5,6 +5,7 @@
 # It will not be overwritten by python_on_wheels
 # unless you force it with the -f or --force option
 # 
+
 # #DATE
 
 from sqlalchemy import *
@@ -20,25 +21,20 @@ sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(_
 import powlib
 from PowTable import PowTable
 from BaseMigration import BaseMigration
+#IMPORT_MODEL1
+#IMPORT_MODEL2
 
 class Migration(BaseMigration):
-    table_name="#TABLENAME"
-    table = None
         
     def up(self):
-        """ up method will be executed when running do_migrate -d up"""
-          
-        self.table = PowTable(self.table_name, self.__metadata__,
-            # here is where you define your table (Format see example below)
-            # the columns below are just examples.
-            # Remember that PoW automatically adds an id and a timestamp column (ID,TIMESTAMP)
-            Column('example_column', String(50))
-            
-            #Column('user_id', Integer, ForeignKey('users.id'))
-        )
-        self.create_table()
-        #print CreateTable(self.table)
+        #
+        # define you relation here:
+        # example for your models:
+        # MODEL1.has_many(powlib.pluralize(string.lower("MODEL2")))
+        # MODEL2.belongs_to(string.lower("MODEL1"))
         
     def down(self):
-        """ down method will be executed when running do_migrate -d down"""
-        self.drop_table()
+        # define cleanups for your relation heren.
+        # be sure to check the PoW docs since not all relations can
+        # automatically be cleaned up.
+        return
