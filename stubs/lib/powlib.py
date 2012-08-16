@@ -17,6 +17,7 @@ sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(_
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../config" )))
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../controllers" )) )
 import pow
+import db
 
 hidden_list = ["created", "last_updated", "group", "user", "id", "password"]
 linesep = "\n"
@@ -315,7 +316,8 @@ def get_db_conn_str():
     #print "APP_DIR: " + appdir
     #print "reading db_conn_str for environment: " + env
 
-    dic = read_db_config( "db.cfg", env )
+    #dic = read_db_config( "db.cfg", env )
+    dic = eval("db."+env)
     # debug printing
     #for key in dic:
     #    print key + " : " + dic[key]

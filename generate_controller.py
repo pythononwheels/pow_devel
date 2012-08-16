@@ -26,7 +26,10 @@ CONTROLLER_TEST_DIR = "/tests/controllers/"
 
 
 def main():
-    """ Executes the render methods to generate a conroller and basic tests according to the given options """
+    """ 
+        Executes the render methods to generate a conroller and basic 
+        tests according to the given options
+    """
     parser = OptionParser()
     mode= MODE_CREATE
     parser.add_option("-n", "--name",  action="store", type="string", 
@@ -117,6 +120,7 @@ def render_controller(name, force, prefix_path="./"):
     
     
 def render_test_stub (controllername, classname, prefix_path ="./" ):
+    """ renders the basic testcase for a PoW Controller """
     #print "rendering Testcase for:", classname, " ", " ", modelname
     print " -- generating TestCase...",
     infile = open( os.path.normpath( PARTS_DIR +  "test_controller_stub.py"), "r")

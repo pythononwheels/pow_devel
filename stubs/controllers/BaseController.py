@@ -123,7 +123,9 @@ class BaseController(object):
         """returns the redirection, if the given action is locked. None otherwise. 
         Locked actions will not be executed by simple_server nor pow_router"""
         if self.is_locked(action):
-            return self.locked_actions[action]
+            
+            return ( self.locked_actions[action].split("/")[0], 
+                     self.locked_actions[action].split("/")[1] )
         else:
             return "None"
         # should never be reached

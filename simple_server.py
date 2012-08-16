@@ -229,8 +229,11 @@ def powapp_simple_server(environ, start_response):
         # locked, so set the action to the given redirection and execute that instead.
         # TODO: Could be aditionally coupled with a flashtext.
         print "Action: ", action, " locked."
-        aclass.setCurrentAction(aclass.get_redirection_if_locked(action))
-        action = aclass.get_redirection_if_locked(action)
+        cont, action = aclass.get_redirection_if_locked(action)
+        if  cont != None and cont != "None" and cont != "":
+            controller = string.capitalize(cont) + "Controller"
+            aclass = powlib.load_class(controller,controller)
+        aclass.setCurrentAction(action)
         print " -- Redirecting to: ", action
     #
     # Now really execute the action

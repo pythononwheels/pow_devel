@@ -14,16 +14,12 @@ sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(_
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./stubs/models/powmodels" )))
 import powlib
 import generate_model
-
-# setting the right defaults
-#MODE_CREATE = 1
-#MODE_REMOVE = 0
-
-#pow_newline = powlib.linesep
-#pow_tab = powlib.tab
-
     
 def main():
+    """ 
+        Executes the render methods to generate a conroller and basic 
+        tests according to the given options 
+    """
     parser = OptionParser()
     #mode = MODE_CREATE
     parser.add_option("-n", "--name",  action="store", type="string", dest="name", 
@@ -32,15 +28,13 @@ def main():
         help="app base dir", default ="./")
     parser.add_option("-f", "--force",  action="store_true",  dest="force", 
         help="forces overrides of existing app", default="False")
-    #parser.add_option("-c", "--comment",  action="store", type="string", dest="comment", 
-        #help="defines a comment for this migration.", default ="No Comment")
-
 
     (options, args) = parser.parse_args()
     #print options, args
     if options.name == "None":
         if len(args) > 0:
-            # if no option flag (like -n) is given, it is assumed that the first argument is the appname. (representing -n arg1)
+            # if no option flag (like -n) is given, it is assumed that 
+            # the first argument is the appname. (representing -n arg1)
             options.name = args[0]
         else:
             parser.error("You must at least specify an appname by giving -n <name>.")
@@ -61,13 +55,14 @@ def main():
 
 def render_db_config( appname, appbase ):
     """ Creates the db.cfg file for this application and puts it in appname/config/db.cfg"""
-    infile = open("./stubs/config/db.cfg")
+    
+    infile = open("./stubs/config/db.py")
     instr = infile.read()
     infile.close()
     instr = instr.replace("please_rename_the_development_db", appname + "_devel")
     instr = instr.replace("please_rename_the_test_db", appname + "_test")
     instr = instr.replace("please_rename_the_production_db", appname + "_prod")
-    ofile = open( os.path.normpath(appbase + "/config/db.cfg"), "w" )
+    ofile = open( os.path.normpath(appbase + "/config/db.py"), "w" )
     ofile.write(instr)
     ofile.close()
     
@@ -127,18 +122,14 @@ def gen_app(appname, appdir, force=False):
                         ("stubs/ext/auth", "ext/auth"),
                         ("stubs/ext/validate", "ext/validate")
                         ]
+                        
     print " -- copying files ..."
     exclude_patterns = [".pyc", ".pyo", ".DS_STORE"]
     exclude_files = [ "db.cfg" ]
     for source_dir, dest_dir in deep_copy_list:
         for source_file in os.listdir(source_dir):
-            #print "ext:", os.path.splitext(source_file)
-            #print "source:", os.path.abspath(source_file), " is file:", os.path.isfile(os.path.abspath(source_file))
             fname, fext = os.path.splitext(source_file)
             if not fext in exclude_patterns and not source_file in exclude_files:
-                #print " copying src:", os.path.join(source_dir,source_file)
-                #print "   -> to dest:", os.path.join(appbase,source_file)
-                #print "ext:", os.path.splitext(source_file)
                 powlib.check_copy_file(
                     os.path.join(source_dir,source_file),
                     os.path.join(appbase+"/"+dest_dir,source_file)
@@ -147,8 +138,6 @@ def gen_app(appname, appdir, force=False):
                 print " excluded:.EXCL", source_file
                 continue
                 
-    #print "...done"
-
     #
     # copy the generator files
     #
