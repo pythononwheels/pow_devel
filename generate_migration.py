@@ -25,6 +25,7 @@ PARTS_DIR = powlib.PARTS_DIR
 
     
 def main():
+    """ Executes the render methods to generate a migration according to the given options """
     parser = OptionParser()
     mode= MODE_CREATE
     parser.add_option("-n", "--name",  action="store", type="string", dest="name", help="creates migration with name = <name>. Only for jobs", default ="None")
