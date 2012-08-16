@@ -56,8 +56,51 @@ def regex_rules(rules=rule_tuple):
         pattern, search, replace = line
         yield lambda word: re.search(pattern, word) and re.sub(search, replace, word)
 
+# the following three functions are taken from:
+# http://c2.com/cgi/wiki?MixinsForPython 
+# will use them to test mixin of plugin functionalities into models and controllers.
+# also see comment to mixin function related to the controvery of mixin vs multiple inheritance.
+def mixInClass (base, addition):
+
+    """Mixes in place, i.e. the base class is modified.
+    Tags the class with a list of names of mixed members.
+    """
+    assert not hasattr(base, '_mixed_')
+    mixed = []
+    for item, val in addition.__dict__.items():
+        if not hasattr(base, item):
+            setattr(base, item, val)
+            mixed.append (item)
+    base._mixed_ = mixed
+
+
+
+def unMixClass (cla):
+
+    """Undoes the effect of a mixin on a class. Removes all attributes that
+    were mixed in -- so even if they have been redefined, they will be
+    removed.
+    """
+    for m in cla._mixed_: #_mixed_ must exist, or there was no mixin
+        delattr(cla, m)
+    del cla._mixed_
+
+
+
+def mixedInClass (base, addition):
+
+    """Same as mixInClass, but returns a new class instead of modifying
+    the base.
+    """
+    class newClass: pass
+    newClass.__dict__ = base.__dict__.copy()
+    mixIn (newClass, addition)
+    return newClass
 def mixin(*args):
-    """Decorator for mixing mixins
+    """Decorator for mixing in mixins ;) 
+        I nkow that there is a BIG debate about mixins vs. multiple inheritance.
+        I will try both but personally do not like to have many multi inheritances per class.
+           IMO looks ugly. if multi inheritances are also stacked it gets quite copmplex to follow.
         taken from: http://stackoverflow.com/questions/4139508/in-python-can-one-implement-mixin-behavior-without-using-inheritance
         Adapted so that methods already in the Class will not be overwritten.
         Could be chamged semantically to overwrite in the future but then will need to 
