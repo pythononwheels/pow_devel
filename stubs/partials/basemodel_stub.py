@@ -12,6 +12,7 @@ from sqlalchemy.sql import delete
 #from migrate.changeset.constraint import ForeignKeyConstraint
 from sqlalchemy.schema import CreateTable
 from sqlalchemy import event, DDL
+from sqlalchemy import or_
 
 import sys,os,datetime
 import string
@@ -50,6 +51,7 @@ class #MODELCLASS(Base):
         self.generate_accessor_methods()
         self.t = self.__table__
         self.setup_properties()
+         self.generate_find_by()
         #self.__mapper_args__ = {}
         #self.__mapper__.add_properties({'posts': relationship(con.model.__mapper__)})
     
@@ -76,7 +78,19 @@ class #MODELCLASS(Base):
         res= eval(mstr)
         #res.__init__()
         return res
+    
+    def find_by_list_and(self, att_list):
+        """ find one or all record(s) matching att = val
+            @param att_list : list of (attribute, value) tuples to be queried"""
+        mstr = 'self.session.query(Base" + self.__class__.__name__ +")'
+        for att,val in att_list: 
+            mstr += '.filter(" + str(att) + "=val)"'
+        print " -- ", mstr
+        res= eval(mstr)
+        #res.__init__()
+        return res
 
+           
     def find_all(self):
         """ return all records of this model found in the DB """
         mstr = "self.session.query(Base" + self.__class__.__name__ + ").all()"
@@ -162,9 +176,20 @@ class #MODELCLASS(Base):
             #cmd_str = "self.__table__." + item + "=property(" + getter + "," + setter + ")"
             #eval(cmd_str)
             
+    
     def generate_find_by( self ):
-        """ TODO: generate find_by_ATTRIBUTENAME methods """
-        pass
+        """ generates the conveniance find_by_ATTRIBUTENAME methods """
+        for col in self.__table__.columns:
+            mstr = ""
+            method_name = "find_by_"+ col.name
+            setter = method_name
+            tmp_meth_name = "foo"
+            mstr +=     "def foo(self, val):" + powlib.newline
+            mstr += powlib.tab + "return getattr(self, 'find_by')('%s', val)" % (col.name)
+            print mstr
+            exec(mstr)
+            self.__dict__[method_name] = types.MethodType(foo,self)    
+
 
     def get_by_name(self, name):
         """ returns the records attributefield: name """
