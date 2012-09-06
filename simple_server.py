@@ -73,7 +73,7 @@ def powapp_simple_server(environ, start_response):
         
         }
     environ["SCRIPT_FILENAME"] = __file__
-    powdict["POW_APP_NAME"] = "atest"
+    powdict["POW_APP_NAME"] = "#POWAPPNAME"
     powdict["POW_APP_URL"] = "www.pythononwheels.org"
     powdict["POW_APP_DIR"] = environ.get("pow.wsgi_dir")
     powdict["ERROR_INFO"] = "NONE"

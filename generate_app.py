@@ -65,6 +65,8 @@ def render_db_config( appname, appbase ):
     ofile = open( os.path.normpath(appbase + "/config/db.py"), "w" )
     ofile.write(instr)
     ofile.close()
+ 
+
     
 def gen_app(appname, appdir, force=False):
     """ Generates the complete App Filesystem Structure for Non-GAE Apps.
@@ -147,16 +149,21 @@ def gen_app(appname, appdir, force=False):
     powlib.check_copy_file("generate_migration.py", appbase)
     powlib.check_copy_file("generate_scaffold.py", appbase)
     powlib.check_copy_file("simple_server.py", appbase)
-    # set correct Appname in simple_server
-    f = open(os.path.join(appbase + "/" + "simple_server.py"), "r")
-    instr = f.read()
-    instr = instr.replace("#POWAPPNAME", appname)
-    f.close()
-    f = open(os.path.join(appbase + "/" + "simple_server.py"), "w")
-    f.write(instr)
-    f.close()
-    
     powlib.check_copy_file("pow_router.wsgi", appbase)
+    
+    powlib.replace_string_in_file(
+        os.path.join(appbase + "/" + "simple_server.py"),
+        "#POWAPPNAME",
+        appname
+    )
+    
+    powlib.replace_string_in_file(
+        os.path.join(appbase + "/" + "pow_router.wsgi"),
+        "#POWAPPNAME",
+        appname
+    )
+    
+   
     powlib.check_copy_file("pow_console.py", appbase)
     powlib.check_copy_file("runtests.py", appbase)
 

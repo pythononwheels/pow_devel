@@ -51,7 +51,7 @@ class #MODELCLASS(Base):
         self.generate_accessor_methods()
         self.t = self.__table__
         self.setup_properties()
-         self.generate_find_by()
+        self.generate_find_by()
         #self.__mapper_args__ = {}
         #self.__mapper__.add_properties({'posts': relationship(con.model.__mapper__)})
     
@@ -103,16 +103,7 @@ class #MODELCLASS(Base):
         mstr = "self.session.query(Base" + self.__class__.__name__ + ").first()"
         print " -- ", mstr
         res= eval(mstr)
-        return res
-    
-    def will_paginate(page=1, per_page=10):
-        """ deprecated: functionality has been moved to pow_html_helper lib"""
-        # TODO: Unused since pagiantion is part of the html_helpers lib. 
-        # TODO: recheck that it's really not used anymore and delete it.
-        res = self.find_all()
-        start = page * per_page
-        end = (page*per_page)+per_page
-        return res[start:end]    
+        return res   
     
     def get(self, name):
         """ return the attribute with the given name"""
@@ -186,7 +177,7 @@ class #MODELCLASS(Base):
             tmp_meth_name = "foo"
             mstr +=     "def foo(self, val):" + powlib.newline
             mstr += powlib.tab + "return getattr(self, 'find_by')('%s', val)" % (col.name)
-            print mstr
+            #print mstr
             exec(mstr)
             self.__dict__[method_name] = types.MethodType(foo,self)    
 

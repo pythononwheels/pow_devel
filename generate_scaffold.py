@@ -98,7 +98,7 @@ def scaffold(   modelname,
         filename = os.path.normpath( 
                             os.path.join(prefix_dir + "/views/", filename) ) 
                                     
-        #TODO: optiomize the double else part .
+        #TODO: optimize the double else part .
         if os.path.isfile( os.path.normpath(filename) ):
             if not force:
                 print filename + " already exists..."

@@ -29,7 +29,6 @@ if __name__ == "__main__":
     generate_all_for( "post" )
     #do_migrate.do_migrate(-1, "up")
     
-    generate_all_for( "comment" )
     #do_migrate.do_migrate(-1, "up")
     print " -----------------------------------------------------------"
     print " .. everything has been created, you need to migrate up 2 times"

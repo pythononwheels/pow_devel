@@ -118,7 +118,17 @@ def mixin(*args):
         return cls
     return inner
 
-
+def replace_string_in_file( absfilename, origstr, repstr):
+    # set correct Appname in pow_router.wsgi
+    f = open(os.path.join(absfilename), "r")
+    instr = f.read()
+    instr = instr.replace(origstr, repstr)
+    f.close()
+    f = open(os.path.join(absfilename), "w")
+    f.write(instr)
+    f.close()
+    return
+    
 def plural(noun):
     # the final pluralisation method.
     for rule in regex_rules():
