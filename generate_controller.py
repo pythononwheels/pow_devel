@@ -1,3 +1,4 @@
+#!python
 #  pow controller generator.
 #
 # options are: 

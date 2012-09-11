@@ -1,3 +1,4 @@
+#!python
 #
 # simple_server is a simple wsgi server for testing purposes only.
 # Gives you the opportunity to develop on your local machine 

@@ -1,0 +1,25 @@
+#
+#
+# Manifest file for building the PoW distribution pakage for PyPi
+# 
+# Status    : Test 
+# Author    : khz@pythononwheels.org
+# Date      : 10 / 09 / 2012
+# mabnual 	: http://docs.python.org/distutils/sourcedist.html
+
+# explicit includes
+
+include pow_devel/README.txt 
+include pow_devel/*.txt
+include pow_devel/*.wsgi
+include pow_devel/stubs/db/app_db_including_app_versions_small.db
+include pow_devel/stubs/config/nose.cfg
+
+recursive-include pow_devel/stubs/views *.tmpl
+recursive-include pow_devel/stubs/public  *.css *.js *.md
+recursive-include pow_devel/stubs/public/ico  *.png *.ico
+recursive-include pow_devel/stubs/public/img  *.png *.jpg 
+
+# explicit excludes
+#exclude pylintrc
+#prune scripts

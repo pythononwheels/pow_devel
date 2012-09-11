@@ -1,3 +1,4 @@
+#!python
 #  pow model generator.
 #
 # options are: 

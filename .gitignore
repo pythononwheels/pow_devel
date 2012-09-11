@@ -6,6 +6,8 @@
 .tmpl text
 .js text
 .css text
+.project
+.pydevproject
 
 #################
 ## Eclipse

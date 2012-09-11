@@ -1,3 +1,4 @@
+#!python
 #  pow migration generator.
 #
 # options are: 

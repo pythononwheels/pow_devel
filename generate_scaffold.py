@@ -1,4 +1,4 @@
-
+#!python
 #  pow scaffold generator.
 #
 #  options are: 

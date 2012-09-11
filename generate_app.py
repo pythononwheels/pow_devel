@@ -1,4 +1,4 @@
-#
+#!python
 #  pow app generator
 #  Generates the PoW Application.
 #  options are:

@@ -1,3 +1,4 @@
+#!python
 #
 # Runs the generated Tests.
 # All fail by defualt. You need to implement them
