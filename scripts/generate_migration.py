@@ -131,7 +131,7 @@ def render_relation_migration(name, PARTS_DIR = powlib.PARTS_DIR, prefix_dir = "
     print "generate_migration: relation migration for models: " + model1 +  " & " + model2
     print "following naming convention rel_model1_model2"
     # add the auto generated (but can be safely edited) warning to the outputfile
-    infile = open (os.path.normpath(PARTS_DIR + "/db_relation_migration_stub.py"), "r")
+    infile = open (os.path.normpath(PARTS_DIR + "/db_relation_migration_stub.part"), "r")
     ostr = infile.read()
     infile.close()
     
@@ -215,7 +215,7 @@ def render_migration(name, model, comment, col_defs = "", PARTS_DIR = powlib.PAR
     """
     
     # add the auto generated (but can be safely edited) warning to the outputfile
-    infile = open (os.path.normpath(PARTS_DIR + "/db_migration_stub.py"), "r")
+    infile = open (os.path.normpath(PARTS_DIR + "/db_migration_stub.part"), "r")
     ostr = infile.read()
     infile.close()
 
@@ -249,7 +249,7 @@ def render_migration_job(filename):
         They can be executed with python migrate.py -f <migrationname>
         """
         print " -- creating migration job:"
-        powlib.check_copy_file(os.path.normpath( PARTS_DIR + "migration_job.py"), "./migrations/" + filename + "_migration.py")
+        powlib.check_copy_file(os.path.normpath( PARTS_DIR + "migration_job.part"), "./migrations/" + filename + "_migration.py")
         return
         
 

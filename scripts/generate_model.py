@@ -75,7 +75,7 @@ def render_model(modelname, force, comment, prefix_path="./", properties=None, P
         print filename + " (exists)...(Use -f to force override)"
     else:
         infile = None
-        infile = open (os.path.normpath( PARTS_DIR +  "model_stub.py"), "r")
+        infile = open (os.path.normpath( PARTS_DIR +  "model_stub.part"), "r")
         ostr = ""
         ostr = ostr + infile.read()
         infile.close()
@@ -98,7 +98,7 @@ def render_model(modelname, force, comment, prefix_path="./", properties=None, P
     else:
         infile = None
         ### generate the BaseClass
-        infile = open (os.path.normpath( PARTS_DIR +  "basemodel_stub.py"), "r")
+        infile = open (os.path.normpath( PARTS_DIR +  "basemodel_stub.part"), "r")
         ostr = infile.read()
         infile.close()
         # Add Class declaration and Table relation for sqlalchemy
@@ -133,7 +133,7 @@ def render_test_stub (modelname, classname, prefix_path = "", PARTS_DIR = powlib
     """ renders the basic testcase for a PoW Model """
     #print "rendering Testcase for:", classname, " ", " ", modelname
     print " -- generating TestCase...",
-    infile = open( os.path.normpath( PARTS_DIR +  "test_model_stub.py"), "r")
+    infile = open( os.path.normpath( PARTS_DIR +  "test_model_stub.part"), "r")
     test_name = "Test" + classname + ".py"
     ofile = open( os.path.normpath(prefix_path + MODEL_TEST_DIR + test_name ), "w")
     instr = infile.read()

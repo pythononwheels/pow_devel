@@ -20,7 +20,7 @@ if __name__ == "__main__":
     
     if os.path.isfile("./exec_once.nfo"):
        print "#########################################################################" 
-       print "# ==> You already setup the auth plugin."
+       print "# ==> You have already setup the auth plugin."
        print "# if you want to setup the plugin again, be sure to run cleanup first."
        print "#########################################################################"
        sys.exit()
@@ -64,6 +64,7 @@ if __name__ == "__main__":
     col_defs += "email String(100),"
     col_defs += "password String(20),"
     col_defs += "login String(20)"
+    col_defs += "role Text"
     generate_migration.render_migration("user", "user", "user model for py_auth", col_defs, "../../stubs/partials/", "../../")
     
     

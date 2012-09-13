@@ -92,7 +92,7 @@ def gen_app(appname, appdir, force=False):
                         {"stubs" : ["partials"] },
                         {"views" : ["layouts"] },
                         {"tests" : ["models", "controllers", "integration", "fixtures"] },
-                        {"ext" : ["auth", "validate"] }  
+                        {"ext" : ["auth", "validate"] }                        
                         ]
     for elem in subdirs:
         for key in elem:
@@ -107,7 +107,7 @@ def gen_app(appname, appdir, force=False):
     deep_copy_list = [  ("stubs/config", "config"),  
                         ("stubs/lib", "lib"), 
                         ("stubs", "stubs"),
-                         ("stubs/migrations","migrations"),
+                        ("stubs/migrations","migrations"),
                         ("stubs/partials","stubs/partials"),
                         ("stubs/public/doc","/public/doc"),
                         ("stubs/public/ico","/public/ico"),
@@ -122,7 +122,7 @@ def gen_app(appname, appdir, force=False):
                         ("stubs/views", "views"),
                         ("stubs/views/layouts", "views/layouts"),
                         ("stubs/ext/auth", "ext/auth"),
-                        ("stubs/ext/validate", "ext/validate")
+                        ("stubs/ext/validate", "ext/validate"),
                         ]
                         
     print " -- copying files ..."
@@ -143,14 +143,16 @@ def gen_app(appname, appdir, force=False):
     #
     # copy the generator files
     #
-    powlib.check_copy_file("generate_model.py", appbase)
-    powlib.check_copy_file("do_migrate.py", appbase)
-    powlib.check_copy_file("generate_controller.py", appbase)
-    powlib.check_copy_file("generate_migration.py", appbase)
-    powlib.check_copy_file("generate_scaffold.py", appbase)
-    powlib.check_copy_file("simple_server.py", appbase)
-    powlib.check_copy_file("pow_router.wsgi", appbase)
-    
+    powlib.check_copy_file("scripts/generate_model.py", appbase)
+    powlib.check_copy_file("scripts/do_migrate.py", appbase)
+    powlib.check_copy_file("scripts/generate_controller.py", appbase)
+    powlib.check_copy_file("scripts/generate_migration.py", appbase)
+    powlib.check_copy_file("scripts/generate_scaffold.py", appbase)
+    powlib.check_copy_file("scripts/simple_server.py", appbase)
+    powlib.check_copy_file("scripts/pow_router.wsgi", appbase)
+    powlib.check_copy_file("pow_console.py", appbase)
+    powlib.check_copy_file("runtests.py", appbase)
+        
     powlib.replace_string_in_file(
         os.path.join(appbase + "/" + "simple_server.py"),
         "#POWAPPNAME",
@@ -163,10 +165,6 @@ def gen_app(appname, appdir, force=False):
         appname
     )
     
-   
-    powlib.check_copy_file("pow_console.py", appbase)
-    powlib.check_copy_file("runtests.py", appbase)
-
     #
     # copy the initial db's
     #

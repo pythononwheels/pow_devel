@@ -81,7 +81,7 @@ def render_controller(name, force, prefix_path="./"):
     
     print " creating controller: ", name 
     # add the auto generated warning to the outputfile
-    infile = open (os.path.normpath(PARTS_DIR + "controller_stub.py"), "r")
+    infile = open (os.path.normpath(PARTS_DIR + "controller_stub.part"), "r")
     ostr = infile.read()
     infile.close()
     
@@ -124,7 +124,7 @@ def render_test_stub (controllername, classname, prefix_path ="./" ):
     """ renders the basic testcase for a PoW Controller """
     #print "rendering Testcase for:", classname, " ", " ", modelname
     print " -- generating TestCase...",
-    infile = open( os.path.normpath( PARTS_DIR +  "test_controller_stub.py"), "r")
+    infile = open( os.path.normpath( PARTS_DIR +  "test_controller_stub.part"), "r")
     instr = infile.read()
     infile.close()
     test_name = "Test" + classname + ".py"
