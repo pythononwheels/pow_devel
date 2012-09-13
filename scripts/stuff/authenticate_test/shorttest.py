@@ -50,8 +50,9 @@ class Protector(object):
             if not k.startswith("__"):
                 func = getattr(instance, k)
                 print "callable",callable(func)
-                print "wrap", k
-                setattr(instance.__class__, k, mkwrapper(v))
+                if callable(func):
+                    print "wrap", k
+                    setattr(instance.__class__, k, mkwrapper(v))
     
     def wrap_class(self, cls):
         #print self.__dict__
@@ -62,8 +63,9 @@ class Protector(object):
             if not k.startswith("__"):
                 func = getattr(cls, k)
                 print "callable",callable(func)
-                print "wrap", k
-                setattr(cls, k, mkwrapper(v))
+                if callable(func):
+                    print "wrap", k
+                    setattr(cls, k, mkwrapper(v))
     
     def mkwrapper(f):
         def wrapper(*args, **kwargs):
@@ -80,8 +82,8 @@ if __name__ == "__main__":
     foo = Foo(3)
     p = Protector()
     #p.wrap(foo)
-    #p.wrap_class(Foo)
-    p.wrap_old(Foo)
+    p.wrap_class(Foo)
+    #p.wrap_old(Foo)
     print foo.bar(4)
     print "----------------------"
     # 
