@@ -117,7 +117,11 @@ class #MODELCLASS(Base):
         func = eval(funcname)
         func(val)
         return
-
+    
+    def get_column_type(self, column):
+        curr_type = type(self.__table__.columns[column].type)
+        return curr_type
+    
     def getColumns(self):
         """ return a list of this model's columns """
         rlist = []

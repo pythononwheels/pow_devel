@@ -35,9 +35,12 @@ def paginate( list, powdict=None, per_page=3 ):
     link = "#"
     # first link
     ostr += '<li><a href="/post/blog?page=1">First</a></li>' 
-    # Prev Link
-    link = "/post/blog?page=%s" % (str(page-1))
-    ostr += '<li><a href="%s">&laquo;</a></li>' % (link)           
+    if page > 1:
+        # Prev Link
+        link = "/post/blog?page=%s" % (str(page-1))
+        ostr += '<li><a href="%s">&laquo;</a></li>' % (link)           
+    else:
+        ostr += '<li><a href="#">&laquo;</a></li>'
     # paginators
     print " -- paginator: len(list) > len(list)/per_page : ", str(len(list)), "  >   ", str(len(list)/per_page)
     
@@ -69,9 +72,11 @@ def paginate( list, powdict=None, per_page=3 ):
     
     
     # next link
-    link = "/post/blog?page=%s" % (str(page+1))
-    ostr += '<li><a href="%s">&raquo;</a></li>' % (link)
-    
+    if page < real_end:
+        link = "/post/blog?page=%s" % (str(page+1))
+        ostr += '<li><a href="%s">&raquo;</a></li>' % (link)
+    else:
+        ostr += '<li><a href="#">&raquo;</a></li>'
    
     # Last link
     link = "/post/blog?page=%s" % (str(real_end))
@@ -90,8 +95,14 @@ def css_include_tag(base, cssfile):
     return (os.path.normpath(os.path.join(base,cssfile)))
 
 def test_helper():
+    """
+    Just a test to see in html inline if helpers work.
+    """
     return "test_helper() worked"
 
+def get_user_logonname(powdict):
+    return "hans"
+    
 def generate_hidden(model, hidden_list=None):
     ostr = ""
     if hidden_list == None:
@@ -102,6 +113,17 @@ def generate_hidden(model, hidden_list=None):
     
     return ostr
 
+def is_logged_on(powdict):
+    """
+    returns True if a user is logged on.
+    This is semantically equivalent to session.user != 0
+    Session user is in powdict
+    """
+    session = powdict["SESSION"]
+    if session['user.id'] == 0:
+        return False
+    else:
+        return True    
 
 def smart_list(model, colname = None):
     """
@@ -132,9 +154,9 @@ def smart_form_input( modelname = None, colname = None, value = "", accept = "",
     """
         Generates the right form input for the given model.column type.
         Basically:
-            default, text and VArchar   =>      <input type=text
-            binary and blob             =>      <input type=file
-            Text                        =>      <textarea
+            default, text and VArchar   =>      <input type=text>
+            binary and blob             =>      <input type=file>
+            Text                        =>      <textarea>
             
     """
     
@@ -234,14 +256,24 @@ def link_to(link, text, options_dict=None):
     linkto = linkto_first + linkto_last
     return linkto
 
+def start_javascript():
+    ostr = """
+     <script type="text/javascript">
+    """
+    return ostr
+
+def end_javascript():
+    ostr = """
+     </script>
+    """
+    return ostr
 def enable_ajax():
     return enable_xml_http_post()
     
 def enable_xml_http_post():
     script = """
     <!-- Start AJAX Test, see: http://stackoverflow.com/questions/336866/how-to-implement-a-minimal-server-for-ajax-in-python -->
-     <script type="text/javascript">
-
+    
     function xml_http_post(url, data, callback) {
         var req = false;
         try {
@@ -273,17 +305,6 @@ def enable_xml_http_post():
         req.send(data);
     }
 
-    function send_request() {
-        var data=document.getElementById('ajax_input').value;           
-        xml_http_post("/app/ajax", data, handle_response)
-    }
-
-    function handle_response(req) {
-        var elem = document.getElementById('test_result')
-        elem.innerHTML =  req.responseText
-    }
-
-    </script> <!-- End AJAX Test -->
     """
     
     return script
