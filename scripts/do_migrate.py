@@ -253,7 +253,7 @@ def do_erase():
         print " -- deleted: ", filename_pyc
 
     #  delete the app.db.version entry
-    ver.delete(ver.id)
+    ver.delete()
     
     maxversion -= 1
     print "setting new currentversion to: " + str(currversion)

@@ -28,10 +28,10 @@ class Migration(BaseMigration):
         
     def up(self):
         #
-        # define you relation here:
-        # example for your models:
-        # MODEL1.has_many(powlib.pluralize(string.lower("MODEL2")))
-        # MODEL2.belongs_to(string.lower("MODEL1"))
+        # define you relation here. The following is a generated example 
+        # for your models:
+        #       #MODEL1.has_many("#MODEL2_has_many")
+        #       #MODEL2.belongs_to("#MODEL1")
         
     def down(self):
         # define cleanups for your relation heren.

@@ -12,6 +12,7 @@ import sys
 import datetime
 from sqlalchemy.orm import mapper
 from sqlalchemy import *
+import string
 
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./lib" )))
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./models" )))
@@ -57,7 +58,17 @@ def main():
             if migration_name.startswith("rel_") and ( migration_name.count("_") == 2 ):
                 # if the name is of the form: rel_name1_name2 it is assumed that you want to
                 # generate a relation between name1 and name2. So the mig is especially customized for that.
+                print "assuming you create a relation migration"
+                start = None
+                end = None 
+                start = datetime.datetime.now()
                 render_relation_migration(migration_name)
+                end = datetime.datetime.now()
+                duration = None
+                duration = end - start 
+
+                print "generated_migration in("+ str(duration) +")"
+                return
         else:
             parser.error("You must at least specify an migration name by giving -n <name>.")
             return
@@ -74,7 +85,7 @@ def main():
     
     
     start = None
-    end = None
+    end = None 
     start = datetime.datetime.now()
     
     if options.job != "None":
@@ -123,13 +134,23 @@ def transform_col_defs( ostr, col_defs ):
 
 
 def render_relation_migration(name, PARTS_DIR = powlib.PARTS_DIR, prefix_dir = "./"):
-    # 
-    splittxt = name.split(name, "_")
+    """
+    renders a migration for a relational link between tables / models
+    Typical examples are A.has_many(B) and B.belongs_to(A)
+    these are then added to the newly genrated migration file.
+    
+    @params name    =>  name of the migration. Must be rel_modelA_modelB
+    @param PARTS_DIR:   A relative path to the stubs/partials dir from the executing script.
+    @param prefix_dir:  A prefix path to be added to migrations making prefix_dir/migrations the target dir
+    """
+    splittxt = string.split(name, "_")
     model1 = splittxt[1]
     model2 = splittxt[2]
     
-    print "generate_migration: relation migration for models: " + model1 +  " & " + model2
-    print "following naming convention rel_model1_model2"
+    print " -- generate_migration: relation migration for models: " + model1 +  " & " + model2
+    print " -- following the naming convention rel_model1_model2"
+    print " -- you gave:", name
+    
     # add the auto generated (but can be safely edited) warning to the outputfile
     infile = open (os.path.normpath(PARTS_DIR + "/db_relation_migration_stub.part"), "r")
     ostr = infile.read()
@@ -144,14 +165,19 @@ def render_relation_migration(name, PARTS_DIR = powlib.PARTS_DIR, prefix_dir = "
     
     # add the example migration for this models
     ostr = ostr.replace( "#MODEL1", model1)
+    ostr = ostr.replace( "#MODEL2_has_many", powlib.pluralize(model2))
     ostr = ostr.replace( "#MODEL2", model2)
     
-    
+    filename = write_migration( name, 
+                                "relation between %s and %s" % (model1, model2),
+                                prefix_dir,
+                                ostr
+                                )
     print  " -- created file:" + str(os.path.normpath(os.path.join(prefix_dir,filename)))
     return
     
 
-def write_migration(name, model, comment, prefix_dir, ostr):
+def write_migration(name, comment, prefix_dir, ostr):
     """
     Writes a new migration.
     It generates a new version, constructs the correct filename and path
@@ -237,7 +263,7 @@ def render_migration(name, model, comment, col_defs = "", PARTS_DIR = powlib.PAR
     print "generate_migration: " + name + " for model: " + model
 
     # really write the migration now
-    write_migration(name, model, comment, prefix_dir, ostr)
+    write_migration(name, comment, prefix_dir, ostr)
 
     return
 

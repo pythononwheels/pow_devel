@@ -228,9 +228,9 @@ class #MODELCLASS(Base):
         self.session.merge(self)
         self.session.commit()
 
-    def delete(self, id):
-        """ deletes the record with id = id """
-        s = delete(self.__table__, self.__table__.columns.id==id)
+    def delete(self):
+        """ deletes this record """
+        s = delete(self.__table__, self.__table__.columns.id==self.id)
         self.session.execute(s)
         self.session.commit()
 
@@ -244,12 +244,13 @@ class #MODELCLASS(Base):
                 Creates the foreign_key for the table relation. 
                 Remark: The old table is dropped. 
             input parameters:    
-                rel_table (type:string) Name of the table to be related.
+                @param rel_table (type:string) Name of the table to be related.
+                                                lowercase, singular. comment.belongs_to("post")
         """
         #
         # Now creating the foreign_key
         #
-        fkey = powlib.pluralize(rel_table) + ".id"
+        fkey = powlib.pluralize(string.lower(rel_table)) + ".id"
         if fkey in self.__table__.foreign_keys:
             err_msg = " already has a belongs_to relation to table "
             print "Table ", self.__table__.name, err_msg , rel_table
@@ -275,13 +276,17 @@ class #MODELCLASS(Base):
         return
 
     def release_has_many(self,rel_table, prefix_path="./"):
-        
+        """
+            removes a has_many relation between self and the given model.
+            @param  rel_table:  string, 
+        """
         if rel_table in self.properties_list:
-            # remove raltion from the living model
+            # remove relation from the instance
             self.properties_list.remove(rel_table)
             print "properties_list after release_has_many:" , self.properties_list 
             mod = powlib.load_module( "generate_model" )
-            # daclaration of render_model: def render_model(modelname, force, comment, properties=None, nomig=False):
+            # daclaration of render_model: 
+            #   def render_model(modelname, force, comment, properties=None, nomig=False):
             # remove relation from the persistent model
             mod.render_model( str.lower(self.modelname), True, "", prefix_path, str(self.properties_list) )
         else:
@@ -293,9 +298,10 @@ class #MODELCLASS(Base):
         """ Description:
                 Creates the relation property in the model class text definition.                  
             input parameters:    
-                rel_table     (type:string) Name of the table to be related.
+                rel_table     (type:string) pluralized Name of the table to be related.
                 prefix_path   (type:string) The new model code will be generated into
                                             prefix_path/models/ 
+                example:        Post.has_many("comments")
         """
         ### has_many property is the plural form of the modelname
         #modelname = string.capitalize(powlib.singularize(rel_table))
