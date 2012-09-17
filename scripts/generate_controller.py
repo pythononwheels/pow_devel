@@ -63,7 +63,7 @@ def main():
             # the first argument is the model. (representing -m arg1)
             options.model = args[0]
         else:
-            parser.error("You must at least specify an appname by giving -n <name>.")
+            parser.error("You must at least specify an controllername by giving -n <name>.")
             
     controller_name = options.model
     render_controller(controller_name, options.force)

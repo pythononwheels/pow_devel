@@ -41,6 +41,12 @@ def main():
                         dest="force", 
                         help="forces overrides of existing files",
                         default=False)
+    parser.add_option(  "-t", "--template",  
+                        action="store",  
+                        type="string",    
+                        dest="template", 
+                        help="forces a special mako template for these views",
+                        default="${context.get(\"template\")}")
 
     start = None
     end = None
@@ -56,7 +62,7 @@ def main():
         else:
             parser.error("You must at least specify an appname by giving -n <name>.")
     
-    scaffold(options.model, options.force)
+    scaffold(options.model, options.force, options.template)
     end = datetime.datetime.now()
     duration = None
     duration = end - start 
@@ -65,6 +71,7 @@ def main():
     
 def scaffold(   modelname, 
                 force, 
+                template = "/${context.get('template')}",
                 actions = ["list", "show","create", "edit", "message"], 
                 PARTS_DIR = powlib.PARTS_DIR, 
                 prefix_dir = "./" ):
@@ -87,7 +94,10 @@ def scaffold(   modelname,
         infile.close() 
         
         # add a creation date
-        ostr = ostr.replace("#DATE", str(datetime.date.today()) )        
+        ostr = ostr.replace("#DATE", str(datetime.date.today()) )    
+        
+        #set the template
+        ostr = ostr.replace("#TEMPLATE", template )  
        
         
         # Add the _stub part1 content to the newly generated file. 
