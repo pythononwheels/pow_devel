@@ -12,11 +12,12 @@ import shutil
 
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./stubs/lib" )))
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./stubs/models/powmodels" )))
+sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./scripts" )))
 for p in sys.path:
     print p
     
 
-import pow_devel.powlib
+import powlib
 import generate_model
     
 def main():
@@ -153,9 +154,9 @@ def gen_app(appname, appdir, force=False):
     powlib.check_copy_file("scripts/generate_migration.py", appbase)
     powlib.check_copy_file("scripts/generate_scaffold.py", appbase)
     powlib.check_copy_file("scripts/simple_server.py", appbase)
-    powlib.check_copy_file("scripts/pow_router.wsgi", appbase)
-    powlib.check_copy_file("pow_console.py", appbase)
-    powlib.check_copy_file("runtests.py", appbase)
+    powlib.check_copy_file("pow_router.wsgi", appbase)
+    powlib.check_copy_file("scripts/pow_console.py", appbase)
+    powlib.check_copy_file("scripts/runtests.py", appbase)
         
     powlib.replace_string_in_file(
         os.path.join(appbase + "/" + "simple_server.py"),
