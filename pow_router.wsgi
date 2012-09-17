@@ -60,8 +60,8 @@ def powapp_simple_server(environ, start_response):
     # instead of setting it hard-coded here
     status = '200 OK'
     response_headers = [
-        #('Content-type', 'text/html; charset=utf-8')
-        ('Content-type', 'text/html')
+        ('Content-type', 'text/html'),
+        ('Cache-Control', 'no-store,no-cache,must-revalidate,max-age=0')
         ]
 
     
