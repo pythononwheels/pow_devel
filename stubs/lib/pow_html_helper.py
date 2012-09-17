@@ -26,6 +26,7 @@ def paginate( list, powdict=None, per_page=3 ):
                 see demo blog Post_blog.tmpl for an example
     """
     max_paginators = 4
+    # se if we come from a page already.
     if powdict["REQ_PARAMETERS"].has_key("page"):
         page = int(powdict["REQ_PARAMETERS"]["page"])
     else:
@@ -47,17 +48,18 @@ def paginate( list, powdict=None, per_page=3 ):
     rest = len(list) % per_page
     if rest > 0:
         # if there is a rest while dividing the list / page (INTEGER) then there is one more page
-        # with less then per_page entries that must be added. So +2 in this case
+        # with less then per_page entries that must be added. So + 1 in this case
         real_end =  (len(list)/per_page)+1
     else:
         real_end = (len(list)/per_page)
         
-    if page <= max_paginators/2:
+    if page <= max_paginators:
         # make forward pagination page, page +1, page+2  ... and so on
-        start = page
+        start = 1
         end = page + max_paginators + 1 
     else:
-         # make pagination forward and backwards aroiund page: page-2, page-1 page, page+1, page+2 (for example)
+         # make pagination forward and backwards around page: page-2, page-1 page, 
+         # page+1, page+2 (for example)
          start = (page - (max_paginators/2))
          end =  (page + (max_paginators/2))+1
          

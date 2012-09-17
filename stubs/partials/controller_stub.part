@@ -54,7 +54,7 @@ class #CONTROLLERNAMEController(BaseController):
         self.model.__init__()
         dict = powdict["REQ_PARAMETERS"]
         for key in dict:
-            self.model.get_column_type(key)
+            curr_type = self.model.get_column_type(key)
             if curr_type == type(sqlalchemy.types.BLOB()) or curr_type == type(sqlalchemy.types.BINARY()):
                 ofiledir  = os.path.normpath("./public/img/")
                 print "key: ", key
@@ -91,8 +91,7 @@ class #CONTROLLERNAMEController(BaseController):
         #print self.model
         dict = powdict["REQ_PARAMETERS"]
         for key in dict:
-            statement = 'type(self.model.__table__.columns["%s"].type)' % (key)
-            curr_type = eval(statement)
+            curr_type = self.model.get_column_type(key)
             if curr_type == type(sqlalchemy.types.BLOB()) or curr_type == type(sqlalchemy.types.BINARY()):
                 ofiledir  = os.path.normpath("./public/img/")
                 print "key: ", key

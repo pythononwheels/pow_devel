@@ -46,7 +46,7 @@ def main():
                         type="string",    
                         dest="template", 
                         help="forces a special mako template for these views",
-                        default="${context.get(\"template\")}")
+                        default="/${context.get('template')}")
 
     start = None
     end = None

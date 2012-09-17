@@ -38,7 +38,7 @@ class Shell(code.InteractiveConsole):
             importlist = []
             for elem in os.listdir(os.path.normpath(path)):
                 fname, fext = os.path.splitext(elem)
-                if fext in include_ext_list:
+                if fext in include_ext_list and not fname.startswith("__"):
                     statement = "from "+ str(fname)+ " import " + str(fname)
                     print "executing statement: ", statement
                     #exec statement
