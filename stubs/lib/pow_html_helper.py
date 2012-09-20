@@ -196,7 +196,7 @@ def smart_form_input( modelname = None, colname = None, value = "", accept = "",
     
     return input_first
     
-def create_link(model, text=None):
+def create_link(text=None):
     if text == None:
         retstr = '<i class="icon-plus"></i>&nbsp;<a href="./create">create</a>' 
     else:

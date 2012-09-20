@@ -1,7 +1,8 @@
 
 
-<h2>Create ${model.__table__} Form:</h2>
+
     <div class="niceform">
+    	<h2>Create ${model.__table__} Form:</h2>
         <fieldset>
           <form action="./new" method="post" accept-charset="utf-8" class="well" enctype="multipart/form-data">
             %for colname in model.getColumns():
