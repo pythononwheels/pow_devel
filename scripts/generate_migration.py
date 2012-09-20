@@ -30,7 +30,6 @@ def main():
     """ Executes the render methods to generate a migration according to the given options """
     parser = OptionParser()
     mode= MODE_CREATE
-    parser.add_option("-n", "--name",  action="store", type="string", dest="name", help="creates migration with name = <name>. Only for jobs", default ="None")
     parser.add_option("-m", "--model",  action="store", type="string", dest="model", help="defines the model for this migration.", default ="None")
     parser.add_option("-c", "--comment",  action="store", type="string", dest="comment", help="defines a comment for this migration.", default ="No Comment")
     parser.add_option("-j", "--job",  action="store", type="string", dest="job", help="creates migration job, e.g for backups, restores etc.",default="None")
@@ -42,7 +41,10 @@ def main():
     # column definition format: NAME TYPE opt1 opt2 optn, NAME2 TYPE2 opt1 opt2 optn ....
     # 
     
-
+    start = None
+    end = None 
+    start = datetime.datetime.now()
+    
     (options, args) = parser.parse_args()
     #print options
     #TODO: reorg and optimize the section below. more structure.
@@ -53,16 +55,13 @@ def main():
             # if no option flag (like -m) is given, it is assumed 
             #that the first argument is the model. (representing -m arg1)
             options.model = args[0]
-            migration_name = options.model
-            migration_model = options.model
-            if migration_name.startswith("rel_") and ( migration_name.count("_") == 2 ):
+            
+            if options.model.startswith("rel_") and ( options.model.count("_") == 2 ):
                 # if the name is of the form: rel_name1_name2 it is assumed that you want to
                 # generate a relation between name1 and name2. So the mig is especially customized for that.
                 print "assuming you create a relation migration"
-                start = None
-                end = None 
-                start = datetime.datetime.now()
-                render_relation_migration(migration_name)
+                
+                render_relation_migration(options.model)
                 end = datetime.datetime.now()
                 duration = None
                 duration = end - start 
@@ -74,30 +73,17 @@ def main():
             return
     else:
         # we got a model or job.
-        if options.name == "None":
-            # if no specifoc name for the migration is given, take the modelname
-            migration_name = options.model
+        if options.job != "None":
+            render_migration_job(options.job)
         else:
-            # else take the specific name
-            migration_name = options.name
-            #migration_name = options.name
-        migration_model = options.model
-    
-    
-    start = None
-    end = None 
-    start = datetime.datetime.now()
-    
-    if options.job != "None":
-        render_migration_job(options.job)
-    else:
-        render_migration(migration_name, migration_model,options.comment, options.col_defs)
+            render_migration(migration_model,options.comment, options.col_defs)
     
     end = datetime.datetime.now()
     duration = None
     duration = end - start 
     
     print "generated_migration in("+ str(duration) +")"
+    print
     return
 
 def transform_col_defs( ostr, col_defs ):
@@ -229,10 +215,9 @@ def update_app_and_version(maxversion, filename, version, comment=""):
     app_versions.update()
     return 
     
-def render_migration(name, model, comment, col_defs = "", PARTS_DIR = powlib.PARTS_DIR, prefix_dir = "./"):
+def render_migration( modelname="NO_MODEL_GIVEN", comment="", col_defs = "", PARTS_DIR = powlib.PARTS_DIR, prefix_dir = "./"):
     """
     Renders a database migration file.
-    @param name:        A Name for the migration. By default the modelname is taken.
     @param model:       Modelname for this migration (typically defining the model's base table)
     @param comment:     a Comment for this migration
     @param col_defs:    pre defined column definitions of the form NAME TYPE OPTIONS, NAME1 TYPE1 OPTIONS1, ...
@@ -247,7 +232,7 @@ def render_migration(name, model, comment, col_defs = "", PARTS_DIR = powlib.PAR
 
     # Replace the TAGGED Placeholders with the actual values
     ostr = ostr.replace( "#DATE", str(datetime.date.today() ))
-    pluralname = powlib.plural(model)
+    pluralname = powlib.plural(modelname)
     ostr = ostr.replace("#TABLENAME", pluralname)
     
     #
@@ -260,10 +245,10 @@ def render_migration(name, model, comment, col_defs = "", PARTS_DIR = powlib.PAR
     version = get_new_version()
     verstring = powlib.version_to_string(version)
 
-    print "generate_migration: " + name + " for model: " + model
+    print "generate_migration for model: " + modelname
 
     # really write the migration now
-    write_migration(name, comment, prefix_dir, ostr)
+    write_migration(modelname, comment, prefix_dir, ostr)
 
     return
 

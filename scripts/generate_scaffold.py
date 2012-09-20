@@ -67,10 +67,11 @@ def main():
     duration = None
     duration = end - start 
     print "generated_scaffold in("+ str(duration) +")"
+    print
     return
     
-def scaffold(   modelname, 
-                force, 
+def scaffold(   modelname="NO_MODELNAME_GIVEN", 
+                force=False,
                 template = "/${context.get('template')}",
                 actions = ["list", "show","create", "edit", "message"], 
                 PARTS_DIR = powlib.PARTS_DIR, 
@@ -84,7 +85,7 @@ def scaffold(   modelname,
         @param prefix_dir: prefix_path for the generated views. /(default=./ which results in ./views) 
     """
      
-    print "generating scaffold for model: " + str(modelname)
+    print "generate_scaffold for model: " + str(modelname)
     
     for act in actions:
        

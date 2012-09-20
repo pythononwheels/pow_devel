@@ -55,10 +55,11 @@ def main():
     duration = None
     duration = end - start 
     print "generated_model in("+ str(duration) +")"
+    print ""
     return
 
     
-def render_model(modelname, force, comment, prefix_path="./", properties=None, PARTS_DIR = powlib.PARTS_DIR ):
+def render_model(modelname = "NO_MODELNAME_GIVEN", force = False, comment="", prefix_path="./", properties=None, parts_dir= powlib.PARTS_DIR ):
     """
     Renders the generated Model Class in prefix_path/models.
     Renders the according BaseModel in prefix_path/models/basemodels.
@@ -75,7 +76,7 @@ def render_model(modelname, force, comment, prefix_path="./", properties=None, P
         print filename + " (exists)...(Use -f to force override)"
     else:
         infile = None
-        infile = open (os.path.normpath( PARTS_DIR +  "model_stub.part"), "r")
+        infile = open (os.path.normpath( parts_dir +  "model_stub.part"), "r")
         ostr = ""
         ostr = ostr + infile.read()
         infile.close()
