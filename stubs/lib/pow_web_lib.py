@@ -11,7 +11,7 @@ import urllib
 import re
 import cgi
 import string
-
+import sqlalchemy.types
 import powlib
 
 #
@@ -28,7 +28,38 @@ def log( instr ):
     print >> environ['wsgi.errors'], instr
     return
 
-def get_form_binary_data( form_fieldname, dict, ofiledir ):
+def set_text_or_binary_form_data(model, powdict, bin_data_path="/public/img"):
+    """
+        iterates over all parameters in the current requests and updates
+        the according model fields.
+        Handles text and binary data coorectly. Text is directly stored in the
+        models attribute. For binary data the file is stored in the given path and 
+        the link is stored in the model attribute.
+        If binary_data is expected depends on the models.attribute type, NOT on the submitted
+        data.
+        @param model:            the Model
+        @param powdict:          the powdict of the current request
+        @param bin_data_path:    path where the binary data will be stored.
+        @returns:                the updated model. You need to call model.update 
+                                 (or model.create) afterwards, yourself to really update the db.
+    """ 
+    dict = powdict["REQ_PARAMETERS"]
+    for key in dict:
+        curr_type = model.get_column_type(key)
+        if curr_type == type(sqlalchemy.types.BLOB()) or curr_type == type(sqlalchemy.types.BINARY()):
+            #ofiledir  = os.path.normpath(bin_data_path)
+            #print "key: ", key
+            if form_has_binary_data( key, dict, bin_data_path):
+                # if form contains file data AND file could be written, update model
+                model.set(key, dict[key].filename )   
+            else:
+                # dont update model
+                print " ##### ________>>>>>>>   BINARY DATA but couldnt update model"
+        else:
+            model.set(key, dict[key])
+    return model
+
+def form_has_binary_data( form_fieldname, dict, ofiledir ):
     """ safely checks if a given form field has binary data attached to it
         and safes it into the given filename. Often used for html form <input type="file" ...>
     """

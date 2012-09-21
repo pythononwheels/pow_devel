@@ -52,20 +52,7 @@ class #CONTROLLERNAMEController(BaseController):
     def new( self, powdict ):
         """ Standard PoW action to create a new record """  
         self.model.__init__()
-        dict = powdict["REQ_PARAMETERS"]
-        for key in dict:
-            curr_type = self.model.get_column_type(key)
-            if curr_type == type(sqlalchemy.types.BLOB()) or curr_type == type(sqlalchemy.types.BINARY()):
-                ofiledir  = os.path.normpath("./public/img/")
-                print "key: ", key
-                if pow_web_lib.get_form_binary_data( key, dict, ofiledir):
-                    # if form contains file data AND file could be written, update model
-                    self.model.set(key, dict[key].filename )   
-                else:
-                    # dont update model
-                    print " ##### ________>>>>>>>   BINARY DATA but couldnt update model"
-            else:
-                self.model.set(key, dict[key])
+        self.model = pow_web_lib.set_text_or_binary_form_data(self.model, powdict, "./public/img/")
         
         self.model.create()
         powdict["FLASHTEXT"] ="Yep, record successfully created."
@@ -74,12 +61,12 @@ class #CONTROLLERNAMEController(BaseController):
         return self.render(special_tmpl=spectmpl , model=self.model, powdict=powdict)
     
     def create( self, powdict):
-        """ Standard PoW action. renders the create record view #CONTROLLERNAME_create.tmpl"""
+        """ Standard PoW action. renders the create record view Post_create.tmpl"""
         self.model.__init__()
         return self.render(model=self.model, powdict=powdict)
     
     def edit( self, powdict ):
-        """ Standard PoW action to. renders the edit record view #CONTROLLERNAME_edit.tmpl"""
+        """ Standard PoW action to. renders the edit record view Post_edit.tmpl"""
         res = self.model.find_by("id",powdict["REQ_PARAMETERS"]["id"])
         return self.render(model=res, powdict=powdict)
     
@@ -89,20 +76,8 @@ class #CONTROLLERNAMEController(BaseController):
         #print powdict["REQ_PARAMETERS"]
         self.model = self.model.find_by("id",powdict["REQ_PARAMETERS"]["id"])
         #print self.model
-        dict = powdict["REQ_PARAMETERS"]
-        for key in dict:
-            curr_type = self.model.get_column_type(key)
-            if curr_type == type(sqlalchemy.types.BLOB()) or curr_type == type(sqlalchemy.types.BINARY()):
-                ofiledir  = os.path.normpath("./public/img/")
-                print "key: ", key
-                if pow_web_lib.get_form_binary_data( key, dict, ofiledir):
-                    # if form contains file data AND file could be written, update model
-                    self.model.set(key, dict[key].filename )   
-                else:
-                    # dont update model
-                    print " ##### -_______>>>>>>>   BINARY DATA but couldnt update model"
-            else:
-                self.model.set(key, dict[key])
+        self.model = pow_web_lib.set_text_or_binary_form_data(self.model, powdict, "./public/img/")
+        
         self.model.update()
         powdict["FLASHTEXT"] ="Yep, record successfully updated."
         powdict["FLASHTYPE"] ="success"
