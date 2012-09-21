@@ -90,7 +90,7 @@ class #CONTROLLERNAMEController(BaseController):
         """ Standard PoW action to delete the record with id=id"""
         self.model.__init__()
         self.model = self.model.find_by("id",powdict["REQ_PARAMETERS"]["id"])
-        self.model.delete(self.model.get_id())
+        self.model.delete()
         powdict["FLASHTEXT"] ="Yep, record successfully deleted."
         powdict["FLASHTYPE"] ="success"
         spectmpl = string.capitalize(self.model.modelname) + "_message.tmpl"
