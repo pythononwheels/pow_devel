@@ -59,6 +59,10 @@ def set_text_or_binary_form_data(model, powdict, bin_data_path="/public/img"):
             model.set(key, dict[key])
     return model
 
+
+def get_form_binary_data( form_fieldname, dict, ofiledir ):
+    return form_has_binary_data( form_fieldname, dict, ofiledir )
+
 def form_has_binary_data( form_fieldname, dict, ofiledir ):
     """ safely checks if a given form field has binary data attached to it
         and safes it into the given filename. Often used for html form <input type="file" ...>

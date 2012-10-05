@@ -85,7 +85,7 @@ class #MODELCLASS(Base):
         mstr = 'self.session.query(Base" + self.__class__.__name__ +")'
         for att,val in att_list: 
             mstr += '.filter(" + str(att) + "=val)"'
-        print " -- ", mstr
+        #print " -- ", mstr
         res= eval(mstr)
         #res.__init__()
         return res
@@ -94,14 +94,14 @@ class #MODELCLASS(Base):
     def find_all(self):
         """ return all records of this model found in the DB """
         mstr = "self.session.query(Base" + self.__class__.__name__ + ").all()"
-        print " -- ", mstr
+        #print " -- ", mstr
         res= eval(mstr)
         return res
     
     def find_first(self):
         """ return the first Model record found in the DB """
         mstr = "self.session.query(Base" + self.__class__.__name__ + ").first()"
-        print " -- ", mstr
+        #print " -- ", mstr
         res= eval(mstr)
         return res   
     
