@@ -3,7 +3,7 @@
 ##  http://code.activestate.com/recipes/355319/ (r1)
 ## eased my life. Console and the  recipe above ;)
 import code
-import sys,os, string
+import sys,os, string, pdb
 try:
   import pyreadline as readline
 except ImportError:

@@ -9,7 +9,7 @@
 
 
 from wsgiref.simple_server import make_server
-
+import logging
 import string
 import os.path
 import sys
@@ -26,18 +26,10 @@ sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(_
 import urllib
 import pow
 import powlib
+from powlib import _log
 import pow_web_lib
 from webob import Request, Response
 
-# one of: 
-#    NORMAL  = print almost nothing
-#    INFO    = more Info printed (But especially NOT the whole WSGI environment)
-#    DEBUG   = All Info printed, including WSGI environment. (LONG)
-MODE_NORMAL = 1
-MODE_INFO = 2
-MODE_DEBUG = 3
-
-MODE = MODE_NORMAL
 
 def powapp_simple_server(environ, start_response):
     
@@ -74,7 +66,7 @@ def powapp_simple_server(environ, start_response):
         
         }
     environ["SCRIPT_FILENAME"] = __file__
-    powdict["POW_APP_NAME"] = "#POWAPPNAME"
+    powdict["POW_APP_NAME"] = "atest"
     powdict["POW_APP_URL"] = "www.pythononwheels.org"
     powdict["POW_APP_DIR"] = environ.get("pow.wsgi_dir")
     powdict["ERROR_INFO"] = "NONE"
@@ -95,19 +87,17 @@ def powapp_simple_server(environ, start_response):
     #session.save()
     
     powdict["SESSION"] = session
-    print "-- request info:"
-    print "-- webob: req.content_type: ", req.content_type
-    print "-- webob: ", req.method
+    #print "-- request info:"
+    #print "-- webob: req.content_type: ", req.content_type
+    if pow.logging["LOG_LEVEL"] == "DEBUG":
+        print "-- webob: ", req.method
     
     powdict["REQ_CONTENT_TYPE"] = req.content_type
     powdict["REQ_PARAMETERS"] = req.params
     powdict["REQ_BODY"] = req.body
     
-    print powdict["REQ_PARAMETERS"]
     
-    if MODE > MODE_NORMAL: 
-        print plist
-        print plist.keys()
+      
     plist = req.params
     
     #if plist.has_key("image"):
@@ -135,7 +125,6 @@ def powapp_simple_server(environ, start_response):
     environ["PATH_INFO"] = pinfo
     
     if found_static == True:
-        print "-- Static REQUEST --------------------------------------------------------- "
         non_binary = [".css", ".html",".js",".tmpl"]
         ctype = "UNINITIALIZED"
         ftype = os.path.splitext(pinfo)[1]
@@ -159,18 +148,19 @@ def powapp_simple_server(environ, start_response):
             ctype= "application/x-javascript"
         else:
             ctype = "text/html"
-        #print "file type is: ", ftype, " responding with type-> ", ctype
+        #_log( "file type is: %s responding with type-> %s , %s" %(ftype,ctype,pinfo), "DEBUG") 
         response_headers = [
             ('Content-type', ctype )
         ]
         start_response(status, response_headers)
         return [ostr]
         
-    print "-- Dynamic REQUEST --------------------------------------------------------- "
-    if MODE > MODE_INFO :
-        print "Request: " + environ["REQUEST_METHOD"] + " " + environ["PATH_INFO"] + " " + environ["SERVER_PROTOCOL"] + " " + environ["QUERY_STRING"]    
-        print "PATH_INFO before: ", pinfo_before
-        print "PATH_INFO after: ", pinfo
+    _log( "-- Dynamic REQUEST --------------------------------------------------------- ", "INFO")
+    _log( "Parameters = %s " % (powdict["REQ_PARAMETERS"]), "DEBUG")
+    _log( "Request: %s " % (environ["REQUEST_METHOD"]) , "DEBUG" ) 
+    _log( "Query String: %s" % ( environ["QUERY_STRING"]) , "DEBUG" ) 
+    _log( "PATH_INFO before: %s " % (pinfo_before), "DEBUG")
+    _log( "PATH_INFO after: %s " % (pinfo) , "DEBUG" )
         
     if not session.has_key('counter'):
         session['counter'] = 0
@@ -192,10 +182,10 @@ def powapp_simple_server(environ, start_response):
     #
     # get controller and action
     #
-    print "environ[\"PATH_INFO\"] = ", environ["PATH_INFO"]
+    
     pathdict = pow_web_lib.get_controller_and_action(environ["PATH_INFO"])
     #(controller,action) = os.path.split(pathinfo)
-    print "(controller,action) -> ", pathdict
+    _log ("(controller,action) -> %s" % (pathdict), "INFO" )
     controller = powdict["CONTROLLER"] = pathdict["controller"]
     action = powdict["ACTION"] = pathdict["action"]
     powdict["PATHDICT"]=pathdict
@@ -204,16 +194,16 @@ def powapp_simple_server(environ, start_response):
     if controller == "":
         defroute = pow.routes["default"]
         #defroute = powlib.readconfig("pow.cfg","routes","default")
-        print pow_web_lib.get_controller_and_action(defroute)
+        _log("pow_web_lib.get_controller_and_action: %s" %(pow_web_lib.get_controller_and_action(defroute)), "INFO")
         pathdict = pow_web_lib.get_controller_and_action(defroute)
         #(controller,action) = os.path.split(pathinfo)
-        print "(controller,action) -> ", pathdict
+        _log ("(controller,action) -> %s" % (pathdict), "INFO" )
         controller = powdict["CONTROLLER"] = pathdict["controller"]
         action = powdict["ACTION"] = pathdict["action"]
         powdict["PATHDICT"]=pathdict
 
-        print "Using the DEFAULT_ROUTE: ",
-        print "(controller,action) -> ", pathdict
+        _log( "Using the DEFAULT_ROUTE: ", "INFO" )
+        _log ("(controller,action) -> %s" % (pathdict), "INFO" )
     # get rid of the first / in front of the controller. string[1:] returns the string from char1 to len(string)
     controller = string.capitalize(controller) + "Controller"
     
@@ -229,13 +219,13 @@ def powapp_simple_server(environ, start_response):
     if aclass.is_locked(action):
         # locked, so set the action to the given redirection and execute that instead.
         # TODO: Could be aditionally coupled with a flashtext.
-        print "Action: ", action, " locked."
+        _log( "Action: %s is locked." % (action), "INFO")
         cont, action = aclass.get_redirection_if_locked(action)
         if  cont != None and cont != "None" and cont != "":
             controller = string.capitalize(cont) + "Controller"
             aclass = powlib.load_class(controller,controller)
         aclass.setCurrentAction(action)
-        print " -- Redirecting to: ", action
+        _log( " -- Redirecting to: %s" % (action), "INFO")
     #
     # Now really execute the action
     #
@@ -260,14 +250,23 @@ session_opts = {
 
 #application= SessionMiddleware(powapp, key='mysession', secret='randomsecret')
 #application = SessionMiddleware(powapp, session_opts)
-
+ 
 
 if __name__ == "__main__":
+    #
+    # setup logging
+    #
+    
+    logging.basicConfig( format=pow.logging["FORMAT"],
+                         filename=pow.logging["LOGFILE"], 
+                         filemode=pow.logging["LOGFILE_MODE"], 
+                         level=getattr( logging, pow.logging["LOG_LEVEL"]) )
+        
     application = pow_web_lib.Middleware(SessionMiddleware(powapp_simple_server, session_opts))
     port = pow.global_conf["PORT"]
-    httpd = make_server('', int(port), application)
+    httpd = make_server('', int(port), application )
     print "Serving HTTP on port %s..." % (port)
-
+    
     # Respond to requests until process is killed
     httpd.serve_forever()
 

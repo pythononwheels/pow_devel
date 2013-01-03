@@ -59,7 +59,12 @@ def main():
     return
 
     
-def render_model(modelname = "NO_MODELNAME_GIVEN", force = False, comment="", prefix_path="./", properties=None, parts_dir= powlib.PARTS_DIR ):
+def render_model(modelname = "NO_MODELNAME_GIVEN", 
+                 force = False, 
+                 comment="", 
+                 prefix_path="./", 
+                 properties=None, 
+                 parts_dir= powlib.PARTS_DIR ):
     """
     Renders the generated Model Class in prefix_path/models.
     Renders the according BaseModel in prefix_path/models/basemodels.
@@ -85,7 +90,8 @@ def render_model(modelname = "NO_MODELNAME_GIVEN", force = False, comment="", pr
         ostr = ostr.replace("#MODELCLASS", classname)
         
         ostr = ostr.replace("#BASECLASS", baseclassname)
-   
+        ostr = ostr.replace( "#MODELTABLE",  powlib.plural(string.lower(modelname))  ) 
+        
         # write the output file to disk
         ofile = open( filename , "w+") 
         print " --", filename + " (created)"
@@ -103,7 +109,7 @@ def render_model(modelname = "NO_MODELNAME_GIVEN", force = False, comment="", pr
         ostr = infile.read()
         infile.close()
         # Add Class declaration and Table relation for sqlalchemy
-        ostr = ostr.replace("#MODELCLASS",  baseclassname )
+        ostr = ostr.replace( "#BASECLASSNAME",  baseclassname )
         ostr = ostr.replace( "#MODELTABLE",  powlib.plural(string.lower(modelname))  ) 
          
         ### adding the properties list
@@ -111,7 +117,7 @@ def render_model(modelname = "NO_MODELNAME_GIVEN", force = False, comment="", pr
         if properties == None:
             ostr = ostr.replace("#PROPERTIES_LIST",  "[]")
         else:
-            ostr = ostr.replace("#PROPERTIES_LIST",  "[" + properties + "]")
+            ostr = ostr.replace("#PROPERTIES_LIST",  properties )
             
         ostr = ostr.replace("#MODELNAME" , string.capitalize(modelname) )        
             

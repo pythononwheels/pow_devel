@@ -1,12 +1,12 @@
-
     <div class="niceform">
-        <h2>Edit ${model.__table__} Form:</h2>
+    	##${dir(model)}
+        <h2>Edit ${model.get_name()} Form:</h2>
         <fieldset>
           <form action="./update" method="post" accept-charset="utf-8" class="well" enctype="multipart/form-data">
-            %for colname in model.getColumns():
+            %for colname in model.get_column_names():
             <p>
             %if colname not in hidden_list:
-                <%  context.write( helper.smart_form_input(model.modelname, colname, model.get(colname) ) ) %>
+                <%  context.write( helper.smart_form_input(model.get_name(), colname, model.get(colname) ) ) %>
                 
             %else:
                 <input type="hidden" name="${colname}" value="${model.get(colname)}"/> 
@@ -21,5 +21,5 @@
         
     </div> <!-- Niceform -->
     <p>
-        <i class="icon-fast-backward"></i><a href="/${model.modelname}/list">Back to the list</a>
+        <i class="icon-fast-backward"></i><a href="/${model.get_name()}/list">Back to the list</a>
     </p>

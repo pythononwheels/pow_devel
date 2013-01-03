@@ -88,7 +88,7 @@ def do_job(options, filename, method):
     #print filename
     # load the class
     mig = powlib.load_class( filename, "Migration" )
-    # execute the up() method
+    # execute the given method
     if method != "None":
         eval("mig." + str(method) + "()")
     elif options.direction == "up":

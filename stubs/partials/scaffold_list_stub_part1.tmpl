@@ -1,17 +1,17 @@
-This is the scaffolded template for the <strong>${model.getName()}.list</strong> action <br>
+This is the scaffolded template for the <strong>${model.get_name()}.list</strong> action <br>
 
 ${helper.flash_message(powdict)}
 
 
 <!-- <i class="icon-plus"></i>&nbsp; -->
-<a class="btn btn-success"  href="./create">Create a new ${model.getName()}</a>
+<a class="btn btn-success"  href="./create">Create a new ${model.get_name()}</a>
 <br>
 <div class="row">
 		<div class="span12">
 			<table class="table" width="100%">
 				<thead>
 					<tr>
-						%for colname in model.getColumns():
+						%for colname in model.get_column_names():
 							%if colname not in hidden_list:	
 								<th>${colname}</th>
 							%endif
@@ -21,7 +21,7 @@ ${helper.flash_message(powdict)}
 				<tbody>
 					% for elem in list:
 						<tr>
-							%for colname in elem.getColumns():
+							%for colname in elem.get_column_names():
 								%if colname not in hidden_list:
 									<td><% context.write(helper.smart_list(elem, colname)) %></td>
 								%endif
@@ -37,5 +37,5 @@ ${helper.flash_message(powdict)}
 		</div> <!-- span 12 -->
 </div>
 <p>
-    <i class="icon-fast-backward"></i>&nbsp;<a href="/${model.modelname}/list">Back to the list</a>
+    <i class="icon-fast-backward"></i>&nbsp;<a href="/${model.get_name()}/list">Back to the list</a>
 </p>

@@ -6,9 +6,19 @@
 # unless you force it with the -f or --force option
 # 
 
-# date created: 	#DATE
+# date created:     #DATE
+
 import sys,os
 
+from sqlalchemy import Table
+from sqlalchemy import MetaData
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import orm
+import sys,os,datetime
+import string
+import types
+import urllib
+from PowBaseObject import PowBaseObject
 
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../lib" )))
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./basemodels" )))
@@ -16,16 +26,23 @@ sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(_
 import powlib
 import #BASECLASS
 
-class #MODELCLASS(#BASECLASS.#BASECLASS):
+Base = declarative_base()
+pbo = PowBaseObject()
+
+class #MODELCLASS(Base,#BASECLASS.#BASECLASS):
     #
     # PoW Model Class
     # Empty by default since the standard functionality 
     # is in the BaseModel Class. BaseClasses might be overwritten so
-    # add your Methods in this class only. 
+    # add your Methods in this class only.
+    __metadata__ = pbo.getMetaData() 
+    __table__ = Table('#MODELTABLE', __metadata__, autoload=True, autoload_replace = True, extend_existing=True)
     
     def __init__(self):
-        """ Initializes the #MODELCLASS model. By default just calls super init()  """
-        super(#MODELCLASS,self).__init__()
-        return
-    
-    
+        """ Initializes the #MODELCLASS model.  """
+        self.pbo = PowBaseObject()
+        self.session = self.pbo.getSession()
+        self.t = self.__table__
+        #bp = BasePost.BasePost(self)
+        self.set_parent(self)
+        self.generate_accessor_methods()

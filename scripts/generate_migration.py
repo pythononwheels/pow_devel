@@ -37,6 +37,10 @@ def main():
                         type="string", dest="col_defs", 
                         help="column definitions.Form: d- 'NAME TYPE opt, NAME2 TYPE2 opt2' Name, type, options (all SQLAlchemy style).",
                         default="None")
+    parser.add_option("-t", "--table",  action="store", 
+                        type="string", dest="table", 
+                        help="set table for migration_job",
+                        default="None")
     #
     # column definition format: NAME TYPE opt1 opt2 optn, NAME2 TYPE2 opt1 opt2 optn ....
     # 
@@ -74,7 +78,7 @@ def main():
     else:
         # we got a model or job.
         if options.job != "None":
-            render_migration_job(options.job)
+            render_migration_job(options.job, options.table)
         else:
             render_migration(migration_model,options.comment, options.col_defs)
     
@@ -253,14 +257,24 @@ def render_migration( modelname="NO_MODEL_GIVEN", comment="", col_defs = "", PAR
     return
 
 
-def render_migration_job(filename):
+def render_migration_job(filename, tablename):
         """create a 'job' or task that has to be done on the database.
         typical examples are backup/restore scripts for dbs or tables or loading data into a table.
         These migrations are not part of the migration versioning system.
         They can be executed with python migrate.py -f <migrationname>
+        You can set the table by adding the -t <tablename> option
         """
         print " -- creating migration job:"
-        powlib.check_copy_file(os.path.normpath( PARTS_DIR + "migration_job.part"), "./migrations/" + filename + "_migration.py")
+        infile = open(os.path.normpath( PARTS_DIR + "migration_job.part"), "r")
+        instr = infile.read()
+        infile.close()
+        instr = instr.replace("#JOBNAME", filename+ "_migration.py")
+        if tablename != "None":
+            instr = instr.replace("#TABLENAME", tablename)
+        ofile = open(os.path.normpath( "./migrations/" + filename + "_migration.py"), "w")
+        ofile.write(instr)
+        ofile.close()
+        #powlib.check_copy_file(os.path.normpath( PARTS_DIR + "migration_job.part"), "./migrations/" + filename + "_migration.py")
         return
         
 
