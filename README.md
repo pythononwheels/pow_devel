@@ -4,7 +4,7 @@ PythonOnWheels.
 ![pow_logo_sketch!](http://www.pythononwheels.org/static/img/pow_logo_ideas_sketch_1.png "pow_logo_sketch")
 ![pow_logo_sv!](http://www.pythononwheels.org/static/img/pow_logo_idea_1_extra_small.png "pow_logo_svg")
 
-     ```the plain,simple and easy to use rapid web App generator framework for python.```
+     the plain,simple and easy to use rapid web App generator framework for python.
 
 Based on reliable python 'standards' and frameworks
 -------------------------
@@ -42,17 +42,17 @@ Key Features:
 
 Philosophy
 -------------------
-The clear Focus was to develop a Framework in between the existing Big Ones,
-which have quite some learning curve to get started and
-the small, very low level ones, which make it neccessary to develop
-quite a lot yourself.
-There are good examples of both in the python community and there are 
-good reasons for those frameworks to exists as well.
+    The clear Focus was to develop a Framework in between the existing Big Ones,
+    which have quite some learning curve to get started and
+    the small, very low level ones, which make it neccessary to develop
+    quite a lot yourself.
+    There are good examples of both in the python community and there are 
+    good reasons for those frameworks to exists as well.
 
-BUT 
-PythonOnWheels' main objective is to make you focus on your webapp
-and not on the Framework or the low-level coding. 
-If you dont recognize you use it, it's just the way it's ment to be.
+    BUT 
+    PythonOnWheels' main objective is to make you focus on your webapp
+    and not on the Framework or the low-level coding. 
+    If you dont recognize you use it, it's just the way it's ment to be.
 
 
 Just give it a try. Any comments are very welcome. mail to khz@pythononwheels.org
