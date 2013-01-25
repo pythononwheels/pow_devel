@@ -40,7 +40,7 @@ Key Features:
 	    * full environment on your laptop, mac or pc
 	    * just untar/unzip in any dir and run!
 
-Philosophy
+Focus
 -------------------
     The clear Focus was to develop a Framework in between the existing Big Ones,
     which have quite some learning curve to get started and
@@ -49,7 +49,8 @@ Philosophy
     There are good examples of both in the python community and there are 
     good reasons for those frameworks to exists as well.
 
-    BUT 
+Philosophy
+------------------- 
     PythonOnWheels' main objective is to make you focus on your webapp
     and not on the Framework or the low-level coding. 
     If you dont recognize you use it, it's just the way it's ment to be.
