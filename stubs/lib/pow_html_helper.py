@@ -7,7 +7,7 @@ import string
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../config" )))
 import pow
 import sqlalchemy.types
-
+from powlib import _log
 
 def paginate( list, powdict=None, per_page=3 ):
     """ returns a tupel ( t1 , 2 )
@@ -94,7 +94,18 @@ def paginate( list, powdict=None, per_page=3 ):
     #return ostr
     
 def css_include_tag(base, cssfile):
-    return (os.path.normpath(os.path.join(base,cssfile)))
+    return css_tag(base,cssfile)
+
+def css_tag(cssfile, base="/static/css/"):
+    retstr="<link href="%s%s" rel="stylesheet">" % (base, cssfile)
+    return retstr
+
+def std_css_tag():
+    retstr="""
+    <link href="/static/css/bs/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bs/bootstrap-responsive.css" rel="stylesheet">
+    """
+    return retstr    
 
 def test_helper():
     """
@@ -138,17 +149,16 @@ def smart_list(model, colname = None):
             integer, Text               =>      plain text
     """
     ostr = ""
-    print " ##### ----------------> in smart list"
     curr_type = type(model.__table__.columns[colname].type)
     if curr_type == type(sqlalchemy.types.BLOB()) or curr_type == type(sqlalchemy.types.BINARY()):
-        print "smart_list: curr_type: BINARY"
         if string.lower(colname) == pow.global_conf["DEFAULT_IMAGE_NAME"]:
             if model.get(colname) != None and model.get(colname) != "None":
                 ostr += '<img src="%s" alt="%s"/>' % ( pow.global_conf["STD_BINARY_PATH"] + model.get(colname),  model.get(colname))
+                _log( "smart_list: curr_type: BINARY file is: %s " % (model.get(colname)), "DEBUG")
             else:
                 ostr += "None"
     else:
-        print "smart_list: curr_type: ", curr_type
+        #_log( "smart_list: curr_type: %s" % (curr_type), "DEBUG" )
         ostr += model.get(colname)
     return ostr
     

@@ -18,6 +18,7 @@ sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(_
 sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "../controllers" )) )
 import pow
 import db
+import logging
 
 hidden_list = ["created", "last_updated", "group", "user", "id", "password"]
 linesep = "\n"
@@ -25,6 +26,14 @@ newline = linesep
 tab = "    "
 MAX_SYSOUT = 50
 PARTS_DIR = "./stubs/partials/"
+
+def _log(logstr, level="INFO"):
+    if pow.logging["LOG_LEVEL"] == level:
+        logging.info(logstr)
+    else:
+        pass
+    return
+    
 #
 # (pattern, search, replace) regex english plural rules tuple
 # taken from : http://www.daniweb.com/software-development/python/threads/70647
@@ -45,6 +54,7 @@ rule_tuple = (
     ('(qu|[^aeiou])y$', 'y$', 'ies'),
     ('$', '$', 's')
     )
+
 
 def uc(instr):
     #encoding = readconfig("pow.cfg","global","DEFAULT_ENCODING")
@@ -327,7 +337,8 @@ def get_db_conn_str():
     #print "reading db_conn_str for environment: " + env
 
     #dic = read_db_config( "db.cfg", env )
-    dic = eval("db."+env)
+    #dic = eval("db."+env)
+    dic = getattr(db, env)
     # debug printing
     #for key in dic:
     #    print key + " : " + dic[key]

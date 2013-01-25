@@ -27,3 +27,13 @@ global_conf = {
 routes = {
      "default"  :   "/app/welcome" 
 }
+
+logging = {
+      "LOGFILE"                 :   "log.txt",
+      "LOGFILE_MODE"            :   "w",
+      # log_level = DEBUG or INFO
+      "LOG_LEVEL"               :   "DEBUG",
+      # see: http://docs.python.org/howto/logging.html#logging-basic-tutorial
+      "FORMAT"                  :   "%(asctime)s %(message)s",
+      "SQLALCHEMY_LOGGING"      :   "True"
+}
