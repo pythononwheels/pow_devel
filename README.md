@@ -1,5 +1,4 @@
-PythonOnWheels. ![pow_logo_sv!](http://www.pythononwheels.org/static/img/pow_logo_idea_1_extra_small.png "pow_logo_svg")
-
+PythonOnWheels. 
 ===================
 ![pow_logo_sv!](http://www.pythononwheels.org/static/img/pow_logo_idea_1_extra_small.png "pow_logo_svg")
 
