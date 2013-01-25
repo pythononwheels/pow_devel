@@ -2,7 +2,7 @@ PythonOnWheels.
 ===================
 ![pow_logo_sv!](http://www.pythononwheels.org/static/img/pow_logo_idea_1_extra_small.png "pow_logo_svg")
 
-     the plain,simple and easy to use rapid web App generator framework for python.
+     The plain, simple and easy to use rapid web App generator framework for python.
 
 Based on reliable python 'standards' and frameworks
 -------------------------
