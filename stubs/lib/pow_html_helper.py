@@ -97,7 +97,7 @@ def css_include_tag(base, cssfile):
     return css_tag(base,cssfile)
 
 def css_tag(cssfile, base="/static/css/"):
-    retstr="<link href="%s%s" rel="stylesheet">" % (base, cssfile)
+    retstr="<link href=\"%s%s\" rel=\"stylesheet\">" % (base, cssfile)
     return retstr
 
 def std_css_tag():
