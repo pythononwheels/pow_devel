@@ -250,7 +250,7 @@ class TestHandler(BaseHandler):
           <p class="lead"> 
             You can also specify more repcisely which method to call for each HTTP VERB using the
             <code>dispatch</code> parameter.
-            <p class="lead">Direct route example:</p>
+            
 <pre><code class="language-python">
 @app.add_route("/test/([0-9]+)*", dispatch={"get" : "test"})
 class TestHandler(BaseHandler):
@@ -259,8 +259,8 @@ class TestHandler(BaseHandler):
         self.write(index)
 </code></pre>
             <br>
-        <code>@app.add_route("/test/([0-9]+)*", dispatch={"get" : "test"})
-                  </code>to add a direct route: matching the <code>regular expression</code> : 
+        Use: <code>@app.add_route("/test/([0-9]+)*", dispatch={"get" : "test"})
+      </code>to add a direct route: matching the <code>regular expression</code> : 
                   <code>/test/([0-9+])</code> 
                   and then calling the given method of your handler class. The regex 
                   group <code>([0-9+])</code> will be handed as the first parameter to <code>test(self, index)</code>
