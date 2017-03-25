@@ -1,8 +1,11 @@
 
 ![Pow logo](http://www.pythononwheels.org/static/images/pow_logo_300.png)
 
-# This is the new pow. And it's really good. 
+
+# This is the new pow 2017. And it's really good. 
 (ok I might be biased ;)
+
+## Release date: 4.4.2017!
 
 But it's by far the best PoW (concept and implementation) ever !
 Ever, ever, ever!!
@@ -62,5 +65,9 @@ The current <master> version in this repo is fully working except for:
             'name': {'type': 'string', 'maxlength' : 35},
             'last': {'type': 'number'}
         }
+
+
+## Check: [The PythonOnWheels Homepage](https://www.pythononwheels.org)
+
 
     
