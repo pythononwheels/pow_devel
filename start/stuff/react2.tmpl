@@ -1,0 +1,38 @@
+{% extends "base.tmpl" %}
+  {% block content %}
+    <div id="content" class="container">
+      <!-- you can put your code in an "external" js file -->
+      <!--script type="text/babel" src="{{ static_url("mycode.js") }}"></script-->
+      
+      <!-- or just into the template -->
+      <script type="text/babel">
+        
+          // from: https://facebook.github.io/react/docs/tutorial.html
+          var CommentBox = React.createClass({
+            render: function() {
+              return (
+                <div className="commentBox">
+                  Hello, world! I am a CommentBox.
+                </div>
+              );
+            }
+          });
+
+
+          ReactDOM.render(
+            <CommentBox />,
+            document.getElementById("content")
+          );
+      </script>
+    </div>
+  {% end %}
+
+{% block js %}
+  <!-- your additional js here-->
+  <script src="{{ static_url("js/react.js") }}"></script>
+  <script src="{{ static_url("js/react-dom.js") }}"></script>
+  <script src="{{ static_url("js/remarkable.min.js") }}"></script>
+  <script src="https://unpkg.com/babel-core@5.8.38/browser.min.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+
+{% end %}

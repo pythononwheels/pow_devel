@@ -1,0 +1,39 @@
+{% extends "base.tmpl" %}
+
+{% block css %}
+<!-- your additional css here-->
+
+{% end %}
+
+{% block content %}
+<!-- you main content for this page here -->
+<div class="container">
+    <div class="row centered">
+      <div class="col-sm-2">
+          &nbsp;
+      </div>
+      <div class="col-sm-8">
+          <p>&nbsp;</p>
+           <img src='{{static_url("images/404.png")}}' class="img-responsive center-block" />
+           <p>&nbsp;</p>
+           <p class="lead text-xs-center">
+            <span class="text-capitalize font-weight-bold">You tried to access:</span> {{url}}
+           </p>
+           <hr>
+           <p class="lead text-xs-center text-capitalize">
+            You might want to go <a href="/">Home</a>
+           </p>
+      </div>
+      <div class="col-sm-2">
+         &nbsp;
+      </div>
+     
+    </div>
+</div>
+
+
+{% end %}
+
+{% block js %}
+  
+{% end %}

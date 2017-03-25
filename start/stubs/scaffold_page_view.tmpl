@@ -1,0 +1,14 @@
+{% extends "base.tmpl" %}
+
+{% block content %}
+    <!-- Begin page content -->
+    <div class="container">
+            <h1> this is the {{handler_name}}:  page </h1>
+            <p> showing the data:</p>
+            <ul>
+                {% <for></for> elem in data %}
+                    <li>{{data}}</li>
+                {% end %}
+            </ul>
+    </div>
+{% end %}

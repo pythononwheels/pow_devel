@@ -1,194 +1,195 @@
-#!python
-#  pow app generator
-#  Generates the PoW Application.
-#  options are:
-#   see: python generate_app.py --help
+#
+# generate app
+#
 
-
-from optparse import OptionParser
-import sqlite3, sys, os, datetime
-import string
+import argparse
+import tornado.template
+import os
+import sys
+import datetime
 import shutil
+from pathlib import Path
+import uuid
 
-sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./stubs/lib" )))
-sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./stubs/models/powmodels" )))
-sys.path.append( os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)), "./scripts" )))
-for p in sys.path:
-    print p
-    
-
-import powlib
-import generate_model
-    
-def main():
-    """ 
-        Executes the render methods to generate a conroller and basic 
-        tests according to the given options 
+def camel_case(name):
     """
-    parser = OptionParser()
-    #mode = MODE_CREATE
-    parser.add_option("-n", "--name",  action="store", type="string", dest="name", 
-        help="set the app name", default ="None")
-    parser.add_option("-d", "--directory",  action="store", type="string", dest="directory", 
-        help="app base dir", default ="./")
-    parser.add_option("-f", "--force",  action="store_true",  dest="force", 
-        help="forces overrides of existing app", default="False")
-
-    (options, args) = parser.parse_args()
-    #print options, args
-    if options.name == "None":
-        if len(args) > 0:
-            # if no option flag (like -n) is given, it is assumed that 
-            # the first argument is the appname. (representing -n arg1)
-            options.name = args[0]
-        else:
-            parser.error("You must at least specify an appname by giving -n <name>.")
-    
-    appdir = options.directory
-    appname = options.name
-    force = options.force
-    start = None
-    end = None
-    start = datetime.datetime.now()
-
-    gen_app(appname, appdir, force)
-
-    end = datetime.datetime.now()
-    duration = None
-    duration = end - start
-    print " -- generated_app in("+ str(duration) +")"
-
-def render_db_config( appname, appbase ):
-    """ Creates the db.cfg file for this application and puts it in appname/config/db.cfg"""
-    
-    infile = open("./stubs/config/db.py")
-    instr = infile.read()
-    infile.close()
-    instr = instr.replace("please_rename_the_development_db", appname + "_devel")
-    instr = instr.replace("please_rename_the_test_db", appname + "_test")
-    instr = instr.replace("please_rename_the_production_db", appname + "_prod")
-    ofile = open( os.path.normpath(appbase + "/config/db.py"), "w" )
-    ofile.write(instr)
-    ofile.close()
- 
-
-    
-def gen_app(appname, appdir, force=False):
-    """ Generates the complete App Filesystem Structure for Non-GAE Apps.
-        Filesystem action like file and dir creation, copy fiels etc. NO DB action in this function 
+        converts this_is_new to ThisIsNew
+        and this in This
     """
-    
-    appname = str(appname)
-    appname = str.strip(appname)
-    appname = str.lower(appname)
-    print " -- generating app:", appname
+    return "".join([x.capitalize() for x in name.split("_")])
 
-    powlib.check_create_dir(appdir + appname)
-    appbase = os.path.abspath(os.path.normpath(appdir +"/"+ appname + "/"))
-    #print appbase
-    # defines the subdirts to be created. Form { dir : subdirs }
-    subdirs = [ {"config" : [] },  
-                        {"db" : [] },
-                        {"lib" : [] },
-                        {"migrations" : [] },
-                        {"models" : ["basemodels"] },
-                        {"controllers" : [] },
-                        {"public" : ["img", "img/bs", "ico", "css", "css/bs", "js", "js/bs", "doc"] },
-                        {"stubs" : ["partials"] },
-                        {"views" : ["layouts"] },
-                        {"tests" : ["models", "controllers", "integration", "fixtures"] },
-                        {"ext" : ["auth", "validate"] }                        
-                        ]
-    for elem in subdirs:
-        for key in elem:
-            subdir = os.path.join(appbase,str(key))
-            powlib.check_create_dir( subdir)
-            for subs in elem[key]:
-                powlib.check_create_dir( os.path.join(subdir,str(subs)))
-    
-    #
-    # copy the files in subdirs. Form ( from, to )
-    #
-    deep_copy_list = [  ("stubs/config", "config"),  
-                        ("stubs/lib", "lib"), 
-                        ("stubs", "stubs"),
-                        ("stubs/migrations","migrations"),
-                        ("stubs/partials","stubs/partials"),
-                        ("stubs/public/doc","/public/doc"),
-                        ("stubs/public/ico","/public/ico"),
-                        ("stubs/public/img","/public/img"),
-                        ("stubs/public/img/bs","/public/img/bs"),
-                        ("stubs/public/css","/public/css"),
-                        ("stubs/public/css/bs","/public/css/bs"),
-                        ("stubs/public/js", "public/js"),
-                        ("stubs/public/js/bs", "public/js/bs"),
-                        ("stubs/lib", "lib"), 
-                        ("stubs/controllers", "controllers"),
-                        ("stubs/views", "views"),
-                        ("stubs/views/layouts", "views/layouts"),
-                        ("stubs/ext/auth", "ext/auth"),
-                        ("stubs/ext/validate", "ext/validate"),
-                        ]
-                        
-    print " -- copying files ..."
-    exclude_patterns = [".pyc", ".pyo", ".DS_STORE"]
-    exclude_files = [ "db.cfg" ]
-    for source_dir, dest_dir in deep_copy_list:
-        for source_file in os.listdir(source_dir):
-            fname, fext = os.path.splitext(source_file)
-            if not fext in exclude_patterns and not source_file in exclude_files:
-                powlib.check_copy_file(
-                    os.path.join(source_dir,source_file),
-                    os.path.join(appbase+"/"+dest_dir,source_file)
+def copy_or_pump(src, dest, copy=False, appname=None, sqlite_path=None, 
+            dbtype=None, cookie_secret=str(uuid.uuid4())):
+    """
+        just copy files or pump them through the template engine before copying to out dir
+    """
+    if not copy:
+        print("    pumping to ----->", dest )
+        f = open(src, "r", encoding="utf-8")
+        instr = f.read()
+        f.close()
+        template = tornado.template.Template(instr)
+        out = template.generate(  
+                dbtype=dbtype,
+                appname=appname,
+                sqlite_path=sqlite_path,
+                current_date=datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
+                cookie_secret=cookie_secret
                 )
+        f = open(dest, "w", encoding="utf-8")
+        f.write(out.decode("unicode_escape"))
+        f.close()
+    else:
+        # just copy file
+        print("    copying to ----->", dest )
+        print("    .. :" + str(shutil.copy( src, dest )))
+
+def generate_app(appname, force=False, outpath="..", dbtype="sql", testmode=False):
+    """ generates a small model with the given modelname
+        also sets the right db and table settings and further boilerplate configuration.
+        Template engine = tornado.templates
+    """    
+    print("  generating app:" + str(appname))
+    #base=os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+    base=os.path.normpath(outpath)
+
+    print("  base: " + base)
+    root=os.path.join(os.path.dirname(os.path.abspath(__file__)), "start")
+    print("  root: " +  root)
+    
+    outdir=os.path.normpath(os.path.join(base, appname))
+    #outdir = os.path.join(outdir, appname)
+    print("  ..creating in: " +  outdir)
+    
+    os.makedirs(outdir, exist_ok=True)
+    template_exts = [".py", ".tmpl"]
+    # excluded from template processing.
+    exclude_dirs = ["static", "stubs", "views"]
+    skip_dirs= ["stuff", "werkzeug"]
+    exclude_for_testmode=["alembic.ini", "sql.sqlite", "tiny.db", "config.py"]
+    #
+    # walk the root (/pow/start)
+    # and copy (for .py and .tmpl pump thru template engine first)
+    # all files to the new app dir (appname)
+    # 
+    sqlite_path=os.path.normpath(os.path.abspath(os.path.join(outdir, "sql.db")))
+    if sys.platform =="win32":
+        sqlite_path=sqlite_path.replace("\\", "\\\\")
+    elif sys.platform in ["linux", "darwin"] :
+        sqlite_path="/"+sqlite_path
+    else:
+        sqlite_path="Unknown system platform (" + sys.platform + "). Please set sqlite connection string yourself"
+    
+    cookie_secret = uuid.uuid4()
+
+    for dirname, dirs, files in os.walk(root):
+        for f in files:
+            if ((not testmode) or (not f in exclude_for_testmode)):
+                print(" processing: " + f)
+                print("  in: " + dirname)
+                path=Path(dirname)
+                index = path.parts.index("start")
+                opath = Path(outdir).joinpath(*path.parts[index+1:])
+                print("  out: " + str(opath))
+                filename, file_extension = os.path.splitext(f)
+                print("  filename: " + filename)
+                print("  file ext: " + file_extension)
+                print("  path.parts-1: " + path.parts[-1])
+                if path.parts[-1] in skip_dirs:
+                    print("skipped: " + str(f))    
+                else:
+                    if not os.path.exists(str(opath)):
+                        os.makedirs(str(opath), exist_ok=True)
+                    if (file_extension in template_exts) and not (path.parts[-1] in exclude_dirs):
+                            copy_or_pump(
+                                os.path.normpath(os.path.join(dirname, f)),
+                                os.path.normpath(os.path.join(str(opath), f)),
+                                copy=False,
+                                appname=appname,
+                                sqlite_path=sqlite_path,
+                                dbtype=dbtype,
+                                cookie_secret=str(cookie_secret)
+                                )
+                    else:
+                        copy_or_pump(
+                            os.path.normpath(os.path.join(dirname, f)),
+                            os.path.normpath(os.path.join(str(opath), f)),
+                            copy=True,
+                            appname=appname,
+                            sqlite_path=sqlite_path,
+                            dbtype=dbtype,
+                            cookie_secret=str(cookie_secret)
+                            )
             else:
-                print " excluded:.EXCL", source_file
-                continue
-                
-    #
-    # copy the generator files
-    #
-    powlib.check_copy_file("scripts/generate_model.py", appbase)
-    powlib.check_copy_file("scripts/do_migrate.py", appbase)
-    powlib.check_copy_file("scripts/generate_controller.py", appbase)
-    powlib.check_copy_file("scripts/generate_migration.py", appbase)
-    powlib.check_copy_file("scripts/generate_scaffold.py", appbase)
-    powlib.check_copy_file("scripts/generate_mvc.py", appbase)
-    powlib.check_copy_file("scripts/simple_server.py", appbase)
-    powlib.check_copy_file("pow_router.wsgi", appbase)
-    powlib.check_copy_file("scripts/pow_console.py", appbase)
-    powlib.check_copy_file("scripts/runtests.py", appbase)
-        
-    powlib.replace_string_in_file(
-        os.path.join(appbase + "/" + "simple_server.py"),
-        "#POWAPPNAME",
-        appname
-    )
-    
-    powlib.replace_string_in_file(
-        os.path.join(appbase + "/" + "pow_router.wsgi"),
-        "#POWAPPNAME",
-        appname
-    )
-    
-    #
-    # copy the initial db's
-    #
-    appdb = "stubs/db/app_db_including_app_versions_small.db"
-    powlib.check_copy_file(appdb, os.path.normpath(appbase + "/db/" + appname + "_prod.db") )
-    powlib.check_copy_file(appdb, os.path.normpath(appbase + "/db/" + appname + "_test.db") )
-    powlib.check_copy_file(appdb, os.path.normpath(appbase + "/db/" + appname + "_devel.db") )
-    #powlib.check_copy_file("stubs/db/empty_app.db", os.path.normpath(appbase + "/db/app.db") )
-    
-    #
-    # initiate the db.cfg file
-    #
-    render_db_config(appname, appbase)
-    
-    generate_model.render_model("App", False, "System class containing the App Base Informations", appname)
-    generate_model.render_model("Version", False, "System class containing the Versions", appname)
-    return
-    
-    
+                print("skipped in testmode: " + str(f))
+    print(" DB path: " + sqlite_path)
+
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('-n', "--name", action="store", 
+        dest="name", help='-n appname',
+        required=True)
+
+    parser.add_argument('-p', "--path", action="store", 
+        dest="path", help='-p out_path', default="..",
+        required=False)
+
+    parser.add_argument("-f", "--force", 
+        action="store_true", dest="force", default=False,
+        help="force overwriting if invoked on existing app [default]")
+
+    #
+    # db type
+    # 
+    parser.add_argument('-d', "--db", action="store", 
+                        dest="db", help='-d which_db (mongo || tiny || peewee_sqlite) default = tiny',
+                        default="sql", required=False)
+    
+    parser.add_argument('-t', "--test-mode", action="store_true", 
+                        dest="testmode", help='enables testmode (for internal pow development only.)',
+                        default=False, required=False)
+    
+    args = parser.parse_args()
+    #
+    # show some args
+    #
+    #print("all args: ", args)
+    #print(dir(args))
+    #print("pluralized model name: ", pluralize(args.name))
+   
+
+    print(50*"-")
+    print(" Generating your app: " + args.name)
+    print(50*"-")
+    generate_app(args.name, args.force, args.path, dbtype=args.db, testmode=args.testmode)
+
+    base = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+    apppath = os.path.normpath(os.path.join(base, args.name))
+    tpath = os.path.normpath(os.path.join(base, "migrations"))
+    # make the versions dir
+    os.makedirs(os.path.normpath(os.path.join(tpath, "versions")), exist_ok=True)
+
+    print()
+    print(50*"-")
+    print(" Successfully created your application")
+    print()
+    print(50*"-")
+    print("Your next steps: ")
+    print("  1. [Optional step: create a virtualenv in you app directory]")
+    print("      virtualenv " + apppath )
+    print("  2. cd to you new apps directory: " + apppath)
+    print("     [optionally activate the virtualenv]")
+    print("  3. pip install -r requirements.txt")
+    print("  4. run: python server.py")
+    print("  5. open your browser with http://localhost:8080")
+    print(50*"-")
+    print()
+    print(50*"-")
+    print("Remark:")
+    print("  You can move your app subdir to wherever you want")
+    print("  as long as its on the pythonpath")
+    print("  Windows: set PYTHONPATH=%PYTHONPATH%;"+base)
+    print("  linux/osx: export PYTHONPATH=$PYTHONPATH:"+base)
+    print(50*"-")
+    print()

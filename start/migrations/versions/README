@@ -1,0 +1,4 @@
+#
+# Generic single-database configuration.
+# all your migration versions will be added to this directory
+#
