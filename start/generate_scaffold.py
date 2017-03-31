@@ -20,7 +20,7 @@ def camel_case(name):
     """
     return "".join([x.capitalize() for x in name.split("_")])
 
-def generate_scaffold(handler_name, appname={{appname}}):
+def generate_scaffold(handler_name, appname=None):
     """ 
         generates the plain html view scaffolding
     """
@@ -33,7 +33,7 @@ def generate_scaffold(handler_name, appname={{appname}}):
     #rest_methods = ["show", "list", "page",  "new", "create", "edit", "update", "destroy"]
 
     views = ["show", "list", "page"]
-
+    
     for view in views:
         template_file =  "scaffold_" + view + "_view.tmpl"
         ofile_name = os.path.join(cfg.templates["view_path"], handler_name + "_" + view ".tmpl")
@@ -62,4 +62,4 @@ if __name__ == "__main__":
     #print("all args: ", args)
     #print(dir(args))
     print("CamelCased handler name: ", camel_case(args.name))
-    generate_handler(args.name, args.db, appname="testapp")
+    generate_handler(args.name, args.db, appname={{appname}})

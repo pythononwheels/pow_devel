@@ -45,6 +45,7 @@ def generate_model(model_name=None, model_type=None, appname=None):
         ofile.close()
     except:
         return False
+    print("... generated: " + ofile.name)
     return True
 
 

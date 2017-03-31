@@ -19,32 +19,36 @@ def camel_case(name):
     return "".join([x.capitalize() for x in name.split("_")])
 
 def copy_or_pump(src, dest, copy=False, appname=None, sqlite_path=None, 
-            dbtype=None, cookie_secret=str(uuid.uuid4())):
+            dbtype=None, cookie_secret=str(uuid.uuid4()), force=False):
     """
         just copy files or pump them through the template engine before copying to out dir
     """
-    if not copy:
-        print("    pumping to ----->", dest )
-        f = open(src, "r", encoding="utf-8")
-        instr = f.read()
-        f.close()
-        template = tornado.template.Template(instr)
-        out = template.generate(  
-                dbtype=dbtype,
-                appname=appname,
-                sqlite_path=sqlite_path,
-                current_date=datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
-                cookie_secret=cookie_secret
-                )
-        f = open(dest, "w", encoding="utf-8")
-        f.write(out.decode("unicode_escape"))
-        f.close()
+    if not force and os.path.exists(dest):
+        print("    skipping copy_or_pump: exists AND force = False ")
     else:
-        # just copy file
-        print("    copying to ----->", dest )
-        print("    .. :" + str(shutil.copy( src, dest )))
+        if not copy:
+            print("    pumping to ----->", dest )
+            f = open(src, "r", encoding="utf-8")
+            instr = f.read()
+            f.close()
+            template = tornado.template.Template(instr)
+            out = template.generate(  
+                    dbtype=dbtype,
+                    appname=appname,
+                    sqlite_path=sqlite_path,
+                    current_date=datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
+                    cookie_secret=cookie_secret
+                    )
+            f = open(dest, "w", encoding="utf-8")
+            f.write(out.decode("unicode_escape"))
+            f.close()
+        else:
+            # just copy file
+            print("    copying to ----->", dest )
+            print("    .. :" + str(shutil.copy( src, dest )))
+        
 
-def generate_app(appname, force=False, outpath="..", dbtype="sql", testmode=False):
+def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=False):
     """ generates a small model with the given modelname
         also sets the right db and table settings and further boilerplate configuration.
         Template engine = tornado.templates
@@ -66,7 +70,20 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", testmode=Fals
     # excluded from template processing.
     exclude_dirs = ["static", "stubs", "views"]
     skip_dirs= ["stuff", "werkzeug"]
-    exclude_for_testmode=["alembic.ini", "sql.sqlite", "tiny.db", "config.py"]
+    exclude_files=["scaffold_list_view.tmpl", "scaffold_page_view.tmpl", "scaffold_show_view.tmpl"]
+    if update_only:
+        # only update pow versions. Leave all non pow or possibly changed stuff untouched
+        exclude_files.extend([
+            "alembic.ini", "sql.sqlite", "tiny.db",
+            "env.py", "shorties.py", "config.py", "encoders.py", "powhandler.py"
+            ])
+        
+        skip_dirs.extend([
+            "migrations", "views", "static"
+            ]
+        )
+    
+        
     #
     # walk the root (/pow/start)
     # and copy (for .py and .tmpl pump thru template engine first)
@@ -84,7 +101,7 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", testmode=Fals
 
     for dirname, dirs, files in os.walk(root):
         for f in files:
-            if ((not testmode) or (not f in exclude_for_testmode)):
+            if (f not in exclude_files):
                 print(" processing: " + f)
                 print("  in: " + dirname)
                 path=Path(dirname)
@@ -108,7 +125,8 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", testmode=Fals
                                 appname=appname,
                                 sqlite_path=sqlite_path,
                                 dbtype=dbtype,
-                                cookie_secret=str(cookie_secret)
+                                cookie_secret=str(cookie_secret),
+                                force=force
                                 )
                     else:
                         copy_or_pump(
@@ -118,10 +136,11 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", testmode=Fals
                             appname=appname,
                             sqlite_path=sqlite_path,
                             dbtype=dbtype,
-                            cookie_secret=str(cookie_secret)
+                            cookie_secret=str(cookie_secret),
+                            force=force
                             )
             else:
-                print("skipped in testmode: " + str(f))
+                print("skipped in update_only: " + str(f))
     print(" DB path: " + sqlite_path)
 
 if __name__ == "__main__":
@@ -139,6 +158,10 @@ if __name__ == "__main__":
         action="store_true", dest="force", default=False,
         help="force overwriting if invoked on existing app [default]")
 
+    parser.add_argument("-u", "--update", 
+        action="store_true", dest="update_only", default=False,
+        help="Only update the Pow parts. Leaves everyathin in models")
+
     #
     # db type
     # 
@@ -146,9 +169,7 @@ if __name__ == "__main__":
                         dest="db", help='-d which_db (mongo || tiny || peewee_sqlite) default = tiny',
                         default="sql", required=False)
     
-    parser.add_argument('-t', "--test-mode", action="store_true", 
-                        dest="testmode", help='enables testmode (for internal pow development only.)',
-                        default=False, required=False)
+    
     
     args = parser.parse_args()
     #
@@ -162,7 +183,7 @@ if __name__ == "__main__":
     print(50*"-")
     print(" Generating your app: " + args.name)
     print(50*"-")
-    generate_app(args.name, args.force, args.path, dbtype=args.db, testmode=args.testmode)
+    generate_app(args.name, args.force, args.path, dbtype=args.db, update_only=args.update_only)
 
     base = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
     apppath = os.path.normpath(os.path.join(base, args.name))
@@ -172,7 +193,10 @@ if __name__ == "__main__":
 
     print()
     print(50*"-")
-    print(" Successfully created your application")
+    if args.update_only:
+        print(" Successfully updated your application")    
+    else:
+        print(" Successfully created your application")
     print()
     print(50*"-")
     print("Your next steps: ")
