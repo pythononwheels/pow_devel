@@ -45,7 +45,10 @@ def generate_model(model_name=None, model_type=None, appname=None):
         ofile.close()
     except:
         return False
-    print("... generated: " + ofile.name)
+    print("... generated: " + model_type + " DB Model")
+    print(40*"-")
+    print("... in : " + ofile.name)
+    print(40*"-")
     return True
 
 

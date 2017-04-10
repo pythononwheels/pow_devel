@@ -22,6 +22,8 @@ class TinyBaseModel(ModelObject):
         "last_updated"    : { "type" : "datetime" },
     }
     
+    where=where
+    Query=Query()
 
     def init_on_load(self, *args, **kwargs):
         
@@ -142,15 +144,27 @@ class TinyBaseModel(ModelObject):
         if getattr(self, "eid", None):
             # if the instance has an eid its already in the db
             # update
+            print("update by eid:" + str(self.eid))
             Q = Query()
             self.last_updated = datetime.datetime.now()
-            self.table.update(self.to_dict(),Q.eid==self.eid)
+            self.table.update(self.to_dict(),Q.id==self.id)
         else:
-            # insert            
-            self.last_updated = datetime.datetime.now()
-            self.created_at = self.last_updated
-            self.id = str(uuid.uuid4())
-            self.eid = self.table.insert(self.to_dict())            
+            #first check if id is in db:
+            Q = Query()
+            res=self.table.get(Q.id==self.id)
+            if res:
+                #update. object is already in db
+                print("update by id:" + str(self.id))
+                self.last_updated = datetime.datetime.now()
+                self.table.update(self.to_dict(),Q.id==self.id)
+            else:
+                # insert  
+                 
+                self.last_updated = datetime.datetime.now()
+                self.created_at = self.last_updated
+                self.id = str(uuid.uuid4())
+                self.eid = self.table.insert(self.to_dict())         
+                print("insert, new eid: " +str(self.eid))            
 
 
     def get_by_eid(self, eid=None):
@@ -193,8 +207,10 @@ class TinyBaseModel(ModelObject):
         reslist = []
         m = self.__class__()
         for elem in res:
-            print(str(elem))
+            #print(str(type(elem)) + "->" + str(elem))
             m.init_from_json(json.dumps(elem, default=pow_json_serializer))
+            #print("adding model to reslist: " + str(m))
+            setattr(m,"eid", elem.eid)
             reslist.append(m)
         return reslist
     
@@ -213,6 +229,20 @@ class TinyBaseModel(ModelObject):
         else:
             reslist = self.json_result_to_object(res)
             return reslist
+    
+    def find_random(self, as_json=False):
+        """ Find and return a random element """
+        import random
+        res = self.table.all() # returns a list of tinyDB DB-Elements
+        #print(res)
+        randnum = random.randrange(len(res))
+        #print(" random: " + str(randnum))
+        res=[res[randnum]]
+        if as_json:
+           return self.res_to_json(res)
+        else:
+            reslist = self.json_result_to_object(res)
+            return reslist[0]
 
     def find_all(self, as_json=False):
         """ Find something given a query or criterion and parameters """
