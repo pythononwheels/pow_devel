@@ -164,11 +164,11 @@ class Application(tornado.web.Application):
         """
         def decorator(cls):
             # parent is the parent class of the relation
+            print("in add_rest_routes")
             cls_name = cls.__name__.lower()
             #print(cls_name)
-            action=route
             
-            action_part = action
+            action_part = route
             if api:
                 action_part + r"/" + str(api)
             
@@ -189,9 +189,14 @@ class Application(tornado.web.Application):
                 routes = [(x[0]+ r"(?:/?\.\w+)?/?", x[1]) for x in routes]  
             #print("added the following routes: " + r)
             handlers=getattr(self.__class__, "handlers", None)
-            for elem in routes:
-                handlers.append( ((elem[0],cls, elem[1]), pos) ) 
-            print("ROUTING: added RESTful routes for: " + cls.__name__ +  " as /" + action)
+            #handlers=getattr(cls.__class__, "handlers", None)
+            try:
+                for elem in routes:
+                    handlers.append( ((elem[0],cls, elem[1]), pos) )
+            except Exception as e:
+                print("Error in add_rest_routes")
+                raise e
+            print("ROUTING: added RESTful routes for: " + cls.__name__ +  " as /" + action_part)
             #print(dir())
             return cls
         return decorator

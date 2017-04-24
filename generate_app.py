@@ -70,7 +70,7 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
     # excluded from template processing.
     exclude_dirs = ["static", "stubs", "views"]
     skip_dirs= ["stuff", "werkzeug"]
-    exclude_files=["scaffold_list_view.tmpl", "scaffold_page_view.tmpl", "scaffold_show_view.tmpl"]
+    exclude_files=[]
     if update_only:
         # only update pow versions. Leave all non pow or possibly changed stuff untouched
         exclude_files.extend([
@@ -101,7 +101,8 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
 
     for dirname, dirs, files in os.walk(root):
         for f in files:
-            if (f not in exclude_files):
+            # skipping the exclude_files in update_only mode
+            if not (f in exclude_files and update_only):
                 print(" processing: " + f)
                 print("  in: " + dirname)
                 path=Path(dirname)

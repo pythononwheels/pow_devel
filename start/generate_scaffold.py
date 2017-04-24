@@ -9,9 +9,9 @@ import argparse
 import tornado.template as template
 import os.path
 import timeit
-import testapp.powlib as lib
-import testapp.config as cfg
-
+import {{appname}}.powlib as lib
+import {{appname}}.config as cfg
+import shutil
 
 def camel_case(name):
     """
@@ -35,16 +35,23 @@ def generate_scaffold(handler_name, appname=None):
     views = ["show", "list", "page"]
     
     for view in views:
-        template_file =  "scaffold_" + view + "_view.tmpl"
-        ofile_name = os.path.join(cfg.templates["view_path"], handler_name + "_" + view ".tmpl")
-        ofile = open(ofile_name, "wb")
-        res = loader.load(template_file).generate( 
-            handler_name=handler_name, 
-            handler_class_name=handler_class_name,
-            appname=appname
-            )
-        ofile.write(res)
-        ofile.close()
+        template_file =  os.path.join(cfg.templates["stubs_path"], "scaffold_" + view + "_view.tmpl")
+        #
+        # copy to dest dir first
+        #
+        ofile_name = os.path.join(cfg.templates["views_path"], handler_name + "_" + view + ".tmpl")
+        shutil.copy( template_file, ofile_name )
+        #
+        # then process the template
+        #
+        # ofile = open(ofile_name, "wb")
+        # res = loader.load(template_file).generate( 
+        #     handler_name=handler_name, 
+        #     handler_class_name=handler_class_name,
+        #     appname=appname
+        #     )
+        # ofile.write(res)
+        # ofile.close()
         print("... created view: " + ofile_name)
     return
 
@@ -61,5 +68,5 @@ if __name__ == "__main__":
     #
     #print("all args: ", args)
     #print(dir(args))
-    print("CamelCased handler name: ", camel_case(args.name))
-    generate_handler(args.name, args.db, appname={{appname}})
+    print("CamelCased handler name: ", camel_case(args.handler_name))
+    generate_scaffold(args.handler_name,  appname="{{appname}}")

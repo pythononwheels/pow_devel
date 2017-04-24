@@ -225,11 +225,12 @@ class BaseHandler(tornado.web.RequestHandler):
             format = cfg.myapp["default_format"]
         if format.lower() == "html":
             # special case where we render the classical html templates
-            viewname = self.__class__.__name__ + "_" + self.view
+            viewname = self.__class__.__name__ + "_" + self.view + ".tmpl"
             if self.view is not None:
-                self.render( self.__class__.__name__ + "_" + self.view, data=data, message=message )
+                self.render( viewname, data=data, message=message, handler_name = self.__class__.__name__ )
             else:
-                self.error(message="Sorry, View: " + viewname +  " can not be found.", format=format, data=data)
+                self.error(message="Sorry, View: " + viewname +  " can not be found.", 
+                    format=format, data=data)
         if encoder:
             encoder = encoder
         else:

@@ -51,7 +51,7 @@ class TinyBaseModel(ModelObject):
 
         # setup  the instance attributes from schema
         for key in self.schema.keys():
-            if self.schema[key].get("default", None):
+            if self.schema[key].get("default", None) != None:
                 setattr(self,key,self.schema[key].get("default"))
                 self.schema[key].pop("default", None)
             else:

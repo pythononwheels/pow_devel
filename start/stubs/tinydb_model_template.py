@@ -10,12 +10,11 @@ class {{model_class_name}}(TinyBaseModel):
     # which offer you immediate validation with cerberus
     #
     schema = {
-        'text': {'type': 'string'},
-        'name': {'type': 'string', 'maxlength' : 35},
-        'last': {
-            'type': 'number',
+        'title':    { 'type': 'string', 'maxlength' : 35},
+        'text' :    { 'type': 'string'},
+        'tags' :    { 'type': 'list', "default" : [] },
+        "votes" :   { "type" : "number" }   
         }
-    }
 
     #
     # init
