@@ -28,6 +28,4 @@ class PowHandler(BaseHandler):
             return u
         else:
             # if authentication is disabled return a dummy guest user
-            u=User()
-            u.login="pow_guest"
-            return None
+            return True

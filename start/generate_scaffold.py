@@ -11,7 +11,7 @@ import os.path
 import timeit
 import {{appname}}.powlib as lib
 import {{appname}}.config as cfg
-
+import shutil
 
 def camel_case(name):
     """
@@ -37,19 +37,24 @@ def generate_scaffold(handler_name, appname=None):
     print(" generating Scaffolds for: " + handler_name)
     print(40*"-")
     for view in views:
-        template_file =  "scaffold_" + view + "_view.tmpl"
+        template_file =  os.path.join(cfg.templates["stubs_path"], "scaffold_" + view + "_view.tmpl")
+        #
+        # copy to dest dir first
+        #
         ofile_name = os.path.join(cfg.templates["views_path"], handler_name + "_" + view + ".tmpl")
-        ofile = open(ofile_name, "wb")
-        res = loader.load(template_file).generate( 
-            handler_name=handler_name, 
-            handler_class_name=handler_class_name,
-            appname=appname,
-            extensions={{extensions}},
-            data={{data}}
-            )
-        ofile.write(res)
-        ofile.close()
-        print("... created view: " + view + " -> " + ofile_name)
+        shutil.copy( template_file, ofile_name )
+        #
+        # then process the template
+        #
+        # ofile = open(ofile_name, "wb")
+        # res = loader.load(template_file).generate( 
+        #     handler_name=handler_name, 
+        #     handler_class_name=handler_class_name,
+        #     appname=appname
+        #     )
+        # ofile.write(res)
+        # ofile.close()
+        print("... created view: " + ofile_name)
     return
 
 
@@ -67,3 +72,4 @@ if __name__ == "__main__":
     #print(dir(args))
     print("CamelCased handler name: ", camel_case(args.handler_name))
     generate_scaffold(args.handler_name, appname="{{appname}}")
+

@@ -1,4 +1,4 @@
-{{extensions}}
+{% extends "base.tmpl" %}
 
 {% block content %}
     <!-- Begin page content -->
@@ -10,5 +10,8 @@
                     <li>{{data}}</li>
                 {% end %}
             </ul>
+            <hr>
+            <h2>Raw: </h2>
+            {{data}}
     </div>
 {% end %}

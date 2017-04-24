@@ -5,18 +5,18 @@ import tornado.web
 
 
 # sample data
-data = {
-    "1" : "one",
-    "2" : "two",
-    "3" : "three",
-    "4" : "four",
-    "5" : "five",
-    "6" : "six",
-    "7" : "seven"
-}
+data = [
+    {"1" : "one", "name" : "name_1" },
+    {"2" : "two", "name" : "name_2"},
+    {"3" : "three", "name" : "name_3"},
+    {"4" : "four", "name" : "name_4"},
+    {"5" : "five", "name" : "name_5"},
+    {"6" : "six", "name" : "name_6"},
+    {"7" : "seven", "name" : "name_7"}
+}]
 
 @app.add_rest_routes("{{handler_name}}")
-class {{handler_name}}Handler(BaseHandler):
+class {{handler_class_name}}(BaseHandler):
 
     # 
     # every pow handler automatically gets these RESTful routes
@@ -37,17 +37,6 @@ class {{handler_name}}Handler(BaseHandler):
     # SUPPORTED_METHODS = ("GET", "HEAD", "POST", "DELETE", "PATCH", "PUT", "OPTIONS")
     # you can overwrite any of those directly or leave the @add_rest_routes out to have a basic 
     # handler.
-    
-    # sample data
-    data = {
-        "1" : "one",
-        "2" : "two",
-        "3" : "three",
-        "4" : "four",
-        "5" : "five",
-        "6" : "six",
-        "7" : "seven",
-    }
 
     def show(self, id=None):
         try:
@@ -70,7 +59,7 @@ class {{handler_name}}Handler(BaseHandler):
             self.error( message="base.error: rest_nodb page: " + str(e), data=data)
                  
     def search(self):
-        return self.error(message="{{handler_name}} search: " + not implemented yet )
+        return self.error(message="{{handler_name}} search: not implemented yet" )
         
     @tornado.web.authenticated
     def edit(self, id=None):

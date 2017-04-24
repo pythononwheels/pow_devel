@@ -8,15 +8,15 @@ class {{model_class_name}}(TinyBaseModel):
     #
     # Use the cerberus schema style 
     # which offer you immediate validation with cerberus
+    # http://docs.python-cerberus.org/en/stable/validation-rules.html
+    # types: http://docs.python-cerberus.org/en/stable/validation-rules.html#type
     #
     schema = {
-        'text': {'type': 'string'},
-        'name': {'type': 'string', 'maxlength' : 35},
-        'last': {
-            'type': 'number',
-            "default" : 999
+        'title':    { 'type': 'string', 'maxlength' : 35},
+        'text' :    { 'type': 'string'},
+        'tags' :    { 'type': 'list', "default" : [] },
+        "votes" :   { "type" : "number", "default" : 999 }   
         }
-    }
 
     #
     # init

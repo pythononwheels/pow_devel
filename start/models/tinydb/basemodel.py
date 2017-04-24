@@ -51,9 +51,7 @@ class TinyBaseModel(ModelObject):
 
         # setup  the instance attributes from schema
         for key in self.schema.keys():
-            #print("checking default: " + key)
-            if self.schema[key].get("default") != None:
-                #print("default: " + str(self.schema[key].get("default")))
+            if self.schema[key].get("default", None) != None:
                 setattr(self,key,self.schema[key].get("default"))
                 self.schema[key].pop("default", None)
             else:
@@ -225,7 +223,7 @@ class TinyBaseModel(ModelObject):
         """
             returns a list of results in a json serialized format.
         """
-        return json.dumps(res, default=pow_json_serializer)
+        return json.loads(json.dumps(res, default=pow_json_serializer))
 
     def find(self,*criterion, as_json=False):
         """ Find something given a query or criterion """
