@@ -41,7 +41,7 @@ def generate_scaffold(handler_name, appname=None):
         #
         # copy to dest dir first
         #
-        ofile_name = os.path.join(cfg.templates["views_path"], handler_name + "_" + view + ".tmpl")
+        ofile_name = os.path.join(cfg.templates["views_path"], handler_class_name + "_" + view + ".tmpl")
         shutil.copy( template_file, ofile_name )
         #
         # then process the template

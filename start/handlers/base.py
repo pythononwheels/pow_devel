@@ -225,7 +225,8 @@ class BaseHandler(tornado.web.RequestHandler):
             # special case where we render the classical html templates
             viewname = self.__class__.__name__ + "_" + self.view + ".tmpl"
             if self.view is not None:
-                self.render( viewname, data=self.json_result_to_object(data), message=message, handler_name = self.__class__.__name__ )
+                model=self.__class__.model
+                self.render( viewname, data=model.json_result_to_object(data), message=message, handler_name = self.__class__.__name__ )
             else:
                 self.error(message="Sorry, View: " + viewname +  " can not be found.", 
                     format=format, data=data)

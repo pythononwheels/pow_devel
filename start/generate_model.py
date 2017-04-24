@@ -24,7 +24,7 @@ def generate_model(model_name=None, model_type=None, appname=None):
     # set some attributes
     #
     print(40*"-")
-    print(" generating model: " + model_class_name)
+    print(" generating model: " + model_name)
     print(40*"-")
     try:
         loader = template.Loader(templates["stubs_path"])

@@ -1,9 +1,9 @@
 #
 # TinyDB Model:  {{model_class_name}}
 #
-from {{appname}}.models.tinydb.basemodel import TinyBaseModel
+from {{appname}}.models.tinydb.tinymodel import TinyModel
 
-class {{model_class_name}}(TinyBaseModel):
+class {{model_class_name}}(TinyModel):
 
     #
     # Use the cerberus schema style 

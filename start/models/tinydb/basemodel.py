@@ -215,7 +215,7 @@ class TinyBaseModel(ModelObject):
             #print(str(type(elem)) + "->" + str(elem))
             m.init_from_json(json.dumps(elem, default=pow_json_serializer))
             #print("adding model to reslist: " + str(m))
-            setattr(m,"eid", elem.eid)
+            setattr(m,"eid", elem.get("eid", None))
             reslist.append(m)
         return reslist
     

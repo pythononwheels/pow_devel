@@ -27,6 +27,7 @@ class {{handler_class_name}}(PowHandler):
     # SUPPORTED_METHODS = ("GET", "HEAD", "POST", "DELETE", "PATCH", "PUT", "OPTIONS")
     # you can overwrite any of those directly or leave the @add_rest_routes out to have a basic 
     # handler.
+    model=Model()
     
     def show(self, id=None):
         m=Model()
