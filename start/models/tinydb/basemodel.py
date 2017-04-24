@@ -218,7 +218,7 @@ class TinyBaseModel(ModelObject):
         """
             returns a list of results in a json serialized format.
         """
-        return json.dumps(res, default=pow_json_serializer)
+        return json.loads(json.dumps(res, default=pow_json_serializer))
 
     def find(self,*criterion, as_json=False):
         """ Find something given a query or criterion """

@@ -173,7 +173,7 @@ class ModelObject():
     def to_json(self, *args, default=pow_json_serializer, **kwargs):
         """ just json """
         #return json.loads(self.json_dumps(*args, **kwargs))
-        return json.dumps(self.to_dict(), *args, default=default, **kwargs)
+        return json.loads(json.dumps(self.to_dict(), *args, default=default, **kwargs))
 
     def to_csv(self, encoder=None):
         """ returns the models as csv using the given encoder.

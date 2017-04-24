@@ -129,32 +129,30 @@ class BaseHandler(tornado.web.RequestHandler):
     # @app.add_route2("/thanks/*", dispatch={"get": "_get"} )
     def get(self, *args, **params):
         #url_params=self.get_arguments("id")
-        print(" ----> GET / BaseHandler2")
+        print(" ----> GET / BaseHandler")
         print("  .. params : " + str(params))
         print("  .. args : " + str(args))
         print("  .. self.dispatch_kwargs : " + str(self.dispatch_kwargs))
-        if self.dispatch_kwargs.get("get", None):
+        if self.dispatch_kwargs.get("get", None) != None:
             try:
                 # this is the view that will be rendered by success or error,
                 # if the format is .html
                 # rule: handlerName_methodName
                 self.view = self.dispatch_kwargs.get("get", None)
 
-                print(" .. Trying to call handler method: " + self.dispatch_kwargs.get("get") )
+                print("  .. Trying to call handler method: " + self.dispatch_kwargs.get("get") )
                 f=getattr(self, self.dispatch_kwargs.get("get"))
                 print("  .. trying to call: " + str(f))
                 if callable(f):
                     # call the given method
                     return f(*args, **params)
-            except TypeError:
+            except TypeError as e:
                 self.application.log_request(self, 
-                    message="""method was None. But you also did not implement
-                    one of the to standard HTTP methods (get,put ...)""")
+                    message=str(e))
                 self.error(
-                message="""method was None. But you also did not implement
-                    one of the to standard HTTP methods (get,put ...)""",
-                data = { "request" : str(self.request )},
-                http_code = 405
+                    message=str(e),
+                    data = { "request" : str(self.request)},
+                    http_code = 405
                 )
         else:
             self.error(
@@ -163,7 +161,7 @@ class BaseHandler(tornado.web.RequestHandler):
                 http_code = 405
                 )
 
-        self.write(params)
+        #self.write(str(self.request))
     
     #
     # POST   /items     #=> create
@@ -227,7 +225,7 @@ class BaseHandler(tornado.web.RequestHandler):
             # special case where we render the classical html templates
             viewname = self.__class__.__name__ + "_" + self.view + ".tmpl"
             if self.view is not None:
-                self.render( viewname, data=data, message=message, handler_name = self.__class__.__name__ )
+                self.render( viewname, data=self.json_result_to_object(data), message=message, handler_name = self.__class__.__name__ )
             else:
                 self.error(message="Sorry, View: " + viewname +  " can not be found.", 
                     format=format, data=data)

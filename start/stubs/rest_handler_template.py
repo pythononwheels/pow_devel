@@ -35,7 +35,7 @@ class {{handler_class_name}}(PowHandler):
 
     def list(self):
         m=Model()
-        res = m.find_all(as_json=True)
+        res = m.find_all()  # set as_json=true if you like
         self.success(message="{{handler_model_class_name}}, index", data=res)         
     
     def page(self, page=0):
