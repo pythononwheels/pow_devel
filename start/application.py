@@ -174,14 +174,14 @@ class Application(tornado.web.Application):
             
             routes = [
                 # tuple (http_method, route, { http_method : method_to_call_in_handler, .. })
-                ( r"/" + action_part + r"/search/?" , { "get" : "search" }),
-                ( r"/" + action_part + r"/(?P<id>[0-9]+)/edit/?" , { "get" : "edit", "params" : ["id"] }),
-                ( r"/" + action_part + r"/page/?(?P<page>[0-9]+)?/?", { "get" : "page", "params" : ["page"] }),
-                ( r"/" + action_part + r"/new/?", {"get" : "new"}),
+                ( r"/" + action_part + r"/search/?" , dispatch = { "get" : "search" }),
+                ( r"/" + action_part + r"/(?P<id>[0-9]+)/edit/?" ,  dispatch ={ "get" : "edit", "params" : ["id"] }),
+                ( r"/" + action_part + r"/page/?(?P<page>[0-9]+)?/?",  dispatch = { "get" : "page", "params" : ["page"] }),
+                ( r"/" + action_part + r"/new/?",  dispatch = {"get" : "new"}),
                 ( r"/" + action_part + r"/?(?P<id>[0-9]+)?/?", 
-                    { "get" : "show" , "put" : "update", "delete" : "delete", "params" : ["id"]} ),
-                 ( r"/" + action_part + r"/show/?(?P<id>[0-9]+)?/?", { "get" : "show" , "params" : ["id"]} ),
-                ( r"/" + action_part + r"/?", { "get" : "list", "post" : "create" })                
+                     dispatch = { "get" : "show" , "put" : "update", "delete" : "delete", "params" : ["id"]} ),
+                 ( r"/" + action_part + r"/show/?(?P<id>[0-9]+)?/?",  dispatch = { "get" : "show" , "params" : ["id"]} ),
+                ( r"/" + action_part + r"/?",  dispatch = { "get" : "list", "post" : "create" })                
             ]
             # BETA: Add the .format regex to the RESTpattern   
             # this makes it possible to add a .format at an URL. Example /test/12.json (or /test/12/.json)

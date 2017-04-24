@@ -18,12 +18,16 @@ def generate_migration(message="NONE"):
     import warnings
     from sqlalchemy import exc as sa_exc
 
+    print(40*"-")
+    print(" generating migration: " + message)
+    
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", category=sa_exc.SAWarning)
     
         alembic_cfg = Config(os.path.join(os.path.dirname(__file__), "alembic.ini"))
         command.revision(alembic_cfg, autogenerate=True, message=args.message)
-    
+    print("... done")
+    print(40*"-")
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-n', "--name", action="store",

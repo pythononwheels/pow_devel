@@ -19,6 +19,7 @@ def camel_case(name):
     return "".join([x.capitalize() for x in name.split("_")])
 
 def copy_or_pump(src, dest, copy=False, appname=None, sqlite_path=None, 
+            extensions=None, data=None,
             dbtype=None, cookie_secret=str(uuid.uuid4()), force=False):
     """
         just copy files or pump them through the template engine before copying to out dir
@@ -37,7 +38,9 @@ def copy_or_pump(src, dest, copy=False, appname=None, sqlite_path=None,
                     appname=appname,
                     sqlite_path=sqlite_path,
                     current_date=datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
-                    cookie_secret=cookie_secret
+                    cookie_secret=cookie_secret,
+                    extensions=extensions,
+                    data=data
                     )
             f = open(dest, "w", encoding="utf-8")
             f.write(out.decode("unicode_escape"))
@@ -70,7 +73,8 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
     # excluded from template processing.
     exclude_dirs = ["static", "stubs", "views"]
     skip_dirs= ["stuff", "werkzeug"]
-    exclude_files=["scaffold_list_view.tmpl", "scaffold_page_view.tmpl", "scaffold_show_view.tmpl"]
+    #exclude_files=["scaffold_list_view.tmpl", "scaffold_page_view.tmpl", "scaffold_show_view.tmpl"]
+    exclude_files=["generate_handler.py"]
     if update_only:
         # only update pow versions. Leave all non pow or possibly changed stuff untouched
         exclude_files.extend([
@@ -126,6 +130,8 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
                                 sqlite_path=sqlite_path,
                                 dbtype=dbtype,
                                 cookie_secret=str(cookie_secret),
+                                extensions="""{% extends base.tmpl %}""",
+                                data="""{{data}}""",
                                 force=force
                                 )
                     else:
@@ -137,6 +143,8 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
                             sqlite_path=sqlite_path,
                             dbtype=dbtype,
                             cookie_secret=str(cookie_secret),
+                            extensions="""{% extends base.tmpl %}""",
+                            data="""{{data}}""",
                             force=force
                             )
             else:

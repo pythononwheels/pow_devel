@@ -51,10 +51,13 @@ class TinyBaseModel(ModelObject):
 
         # setup  the instance attributes from schema
         for key in self.schema.keys():
-            if self.schema[key].get("default", None):
+            #print("checking default: " + key)
+            if self.schema[key].get("default") != None:
+                #print("default: " + str(self.schema[key].get("default")))
                 setattr(self,key,self.schema[key].get("default"))
                 self.schema[key].pop("default", None)
             else:
+                #print("no default for: " + str(self.schema[key]))
                 setattr(self, key, None)
                     
         #
@@ -177,7 +180,7 @@ class TinyBaseModel(ModelObject):
 
     def get_by_id(self, id=None):
         """ return by id """
-        if not id:
+        if not self.id:
             id = self.id
         Q = Query()
         res = self.table.search(Q.id == str(id))
@@ -204,9 +207,13 @@ class TinyBaseModel(ModelObject):
             creates a list of instances of this model 
             from a given json resultlist
         """
+        if not isinstance(res,(list)):
+            #single element, pack it in a list
+            res = [res]
+        # lists, iterate over all elements
         reslist = []
-        m = self.__class__()
         for elem in res:
+            m = self.__class__()
             #print(str(type(elem)) + "->" + str(elem))
             m.init_from_json(json.dumps(elem, default=pow_json_serializer))
             #print("adding model to reslist: " + str(m))
@@ -246,38 +253,28 @@ class TinyBaseModel(ModelObject):
 
     def find_all(self, as_json=False):
         """ Find something given a query or criterion and parameters """
-        res =  self.table.all() # returns a list of tinyDB DB-Elements 
+        res = self.table.all() # returns a list of tinyDB DB-Elements 
         if as_json:
             return self.res_to_json(res)
         else:
-            reslist = self.json_result_to_object(res)
-            return reslist
+            return self.json_result_to_object(res)
     
     def find_one(self, *criterion, as_json=False):
         """ find only one result. Raise Excaption if more than one was found"""
-        res = self.table.search(*criterion)
-        if as_json:
-            if len(res) == 1:
-                return self.res_to_json(res[0])
+        print("criterion: " + str(criterion))
+        res = self.table.get(*criterion)
+        print(res)
+        try:
+            if as_json:
+                return self.res_to_json(res)
             else:
-                raise Exception("Find_one with more or less than ONE result")
-        else:
-            reslist = self.json_result_to_object(res)
-            if len(reslist) == 1:
-                return reslist[0]
-            else:
-                raise Exception("Find_one with more or less than ONE result")
+                return self.json_result_to_object(res)
+        except Exception as inst:
+            print(inst)
 
     def find_first(self, *criterion, as_json=False):
         """ return the first hit, or None"""
-        res = self.find(*criterion, as_json=as_json)
-        try:
-            if as_json:
-                return self.res_to_json(res[0])
-            else:
-                return self.json_result_to_object(res[0])
-        except Exception as err:
-            raise Exception(err.msg)
+        return self.find_one(*criterion, as_json=as_json)
 
     def q(self):
         """ return a raw query """

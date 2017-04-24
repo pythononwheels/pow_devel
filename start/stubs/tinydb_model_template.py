@@ -14,6 +14,7 @@ class {{model_class_name}}(TinyBaseModel):
         'name': {'type': 'string', 'maxlength' : 35},
         'last': {
             'type': 'number',
+            "default" : 999
         }
     }
 

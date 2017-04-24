@@ -21,13 +21,18 @@ def generate_handler(handler_name, model_type, appname=None):
     """ 
         generates a small handler
     """
+    
     #
     # set some attributes
     #
     loader = template.Loader(cfg.templates["stubs_path"])
     handler_class_name = camel_case(handler_name)
+
+    print(40*"-")
+    print(" generating handler: " + handler_class_name)
+    print(40*"-")
     #
-    # create the controller
+    # create the handler
     #
     if model_type.lower() == "none":
         template_file =  "rest_handler_nodb_template.py"
@@ -40,11 +45,14 @@ def generate_handler(handler_name, model_type, appname=None):
         handler_class_name=handler_class_name,
         handler_model_class_name=handler_class_name,
         model_type = model_type,
-        appname=appname
+        appname=appname,
+        extensions={{extensions}},
+        data={{data}}
         )
     ofile.write(res)
     ofile.close()
     print("... created: " + ofile_name)
+    print(40*"-")
     return
 
 
