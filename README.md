@@ -41,16 +41,11 @@ Non intrusive! You can always escape and go RAW.
 * generate_app
 * automatic scaffolding views (work in progress)
 
-## Current Status:
-The current <master> version in this repo is fully working except for:
-* automatic scaffolding views
-
 ## Code examples
 
 ### Routes:
 
-    # this will call the myget methog on HTTP GET calls.
-    # and will hand over the re-group as the 1st parameter.
+    # this will call the myget method on HTTP GET calls and will hand over the re-group as the 1st parameter.
     @app.add_route("/index/([0-9]+)*", dispatch={"get" : "myget"})
     class IndexdHandler(BaseHandler):
         def myget(self, index=None):
@@ -70,6 +65,7 @@ The current <master> version in this repo is fully working except for:
 
 
 ## Check: [The PythonOnWheels Homepage](http://www.pythononwheels.org)
+
 
 
     
