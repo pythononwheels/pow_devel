@@ -6,7 +6,7 @@ def readme():
         return f.read()
 
 setup(name='pythononwheels',
-      version='0.5b',
+      version='0.5.1b',
       description='The simple, quick and easy generative web framework for python',
        classifiers=[
         'Development Status :: 4 - Beta',
@@ -32,7 +32,7 @@ setup(name='pythononwheels',
             "start/handlers/*",
             "start/migrations/*",
             "start/migrations/versions/*",
-            "start/models/*",
+            "start/models/*", 
             "start/models/tinydb/*",
             "start/models/elastic/*",
             "start/models/sql/*",
@@ -45,7 +45,7 @@ setup(name='pythononwheels',
             "start/tests/*",
         ]},
       install_requires=[
-        "tornado==4.4.1"
+        "tornado>=4"
       ],
       entry_points={
         'console_scripts': [
