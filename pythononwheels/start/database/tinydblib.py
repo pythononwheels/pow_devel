@@ -1,7 +1,7 @@
 #
 #
 #
-from testapp.config import database
+from {{appname}}.config import database
 from tinydb import TinyDB, Query
 from tinydb.storages import JSONStorage
 from tinydb_serialization import SerializationMiddleware

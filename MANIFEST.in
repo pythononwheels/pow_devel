@@ -1,0 +1,5 @@
+# Include the license file
+include LICENCE.txt
+include README.md
+
+# Include the all pow files

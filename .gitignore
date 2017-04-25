@@ -104,3 +104,17 @@ pip-selfcheck.json
 
 # Rope project settings
 .ropeproject
+
+
+#
+# ignore python build files. 
+# 
+# Compiled python modules.
+*.pyc
+
+# Setuptools distribution folder.
+/dist/
+
+# Python egg metadata, regenerated from source files by setuptools.
+/*.egg-info
+*.whl

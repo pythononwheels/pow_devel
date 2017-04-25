@@ -5,8 +5,6 @@
 # This is the new pow 2017. And it's really good. 
 (ok I might be biased ;)
 
-## Release date: 4.4.2017!
-
 But it's by far the best PoW (concept and implementation) ever !
 Ever, ever, ever!!
 
@@ -22,6 +20,7 @@ Batteries included! (tornado Webswerver, SQLite DB)
 * sqlalchemy ORM
 * cerberus schemas and validation on board
 * tornado templates
+* tinyDB and ElasticSearch on board... more to come
 
 ## Super easy, quick to start and all the basics on board:
 * super easy relations with decorators @relations.has_many("comments")
@@ -40,8 +39,6 @@ Batteries included! (tornado Webswerver, SQLite DB)
 ## Current Status:
 The current <master> version in this repo is fully working except for:
 * automatic scaffolding views
-
-
 
 ## Code examples
 
