@@ -5,7 +5,7 @@ def readme():
         return f.read()
 
 setup(name='pythononwheels',
-      version='0.5.21b',
+      version='0.5.26b',
       description='The simple, quick and easy generative web framework for python',
       long_description=readme(),
       classifiers=[

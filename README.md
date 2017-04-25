@@ -11,8 +11,13 @@ Ever, ever, ever!!
 I call it *SQUEEZY* => for Simple, Quick and Easy.
 
 ## Principle
-As simple to use as possible. Everything you always need on board. And you can always escape and go RAW.
-Batteries included! (tornado Webswerver, SQLite DB)
+
+> Designed for simplicity, happiness and Quick results!
+
+As simple to use as possible. Everything you always need on board. 
+Batteries included! (tornado Webserver, SQLite DB, NoSQL DBs: tinyDB, ElasticSearch, MongoDB following next)
+Non intrusive! You can always escape and go RAW. 
+
 
 ## Strong Foundation:
 * python 3.x
