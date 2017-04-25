@@ -18,5 +18,8 @@ def init_migrations(stdout=False):
         print(70*"-")
     return True
 
-if __name__=="__main__":
+def main():
     init_migrations(stdout=True)
+
+if __name__=="__main__":
+    main()

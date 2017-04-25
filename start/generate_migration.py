@@ -28,7 +28,7 @@ def generate_migration(message="NONE"):
         command.revision(alembic_cfg, autogenerate=True, message=args.message)
     print("... done")
     print(40*"-")
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-n', "--name", action="store",
         dest="message", help='-n my_first_migration',
@@ -39,3 +39,6 @@ if __name__ == "__main__":
         generate_migration(message=args.message)    
     else:
         print("You must give a migration name. -n <something>")
+
+if __name__ == "__main__":
+    main()

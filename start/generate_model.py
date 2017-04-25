@@ -55,7 +55,7 @@ def generate_model(model_name=None, model_type=None, appname=None):
     return True
 
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-n', "--name", action="store", 
                         dest="name", help='-n modelname',
@@ -77,3 +77,6 @@ if __name__ == "__main__":
     #print(dir(args))
     #print("pluralized model name: ", pluralize(args.name))
     generate_model(args.name, args.type, appname="{{appname}}")
+
+if __name__ == "__main__":
+    main()

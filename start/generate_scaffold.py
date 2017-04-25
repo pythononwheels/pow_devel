@@ -58,7 +58,7 @@ def generate_scaffold(handler_name, appname=None):
     return
 
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-n', "--name", action="store", 
                         dest="handler_name", help='-n handler_name',
@@ -72,4 +72,7 @@ if __name__ == "__main__":
     #print(dir(args))
     print("CamelCased handler name: ", camel_case(args.handler_name))
     generate_scaffold(args.handler_name, appname="{{appname}}")
+
+if __name__ == "__main__":
+    main()
 

@@ -56,7 +56,7 @@ def generate_handler(handler_name, model_type, appname=None):
     return
 
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-n', "--name", action="store", 
                         dest="name", help='-n handler name',
@@ -75,3 +75,6 @@ if __name__ == "__main__":
     #print(dir(args))
     print("CamelCased handler name: ", camel_case(args.name))
     generate_handler(args.name, args.db, appname="{{appname}}")
+
+if __name__ == "__main__":
+    main()

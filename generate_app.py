@@ -151,7 +151,7 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
                 print("skipped in update_only: " + str(f))
     print(" DB path: " + sqlite_path)
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser()
 
     parser.add_argument('-n', "--name", action="store", 
@@ -225,3 +225,6 @@ if __name__ == "__main__":
     print("  linux/osx: export PYTHONPATH=$PYTHONPATH:"+base)
     print(50*"-")
     print()
+
+if __name__ == "__main__":
+    main()
