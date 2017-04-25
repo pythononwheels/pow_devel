@@ -1,14 +1,14 @@
 from setuptools import setup
 
-
 def readme():
-    with open('README.md') as f:
+    with open('README.rst') as f:
         return f.read()
 
 setup(name='pythononwheels',
-      version='0.5.1b',
+      version='0.5.21b',
       description='The simple, quick and easy generative web framework for python',
-       classifiers=[
+      long_description=readme(),
+      classifiers=[
         'Development Status :: 4 - Beta',
         "Environment :: Web Environment",
         "Intended Audience :: Developers",
@@ -45,12 +45,11 @@ setup(name='pythononwheels',
             "start/tests/*",
         ]},
       install_requires=[
-        "tornado>=4"
+        #"tornado>=4"
       ],
       entry_points={
         'console_scripts': [
             'pow_generate_app = pythononwheels.generate_app:main',
-            'pow_generate_model = pythononwheels.generate_model:main'
         ]
       },
       #scripts=['bin/generate_app'],

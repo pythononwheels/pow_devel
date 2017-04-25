@@ -19,7 +19,7 @@ import logging
 
 # see here: http://alembic.zzzcomputing.com/en/latest/api/commands.html
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', "--direction", action="store", default=None,
         dest="direction", help='-d up (or down) default = up',
@@ -96,3 +96,6 @@ if __name__ == "__main__":
             print(50*"-")
             command.history(alembic_cfg, rev_range=None, verbose=False)
             sys.exit()
+
+if __name__ == "__main__":
+    main()
