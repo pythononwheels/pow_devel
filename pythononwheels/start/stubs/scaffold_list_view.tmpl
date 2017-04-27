@@ -5,13 +5,28 @@
     <div class="container">
             <h1> this is the {{handler_name}}: list view </h1>
             <p> showing the data:</p>
-            <ul>
-                {% for elem in data %}
-                    <li>{{data}}</li>
-                {% end %}
-            </ul>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        {% for key in data[0].schema.keys() %}
+                            <th>{{key}}</th>
+                        {% end %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for elem in data %}
+                        <tr>
+                        {% for key in elem.schema.keys() %}
+                            <td>{{getattr(elem, key)}}</td>
+                        {% end %}
+                        </tr>
+                    {% end %}
+                </tbody>
+            </table>
             <hr>
             <h2>Raw: </h2>
             {{data}}
+            <hr>
+            <b>ModelClass:</b> {{ str(type(data[0])) }}
     </div>
 {% end %}
