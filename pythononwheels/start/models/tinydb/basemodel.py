@@ -237,7 +237,10 @@ class TinyBaseModel(ModelObject):
             return reslist
 
     def find(self,*criterion, as_json=False):
-        """ Find something given a query or criterion """
+        """ Find something given a query or criterion 
+            example: r=t.find(t.where("id") == "c6492e1a-8740-40d9-9b15-d5f1bc73ba97")
+            example2: r=t.find(t.Query.id == "c6492e1a-8740-40d9-9b15-d5f1bc73ba97")
+        """
         print("  .. find: " + str(*criterion))
         res = self.table.search(*criterion)
         return self._return_find(res, as_json)
