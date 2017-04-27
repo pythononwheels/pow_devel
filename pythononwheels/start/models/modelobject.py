@@ -175,6 +175,13 @@ class ModelObject():
         #return json.loads(self.json_dumps(*args, **kwargs))
         return json.loads(json.dumps(self.to_dict(), *args, default=default, **kwargs))
 
+    def res_to_json(self, res):
+         """
+             returns a list of results in a json serialized format.
+         """
+         #return json.loads(json.dumps(res, default=pow_json_serializer))   
+         return [x.to_json() for x in res]
+         
     def to_csv(self, encoder=None):
         """ returns the models as csv using the given encoder.
             if no encoder is given the defined encoders from config.py are taken.

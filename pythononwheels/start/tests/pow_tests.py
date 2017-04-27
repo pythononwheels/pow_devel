@@ -62,12 +62,11 @@ class TestClass:
     
     def test_sql_migration(self):
         """ test the setup of the alembic environment """
-        import {{appname}}.init_migrations
+        import test.generate_migration
         import os
         os.chdir("..")
-        r = {{appname}}.init_migrations.init_migrations()
-        assert r == True
-        os.chdir(os.path.abspath(os.path.dirname(__file__)))
+        script = test.generate_migration.generate_migration(message="pow_test")
+        assert os.path.exists(os.path.normpath(script.path))
 
     def test_model_insert(self):
         """ based on test_generate_model. Tests if a model can insert values 

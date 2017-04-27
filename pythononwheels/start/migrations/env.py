@@ -5,6 +5,7 @@ from logging.config import fileConfig
 from {{appname}}.powlib import get_class_name
 from {{appname}}.config import myapp
 from {{appname}}.application import log_handler
+import logging
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

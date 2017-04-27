@@ -25,9 +25,16 @@ def generate_migration(message="NONE"):
         warnings.simplefilter("ignore", category=sa_exc.SAWarning)
     
         alembic_cfg = Config(os.path.join(os.path.dirname(__file__), "alembic.ini"))
-        command.revision(alembic_cfg, autogenerate=True, message=args.message)
-    print("... done")
+        script =command.revision(alembic_cfg, autogenerate=True, message=message)
+    #print("... " + str(dir(script)) + " done")
+    print(" rev: " +str(script.revision))
+    print(" path: " +str(script.path))
+    
     print(40*"-")
+
+    return script
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-n', "--name", action="store",

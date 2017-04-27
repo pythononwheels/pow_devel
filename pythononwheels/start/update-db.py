@@ -9,7 +9,8 @@ from alembic.config import Config
 from alembic import command
 import argparse
 import logging
-
+import warnings
+from sqlalchemy import exc as sa_exc
 #
 # this will execute 
 # alembic upgrade head
@@ -18,6 +19,28 @@ import logging
 
 
 # see here: http://alembic.zzzcomputing.com/en/latest/api/commands.html
+def migrate(direction, revision=None, number=1):
+
+    #
+    # really migrate
+    #
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=sa_exc.SAWarning)
+
+        alembic_cfg = Config(os.path.join(os.path.dirname(__file__), "alembic.ini"))
+        if direction == "up":
+            # upgrade
+            if revision:
+                res = command.upgrade(alembic_cfg, revision=revision)
+            if number == "head":
+                res = command.upgrade(alembic_cfg, "head")
+            else:
+                res = command.upgrade(alembic_cfg, "+" + number)
+        elif direction == "down":
+            # downgrade
+            res = command.downgrade(alembic_cfg, "-" + number)
+    
+    return res
 
 def main():
     parser = argparse.ArgumentParser()
@@ -49,8 +72,7 @@ def main():
     #
     #print("all args: ", args)
 
-    import warnings
-    from sqlalchemy import exc as sa_exc
+    
 
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", category=sa_exc.SAWarning)
@@ -72,22 +94,18 @@ def main():
             print(50*"-")
             command.history(alembic_cfg, rev_range=None, verbose=False)
             sys.exit()
+        
 
         #
         # really migrate
         #
+        res = "NOTHING"
         if args.direction == "up":
             # upgrade
-            if args.revision:
-                args.revision
-                command.upgrade(alembic_cfg, revision=args.revision)
-            if args.number == "head":
-                command.upgrade(alembic_cfg, "head")
-            else:
-                command.upgrade(alembic_cfg, "+" + args.number)
+            res = migrate("up", args.revision, args.number)
         elif args.direction == "down":
             # downgrade
-            command.downgrade(alembic_cfg, "-" + args.number)
+            res = migrate("down", args.revision, args.number)
         else:
             print("Error: ")
             print("You must at least give a direction info up / down to migrate:")
@@ -95,7 +113,10 @@ def main():
             print(" Change history ")
             print(50*"-")
             command.history(alembic_cfg, rev_range=None, verbose=False)
-            sys.exit()
+        print(" res type: " + str(type(res)))
+        print(str(res))
+        print(" res dir: " + str(dir(res)))
+        sys.exit()
 
 if __name__ == "__main__":
     main()

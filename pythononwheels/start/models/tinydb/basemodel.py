@@ -219,11 +219,11 @@ class TinyBaseModel(ModelObject):
             reslist.append(m)
         return reslist
     
-    def res_to_json(self, res):
-        """
-            returns a list of results in a json serialized format.
-        """
-        return json.loads(json.dumps(res, default=pow_json_serializer))
+    # def res_to_json(self, res):
+    #     """
+    #         returns a list of results in a json serialized format.
+    #     """
+    #     return json.loads(json.dumps(res, default=pow_json_serializer))
 
     def find(self,*criterion, as_json=False):
         """ Find something given a query or criterion """

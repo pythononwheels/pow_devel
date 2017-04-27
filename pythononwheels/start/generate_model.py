@@ -60,8 +60,8 @@ def main():
     parser.add_argument('-n', "--name", action="store", 
                         dest="name", help='-n modelname',
                         required=True)
-    parser.add_argument('-t', "--type", action="store", 
-                        dest="type", help='-t dbtype   -> Example: -t sql  OR -t tinydb ...',
+    parser.add_argument('-d', "--db", action="store", 
+                        dest="type", help='-d dbtype   -> Example: -d sql  OR -d tinydb ...',
                         default="sql", required=True)
     #
     # db type

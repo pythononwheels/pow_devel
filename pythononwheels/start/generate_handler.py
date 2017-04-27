@@ -46,8 +46,6 @@ def generate_handler(handler_name, model_type, appname=None):
         handler_model_class_name=handler_class_name,
         model_type = model_type,
         appname=appname,
-        extensions={{extensions}},
-        data={{data}}
         )
     ofile.write(res)
     ofile.close()
