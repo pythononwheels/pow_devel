@@ -3,7 +3,7 @@ import os
 
 from sqlalchemy import Table
 import logging
-
+import copy
 
 
 
@@ -49,9 +49,11 @@ def get_class_name(name):
 
 
 #see: http://stackoverflow.com/questions/38987/how-to-merge-two-python-dictionaries-in-a-single-expression
+# but I need a deep copy here. 
 def merge_two_dicts(x, y):
     '''Given two dicts, merge them into a new dict as a shallow copy.'''
-    z = x.copy()
+    z = copy.deepcopy(x)
+    #z = x.copy()
     z.update(y)
     return z
 

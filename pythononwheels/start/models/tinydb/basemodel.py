@@ -224,16 +224,23 @@ class TinyBaseModel(ModelObject):
     #         returns a list of results in a json serialized format.
     #     """
     #     return json.loads(json.dumps(res, default=pow_json_serializer))
+    def _return_find(self, res, as_json=True):
+        """
+            _return_find gives the right result.
+            either as json
+            or as object (Model Class / Instance)
+        """
+        reslist = self.json_result_to_object(res)
+        if as_json:
+            return self.res_to_json(reslist)
+        else:
+            return reslist
 
     def find(self,*criterion, as_json=False):
         """ Find something given a query or criterion """
         print("  .. find: " + str(*criterion))
         res = self.table.search(*criterion)
-        if as_json:
-           return self.res_to_json(res)
-        else:
-            reslist = self.json_result_to_object(res)
-            return reslist
+        return self._return_find(res, as_json)
     
     def find_random(self, as_json=False):
         """ Find and return a random element """
@@ -243,32 +250,21 @@ class TinyBaseModel(ModelObject):
         randnum = random.randrange(len(res))
         #print(" random: " + str(randnum))
         res=[res[randnum]]
-        if as_json:
-           return self.res_to_json(res)
-        else:
-            reslist = self.json_result_to_object(res)
-            return reslist[0]
+        return self._return_find(res, as_json)
 
     def find_all(self, as_json=False):
         """ Find something given a query or criterion and parameters """
         res = self.table.all() # returns a list of tinyDB DB-Elements 
-        if as_json:
-            return self.res_to_json(res)
-        else:
-            return self.json_result_to_object(res)
+        return self._return_find(res, as_json)
     
     def find_one(self, *criterion, as_json=False):
         """ find only one result. Raise Excaption if more than one was found"""
         print("criterion: " + str(criterion))
-        res = self.table.get(*criterion)
-        print(res)
         try:
-            if as_json:
-                return self.res_to_json(res)
-            else:
-                return self.json_result_to_object(res)
-        except Exception as inst:
-            print(inst)
+            res = self.table.get(*criterion)
+            return self._return_find(res, as_json)
+        except Exception as e:
+            raise e
 
     def find_first(self, *criterion, as_json=False):
         """ return the first hit, or None"""
