@@ -19,7 +19,7 @@ def camel_case(name):
     return "".join([x.capitalize() for x in name.split("_")])
 
 def copy_or_pump(src, dest, copy=False, appname=None, sqlite_path=None, 
-            extensions=None, data=None,
+            extensions=None, data=None, tinydb_path=None, db_base_path=None,
             dbtype=None, cookie_secret=str(uuid.uuid4()), force=False):
     """
         just copy files or pump them through the template engine before copying to out dir
@@ -37,6 +37,8 @@ def copy_or_pump(src, dest, copy=False, appname=None, sqlite_path=None,
                     dbtype=dbtype,
                     appname=appname,
                     sqlite_path=sqlite_path,
+                    tinydb_path = tinydb_path,
+                    db_base_path=db_base_path,
                     current_date=datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
                     cookie_secret=cookie_secret,
                     extensions=extensions,
@@ -92,11 +94,18 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
     # and copy (for .py and .tmpl pump thru template engine first)
     # all files to the new app dir (appname)
     # 
-    sqlite_path=os.path.normpath(os.path.abspath(os.path.join(outdir, "sql.db")))
+    db_base_path=os.path.normpath(os.path.abspath(outdir))
+    tinydb_path=os.path.normpath(os.path.abspath(os.path.join(outdir, "tiny.db")))
+    sqlite_path=os.path.normpath(os.path.abspath(os.path.join(outdir, "db.sqlite")))
     if sys.platform =="win32":
         sqlite_path=sqlite_path.replace("\\", "\\\\")
+        tinydb_path=tinydb_path.replace("\\", "\\\\")
+        db_base_path=db_base_path.replace("\\", "\\\\")
     elif sys.platform in ["linux", "darwin"] :
         sqlite_path="/"+sqlite_path
+        tinydb_path="/"+tinydb_path
+        db_base_path="/"+db_base_path
+
     else:
         sqlite_path="Unknown system platform (" + sys.platform + "). Please set sqlite connection string yourself"
     
@@ -128,6 +137,8 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
                                 copy=False,
                                 appname=appname,
                                 sqlite_path=sqlite_path,
+                                tinydb_path=tinydb_path,
+                                db_base_path=db_base_path,
                                 dbtype=dbtype,
                                 cookie_secret=str(cookie_secret),
                                 data="""{{data}}""",
@@ -140,6 +151,8 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
                             copy=True,
                             appname=appname,
                             sqlite_path=sqlite_path,
+                            tinydb_path=tinydb_path,
+                            db_base_path=db_base_path,
                             dbtype=dbtype,
                             cookie_secret=str(cookie_secret),
                             data="""{{data}}""",

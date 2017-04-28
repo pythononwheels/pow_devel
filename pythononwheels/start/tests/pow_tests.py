@@ -15,12 +15,14 @@ import pytest
 MODELNAME = "pow_test_model"
 class TestClass:
     @pytest.mark.notonosx
+    @pytest.mark.run(order=1)
     def test_server(self):
         """ test if server starts
             calls baseurl:pot/test/12 
             must return 12.
             This test the server, routing and method dispatching
         """
+        print(" .. Test if server works" )        
         from multiprocessing import Process
         import {{appname}}.server
         import requests
@@ -29,12 +31,15 @@ class TestClass:
         p = Process(target={{appname}}.server.main)
         p.start()
         testurl=cfg.server_settings["base_url"] + ":" + str(cfg.server_settings["port"]) + "/test/12"  
+
         r = requests.get(testurl)
         p.terminate()
         assert int(r.text)==12
-        
+    
+    @pytest.mark.run(order=2)
     def test_generate_model(self):
         """ test if sql model is generated"""
+        print(" .. Test generate_model")
         import {{appname}}.generate_model as gm
         import uuid
         import os.path
@@ -43,16 +48,20 @@ class TestClass:
         assert ret is True
         assert os.path.exists(os.path.normpath("../models/sql/" + MODELNAME + ".py"))
 
+    @pytest.mark.run(order=3)
     def test_model_type(self):
         """ based on test_generate_model. Tests if a model can insert values 
             DB sqlite by default.
         """ 
+        print(" .. Test model is correct type")
         from {{appname}}.models.sql.pow_test_model import PowTestModel
         m = PowTestModel()
         assert isinstance(m, PowTestModel)
-
+    
+    @pytest.mark.run(order=4)
     def test_sql_dbsetup(self):
         """ test the setup of the alembic environment """
+        print(" .. Test SQL: db_setup")
         import {{appname}}.init_migrations
         import os
         os.chdir("..")
@@ -60,23 +69,48 @@ class TestClass:
         assert r == True
         os.chdir(os.path.abspath(os.path.dirname(__file__)))
     
+    @pytest.mark.run(order=5)
     def test_sql_migration(self):
         """ test the setup of the alembic environment """
-        import test.generate_migration
+        print(" .. Test SQL: generate_migration")
+        import {{appname}}.generate_migration
         import os
         os.chdir("..")
-        script = test.generate_migration.generate_migration(message="pow_test")
+        script = {{appname}}.generate_migration.generate_migration(message="pow_test")
         assert os.path.exists(os.path.normpath(script.path))
-
-    def test_model_insert(self):
+        os.chdir(os.path.abspath(os.path.dirname(__file__)))
+    
+    @pytest.mark.run(order=6)
+    def test_sql_dbupdate(self):
+        """ test the setup of the alembic environment """
+        print(" .. Test SQL: update_db -d up")
+        import {{appname}}.update_db
+        import os, time
+        ret = None
+        os.chdir("..")
+        time.sleep(1)
+        try:
+            ret = {{appname}}.update_db.migrate("up")
+        except Exception as e:
+            print(e)
+            ret = True
+        time.sleep(5)
+        os.chdir(os.path.abspath(os.path.dirname(__file__)))
+    
+    @pytest.mark.run(order=7)
+    def test_sql_insert_and_find(self):
         """ based on test_generate_model. Tests if a model can insert values 
-            DB sqlite by default.
+            and can be found back.
         """ 
+        print(" .. Test SQL: model.upsert() and model.find()")
         from {{appname}}.models.sql.pow_test_model import PowTestModel
+        import os
         m = PowTestModel()
         m.name = "Testname"
-        
-        assert isinstance(m, PowTestModel)
+        m.upsert()
+        res=m.find(PowTestModel.name=="Testname")
+        assert res.count()==1
+        os.chdir(os.path.abspath(os.path.dirname(__file__)))
 
 
 if __name__ == "__main__":

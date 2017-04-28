@@ -46,11 +46,11 @@ myapp = {
     #"environment"       :   "development"       # set the current environment (also see the db section)
 }
 
-
+db_base_path = r"{{db_base_path}}"
 database = {
     "sql"   : {
         "type"      :   "sqlite",
-        "dbname"    :   r"sql.sqlite",   # better leave the r to enable absolute paths with backslashes 
+        "dbname"    :   r"{{sqlite_path}}",   # better leave the r to enable absolute paths with backslashes 
         "host"      :   None,       
         "port"      :   None,   
         "user"      :   None,
@@ -58,7 +58,7 @@ database = {
         "enabled"   :   True
     },
     "tinydb" : {
-        "dbname"    :   r"tiny.db",   # better leave the r to enable absolute paths with backslashes 
+        "dbname"    :   r"{{tinydb_path}}",   # better leave the r to enable absolute paths with backslashes 
         "host"      :   None,       
         "port"      :   None,   
         "user"      :   None,

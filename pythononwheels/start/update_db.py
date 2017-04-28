@@ -19,15 +19,17 @@ from sqlalchemy import exc as sa_exc
 
 
 # see here: http://alembic.zzzcomputing.com/en/latest/api/commands.html
-def migrate(direction, revision=None, number=1):
+def migrate(direction, revision=None, number=1, path=None):
 
     #
     # really migrate
     #
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", category=sa_exc.SAWarning)
-
-        alembic_cfg = Config(os.path.join(os.path.dirname(__file__), "alembic.ini"))
+        if path:
+            alembic_cfg = Config(os.path.join(path, "alembic.ini"))
+        else:
+            alembic_cfg = Config(os.path.join(os.path.dirname(__file__), "alembic.ini"))
         if direction == "up":
             # upgrade
             if revision:
@@ -35,10 +37,10 @@ def migrate(direction, revision=None, number=1):
             if number == "head":
                 res = command.upgrade(alembic_cfg, "head")
             else:
-                res = command.upgrade(alembic_cfg, "+" + number)
+                res = command.upgrade(alembic_cfg, "+" + str(number))
         elif direction == "down":
             # downgrade
-            res = command.downgrade(alembic_cfg, "-" + number)
+            res = command.downgrade(alembic_cfg, "-" + str(number))
     
     return res
 
