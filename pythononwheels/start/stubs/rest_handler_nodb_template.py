@@ -29,9 +29,9 @@ class {{handler_class_name}}(BaseHandler):
     # 5  GET    /{{handler_name}}/page/1 #=> page
     # 6  GET    /{{handler_name}}/search #=> search
     # 7  PUT    /{{handler_name}}/1      #=> update
-    # 8  POST   /{{handler_name}}        #=> create
-    # 9  DELETE /{{handler_name}}/1      #=> destroy
-    #
+    # 8  PUT    /{{handler_name}}        #=> update (You have to send the id as json payload)
+    # 9  POST   /{{handler_name}}        #=> create
+    # 10 DELETE /{{handler_name}}/1      #=> destroy
 
     # standard supported http methods are:
     # SUPPORTED_METHODS = ("GET", "HEAD", "POST", "DELETE", "PATCH", "PUT", "OPTIONS")

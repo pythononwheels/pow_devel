@@ -79,7 +79,7 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
     if update_only:
         # only update pow versions. Leave all non pow or possibly changed stuff untouched
         exclude_files.extend([
-            "alembic.ini", "sql.sqlite", "tiny.db",
+            "alembic.ini", "db.sqlite", "tiny.db",
             "env.py", "shorties.py", "config.py", "encoders.py", "powhandler.py"
             ])
         

@@ -16,7 +16,7 @@ server_settings = {
     "static_url_prefix" :   "/static/",
     "static_path"       :   os.path.join(os.path.dirname(__file__), "static"),
     "login_url"         :   "/login",
-    "xsrf_cookies"      :   True,
+    "xsrf_cookies"      :   False,
     #"log_function"      :   you can give your own log function here.
     "cookie_secret"     :   "{{cookie_secret}}"
 }

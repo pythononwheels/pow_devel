@@ -174,7 +174,8 @@ class ModelObject():
         """ just json """
         #return json.loads(self.json_dumps(*args, **kwargs))
         return json.loads(json.dumps(self.to_dict(), *args, default=default, **kwargs))
-
+    
+    
     def res_to_json(self, res):
          """
              returns a list of results in a json serialized format.

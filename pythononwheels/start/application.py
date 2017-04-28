@@ -179,9 +179,9 @@ class Application(tornado.web.Application):
                 ( r"/" + action_part + r"/page/?(?P<page>[0-9]+)?/?", { "get" : "page", "params" : ["page"] }),
                 ( r"/" + action_part + r"/new/?",  {"get" : "new"}),
                 ( r"/" + action_part + r"/?(?P<id>[0-9]+)?/?", 
-                     { "get" : "show" , "put" : "update", "delete" : "delete", "params" : ["id"]} ),
+                     { "get" : "show" , "put" : "update", "delete" : "destroy", "params" : ["id"]} ),
                 ( r"/" + action_part + r"/show/?(?P<id>[0-9]+)?/?",  { "get" : "show" , "params" : ["id"]} ),
-                ( r"/" + action_part + r"/?", { "get" : "list", "post" : "create" })                
+                ( r"/" + action_part + r"/?", { "get" : "list", "post" : "create", "put" : "update", "delete" : "destroy" })                
             ]
             # BETA: Add the .format regex to the RESTpattern   
             # this makes it possible to add a .format at an URL. Example /test/12.json (or /test/12/.json)

@@ -151,9 +151,12 @@ class SqlBaseModel(ModelObject):
                 #print("  .. skipping: " + col_name )
                 pass
     
+    def to_json(self):
+        return self.json_dumps()
+
     def json_dumps(self):
         """ probably better return str(self.json_dump()) ??... test it """
-        return json.dumps(json.load(self.json_dump()))
+        return json.dumps(self.json_dump())
 
     def json_dump(self):
         """ return this instances columns as json"""
@@ -168,7 +171,25 @@ class SqlBaseModel(ModelObject):
             obj = obj._jsonify.load(data, session=session).data
             obj.id = None
             return obj
-
+    
+    def json_result_to_object(self, res):
+        """
+            creates a list of instances of this model 
+            from a given json resultlist
+        """
+        if not isinstance(res,(list)):
+            #single element, pack it in a list
+            res = [res]
+        # lists, iterate over all elements
+        reslist = []
+        for elem in res:
+            m = self.__class__()
+            print(str(type(elem)) + "->" + str(elem))
+            m.init_from_json(elem)
+            print("adding model to reslist: " + str(m))
+            reslist.append(m)
+        return reslist
+    
     def get_relationships(self):
         """
             returns the raw relationships
@@ -219,6 +240,12 @@ class SqlBaseModel(ModelObject):
         if not session:
             session = self.session
         session.add(self)
+        session.commit()        
+    
+    def delete(self, session=None):
+        if not session:
+            session = self.session
+        session.delete(self)
         session.commit()        
 
     def get_by_id(self, id):

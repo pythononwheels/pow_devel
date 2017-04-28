@@ -167,44 +167,112 @@ class BaseHandler(tornado.web.RequestHandler):
     # POST   /items     #=> create
     #
     def post(self):
-        print(" ---> PUT / BaseHandler")
+        print(" ---> POST / BaseHandler")
         print("  .. params : " + str(params))
         print("  .. args : " + str(args))
         print("  .. self.dispatch_kwargs : " + str(self.dispatch_kwargs))
-        if self.dispatch_kwargs.get("get", None):
+        if self.dispatch_kwargs.get("post", None) != None:
+            try:
+                # this is the view that will be rendered by success or error,
+                # if the format is .html
+                # rule: handlerName_methodName
+                self.view = self.dispatch_kwargs.get("post", None)
+
+                print("  .. Trying to call handler method: " + self.dispatch_kwargs.get("post") )
+                f=getattr(self, self.dispatch_kwargs.get("post"))
+                print("  .. trying to call: " + str(f))
+                if callable(f):
+                    # call the given method
+                    return f(*args, **params)
+            except TypeError as e:
+                self.application.log_request(self, 
+                    message=str(e))
+                self.error(
+                    message=str(e),
+                    data = { "request" : str(self.request)},
+                    http_code = 405
+                )
+        else:
              self.error(
-                message=" HTTP Method: GET not supported for this route. ",
+                message=" HTTP Method: PUT not supported for this route. ",
                 data = { "request" : str(self.request )},
                 http_code = 405
                 )
-        data = tornado.escape.json_decode(self.request.body)
-        return self.create(data)
+        #data = tornado.escape.json_decode(self.request.body)
+        #return self.create(data)
 
     #
     # PUT    /items/1      #=> update
     #
-    def put(self, **params):
-        #data = tornado.escape.json_decode(self.request.body)
-        try:
-            p1 = params.get("param1", None)
-            int(p1)
-            # if param1 is an integer we call update
-            return self.update(p1)
-        except ValueError:
-            return self.error(500, params, "HTTP/UPDATE needs an ID. ID must be an int")
+    def put(self, *args, **params):
+        print(" ---> PUT / BaseHandler")
+        print("  .. params : " + str(params))
+        print("  .. args : " + str(args))
+        print("  .. self.dispatch_kwargs : " + str(self.dispatch_kwargs))
+        if self.dispatch_kwargs.get("put", None) != None:
+            try:
+                # this is the view that will be rendered by success or error,
+                # if the format is .html
+                # rule: handlerName_methodName
+                self.view = self.dispatch_kwargs.get("put", None)
+
+                print("  .. Trying to call handler method: " + self.dispatch_kwargs.get("put") )
+                f=getattr(self, self.dispatch_kwargs.get("put"))
+                print("  .. trying to call: " + str(f))
+                if callable(f):
+                    # call the given method
+                    return f(*args, **params)
+            except TypeError as e:
+                self.application.log_request(self, 
+                    message=str(e))
+                self.error(
+                    message=str(e),
+                    data = { "request" : str(self.request)},
+                    http_code = 405
+                )
+        else:
+             self.error(
+                message=" HTTP Method: PUT not supported for this route. ",
+                data = { "request" : str(self.request )},
+                http_code = 405
+                )
     
     #
     # DELETE /items/1      #=> destroy
     # 
-    def delete(self, **params):
-        #data = tornado.escape.json_decode(self.request.body)
-        try:
-            p1 = params.get("param1", None)
-            int(p1)
-            # if param1 is an integer we call update
-            return self.destroy(p1)
-        except ValueError:
-            return self.error(500, params, "HTTP/UPDATE needs an ID. ID must be an int")
+    def delete(self, *args, **params):
+        print(" ---> DELETE / BaseHandler")
+        print("  .. params : " + str(params))
+        print("  .. args : " + str(args))
+        print("  .. self.dispatch_kwargs : " + str(self.dispatch_kwargs))
+        if self.dispatch_kwargs.get("delete", None) != None:
+            try:
+                # this is the view that will be rendered by success or error,
+                # if the format is .html
+                # rule: handlerName_methodName
+                self.view = self.dispatch_kwargs.get("delete", None)
+
+                print("  .. Trying to call handler method: " + self.dispatch_kwargs.get("delete") )
+                f=getattr(self, self.dispatch_kwargs.get("delete"))
+                print("  .. trying to call: " + str(f))
+                if callable(f):
+                    # call the given method
+                    return f(*args, **params)
+            except TypeError as e:
+                self.application.log_request(self, 
+                    message=str(e))
+                self.error(
+                    message=str(e),
+                    data = { "request" : str(self.request)},
+                    http_code = 405
+                )
+        else:
+             self.error(
+                message=" HTTP Method: PUT not supported for this route. ",
+                data = { "request" : str(self.request )},
+                http_code = 405
+                )
+    
 
 
     def success(self, message=None, data=None, succ=None, prev=None,
