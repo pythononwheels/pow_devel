@@ -3,15 +3,19 @@
 {% block content %}
     <!-- Begin page content -->
     <div class="container">
-            <h1> this is the {{handler_name}}:  page view</h1>
-            <p> showing the data:</p>
-            <ul>
-                {% for elem in data %}
-                    <li>{{data}}</li>
-                {% end %}
-            </ul>
-            <hr>
-            <h2>Raw: </h2>
-            {{data}}
+         <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h1 class="display-3">This is the <strong>{{handler_name}}</strong> page view </h1>
+                <p class="lead">Just paginate through your data here</p>
+            </div>
+        </div>
+        <ul>
+            {% for elem in data %}
+                <li>{{data}}</li>
+            {% end %}
+        </ul>
+        <hr>
+        <h2>Raw: </h2>
+        {{data}}
     </div>
 {% end %}

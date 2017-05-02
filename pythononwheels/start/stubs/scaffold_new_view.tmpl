@@ -1,0 +1,49 @@
+{% extends "base.tmpl" %}
+
+{% block content %}
+    <!-- Begin page content -->
+    <div class="container">
+            <h1> this is the {{handler_name}}: edit view </h1>
+            <p> showing the data:</p>
+            
+            <form>
+            
+                {% set elem = data[0] %}
+                {% for key in model.schema.keys() %}
+                    {% set _type = elem.schema[key]["type"] %}
+                    {% if  _type == "string" %}
+                    <div class="form-group row">
+                        <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
+                        <div class="col-10">
+                            <input  type="text" class="form-control" name="{{key}}" id="{{key}}" 
+                                    placeholder="">
+                        </div>
+                    </div>    
+                    {% elif _type == "boolean" %}
+                    <div class="form-check">
+                        <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input" name="{{key}}" id="{{key}}">
+                            {{key}}
+                        </label>
+                    </div>
+                    {% elif _type == "datetime" %}
+                    <div class="form-group row">
+                    <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
+                    <div class="col-10">
+                        <input class="form-control" type="datetime-local" value="2017-11-22T14:51:55" 
+                        id="{{key}}" name="{{key}}">
+                    </div>
+                    </div>
+                    {% end %}
+                {% end %}
+            
+            </form>
+            
+            <hr>
+            <a href="/{{base_route_rest}}" class="btn btn-secondary">Back to {{handler_name}}.list</a>
+            
+            <hr>
+            <h2>Raw: </h2>
+            {{data}}
+    </div>
+{% end %}

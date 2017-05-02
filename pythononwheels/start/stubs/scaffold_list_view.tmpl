@@ -1,54 +1,55 @@
 {% extends "base.tmpl" %}
 
 {% block content %}
-    <!-- Begin page content -->
-    <div class="container">
-            <h1> this is the {{handler_name}}: list view </h1>
-            <p> showing the data:</p>
-            {% if len(data)>0 %}
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            {% for key in data[0].schema.keys() %}
-                                <th>{{key}}</th>
-                            {% end %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for elem in data %}
-                            <tr>
-                            {% for key in elem.schema.keys() %}
-                                <td>{{getattr(elem, key)}}</td>
-                            {% end %}
-                            <td>
-                                
-                                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 
-                                    <a href='{{base_route_rest}}/{{getattr(elem, "id")}}'>Show</a>
-                                
-                            </td>
-                            <td>
-                                
-                                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                                    <a href='{{base_route_rest}}/{{getattr(elem, "id")}}/edit'>Edit</a>
-                                
-                            </td>
-                            <td>
-                                
-                                    <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
-                                    <a href='{{base_route_rest}}/{{getattr(elem, "id")}}/delete'>Delete</a>
-                                
-                            </td>
-                            </tr>
-                        {% end %}
-                    </tbody>
-                </table>
-            {% else %}
-                <h2> No data, yet, dude !</h2>
-            {% end %}
-            <hr>
-            <h2>Raw: </h2>
-            {{data}}
-            <hr>
-            <b>ModelClass:</b> {{ str(type(data[0])) }}
+<!-- Begin page content -->
+<div class="container">
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-3">This is the <strong>{{handler_name}}</strong> list view </h1>
+            <p class="lead">Just go Ahead and show, edit or delete your data below using the action links.</p>
+            <p class="lead">Of course you can also <a href="{{base_route_rest}}/create" class="btn btn-success">
+            Create</a> a new {{model_name}} here.</p>
+        </div>
     </div>
+    {% if len(data)>0 %}
+        <table class="table table-bordered table-hover">
+            <thead class="thead-inverse">
+                <tr>
+                    {% for key in data[0].schema.keys() %}
+                        <th>{{key}}</th>
+                    {% end %}
+                    <th colspan="3">Actions:</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for elem in data %}
+                    <tr>
+                    {% for key in elem.schema.keys() %}
+                        <td>{{getattr(elem, key)}}</td>
+                    {% end %}
+                    <td>                           
+                        <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 
+                        <a href='{{base_route_rest}}/{{getattr(elem, "id")}}' class="btn btn-primary">Show</a>
+                    </td>
+                    <td>
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                        <a href='{{base_route_rest}}/{{getattr(elem, "id")}}/edit'class="btn btn-warning">Edit</a>
+                    </td>
+                    <td>
+                        <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
+                        <a href='{{base_route_rest}}/{{getattr(elem, "id")}}/delete' class="btn btn-danger">Delete</a>
+                    </td>
+                    </tr>
+                {% end %}
+            </tbody>
+        </table>
+    {% else %}
+        <h2> No data, yet, dude !</h2>
+    {% end %}
+    <hr>
+    <h2>Raw: </h2>
+    {{data}}
+    <hr>
+    <b>ModelClass:</b> {{ str(type(data[0])) }}
+</div>
 {% end %}

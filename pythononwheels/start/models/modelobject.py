@@ -241,7 +241,12 @@ class ModelObject():
             print(p)
         """
         return self.__repr__()
-                       
+    
+    def get(self, name)                       :
+        """
+            returns the attribute with the given name 
+        """
+        return getattr(self, name, None)
     #
     # These Mehtods should be implemented by every subclass
     # 

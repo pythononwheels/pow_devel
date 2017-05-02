@@ -295,7 +295,8 @@ class BaseHandler(tornado.web.RequestHandler):
             if self.view is not None:
                 model=self.__class__.model
                 self.render( viewname, data=model.json_result_to_object(data), message=message, 
-                    handler_name = self.__class__.__name__.lower(), base_route_rest=self.base_route_rest , model=model )
+                    handler_name = self.__class__.__name__.lower(), base_route_rest=self.base_route_rest , 
+                    model=model, status=http_code, next=succ, prev=prev, model_name=model.__class__.__name__.lower() )
             else:
                 self.error(message="Sorry, View: " + viewname +  " can not be found.", 
                     format=format, data=data)
@@ -323,7 +324,7 @@ class BaseHandler(tornado.web.RequestHandler):
         if not format:
             format = cfg.myapp["default_format"]
         if format.lower() == "html":
-            self.render("error.tmpl", data=data, message=message)
+            self.render("error.tmpl", data=data, message=message, status=http_code)
         if encoder:
             encoder = encoder
         else:

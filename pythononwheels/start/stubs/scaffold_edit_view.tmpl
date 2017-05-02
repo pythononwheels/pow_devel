@@ -1,0 +1,60 @@
+{% extends "base.tmpl" %}
+
+{% block content %}
+    <!-- Begin page content -->
+    <div class="container">
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h1 class="display-3">This is the <strong>{{handler_name}}</strong> edit view </h1>
+                <p class="lead">Just go Ahead and edit your data below</p>
+            </div>
+        </div>
+
+        <form>
+        
+            {% set elem = data[0] %}
+            {% for key in model.schema.keys() %}
+                {% set _type = elem.schema[key]["type"] %}
+                {% if  _type == "string" or _type == "number" or _type == "integer" or _type == "float" %}
+                <div class="form-group row">
+                    <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
+                    <div class="col-10">
+                        <input  type="text" class="form-control" name="{{key}}" id="{{key}}" 
+                                value="{{elem.get(key)}}">
+                    </div>
+                </div>    
+                {% elif _type == "boolean" %}
+                <div class="form-group row">
+                    <label class="col-sm-2">{{key}}</label>
+                    <div class="col-sm-10">
+                        <div class="form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" name="{{key}}" id="{{key}}"
+                            {% if  elem.get(key) == True %}
+                                checked="checked"
+                            {% end %}
+                            > {{key}}
+                        </label>
+                        </div>
+                    </div>
+                </div>
+                {% elif _type == "datetime" or _type == "date" %}
+                <div class="form-group row">
+                <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
+                <div class="col-10">
+                    <input class="form-control" type="datetime-local" value="{{elem.get(key)}}" 
+                    id="{{key}}" name="{{key}}">
+                </div>
+                </div>
+                {% end %}
+            {% end %}
+        
+        </form>
+        <hr>
+        <a href="/{{base_route_rest}}" class="btn btn-primary">Back to {{handler_name}}.list</a>
+        
+        <hr>
+        <h2>Raw: </h2>
+        {{data}}
+    </div>
+{% end %}

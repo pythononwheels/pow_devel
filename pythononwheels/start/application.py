@@ -183,7 +183,7 @@ class Application(tornado.web.Application):
                 ( r"/" + action_part + r"/(?P<id>"+ID_PATTERN+")/edit/?" , { "get" : "edit", "params" : ["id"] }),
                 ( r"/" + action_part + r"/page/?(?P<page>"+ID_PATTERN+")?/?", { "get" : "page", "params" : ["page"] }),
                 ( r"/" + action_part + r"/new/?",  {"get" : "new"}),
-                ( r"/" + action_part + r"/?(?P<id>"+ID_PATTERN+")?/?", 
+                ( r"/" + action_part + r"/(?P<id>"+ID_PATTERN+")?/?", 
                      { "get" : "show" , "put" : "update", "delete" : "destroy", "params" : ["id"]} ),
                 ( r"/" + action_part + r"/show/?(?P<id>"+ID_PATTERN+")?/?",  { "get" : "show" , "params" : ["id"]} ),
                 ( r"/" + action_part + r"/?", { "get" : "list", "post" : "create", "put" : "update", "delete" : "destroy" })                
