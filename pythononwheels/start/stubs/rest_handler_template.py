@@ -61,7 +61,7 @@ class {{handler_class_name}}(PowHandler):
             limit=limit,
             offset=page*page_size
             )
-        self.success(message="{{handler_model_class_name}} page: #" +str(page), data=data=m.res_to_json(res) )  
+        self.success(message="{{handler_model_class_name}} page: #" +str(page), data=m.res_to_json(res) )  
     
     def search(self):
         m=Model()
@@ -109,7 +109,7 @@ class {{handler_class_name}}(PowHandler):
 
     @tornado.web.authenticated
     def destroy(self, id=None):
-         try:
+        try:
             data_json = self.request.body
             print("  .. DELETE Data: (should be an ID (uuid):" + str(data_json))
             m=Model()

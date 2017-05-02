@@ -8,3 +8,10 @@
     padding: 3rem 1rem 1rem;	
 	}
 }
+
+.top-buffer-20 { margin-top:20px; }
+.top-buffer-40 { margin-top:40px; }
+.top-buffer-60 { margin-top:60px; }
+.top-buffer-80 { margin-top:80px; }
+.top-buffer-100 { margin-top:100px; }
+.top-buffer-120 { margin-top:120px; }

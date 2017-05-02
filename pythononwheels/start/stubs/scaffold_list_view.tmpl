@@ -20,6 +20,24 @@
                             {% for key in elem.schema.keys() %}
                                 <td>{{getattr(elem, key)}}</td>
                             {% end %}
+                            <td>
+                                
+                                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 
+                                    <a href='{{base_route_rest}}/{{getattr(elem, "id")}}'>Show</a>
+                                
+                            </td>
+                            <td>
+                                
+                                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                    <a href='{{base_route_rest}}/{{getattr(elem, "id")}}/edit'>Edit</a>
+                                
+                            </td>
+                            <td>
+                                
+                                    <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
+                                    <a href='{{base_route_rest}}/{{getattr(elem, "id")}}/delete'>Delete</a>
+                                
+                            </td>
                             </tr>
                         {% end %}
                     </tbody>

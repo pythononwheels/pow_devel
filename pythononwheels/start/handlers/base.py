@@ -294,7 +294,8 @@ class BaseHandler(tornado.web.RequestHandler):
             viewname = self.__class__.__name__ + "_" + self.view + ".tmpl"
             if self.view is not None:
                 model=self.__class__.model
-                self.render( viewname, data=model.json_result_to_object(data), message=message, handler_name = self.__class__.__name__ )
+                self.render( viewname, data=model.json_result_to_object(data), message=message, 
+                    handler_name = self.__class__.__name__.lower(), base_route_rest=self.base_route_rest , model=model )
             else:
                 self.error(message="Sorry, View: " + viewname +  " can not be found.", 
                     format=format, data=data)

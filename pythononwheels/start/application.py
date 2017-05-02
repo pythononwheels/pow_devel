@@ -172,15 +172,20 @@ class Application(tornado.web.Application):
             if api:
                 action_part + r"/" + str(api)
             
+            # set the base_path fpr rest routes. So you can reference it in templates.
+            # see: handlers/base.success(...)
+            setattr(cls, "base_route_rest", action_part)
+
+            ID_PATTERN = cfg.myapp["id_pattern"]
             routes = [
                 # tuple (http_method, route, { http_method : method_to_call_in_handler, .. })
                 ( r"/" + action_part + r"/search/?" , { "get" : "search" }),
-                ( r"/" + action_part + r"/(?P<id>[0-9]+)/edit/?" , { "get" : "edit", "params" : ["id"] }),
-                ( r"/" + action_part + r"/page/?(?P<page>[0-9]+)?/?", { "get" : "page", "params" : ["page"] }),
+                ( r"/" + action_part + r"/(?P<id>"+ID_PATTERN+")/edit/?" , { "get" : "edit", "params" : ["id"] }),
+                ( r"/" + action_part + r"/page/?(?P<page>"+ID_PATTERN+")?/?", { "get" : "page", "params" : ["page"] }),
                 ( r"/" + action_part + r"/new/?",  {"get" : "new"}),
-                ( r"/" + action_part + r"/?(?P<id>[0-9]+)?/?", 
+                ( r"/" + action_part + r"/?(?P<id>"+ID_PATTERN+")?/?", 
                      { "get" : "show" , "put" : "update", "delete" : "destroy", "params" : ["id"]} ),
-                ( r"/" + action_part + r"/show/?(?P<id>[0-9]+)?/?",  { "get" : "show" , "params" : ["id"]} ),
+                ( r"/" + action_part + r"/show/?(?P<id>"+ID_PATTERN+")?/?",  { "get" : "show" , "params" : ["id"]} ),
                 ( r"/" + action_part + r"/?", { "get" : "list", "post" : "create", "put" : "update", "delete" : "destroy" })                
             ]
             # BETA: Add the .format regex to the RESTpattern   

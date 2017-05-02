@@ -43,3 +43,15 @@ class TestHandler(BaseHandler):
     # on HTTP GET this method will be called. See dispatch parameter.
     def test(self, index=None):
         self.write(index)
+    
+@app.add_rest_routes("rest")
+class RestHandler(BaseHandler):
+    # on HTTP GET this method will be called. See dispatch parameter.
+    def list(self):
+        self.write("REST")
+
+@app.add_route("/errortest", dispatch={"get" : "errortest"})
+class ErrorTestHandler(BaseHandler):
+    # on HTTP GET this method will be called. See dispatch parameter.
+    def errortest(self):
+        self.error(message="ERRORTEST", data=[])

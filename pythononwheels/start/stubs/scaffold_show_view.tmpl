@@ -3,13 +3,22 @@
 {% block content %}
     <!-- Begin page content -->
     <div class="container">
-            <h1> this is the {{handler_name}}: list view </h1>
+            <h1> this is the {{handler_name}}: show view </h1>
             <p> showing the data:</p>
             <ul>
-                {% for elem in data %}
-                    <li>{{data}}</li>
-                {% end %}
-            </ul>
+               <table class="table table-bordered">
+                    {% set elem = data[0] %}
+                    {% for key in model.schema.keys() %}
+                    <tr>
+                        <td><b>{{key}} :</b></td>
+                        <td> {{getattr(elem,key,None) }}</td>
+                    </tr>
+                    {% end %}
+               </table>
+            <hr>
+            
+            <a href="/{{base_route_rest}}" class="btn btn-secondary">Back to {{handler_name}}.list</a>
+            
             <hr>
             <h2>Raw: </h2>
             {{data}}
