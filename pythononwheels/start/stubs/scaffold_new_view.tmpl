@@ -1,49 +1,130 @@
 {% extends "base.tmpl" %}
 
+{% block include_js %}
+    <script
+			  src="https://code.jquery.com/jquery-2.2.4.js"
+			  integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
+			  crossorigin="anonymous">
+    </script>
+		
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/2.8.1/jquery.serializejson.js"></script>
+{% end %}
+
+{% block js %}
+{% set elem = data[0] %}
+
+<script>
+    $(document).ready(function(){   
+        $("#message-div").hide();
+
+        $("#create_form").submit(function()
+            {
+                var data = $("#edit_form").serializeJSON();
+                console.log( data );
+                var jsonString = JSON.stringify(data);
+                console.log(jsonString);
+                $.ajax({
+                        url : "/{{handler_name}}/{{elem.get("id")}}",
+                        type: "POST",
+                        data : jsonString,
+                        success: function(data, textStatus, jqXHR)
+                        {
+                            $("#message-div").hide();
+                            var od = JSON.stringify(data);
+                            var obj = JSON.parse(od);
+                            //alert("success sending put: " + data + textStatus)
+                            console.log(obj);
+                            $("#message-div").attr("class", "alert alert-success alert-dismissible fade show");
+                            $("#message-div").append(
+                                "<strong>Well done!</strong> You successfully created:" + obj
+                            );
+                            $("#message-div").show();
+                        },
+                        error: function (jqXHR, textStatus, errorThrown)
+                        {
+                            console.log(jqXHR);
+                            $("#message-div").hide();
+                            $("#message-div").attr("class", "alert alert-error alert-dismissible fade show");
+                            $("#message-div").append(
+                                "<strong>Oh NO! Error!</strong> creating:"
+                            );
+                            $("#message-div").show();
+                        }
+                    });  
+            return false;   
+        });
+    });
+</script>
+
+{% end %}
+
 {% block content %}
     <!-- Begin page content -->
     <div class="container">
-            <h1> this is the {{handler_name}}: edit view </h1>
-            <p> showing the data:</p>
-            
-            <form>
-            
-                {% set elem = data[0] %}
-                {% for key in model.schema.keys() %}
-                    {% set _type = elem.schema[key]["type"] %}
-                    {% if  _type == "string" %}
-                    <div class="form-group row">
-                        <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
-                        <div class="col-10">
-                            <input  type="text" class="form-control" name="{{key}}" id="{{key}}" 
-                                    placeholder="">
-                        </div>
-                    </div>    
-                    {% elif _type == "boolean" %}
-                    <div class="form-check">
-                        <label class="form-check-label">
-                        <input type="checkbox" class="form-check-input" name="{{key}}" id="{{key}}">
-                            {{key}}
-                        </label>
-                    </div>
-                    {% elif _type == "datetime" %}
-                    <div class="form-group row">
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h1 class="display-3">This is the <strong>{{handler_name}}</strong> Create view </h1>
+                <p class="lead">Just go Ahead and create your data below</p>
+            </div>
+        </div>
+        
+         <div id="message-div" class="" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <form id="create_form" name="create_form">
+    
+            {% for key in model.schema.keys() %}
+                {% set _type = elem.schema[key]["type"] %}
+                {% if  _type == "string" or _type == "number" or _type == "integer" or _type == "float" %}
+                <div class="form-group row">
                     <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
                     <div class="col-10">
-                        <input class="form-control" type="datetime-local" value="2017-11-22T14:51:55" 
-                        id="{{key}}" name="{{key}}">
+                        <input  type="text" class="form-control" name="{{key}}" id="{{key}}" 
+                                value="" />
                     </div>
+                </div>    
+                {% elif _type == "boolean" %}
+                <div class="form-group row">
+                    <label class="col-sm-2">{{key}}</label>
+                    <div class="col-sm-10">
+                        <div class="form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" name="{{key}}" id="{{key}}"> {{key}}
+                        </label>
+                        </div>
                     </div>
-                    {% end %}
-                {% end %}
-            
-            </form>
-            
-            <hr>
-            <a href="/{{base_route_rest}}" class="btn btn-secondary">Back to {{handler_name}}.list</a>
-            
-            <hr>
-            <h2>Raw: </h2>
-            {{data}}
+                </div>
+                {% elif _type == "datetime" or _type == "date" %}
+                <div class="form-group row">
+                <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
+                <div class="col-10">
+                    <input class="form-control" type="datetime-local" value="" 
+                    id="{{key}}" name="{{key}}">
+                </div>
+                </div>
+                {% elif  _type == "list" %}
+                <div class="form-group row">
+                    <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
+                    <div class="col-10">
+                        <input  type="text" class="form-control" name="{{key}}" id="{{key}}" 
+                                value="" />
+                    </div>
+                </div>    
+                 {% end %}
+            {% end %}
+        
+        
+        <hr>
+        
+        <a href="/{{base_route_rest}}" class="btn btn-primary">Back to {{handler_name}}.list</a>
+        <input type="submit" id="submit_edit_form" value="submit edit form">
+
+        </form>
+        <hr>
+        <h2>Raw: </h2>
+        {{data}}
     </div>
 {% end %}

@@ -1,11 +1,18 @@
 {% extends "base.tmpl" %}
 
 {% block include_js %}
-       
+    <script
+			  src="https://code.jquery.com/jquery-2.2.4.js"
+			  integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
+			  crossorigin="anonymous">
+    </script>
+		
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/2.8.1/jquery.serializejson.js"></script>
 {% end %}
 
 {% block js %}
-    
+{% set elem = data[0] %}
+
 <script>
     $(document).ready(function(){   
         $("#message-div").hide();
@@ -22,6 +29,7 @@
                         data : jsonString,
                         success: function(data, textStatus, jqXHR)
                         {
+                            $("#message-div").hide();
                             var od = JSON.stringify(data);
                             var obj = JSON.parse(od);
                             //alert("success sending put: " + data + textStatus)
@@ -29,15 +37,17 @@
                             $("#message-div").attr("class", "alert alert-success alert-dismissible fade show");
                             $("#message-div").append(
                                 "<strong>Well done!</strong> You successfully upadted:" + obj
-                            )
+                            );
                             $("#message-div").show();
                         },
                         error: function (jqXHR, textStatus, errorThrown)
                         {
+                            console.log(jqXHR);
+                            $("#message-div").hide();
                             $("#message-div").attr("class", "alert alert-error alert-dismissible fade show");
                             $("#message-div").append(
-                                "<strong>Well done!</strong> You successfully upadted:" + obj
-                            )
+                                "<strong>Oh NO! Error!</strong> Updating:"
+                            );
                             $("#message-div").show();
                         }
                     });  
@@ -65,8 +75,7 @@
         </div>
 
         <form id="edit_form" name="edit_form">
-        
-            {% set elem = data[0] %}
+    
             {% for key in model.schema.keys() %}
                 {% set _type = elem.schema[key]["type"] %}
                 {% if  _type == "string" or _type == "number" or _type == "integer" or _type == "float" %}

@@ -133,7 +133,7 @@ class ModelObject():
                     else:
                         raise Exception(" Key: " + str(key) + " is not in schema for: " + self.__class__.__name__)
 
-    def init_from_json(self, data, ignore=True):
+    def init_from_json(self, data, ignore=False, autoconvert=True):
         """
             makes a py dict from input json and
             sets the instance attributes 

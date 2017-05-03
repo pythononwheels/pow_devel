@@ -180,14 +180,15 @@ class Application(tornado.web.Application):
             routes = [
                 # tuple (http_method, route, { http_method : method_to_call_in_handler, .. })
                 ( r"/" + action_part + r"/search/?" , { "get" : "search" }),
-                ( r"/" + action_part + r"/(?P<id>"+ID_PATTERN+")/edit/?" , { "get" : "edit", "params" : ["id"] }),
-                ( r"/" + action_part + r"/page/?(?P<page>"+ID_PATTERN+")?/?", { "get" : "page", "params" : ["page"] }),
                 ( r"/" + action_part + r"/new/?",  {"get" : "new"}),
+                ( r"/" + action_part + r"/page/?(?P<page>"+ID_PATTERN+")?/?", { "get" : "page", "params" : ["page"] }),
+                ( r"/" + action_part + r"/show/?(?P<id>"+ID_PATTERN+")?/?",  { "get" : "show" , "params" : ["id"]} ),
+                ( r"/" + action_part + r"/(?P<id>"+ID_PATTERN+")/edit/?" , { "get" : "edit", "params" : ["id"] }),
                 ( r"/" + action_part + r"/(?P<id>"+ID_PATTERN+")?/?", 
                      { "get" : "show" , "put" : "update", "delete" : "destroy", "params" : ["id"]} ),
-                ( r"/" + action_part + r"/show/?(?P<id>"+ID_PATTERN+")?/?",  { "get" : "show" , "params" : ["id"]} ),
                 ( r"/" + action_part + r"/?", { "get" : "list", "post" : "create", "put" : "update", "delete" : "destroy" })                
             ]
+            routes.reverse()
             # BETA: Add the .format regex to the RESTpattern   
             # this makes it possible to add a .format at an URL. Example /test/12.json (or /test/12/.json)
             if cfg.beta_settings["dot_format"]:

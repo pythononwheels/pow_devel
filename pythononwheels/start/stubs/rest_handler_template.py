@@ -80,7 +80,7 @@ class {{handler_class_name}}(PowHandler):
     @tornado.web.authenticated
     def new(self):
         m=Model()
-        self.success("{{handler_name}}, new", template="{{handler_class_name}}_new.tmpl")
+        self.success("{{handler_name}}, new",data=m.to_json())
 
     @tornado.web.authenticated
     def create(self):
@@ -90,25 +90,27 @@ class {{handler_class_name}}(PowHandler):
             m=Model()
             m.init_from_json(data_json)
             m.upsert()
-            self.success(message="{{handler_name}}, create")
-        except:
-            self.error(message="{{handler_name}}, create")
+            self.success(message="{{handler_name}}, successfully creatd " + str(res.id), 
+                data=m.res_to_json(res), format="json")
+        except Exception as e:
+            self.error(message="{{handler_name}}, error updating " + str(m.id) + "msg: " + str(e), 
+                data=m.res_to_json(res), format="json")
 
     @tornado.web.authenticated
     def update(self, id=None):
         m=Model()
+        data_json = self.request.body
+        m.init_from_json(data_json, autoconvert=True)
         try:
-            data_json = self.request.body
             print("  .. Put Data: " + str(data_json))
-            m=Model()
-            m.init_from_json(data_json)
-            res = m.find_one(Model.id==m.id)
+            res = m.find_one(Model.Query.id==m.id)
             res.init_from_json(data_json)
+            #res.tags= res.tags.split(",")
             res.upsert()
             self.success(message="{{handler_name}}, successfully updated " + str(res.id), 
                 data=m.res_to_json(res), format="json")
-        except:
-            self.success(message="{{handler_name}}, error updating " + str(res.id), 
+        except Exception as e:
+            self.error(message="{{handler_name}}, error updating " + str(m.id) + "msg: " + str(e), 
                 data=m.res_to_json(res), format="json")
 
 
