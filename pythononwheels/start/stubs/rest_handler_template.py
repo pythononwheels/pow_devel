@@ -42,7 +42,7 @@ class {{handler_class_name}}(PowHandler):
     
     def show(self, id=None):
         m=Model()
-        res=m.find_one({{handler_model_class_name}}.id==id)
+        res=m.find_one(Model.Query.id==id)
         self.success(message="{{handler_model_class_name}} show", data=m.res_to_json(res))
 
     def list(self):
@@ -61,7 +61,7 @@ class {{handler_class_name}}(PowHandler):
             limit=limit,
             offset=page*page_size
             )
-        self.success(message="{{handler_model_class_name}} page: #" +str(page), data=m.res_to_json(res) )  
+        self.success(message="{{handler_name}} page: #" +str(page), data=m.res_to_json(res) )  
     
     def search(self):
         m=Model()
@@ -70,12 +70,17 @@ class {{handler_class_name}}(PowHandler):
     @tornado.web.authenticated
     def edit(self, id=None):
         m=Model()
-        self.success(message="{{handler_model_class_name}}, edit id: " + str(id))
+        try:
+            print("  .. GET Edit Data (ID): " + id)
+            res = m.find_one(Model.Query.id==id)
+            self.success(message="{{handler_name}}, edit id: " + str(id), data=m.res_to_json(res))
+        except:
+            self.error(message="{{handler_name}}, edit id: " + str(id), data=None)
 
     @tornado.web.authenticated
     def new(self):
         m=Model()
-        self.success("{{handler_model_class_name}}, new")
+        self.success("{{handler_name}}, new", template="{{handler_class_name}}_new.tmpl")
 
     @tornado.web.authenticated
     def create(self):
@@ -85,25 +90,26 @@ class {{handler_class_name}}(PowHandler):
             m=Model()
             m.init_from_json(data_json)
             m.upsert()
-            self.success(message="{{handler_model_class_name}}, create")
+            self.success(message="{{handler_name}}, create")
         except:
-            self.error(message="{{handler_model_class_name}}, create")
+            self.error(message="{{handler_name}}, create")
 
     @tornado.web.authenticated
     def update(self, id=None):
         m=Model()
         try:
             data_json = self.request.body
-            print("  .. Put Data: (should be an ID (uuid):" + str(data_json))
+            print("  .. Put Data: " + str(data_json))
             m=Model()
             m.init_from_json(data_json)
             res = m.find_one(Model.id==m.id)
             res.init_from_json(data_json)
             res.upsert()
-            print(res)
-            self.success(message="{{handler_model_class_name}}, update")
+            self.success(message="{{handler_name}}, successfully updated " + str(res.id), 
+                data=m.res_to_json(res), format="json")
         except:
-            self.error(message="{{handler_model_class_name}}, update")
+            self.success(message="{{handler_name}}, error updating " + str(res.id), 
+                data=m.res_to_json(res), format="json")
 
 
 
@@ -114,10 +120,9 @@ class {{handler_class_name}}(PowHandler):
             print("  .. DELETE Data: (should be an ID (uuid):" + str(data_json))
             m=Model()
             m.init_from_json(data_json)
-            res = m.find_one(Model.id==m.id)
-            res.init_from_json(data_json)
+            res = m.find_one(Model.Query.id==m.id)
             res.delete()
-            self.success("{{handler_model_class_name}}, destroy id: " + str(id))
+            self.success("{{handler_name}}, destroy id: " + str(id))
         except:
-            self.error("{{handler_model_class_name}}, destroy id: " + str(id))
+            self.error("{{handler_name}}, destroy id: " + str(id))
 

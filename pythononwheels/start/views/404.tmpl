@@ -1,39 +1,42 @@
 {% extends "base.tmpl" %}
-
-{% block css %}
-<!-- your additional css here-->
-
-{% end %}
-
 {% block content %}
-<!-- you main content for this page here -->
-<div class="container">
-    <div class="row centered">
-      <div class="col-sm-2">
-          &nbsp;
-      </div>
-      <div class="col-sm-8">
-          <p>&nbsp;</p>
-           <img src='{{static_url("images/404.png")}}' class="img-responsive center-block" />
-           <p>&nbsp;</p>
-           <p class="lead text-xs-center">
-            <span class="text-capitalize font-weight-bold">You tried to access:</span> {{url}}
-           </p>
-           <hr>
-           <p class="lead text-xs-center text-capitalize">
-            You might want to go <a href="/">Home</a>
-           </p>
-      </div>
-      <div class="col-sm-2">
-         &nbsp;
-      </div>
-     
-    </div>
-</div>
+    
+    <div class="row top-buffer-60">
+        <div class="col-md-2">
+            &nbsp;
+        </div>
+        <div class="col-md-4 text-right top-buffer-40" >
+          <img src={{ static_url("images/404_4.png")}} width="75%"/>
+        </div>
+        
+        <div class="col-md-4 top-buffer-40 text-left">
+            
+            <div class="alert alert-danger" role="alert">
+                <h1 class="alert-heading">Oh no HTTP 404! This URL cannot be Found. </h1> 
+            </div>
+            <p class="lead">    
+                Hm, maybe you want to restart from here:  <a href="/">Home</a>
+            </p>
+            
+            <p>
+                <table class="table">
+                    <tr>
+                        <td><b>Status:</b></td><td> {{status}} </td>
+                    </tr>
+                    <tr>
+                        <td><b>Message:</b></td><td> {{message}} </td>
+                    </tr>
+                    <tr>
+                        <td><b>URI:</b></td><td> {{request.path}} </td>
+                    </tr>
+                    <tr>
+                        <td><b>Request:</b></td><td> {{request}} </td>
+                    </tr>
+                </table>
+        </div>
+        <div class="col-md-2">
+            &nbsp;
+        </div>
 
 
-{% end %}
-
-{% block js %}
-  
 {% end %}

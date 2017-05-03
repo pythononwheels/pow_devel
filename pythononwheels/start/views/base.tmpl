@@ -22,14 +22,19 @@
     <link href="{{ static_url("css/justified-nav.css") }}" rel="stylesheet">
     <link href="{{ static_url("css/prism.css") }}" rel="stylesheet">
     <link href="{{ static_url("css/pow.css") }}" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/superagent/3.5.2/superagent.js" rel="stylesheet">
+    
     
     {% block css %}
       
     {% end %}
 
+    {% block include_js %}
+
+    {% end %}
+
+    
     {% block js %}
-      
+        
     {% end %}
   </head>
 
@@ -41,7 +46,14 @@
 
      {% end %}
     <!-- /div> <!-- /container -->
-
-
+    <script
+			  src="https://code.jquery.com/jquery-2.2.4.js"
+			  integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
+			  crossorigin="anonymous">
+    </script>
+		
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/2.8.1/jquery.serializejson.js"></script>
+    <script src="{{ static_url("js/tether.min.js") }}"></script>
+    <script src="{{ static_url("js/bootstrap.min.js") }}"></script>
   </body>
 </html>

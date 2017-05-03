@@ -1,5 +1,53 @@
 {% extends "base.tmpl" %}
 
+{% block include_js %}
+       
+{% end %}
+
+{% block js %}
+    
+<script>
+    $(document).ready(function(){   
+        $("#message-div").hide();
+
+        $("#edit_form").submit(function()
+            {
+                var data = $("#edit_form").serializeJSON();
+                console.log( data );
+                var jsonString = JSON.stringify(data);
+                console.log(jsonString);
+                $.ajax({
+                        url : "/{{handler_name}}/{{elem.get("id")}}",
+                        type: "PUT",
+                        data : jsonString,
+                        success: function(data, textStatus, jqXHR)
+                        {
+                            var od = JSON.stringify(data);
+                            var obj = JSON.parse(od);
+                            //alert("success sending put: " + data + textStatus)
+                            console.log(obj);
+                            $("#message-div").attr("class", "alert alert-success alert-dismissible fade show");
+                            $("#message-div").append(
+                                "<strong>Well done!</strong> You successfully upadted:" + obj
+                            )
+                            $("#message-div").show();
+                        },
+                        error: function (jqXHR, textStatus, errorThrown)
+                        {
+                            $("#message-div").attr("class", "alert alert-error alert-dismissible fade show");
+                            $("#message-div").append(
+                                "<strong>Well done!</strong> You successfully upadted:" + obj
+                            )
+                            $("#message-div").show();
+                        }
+                    });  
+            return false;   
+        });
+    });
+</script>
+
+{% end %}
+
 {% block content %}
     <!-- Begin page content -->
     <div class="container">
@@ -9,8 +57,14 @@
                 <p class="lead">Just go Ahead and edit your data below</p>
             </div>
         </div>
+        
+         <div id="message-div" class="" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
 
-        <form>
+        <form id="edit_form" name="edit_form">
         
             {% set elem = data[0] %}
             {% for key in model.schema.keys() %}
@@ -20,7 +74,7 @@
                     <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
                     <div class="col-10">
                         <input  type="text" class="form-control" name="{{key}}" id="{{key}}" 
-                                value="{{elem.get(key)}}">
+                                value="{{elem.get(key)}}" />
                     </div>
                 </div>    
                 {% elif _type == "boolean" %}
@@ -46,13 +100,24 @@
                     id="{{key}}" name="{{key}}">
                 </div>
                 </div>
-                {% end %}
+                {% elif  _type == "list" %}
+                <div class="form-group row">
+                    <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
+                    <div class="col-10">
+                        <input  type="text" class="form-control" name="{{key}}" id="{{key}}" 
+                                value="{{", ".join(elem.get(key))}}" />
+                    </div>
+                </div>    
+                 {% end %}
             {% end %}
         
-        </form>
-        <hr>
-        <a href="/{{base_route_rest}}" class="btn btn-primary">Back to {{handler_name}}.list</a>
         
+        <hr>
+        
+        <a href="/{{base_route_rest}}" class="btn btn-primary">Back to {{handler_name}}.list</a>
+        <input type="submit" id="submit_edit_form" value="submit edit form">
+
+        </form>
         <hr>
         <h2>Raw: </h2>
         {{data}}

@@ -36,7 +36,7 @@ class IndexdHandler(BaseHandler):
 @app.add_route(".*", pos=-3)
 class ErrorHandler(BaseHandler):
     def get(self):
-        return self.render("404.tmpl", url=self.request.uri)
+        return self.error( template="404.tmpl", http_code=404  )
 
 @app.add_route("/test/([0-9]+)*", dispatch={"get" : "test"})
 class TestHandler(BaseHandler):

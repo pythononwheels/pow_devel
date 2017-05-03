@@ -234,6 +234,8 @@ class TinyBaseModel(ModelObject):
         if as_json:
             return self.res_to_json(reslist)
         else:
+            if len(reslist) == 1:
+                return reslist[0]
             return reslist
 
     def find(self,*criterion, as_json=False):

@@ -294,7 +294,7 @@ class BaseHandler(tornado.web.RequestHandler):
             viewname = self.__class__.__name__ + "_" + self.view + ".tmpl"
             if self.view is not None:
                 model=self.__class__.model
-                self.render( viewname, data=model.json_result_to_object(data), message=message, 
+                return self.render( viewname, data=model.json_result_to_object(data), message=message, 
                     handler_name = self.__class__.__name__.lower(), base_route_rest=self.base_route_rest , 
                     model=model, status=http_code, next=succ, prev=prev, model_name=model.__class__.__name__.lower() )
             else:
@@ -314,9 +314,13 @@ class BaseHandler(tornado.web.RequestHandler):
         self.finish()
 
     def error(self, message=None, data=None, succ=None, prev=None,
-        http_code=500, format=None, encoder=None):
+        http_code=500, format=None, encoder=None, template=None):
         
-        self.application.log_request(self, message="base.error:" + message)
+        self.application.log_request(self, message="base.error:" + str(message))
+        
+        if template != None:
+            self.render(template, message=message, data=data, succ=succ, prev=prev,
+                        status=http_code, request=self.request)
         self.set_status(http_code)
         
         if not format:
@@ -324,7 +328,7 @@ class BaseHandler(tornado.web.RequestHandler):
         if not format:
             format = cfg.myapp["default_format"]
         if format.lower() == "html":
-            self.render("error.tmpl", data=data, message=message, status=http_code)
+            return self.render("error.tmpl", data=data, message=message, status=http_code)
         if encoder:
             encoder = encoder
         else:

@@ -177,11 +177,17 @@ class ModelObject():
     
     
     def res_to_json(self, res):
-         """
-             returns a list of results in a json serialized format.
-         """
-         #return json.loads(json.dumps(res, default=pow_json_serializer))   
-         return [x.to_json() for x in res]
+        """
+            returns a list of results in a json serialized format.
+        """
+        if not isinstance(res, type([])):
+            res = [res]
+        #return json.loads(json.dumps(res, default=pow_json_serializer))   
+        reslist =  [x.to_json() for x in res]
+        if len(reslist) == 1:
+            return reslist[0]
+        else:
+            return reslist
          
     def to_csv(self, encoder=None):
         """ returns the models as csv using the given encoder.
