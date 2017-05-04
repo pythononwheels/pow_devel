@@ -35,18 +35,25 @@
                             //alert("success sending put: " + data + textStatus)
                             console.log(obj);
                             $("#message-div").attr("class", "alert alert-success alert-dismissible fade show");
-                            $("#message-div").append(
-                                "<strong>Well done!</strong> You successfully upadted:" + obj
+                            $("#message-div").html(`
+                                <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                                <span aria-hidden='true'>&times;</span>
+                                </button>
+                                <strong>Well done!</strong> You successfully upadted:` + obj 
                             );
                             $("#message-div").show();
+                            
                         },
                         error: function (jqXHR, textStatus, errorThrown)
                         {
                             console.log(jqXHR);
                             $("#message-div").hide();
                             $("#message-div").attr("class", "alert alert-error alert-dismissible fade show");
-                            $("#message-div").append(
-                                "<strong>Oh NO! Error!</strong> Updating:"
+                            $("#message-div").html(
+                                `<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                                <span aria-hidden='true'>&times;</span>
+                                </button>
+                                <strong>Well done!</strong> You successfully upadted:`
                             );
                             $("#message-div").show();
                         }
@@ -69,9 +76,7 @@
         </div>
         
          <div id="message-div" class="" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+
         </div>
 
         <form id="edit_form" name="edit_form">
@@ -113,8 +118,8 @@
                 <div class="form-group row">
                     <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
                     <div class="col-10">
-                        <input  type="text" class="form-control" name="{{key}}" id="{{key}}" 
-                                value="{{", ".join(elem.get(key))}}" />
+                        <input  type="text" class="form-control" name="{{key}}[list]:auto" id="{{key}}" 
+                                value="[{{", ".join(elem.get(key))}}]" />
                     </div>
                 </div>    
                  {% end %}

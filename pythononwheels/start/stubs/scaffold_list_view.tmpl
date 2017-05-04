@@ -1,5 +1,55 @@
 {% extends "base.tmpl" %}
 
+{% block include_js %}
+    <script
+			  src="https://code.jquery.com/jquery-2.2.4.js"
+			  integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
+			  crossorigin="anonymous">
+    </script>
+		
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/2.8.1/jquery.serializejson.js"></script>
+{% end %}
+
+{% block js %}
+
+<script>
+    $(document).ready(function(){   
+        $(".btn-delete").click(function(e)
+            {
+                console.log( "btn_delete: " + $(e.currentTarget).attr("value"));
+                var id = $(e.currentTarget).attr("value");
+                var data = jsonString = JSON.stringify({"id" : id});
+                console.log(data)
+                $.ajax({
+                        url : "/{{handler_name}}/" + id,
+                        type: "DELETE",
+                        data : data,
+                        success: function(data, textStatus, jqXHR)
+                        {
+                            
+                            var od = JSON.stringify(data);
+                            var obj = JSON.parse(od);
+                            //alert("success sending put: " + data + textStatus)
+                            console.log(obj);
+                            var curr_tr = $("#"+id);
+                            curr_tr.fadeOut();                            
+                            
+
+                        },
+                        error: function (jqXHR, textStatus, errorThrown)
+                        {
+                            console.log(jqXHR);
+                            var curr_tr = $("#"+id);
+                            curr_tr.fadeTo(100, 0.3, function() { $(this).fadeTo(500, 1.0); });
+                           // try fadeTo(0000)
+                        }
+                    });   // <--- end ajax
+                
+            });
+    });
+</script>
+{% end %}
+
 {% block content %}
 <!-- Begin page content -->
 <div class="container">
@@ -7,7 +57,7 @@
         <div class="container">
             <h1 class="display-3">This is the <strong>{{handler_name}}</strong> list view </h1>
             <p class="lead">Just go Ahead and show, edit or delete your data below using the action links.</p>
-            <p class="lead">Of course you can also <a href="{{base_route_rest}}/create" class="btn btn-success">
+            <p class="lead">Of course you can also <a href="{{base_route_rest}}/new" class="btn btn-success">
             Create</a> a new {{model_name}} here.</p>
         </div>
     </div>
@@ -37,7 +87,7 @@
                     </td>
                     <td>
                         <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
-                        <a href='{{base_route_rest}}/{{getattr(elem, "id")}}/delete' class="btn btn-danger">Delete</a>
+                        <button type="button" class="btn btn-danger btn-delete" value="{{elem.get("id")}}">Delete</a>
                     </td>
                     </tr>
                 {% end %}

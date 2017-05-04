@@ -137,6 +137,14 @@ class TinyBaseModel(ModelObject):
         """
         tinydb.purge_table(self.tablename)
     
+    def delete(self):
+        """
+            remove the (this) model from the DB.
+            Key is the id
+        """
+        Q = Query()
+        return self.table.remove(Q.id==self.id)
+        
     def upsert(self):
         """ insert or update intelligently """
         
