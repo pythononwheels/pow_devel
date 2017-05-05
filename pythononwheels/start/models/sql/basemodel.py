@@ -150,6 +150,21 @@ class SqlBaseModel(ModelObject):
             else:
                 #print("  .. skipping: " + col_name )
                 pass
+                
+    def init_from_json(self, data, ignore=False, autoconvert=True):
+        """
+            makes a py dict from input json and
+            sets the instance attributes 
+        """
+        d=json.loads(data)
+        for key in d:
+            if ignore:
+                setattr(self, key, d[key])
+            else:
+                if key in self.schema:
+                    setattr(self, key, d[key])
+                else:
+                    raise Exception(" Key: " + str(key) + " is not in schema for: " + self.__class__.__name__)
     
     def to_json(self):
         return self.json_dumps()

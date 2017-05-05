@@ -44,7 +44,8 @@ myapp = {
     "logfile"           :   os.path.join(os.path.dirname(__file__),"pow.log"),
     "logformat"         :   logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'),
     "id_pattern"        :   "[0-9\-a-zA-Z]+",       # the regex used to math IDs in URLs (uuid in this case)
-    "list_separator"    :   ","
+    "list_separator"    :   ",",
+    "date_format"       :   "%Y-%m-%dT%H:%M:%S"
     #"environment"       :   "development"       # set the current environment (also see the db section)
 }
 

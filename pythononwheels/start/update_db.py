@@ -115,9 +115,9 @@ def main():
             print(" Change history ")
             print(50*"-")
             command.history(alembic_cfg, rev_range=None, verbose=False)
-        print(" res type: " + str(type(res)))
-        print(str(res))
-        print(" res dir: " + str(dir(res)))
+        #print(" res type: " + str(type(res)))
+        #print(str(res))
+        #print(" res dir: " + str(dir(res)))
         sys.exit()
 
 if __name__ == "__main__":

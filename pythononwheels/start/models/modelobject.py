@@ -7,6 +7,7 @@ import datetime, decimal
 from {{appname}}.config import myapp
 from {{appname}}.powlib import merge_two_dicts
 from {{appname}}.encoders import pow_json_serializer
+from {{appname}}.decoders import pow_json_deserializer
 
 class ModelObject():
     """
@@ -138,7 +139,7 @@ class ModelObject():
             makes a py dict from input json and
             sets the instance attributes 
         """
-        d=json.loads(data)
+        d=json.loads(data,object_hook=pow_json_deserializer)
         for key in d:
             if ignore:
                 setattr(self, key, d[key])
