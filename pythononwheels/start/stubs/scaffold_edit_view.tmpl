@@ -16,7 +16,18 @@
 <script>
     $(document).ready(function(){   
         $("#message-div").hide();
-
+        $(".btn-delete").click(function(e)
+            {
+                console.log( "btn_delete: " + $(e.currentTarget).attr("value"));
+                var id = $(e.currentTarget).attr("value");
+                var data = jsonString = JSON.stringify({"id" : id});
+                console.log(data)
+                var curr_tr = $("#"+id);
+                curr_tr.fadeOut();     
+                
+                
+            });
+    
         $("#edit_form").submit(function()
             {
                 var data = $("#edit_form").serializeJSON();
@@ -58,6 +69,9 @@
                             $("#message-div").show();
                         }
                     });  
+            //setTimeout(function() {
+            //    $('#message-div').fadeOut('fast');
+            //}, 10000); // <-- time in milliseconds
             return false;   
         });
     });
@@ -75,8 +89,7 @@
             </div>
         </div>
         
-         <div id="message-div" class="" role="alert">
-
+        <div id="message-div" class="" role="alert">    
         </div>
 
         <form id="edit_form" name="edit_form">
@@ -115,15 +128,36 @@
                 </div>
                 </div>
                 {% elif  _type == "list" %}
-                <div class="form-group row">
-                    <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
-                    <div class="col-10">
-                        <input  type="text" class="form-control" name="{{key}}[list]:auto" id="{{key}}" 
-                                value="[{{", ".join(elem.get(key))}}]" />
-                    </div>
-                </div>    
-                 {% end %}
-            {% end %}
+                    <div class="form-group row">
+                        <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
+                        <div class="col-10">
+                                {% if len(elem.get(key)) == 0 %}
+                                    Len=0
+                                    <input  type="text" class="form-control" name="{{key}}[]" id="{{key}}" 
+                                            value="" />
+                                {% elif len(elem.get(key)) > 0 %}
+                                    {% set item = elem.get(key) %}
+                                            len>0
+                                            type:{{type(item)}}
+                                            
+                                            {% for val in item %}
+                                            <table>    
+                                                <tr id="{{val}}">
+                                                <td><input  type="text" class="form-control" name="{{key}}[]" id="{{key}}" 
+                                                    value="{{val}}" />
+                                                </td>
+                                                <td>
+                                                <button type="button" class="btn btn-danger btn-delete" value="{{val}}}">-</button>
+                                                </td>
+                                                </tr>
+                                            </table>
+                                            {% end %}
+                                            <button type="button" class="btn btn-success btn-add-to-list" value="{{key}}">+</button>
+                                {% end %}
+                        </div>
+                    </div>    
+                {% end %}
+            {% end %} 
         
         
         <hr>

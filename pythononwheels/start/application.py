@@ -33,6 +33,7 @@ class Application(tornado.web.Application):
     #routing list to handle absolute route positioning
     handlers_tmp = []
 
+     
     def __init__(self):
         self.handlers = routes
         # importing !"activates" the add_route decorator
@@ -41,12 +42,16 @@ class Application(tornado.web.Application):
         #self.handlers+=h
 
         # use the absolute positioning routing table
-        #htmp=getattr(self.__class__, "handlers_tmp", None)
+        
+        #print(list(reversed(sorted(htmp, key=get_key))))
+        # just for route ordering. (sotrted)
         def get_key(item):
             return item[1]
-        #print(list(reversed(sorted(htmp, key=get_key))))
-        self.show_positioned_routes( list(reversed(sorted(h, key=get_key))) )
-        hordered=[x[0] for x in reversed(sorted(h, key=get_key))]
+        ## working version:
+        #self.show_positioned_routes( list(reversed(sorted(h, key=get_key))) )
+        #hordered=[x[0] for x in reversed(sorted(h, key=get_key))]
+        ## end!
+        hordered = self.order_routes(h)
         #print(str(hordered))
         self.handlers+=hordered
 
@@ -60,6 +65,39 @@ class Application(tornado.web.Application):
         self.Session = Session
         self.engine = engine
         self.Base = Base
+    
+    
+    def order_routes(self, routes):
+        """ order the routes.
+            1) if no pos is given, routes are appended in the order they "arrived"
+            2) positioned routes are inserted in this list afterwords.
+            3) the list is reversed (so pos=0 will be the last routes, pos=1 the second last ...)
+                You'll most probably add something like:
+                    @app.add_route("/", pos=1) to IndexHandler 
+                and:
+                    @app.add_route(".*", pos=0) to yur ErrorHandler to catch all unhandled routes.
+        """
+        
+        def get_key(item):
+            return item[1]
+        hordered = []
+        tmp=[]
+        for elem in routes:
+            if elem[1] == -1:
+                hordered.append((elem[0], len(hordered)))
+            else:
+                tmp.append(elem)
+        tmp=sorted(tmp, key=get_key)
+        for elem in tmp:
+            hordered.insert(elem[1], (elem[0], elem[1]))
+
+        #self.show_positioned_routes(hordered)
+        #hordered=list(sorted(hordered, key=get_key))
+        hordered=reversed(hordered)
+        hordered=[x[0] for x in hordered]
+        
+        return hordered
+
 
     def log_request(self, handler, message=None):
         """ 
@@ -146,7 +184,7 @@ class Application(tornado.web.Application):
     # the RESTful route decorator v2
     # with dedicated routes. One per default action
     #
-    def add_rest_routes(self, route, api=None, pos=0):
+    def add_rest_routes(self, route, api=None, pos=-1):
         """
             cls is the class that will get the RESTful routes
             it is automatically the decorated class
@@ -195,7 +233,6 @@ class Application(tornado.web.Application):
                 routes = [(x[0]+ r"(?:/?\.\w+)?/?", x[1]) for x in routes]  
             #print("added the following routes: " + r)
             handlers=getattr(self.__class__, "handlers", None)
-            #handlers=getattr(cls.__class__, "handlers", None)
             try:
                 for elem in routes:
                     handlers.append( ((elem[0],cls, elem[1]), pos) )
@@ -211,7 +248,7 @@ class Application(tornado.web.Application):
     #
     # the direct route decorator
     #
-    def add_route(self, route, dispatch={}, pos=0):
+    def add_route(self, route, dispatch={}, pos=-1):
         """
             cls is the class that will get the given route / API route
             cls is automatically the decorated class
