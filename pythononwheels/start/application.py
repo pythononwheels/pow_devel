@@ -93,7 +93,7 @@ class Application(tornado.web.Application):
 
         #self.show_positioned_routes(hordered)
         #hordered=list(sorted(hordered, key=get_key))
-        #hordered=reversed(hordered)
+        hordered=reversed(hordered)
         hordered=[x[0] for x in hordered]
         
         return hordered

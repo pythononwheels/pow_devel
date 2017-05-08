@@ -40,15 +40,15 @@ class SqlBaseModel(ModelObject):
         self.class_name = self.__class__.__name__.capitalize()
         from marshmallow_sqlalchemy import ModelSchema
         cls_meta=type("Meta", (object,),{"model" : self.__class__})
+        
         jschema_class = type(self.class_name+'Schema', (ModelSchema,),
-            {
-                "Meta": cls_meta,
-                "model" : self.__class__,
-                "sqla_session" : session
-            
-            }
+                {
+                    "Meta": cls_meta,
+                    "model" : self.__class__,
+                    "sqla_session" : session   
+                }
             )
-        setattr(self, "_jsonify", jschema_class())
+        setattr(self, "marshmallow_schema", jschema_class())
         self.session=session
         self.table = self.metadata.tables[pluralize(self.__class__.__name__.lower())]
         
@@ -161,7 +161,7 @@ class SqlBaseModel(ModelObject):
             makes a py dict from input json and
             sets the instance attributes 
         """
-        d=json.loads(data)
+        d=self.marshmallow_schema.load(data, session=session).data
         for key in d:
             if ignore:
                 setattr(self, key, d[key])
@@ -172,7 +172,7 @@ class SqlBaseModel(ModelObject):
                     raise Exception(" Key: " + str(key) + " is not in schema for: " + self.__class__.__name__)
     
     def to_json(self):
-        return json.dumps(self._jsonify.dump(self).data)
+        return json.dumps(self.marshmallow_schema.dump(self).data)
 
     # def json_dumps(self):
     #     """ probably better return str(self.json_dump()) ??... test it """
