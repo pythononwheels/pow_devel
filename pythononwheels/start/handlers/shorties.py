@@ -26,14 +26,14 @@ class ThanksHandler(BaseHandler):
     
 # if you DON't specify a method, the standard HTTP verb method (e.g. get(), put() will be called)
 @app.add_route("/index/([0-9]+)*")
-@app.add_route("/", pos=-2)
+@app.add_route("/", pos=1)
 class IndexdHandler(BaseHandler):
     def get(self, index=None):
         print("  index:" + str(index))
         self.render("index.tmpl")
 
 # this will be the last route since it has the lowest pos.
-@app.add_route(".*", pos=-3)
+@app.add_route(".*", pos=0)
 class ErrorHandler(BaseHandler):
     def get(self):
         return self.error( template="404.tmpl", http_code=404  )
