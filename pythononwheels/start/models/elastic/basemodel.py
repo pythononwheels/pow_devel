@@ -101,7 +101,7 @@ class ElasticBaseModel(ModelObject):
             self._id = res.get("_id")
         return res
 
-    def get_by_id(self, id=None):
+    def find_by_id(self, id=None):
         """ return result by id (only)"""
         if id:
             es.get(index=dbname, doc_type=self.doc_type, id=id)

@@ -42,7 +42,7 @@ class {{handler_class_name}}(PowHandler):
     
     def show(self, id=None):
         m=Model()
-        res=m.find_one(Model.Query.id==id)
+        res=m.find_by_id(id)
         self.success(message="{{handler_model_class_name}} show", data=m.res_to_json(res))
 
     def list(self):
@@ -72,7 +72,7 @@ class {{handler_class_name}}(PowHandler):
         m=Model()
         try:
             print("  .. GET Edit Data (ID): " + id)
-            res = m.find_one(Model.Query.id==id)
+            res = m.find_by_id(id)
             self.success(message="{{handler_name}}, edit id: " + str(id), data=m.res_to_json(res))
         except:
             self.error(message="{{handler_name}}, edit id: " + str(id), data=None)
@@ -100,10 +100,10 @@ class {{handler_class_name}}(PowHandler):
     def update(self, id=None):
         m=Model()
         data_json = self.request.body
-        m.init_from_json(data_json, autoconvert=True)
+        m.init_from_json(data_json)
         try:
             print("  .. Put Data: " + str(data_json))
-            res = m.find_one(Model.Query.id==m.id)
+            res = m.find_by_id(id)
             res.init_from_json(data_json)
             #res.tags= res.tags.split(",")
             res.upsert()
@@ -122,7 +122,7 @@ class {{handler_class_name}}(PowHandler):
             print("  .. DELETE Data: (should be an ID (uuid):" + str(data_json))
             m=Model()
             m.init_from_json(data_json)
-            res = m.find_one(Model.Query.id==m.id)
+            res = m.find_by_id(id)
             res.delete()
             self.success("{{handler_name}}, destroy id: " + str(id))
         except:

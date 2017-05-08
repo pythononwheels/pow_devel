@@ -24,13 +24,13 @@ class {{model_class_name}}(Base):
     #
     schema = {
         'text': {'type': 'string'},
-        'name': {'type': 'string', 'maxlength' : 35},
-        'last': {
+        'title': {'type': 'string', 'maxlength' : 35},
+        'likes': {
             'type': 'number',
-             "sql" : {          # this is just an example
+             "sql" : {          # sql attributes are handed raw to sqlalchemy Column
                 "primary_key"   : False,
                 "default"       : "123",
-                "unique"        : True, 
+                "unique"        : False, 
                 "nullable"      : False 
             }
         }

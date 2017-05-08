@@ -144,7 +144,7 @@ class TinyBaseModel(ModelObject):
         """
         Q = Query()
         return self.table.remove(Q.id==self.id)
-        
+
     def upsert(self):
         """ insert or update intelligently """
         
@@ -183,16 +183,7 @@ class TinyBaseModel(ModelObject):
         Q = Query()
         res = self.table.search(Q.eid == eid)
         return res
-
-    def get_by_id(self, id=None):
-        """ return by id """
-        if not self.id:
-            id = self.id
-        Q = Query()
-        res = self.table.search(Q.id == str(id))
-        return res
-        
-
+    
     def from_statement(self, statement):
         """ Method not available for TinyDB Models """
         raise RuntimeError("Method not available for TinyDB Models ")
@@ -255,6 +246,14 @@ class TinyBaseModel(ModelObject):
         res = self.table.search(*criterion)
         return self._return_find(res, as_json)
     
+    def find_by_id(self, id=None):
+        """ return by id """
+        if not self.id:
+            id = self.id
+        Q = Query()
+        res = self.table.search(Q.id == str(id))
+        return res
+        
     def find_random(self, as_json=False):
         """ Find and return a random element """
         import random

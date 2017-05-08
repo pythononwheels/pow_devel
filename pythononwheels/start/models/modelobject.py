@@ -133,7 +133,7 @@ class ModelObject():
                     else:
                         raise Exception(" Key: " + str(key) + " is not in schema for: " + self.__class__.__name__)
 
-    def init_from_json(self, data, ignore=False, autoconvert=True):
+    def init_from_json(self, data, ignore=False):
         """
             makes a py dict from input json and
             sets the instance attributes 
@@ -294,7 +294,7 @@ class ModelObject():
         """ insert oro update intelligently """
         raise NotImplementedError("Subclasses should overwrite this Method.")
 
-    def get_by_id(self, id):
+    def find_by_id(self, id):
         """ return result by id (only)"""
         raise NotImplementedError("Subclasses should overwrite this Method.")
 

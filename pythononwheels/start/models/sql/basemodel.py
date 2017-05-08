@@ -9,7 +9,7 @@ from sqlalchemy import orm
 import sqlalchemy.inspection
 from cerberus import Validator
 import xmltodict
-import json
+import simplejson as json
 import datetime, decimal
 from {{appname}}.config import myapp
 from {{appname}}.models.modelobject import ModelObject
@@ -41,7 +41,12 @@ class SqlBaseModel(ModelObject):
         from marshmallow_sqlalchemy import ModelSchema
         cls_meta=type("Meta", (object,),{"model" : self.__class__})
         jschema_class = type(self.class_name+'Schema', (ModelSchema,),
-            {"Meta": cls_meta}
+            {
+                "Meta": cls_meta,
+                "model" : self.__class__,
+                "sqla_session" : session
+            
+            }
             )
         setattr(self, "_jsonify", jschema_class())
         self.session=session
@@ -152,15 +157,15 @@ class SqlBaseModel(ModelObject):
                 pass
     
     def to_json(self):
-        return self.json_dumps()
+        return json.dumps(self._jsonify.dump(self).data)
 
-    def json_dumps(self):
-        """ probably better return str(self.json_dump()) ??... test it """
-        return json.dumps(self.json_dump())
+    # def json_dumps(self):
+    #     """ probably better return str(self.json_dump()) ??... test it """
+    #     return json.dumps(self.json_dump())
 
-    def json_dump(self):
-        """ return this instances columns as json"""
-        return self._jsonify.dump(self).data
+    # def json_dump(self):
+    #     """ return this instances columns as json"""
+    #     return self._jsonify.dump(self).data
    
     def json_load_from_db(self, data, keep_id=False):
         if keep_id:
@@ -248,11 +253,10 @@ class SqlBaseModel(ModelObject):
         session.delete(self)
         session.commit()        
 
-    def get_by_id(self, id):
-        return self.query(self.__class__).get(id)
+    
 
     def from_statement(self, statement):
-        return self.query(self.__class__).from_statement(statement)
+        return session.query(self.__class__).from_statement(statement)
 
     def page(self, *criterion, limit=None, offset=None):
         res = session.query(self.__class__).filter(*criterion).limit(limit).offset(offset).all()
@@ -261,6 +265,9 @@ class SqlBaseModel(ModelObject):
     def find(self,*criterion):
         return session.query(self.__class__).filter(*criterion)
     
+    def find_by_id(self, id):
+        return session.query(self.__class__).get(id)
+
     def find_all(self, *criterion, raw=False, as_json=False, limit=None, offset=None):
         if raw:
             return session.query(self.__class__).filter(*criterion).limit(limit).offset(offset)
