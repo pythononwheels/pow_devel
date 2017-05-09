@@ -19,7 +19,7 @@
 
         $("#create_form").submit(function()
             {
-                var data = $("#edit_form").serializeJSON();
+                var data = $("#create_form").serializeJSON();
                 console.log( data );
                 var jsonString = JSON.stringify(data);
                 console.log(jsonString);
