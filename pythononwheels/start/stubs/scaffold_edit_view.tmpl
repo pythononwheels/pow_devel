@@ -35,7 +35,7 @@
                 var jsonString = JSON.stringify(data);
                 console.log(jsonString);
                 $.ajax({
-                        url : "/{{handler_name}}/{{elem.get("id")}}",
+                        url : "/{{handler_name}}/{{elem.get('id')}}",
                         type: "PUT",
                         data : jsonString,
                         success: function(data, textStatus, jqXHR)
@@ -50,7 +50,7 @@
                                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
                                 <span aria-hidden='true'>&times;</span>
                                 </button>
-                                <strong>Well done!</strong> You successfully upadted:` + obj 
+                                <strong>Well done!</strong> You successfully updated:` + obj 
                             );
                             $("#message-div").show();
                             
@@ -59,13 +59,8 @@
                         {
                             console.log(jqXHR);
                             $("#message-div").hide();
-                            $("#message-div").attr("class", "alert alert-error alert-dismissible fade show");
-                            $("#message-div").html(
-                                `<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-                                <span aria-hidden='true'>&times;</span>
-                                </button>
-                                <strong>Well done!</strong> You successfully upadted:`
-                            );
+                            $("#message-div").attr("class", "alert alert-error");
+                            $("#message-div").text("Problems");
                             $("#message-div").show();
                         }
                     });  
@@ -89,74 +84,79 @@
             </div>
         </div>
         
-        <div id="message-div" class="" role="alert">    
+        <div id="message-div" role="alert">    
         </div>
 
         <form id="edit_form" name="edit_form">
     
             {% for key in model.schema.keys() %}
-                {% set _type = elem.schema[key]["type"] %}
-                {% if  _type == "string" or _type == "number" or _type == "integer" or _type == "float" %}
-                <div class="form-group row">
-                    <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
-                    <div class="col-10">
-                        <input  type="text" class="form-control" name="{{key}}" id="{{key}}" 
-                                value="{{elem.get(key)}}" />
-                    </div>
-                </div>    
-                {% elif _type == "boolean" %}
-                <div class="form-group row">
-                    <label class="col-sm-2">{{key}}</label>
-                    <div class="col-sm-10">
-                        <div class="form-check">
-                        <label class="form-check-label">
-                            <input class="form-check-input" type="checkbox" name="{{key}}" id="{{key}}"
-                            {% if  elem.get(key) == True %}
-                                checked="checked"
-                            {% end %}
-                            > {{key}}
-                        </label>
-                        </div>
-                    </div>
-                </div>
-                {% elif _type == "datetime" or _type == "date" %}
-                <div class="form-group row">
-                <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
-                <div class="col-10">
-                    <input class="form-control" type="datetime-local" value="{{elem.get(key)}}" 
-                    id="{{key}}" name="{{key}}">
-                </div>
-                </div>
-                {% elif  _type == "list" %}
+                {% if key in cfg.myapp["internal_fields"] %}
+                    {% set class_hidden = "hidden" %}
+                {% else %}
+                    {% set class_hidden = "" %}
+                {% end %}
+                    {% set _type = elem.schema[key]["type"] %}
+                    {% if  _type == "string" or _type == "number" or _type == "integer" or _type == "float" %}
                     <div class="form-group row">
                         <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
                         <div class="col-10">
-                                {% if len(elem.get(key)) == 0 %}
-                                    Len=0
-                                    <input  type="text" class="form-control" name="{{key}}[]" id="{{key}}" 
-                                            value="" />
-                                {% elif len(elem.get(key)) > 0 %}
-                                    {% set item = elem.get(key) %}
-                                            len>0
-                                            type:{{type(item)}}
-                                            
-                                            {% for val in item %}
-                                            <table>    
-                                                <tr id="{{val}}">
-                                                <td><input  type="text" class="form-control" name="{{key}}[]" id="{{key}}" 
-                                                    value="{{val}}" />
-                                                </td>
-                                                <td>
-                                                <button type="button" class="btn btn-danger btn-delete" value="{{val}}}">-</button>
-                                                </td>
-                                                </tr>
-                                            </table>
-                                            {% end %}
-                                            <button type="button" class="btn btn-success btn-add-to-list" value="{{key}}">+</button>
-                                {% end %}
+                            <input  type="text" class="form-control" name="{{key}}" id="{{key}}" 
+                                    value="{{elem.get(key)}}" />
                         </div>
                     </div>    
-                {% end %}
+                    {% elif _type == "boolean" %}
+                    <div class="form-group row">
+                        <label class="col-sm-2">{{key}}</label>
+                        <div class="col-sm-10">
+                            <div class="form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" name="{{key}}" id="{{key}}"
+                                {% if  elem.get(key) == True %}
+                                    checked="checked"
+                                {% end %}
+                                > {{key}}
+                            </label>
+                            </div>
+                        </div>
+                    </div>
+                    {% elif _type == "datetime" or _type == "date" %}
+                    <div class="form-group row">
+                    <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
+                    <div class="col-10">
+                        <input class="form-control" type="datetime-local" value="{{elem.get(key).strftime(cfg.myapp["date_format"])}}" 
+                        id="{{key}}" name="{{key}}">
+                    </div>
+                    </div>
+                    {% elif  _type == "list" %}
+                        <div class="form-group row">
+                            <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
+                            <div class="col-10">
+                                    {% if len(elem.get(key)) == 0 %}
+                                        Len=0
+                                        <input  type="text" class="form-control" name="{{key}}[]" id="{{key}}" 
+                                                value="" />
+                                    {% elif len(elem.get(key)) > 0 %}
+                                        {% set item = elem.get(key) %}
+                                                len>0
+                                                type:{{type(item)}}
+                                                
+                                                {% for val in item %}
+                                                <table>    
+                                                    <tr id="{{val}}">
+                                                    <td><input  type="text" class="form-control" name="{{key}}[]" id="{{key}}" 
+                                                        value="{{val}}" />
+                                                    </td>
+                                                    <td>
+                                                    <button type="button" class="btn btn-danger btn-delete" value="{{val}}}">-</button>
+                                                    </td>
+                                                    </tr>
+                                                </table>
+                                                {% end %}
+                                                <button type="button" class="btn btn-success btn-add-to-list" value="{{key}}">+</button>
+                                    {% end %}
+                            </div>
+                        </div>    
+                    {% end %}
             {% end %} 
         
         
@@ -167,7 +167,9 @@
 
         </form>
         <hr>
-        <h2>Raw: </h2>
+        <h2>Raw Data: </h2>
         {{data}}
+        <hr>
+        Date format: {{cfg.myapp["date_format"] }} (see config.myapp["date_format"])
     </div>
 {% end %}

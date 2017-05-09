@@ -73,11 +73,7 @@
             </thead>
             <tbody>
                 {% for elem in data %}
-<<<<<<< HEAD
                     <tr id="{{elem.get("id")}}">
-=======
-                    <tr id="{{elem.get("id")}}">>
->>>>>>> origin/master
                     {% for key in elem.schema.keys() %}
                         <td>{{getattr(elem, key)}}</td>
                     {% end %}

@@ -77,43 +77,45 @@
         <form id="create_form" name="create_form">
     
             {% for key in model.schema.keys() %}
-                {% set _type = model.schema[key]["type"] %}
-                {% if  _type == "string" or _type == "number" or _type == "integer" or _type == "float" %}
-                <div class="form-group row">
-                    <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
-                    <div class="col-10">
-                        <input  type="text" class="form-control" name="{{key}}" id="{{key}}" 
-                                value="" />
-                    </div>
-                </div>    
-                {% elif _type == "boolean" %}
-                <div class="form-group row">
-                    <label class="col-sm-2">{{key}}</label>
-                    <div class="col-sm-10">
-                        <div class="form-check">
-                        <label class="form-check-label">
-                            <input class="form-check-input" type="checkbox" name="{{key}}" id="{{key}}"> {{key}}
-                        </label>
+                {% if key not in cfg.myapp["internal_fields"] %}
+                    {% set _type = model.schema[key]["type"] %}
+                    {% if  _type == "string" or _type == "number" or _type == "integer" or _type == "float" %}
+                    <div class="form-group row">
+                        <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
+                        <div class="col-10">
+                            <input  type="text" class="form-control" name="{{key}}" id="{{key}}" 
+                                    value="" />
+                        </div>
+                    </div>    
+                    {% elif _type == "boolean" %}
+                    <div class="form-group row">
+                        <label class="col-sm-2">{{key}}</label>
+                        <div class="col-sm-10">
+                            <div class="form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" name="{{key}}" id="{{key}}"> {{key}}
+                            </label>
+                            </div>
                         </div>
                     </div>
-                </div>
-                {% elif _type == "datetime" or _type == "date" %}
-                <div class="form-group row">
-                <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
-                <div class="col-10">
-                    <input class="form-control" type="datetime-local" value="" 
-                    id="{{key}}" name="{{key}}">
-                </div>
-                </div>
-                {% elif  _type == "list" %}
-                <div class="form-group row">
+                    {% elif _type == "datetime" or _type == "date" %}
+                    <div class="form-group row">
                     <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
                     <div class="col-10">
-                        <input  type="text" class="form-control" name="{{key}}" id="{{key}}" 
-                                value="" />
+                        <input class="form-control" type="datetime-local" value="" 
+                        id="{{key}}" name="{{key}}">
                     </div>
-                </div>    
-                 {% end %}
+                    </div>
+                    {% elif  _type == "list" %}
+                    <div class="form-group row">
+                        <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
+                        <div class="col-10">
+                            <input  type="text" class="form-control" name="{{key}}" id="{{key}}" 
+                                    value="" />
+                        </div>
+                    </div>    
+                    {% end %}
+                {% end %}
             {% end %}
         
         

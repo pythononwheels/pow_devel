@@ -43,12 +43,12 @@ class {{handler_class_name}}(PowHandler):
     def show(self, id=None):
         m=Model()
         res=m.find_by_id(id)
-        self.success(message="{{handler_model_class_name}} show", data=m.res_to_json(res))
+        self.success(message="{{handler_model_class_name}} show", data=res)
 
     def list(self):
         m=Model()
         res = m.find_all()  # set as_json=true if you like
-        self.success(message="{{handler_model_class_name}}, index", data=m.res_to_json(res))         
+        self.success(message="{{handler_model_class_name}}, index", data=res)         
     
     def page(self, page=0):
         m=Model()
@@ -61,7 +61,7 @@ class {{handler_class_name}}(PowHandler):
             limit=limit,
             offset=page*page_size
             )
-        self.success(message="{{handler_name}} page: #" +str(page), data=m.res_to_json(res) )  
+        self.success(message="{{handler_name}} page: #" +str(page), data=res )  
     
     def search(self):
         m=Model()
@@ -73,14 +73,14 @@ class {{handler_class_name}}(PowHandler):
         try:
             print("  .. GET Edit Data (ID): " + id)
             res = m.find_by_id(id)
-            self.success(message="{{handler_name}}, edit id: " + str(id), data=m.res_to_json(res))
+            self.success(message="{{handler_name}}, edit id: " + str(id), data=res)
         except:
             self.error(message="{{handler_name}}, edit id: " + str(id), data=None)
 
     @tornado.web.authenticated
     def new(self):
         m=Model()
-        self.success("{{handler_name}}, new",data=m.to_json())
+        self.success("{{handler_name}}, new",data=m)
 
     @tornado.web.authenticated
     def create(self):
@@ -90,28 +90,30 @@ class {{handler_class_name}}(PowHandler):
             m=Model()
             m.init_from_json(data_json)
             m.upsert()
-            self.success(message="{{handler_name}}, successfully creatd " + str(res.id), 
-                data=m.res_to_json(res), format="json")
+            self.success(message="{{handler_name}}, successfully created " + str(res.id), 
+                data=res, format="json")
         except Exception as e:
             self.error(message="{{handler_name}}, error updating " + str(m.id) + "msg: " + str(e), 
-                data=m.res_to_json(res), format="json")
-
+                data=res, format="json")
+    
     @tornado.web.authenticated
     def update(self, id=None):
         m=Model()
         data_json = self.request.body
+        print("  .. Put Data: " + str(data_json))
         m.init_from_json(data_json)
+        print("  .. Model m: " + str(m))
+        res = m.find_by_id(m.id)
+        res.init_from_json(data_json)
         try:
-            print("  .. Put Data: " + str(data_json))
-            res = m.find_by_id(id)
-            res.init_from_json(data_json)
             #res.tags= res.tags.split(",")
+            print("********************* UPDATING *************************")
+            print(res)
             res.upsert()
             self.success(message="{{handler_name}}, successfully updated " + str(res.id), 
-                data=m.res_to_json(res), format="json")
+                data=res, format="json")
         except Exception as e:
-            self.error(message="{{handler_name}}, error updating " + str(m.id) + "msg: " + str(e), 
-                data=m.res_to_json(res), format="json")
+            self.error(message="{{handler_name}}, error updating: " + str(m.id) + "msg: " + str(e), data=data_json, format="json")
 
 
 

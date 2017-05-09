@@ -45,7 +45,7 @@ class SqlBaseModel(ModelObject):
                 {
                     "Meta": cls_meta,
                     "model" : self.__class__,
-                    "sqla_session" : session   
+                    #"sqla_session" : session   
                 }
             )
         setattr(self, "marshmallow_schema", jschema_class())
@@ -161,15 +161,15 @@ class SqlBaseModel(ModelObject):
             makes a py dict from input json and
             sets the instance attributes 
         """
+
+        print("  ..  marshmallow load data input: " + str(data))
+        if not isinstance(data,(dict)):
+            data=json.loads(data)
         d=self.marshmallow_schema.load(data, session=session).data
-        for key in d:
-            if ignore:
-                setattr(self, key, d[key])
-            else:
-                if key in self.schema:
-                    setattr(self, key, d[key])
-                else:
-                    raise Exception(" Key: " + str(key) + " is not in schema for: " + self.__class__.__name__)
+        print("  . .. init_from_json returned Model d: " + str(d))
+        print("  . .. init_from_json returned Model d type: " + str(type(d)))
+        self.__dict__ = d.__dict__
+        return 
     
     def to_json(self):
         return json.dumps(self.marshmallow_schema.dump(self).data)
@@ -204,9 +204,9 @@ class SqlBaseModel(ModelObject):
         reslist = []
         for elem in res:
             m = self.__class__()
-            print(str(type(elem)) + "->" + str(elem))
+            #print(str(type(elem)) + "->" + str(elem))
             m.init_from_json(elem)
-            print("adding model to reslist: " + str(m))
+            #print("adding model to reslist: " + str(m))
             reslist.append(m)
         return reslist
     

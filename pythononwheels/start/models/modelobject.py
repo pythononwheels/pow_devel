@@ -174,7 +174,7 @@ class ModelObject():
     def to_json(self, *args, default=pow_json_serializer, **kwargs):
         """ just json """
         #return json.loads(self.json_dumps(*args, **kwargs))
-        return json.loads(json.dumps(self.to_dict(), *args, default=default, **kwargs))
+        return json.dumps(self.to_dict(), *args, default=default, **kwargs)
     
     
     def res_to_json(self, res):

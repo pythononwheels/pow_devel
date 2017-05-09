@@ -2,7 +2,7 @@ import tornado.web
 import tornado.escape
 import json
 from {{appname}} import config as cfg
-from {{appname}}.models.{{dbtype}}.user import User
+from {{appname}}.models.sql.user import User
 
 
 
@@ -282,6 +282,8 @@ class BaseHandler(tornado.web.RequestHandler):
             data will be converted to format.  (std = json)
             for other formats you have to define an encoder in config.py
             (see json as an example)
+
+            data input is model or list of models.
         """
         self.application.log_request(self, message="base.success:" + message)
         self.set_status(http_code)
@@ -291,15 +293,23 @@ class BaseHandler(tornado.web.RequestHandler):
             format = cfg.myapp["default_format"]
         if format.lower() == "html":
             # special case where we render the classical html templates
+            if not isinstance(data, (list)):
+                data=[data]
             viewname = self.__class__.__name__ + "_" + self.view + ".tmpl"
             if self.view is not None:
                 model=self.__class__.model
-                return self.render( viewname, data=model.json_result_to_object(data), message=message, 
+                return self.render( viewname, data=data, message=message, 
                     handler_name = self.__class__.__name__.lower(), base_route_rest=self.base_route_rest , 
                     model=model, status=http_code, next=succ, prev=prev, model_name=model.__class__.__name__.lower() )
             else:
                 self.error(message="Sorry, View: " + viewname +  " can not be found.", 
                     format=format, data=data)
+        #
+        # if not format == html convert the model or [model] to json 
+        # the encoders can convert json to any requested target format.
+        # 
+        if not data == None:
+            data = self.model.res_to_json(data)
         if encoder:
             encoder = encoder
         else:
@@ -329,10 +339,28 @@ class BaseHandler(tornado.web.RequestHandler):
             format = cfg.myapp["default_format"]
         if format.lower() == "html":
             return self.render("error.tmpl", data=data, message=message, status=http_code)
+        
+        # encode the data to json.
+        # the encoders convert the json to any requested output format then.
+        if not data == None:
+            data = self.model.res_to_json(data)
+
+        print(" In base.error:")
+        print("  .. data: " + str(data))
+        print("  .. Encoding reply into: " + format)
         if encoder:
             encoder = encoder
         else:
             encoder = cfg.myapp["encoder"][format]
+        print("  .. Encoded reply: " + encoder.dumps({
+            "status"    : http_code,
+            "data"      : data,
+            "error"     : {
+                "message"   : message
+                },
+            "next"      : succ,
+            "prev"      : prev
+        }))
         self.write(encoder.dumps({
             "status"    : http_code,
             "data"      : data,
@@ -351,7 +379,7 @@ class BaseHandler(tornado.web.RequestHandler):
             If this error was caused by an uncaught exception 
             (including HTTPError), an exc_info triple will be available as 
             kwargs["exc_info"]. Note that this exception may not be the 
-            âcurrentâ exception for purposes of methods like sys.exc_info() 
+            ÃÂ¢ÃÂÃÂcurrentÃÂ¢ÃÂÃÂ exception for purposes of methods like sys.exc_info() 
             or traceback.format_exc.
         """
         #if status_code == 404:
