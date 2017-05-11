@@ -166,7 +166,7 @@ class BaseHandler(tornado.web.RequestHandler):
     #
     # POST   /items     #=> create
     #
-    def post(self):
+    def post(self, *args, **params):
         print(" ---> POST / BaseHandler")
         print("  .. params : " + str(params))
         print("  .. args : " + str(args))
