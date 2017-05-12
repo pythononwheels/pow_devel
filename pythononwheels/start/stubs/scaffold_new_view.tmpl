@@ -79,7 +79,7 @@
             {% for key in model.schema.keys() %}
                 {% if key not in cfg.myapp["internal_fields"] %}
                     {% set _type = model.schema[key]["type"] %}
-                    {% if  _type == "string" or _type == "number" or _type == "integer" or _type == "float" %}
+                    {% if  _type == "string" %}
                     <div class="form-group row">
                         <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
                         <div class="col-10">
@@ -87,6 +87,14 @@
                                     value="" />
                         </div>
                     </div>    
+                    {% elif _type == "number" or _type == "integer" or _type == "float" %}
+                    <div class="form-group row">
+                        <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
+                        <div class="col-10">
+                            <input  type="text" class="form-control" name="{{key}}:number" id="{{key}}" 
+                                    value="" />
+                        </div>
+                    </div>
                     {% elif _type == "boolean" %}
                     <div class="form-group row">
                         <label class="col-sm-2">{{key}}</label>
@@ -122,11 +130,14 @@
         <hr>
         
         <a href="/{{base_route_rest}}" class="btn btn-primary">Back to {{handler_name}}.list</a>
-        <input type="submit" class="btn btn-success" id="submit_edit_form" value="Create new {{handler_name}}">
+        <input type="submit" class="btn btn-success" id="submit_edit_form" value="create item">
 
         </form>
         <hr>
-        <h2>Raw: </h2>
+        <h2>Raw Data: </h2>
         {{data}}
+        <hr>
+        <h2>Schema: </h2>
+        {{model.schema}}
     </div>
 {% end %}

@@ -106,6 +106,19 @@ class ModelObject():
                 return True
             else:
                 return v
+    
+    def init_from_dict(self, d, ignore=True):
+        """
+            creates a Model from the given data dictionary
+        """
+        for key in d:
+            if ignore:
+                setattr(self, key, d[key])
+            else:
+                if key in self.schema:
+                    setattr(self, key, d[key])
+                else:
+                    raise Exception(" Key: " + str(key) + " is not in schema for: " + self.__class__.__name__)
 
     def init_from_xml(self, data, root="root", ignore=True):
         """
@@ -140,14 +153,7 @@ class ModelObject():
             sets the instance attributes 
         """
         d=json.loads(data,object_hook=pow_json_deserializer)
-        for key in d:
-            if ignore:
-                setattr(self, key, d[key])
-            else:
-                if key in self.schema:
-                    setattr(self, key, d[key])
-                else:
-                    raise Exception(" Key: " + str(key) + " is not in schema for: " + self.__class__.__name__)
+        return self.init_from_dict(data, ignore)
 
 
     def init_from_csv(self, keys, data, ignore=True):

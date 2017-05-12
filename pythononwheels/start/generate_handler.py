@@ -62,8 +62,8 @@ def main():
     #
     # db type
     # 
-    parser.add_argument('-d', "--db", action="store", 
-                        dest="db", help="-d which_db (" + "|| ".join(cfg.database.keys()) + " || none) default=none",
+    parser.add_argument('-t', "--type", action="store", 
+                        dest="type", help="-t type (" + "|| ".join(cfg.database.keys()) + " || none) default=none",
                         default="none", required=False)
     args = parser.parse_args()
     #
@@ -72,7 +72,7 @@ def main():
     #print("all args: ", args)
     #print(dir(args))
     print("CamelCased handler name: ", camel_case(args.name))
-    generate_handler(args.name, args.db, appname="{{appname}}")
+    generate_handler(args.name, args.type, appname="{{appname}}")
 
 if __name__ == "__main__":
     main()

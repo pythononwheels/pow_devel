@@ -88,27 +88,23 @@ class {{handler_class_name}}(PowHandler):
             data_json = self.request.body
             print("  .. Post Data: " + str(data_json))
             m=Model()
-            m.init_from_json(data_json)
+            m.init_from_dict(json.load(data_json))
             m.upsert()
-            self.success(message="{{handler_name}}, successfully created " + str(res.id), 
-                data=res, format="json")
+            self.success(message="{{handler_name}}, successfully created " + str(m.id), 
+                data=m, format="json")
         except Exception as e:
             self.error(message="{{handler_name}}, error updating " + str(m.id) + "msg: " + str(e), 
-                data=res, format="json")
+                data=m, format="json")
     
     @tornado.web.authenticated
     def update(self, id=None):
-        m=Model()
         data_json = self.request.body
-        print("  .. Put Data: " + str(data_json))
-        m.init_from_json(data_json)
-        print("  .. Model m: " + str(m))
+        m=Model()
+        m.init_from_json()
         res = m.find_by_id(m.id)
         res.init_from_json(data_json)
         try:
             #res.tags= res.tags.split(",")
-            print("********************* UPDATING *************************")
-            print(res)
             res.upsert()
             self.success(message="{{handler_name}}, successfully updated " + str(res.id), 
                 data=res, format="json")
@@ -121,7 +117,7 @@ class {{handler_class_name}}(PowHandler):
     def destroy(self, id=None):
         try:
             data_json = self.request.body
-            print("  .. DELETE Data: (should be an ID (uuid):" + str(data_json))
+            print("  .. DELETE Data: ID:" + str(data_json))
             m=Model()
             m.init_from_json(data_json)
             res = m.find_by_id(id)

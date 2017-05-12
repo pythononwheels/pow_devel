@@ -26,7 +26,7 @@ class {{model_class_name}}(Base):
         'text': {'type': 'string'},
         'title': {'type': 'string', 'maxlength' : 35},
         'likes': {
-            'type': 'number',
+            'type': 'integer',
              "sql" : {          # sql attributes are handed raw to sqlalchemy Column
                 "primary_key"   : False,
                 "default"       : "123",

@@ -246,31 +246,42 @@ class SqlBaseModel(ModelObject):
             
     def create_table(self):
         """
-            created the physical table in the DB
+            creates the physical table in the DB
         """
         self.__table__.create(bind=engine)
 
     def drop_table(self):
         """
-            created the physical table in the DB
+            drops the physical table in the DB
         """
         self.__table__.drop(bind=engine)
     
     def upsert(self, session=None):
+        """
+            intelligently updates or inserts the elememt 
+        """
         if not session:
             session = self.session
         session.add(self)
         session.commit()        
+        #session.flush()
     
     def delete(self, session=None):
+        """
+            deltest the element from the db
+        """
         if not session:
             session = self.session
         session.delete(self)
         session.commit()        
+        #session.flush()
 
     
 
-    def from_statement(self, statement):
+    def find_from_statement(self, statement):
+        """
+            Executes a given SQL query statement
+        """
         return session.query(self.__class__).from_statement(statement)
 
     def page(self, *criterion, limit=None, offset=None):
@@ -278,12 +289,23 @@ class SqlBaseModel(ModelObject):
         return res
 
     def find(self,*criterion):
+        """
+            Executes a find operation.
+            Example: model.find(ModelClass.attribute == "someval")
+                     p.find(Post.title=="first")
+        """
         return session.query(self.__class__).filter(*criterion)
     
     def find_by_id(self, id):
+        """
+            Searches the DB by id
+        """
         return session.query(self.__class__).get(id)
 
     def find_all(self, *criterion, raw=False, as_json=False, limit=None, offset=None):
+        """
+            Searches the DB (Parameters: limit, offset, as_json)
+        """
         if raw:
             return session.query(self.__class__).filter(*criterion).limit(limit).offset(offset)
         res = session.query(self.__class__).filter(*criterion).limit(limit).offset(offset).all()
@@ -292,12 +314,18 @@ class SqlBaseModel(ModelObject):
         return res
     
     def find_one(self, *criterion, as_json=False):
+        """
+            returns one or none
+        """
         res = session.query(self.__class__).filter(*criterion).one()
         if as_json:
             return[x.json_dump() for x in res]
         return res
 
     def find_first(self, *criterion, as_json=False):
+        """
+            return the first match (if any)
+        """
         res = session.query(self.__class__).filter(*criterion).first()
         if as_json:
             return[x.json_dump() for x in res]
@@ -308,6 +336,11 @@ class SqlBaseModel(ModelObject):
         return session.query(self.__class__)
 
     def find_dynamic(self, filter_condition = [('name', 'eq', 'klaas')]):
+        """
+            create a dynamic filter like this: [('name', 'eq', 'klaas')]
+                filter_condition = [('name', 'eq', 'klaas')]
+        """
+        
         dynamic_filtered_query_class = DynamicFilter(query=None, model_class=self,
                                   filter_condition=filter_condition)
         dynamic_filtered_query = dynamic_filtered_query_class.return_query()
@@ -315,6 +348,7 @@ class SqlBaseModel(ModelObject):
 
 class DynamicFilter():
     def __init__(self, query=None, model_class=None, filter_condition=None):
+        
         #super().__init__(*args, **kwargs)
         self.query = query
         self.model_class = model_class.__class__

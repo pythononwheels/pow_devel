@@ -15,7 +15,7 @@ class {{model_class_name}}(TinyModel):
         'title':    { 'type': 'string', 'maxlength' : 35},
         'text' :    { 'type': 'string'},
         'tags' :    { 'type': 'list', "default" : [] },
-        "votes" :   { "type" : "number", "default" : 999 }   
+        "votes" :   { "type" : "integer", "default" : 999 }   
         }
 
     #

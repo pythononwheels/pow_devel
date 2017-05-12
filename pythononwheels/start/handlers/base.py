@@ -379,7 +379,7 @@ class BaseHandler(tornado.web.RequestHandler):
             If this error was caused by an uncaught exception 
             (including HTTPError), an exc_info triple will be available as 
             kwargs["exc_info"]. Note that this exception may not be the 
-            ÃÂ¢ÃÂÃÂcurrentÃÂ¢ÃÂÃÂ exception for purposes of methods like sys.exc_info() 
+            current exception for purposes of methods like sys.exc_info() 
             or traceback.format_exc.
         """
         #if status_code == 404:
