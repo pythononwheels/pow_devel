@@ -64,7 +64,7 @@ The current <master> version in this repo is fully working except for:
         }
 
 
-## Check: [The PythonOnWheels Homepage](http://www.pythononwheels.org)
+## For more check: [The PythonOnWheels Homepage](http://www.pythononwheels.org)
 
 
     

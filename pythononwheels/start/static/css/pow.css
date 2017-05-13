@@ -8,6 +8,46 @@
     padding: 3rem 1rem 1rem;	
 	}
 }
+.navpow a:visited {
+  color: darkgreen;
+}
+.navpow a:link {
+    color: black;
+    text-decoration: none;
+  }
+.navpow a:hover
+  {
+    color: orange;
+    
+  }
+
+.navpow a:active
+  {
+    color: green;
+    
+  }
+hr{
+    padding: 3px;
+    margin: 1px;    
+    color: green;
+} 
+a:link{
+  color: black;
+  text-decoration: underline;
+  
+}
+a:visited {
+  color: darkgreen;
+}
+a:hover
+  {
+    color: orange;
+    
+  }
+
+.middle {
+  vertical-align: middle;
+}
 
 .top-buffer-20 { margin-top:20px; }
 .top-buffer-40 { margin-top:40px; }

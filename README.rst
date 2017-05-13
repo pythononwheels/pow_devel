@@ -8,8 +8,7 @@ This is the new pow 2017. And it's really good.
 
 (ok I might be biased ;)
 
-But it's by far the best PoW (concept and implementation) ever ! Ever,
-ever, ever!!
+But it's by far the best PoW (concept and implementation) ever! (Ever,ever, ever!!)
 
 I call it *SQUEEZY* => for Simple, Quick and Easy.
 
@@ -28,10 +27,12 @@ Strong Foundation:
 
 -  python 3.x
 -  tornado webserver
--  sqlalchemy ORM
+-  sqlalchemy ORM onboard (sqlite, mysql, postgres, oralce, ms-sql ...)
+-  DB migrations generated for you (based on alembic)
 -  cerberus schemas and validation on board
--  tornado templates
--  tinyDB and ElasticSearch on board... more to come
+-  template engine (tornado templates)
+-  tinyDB and ElasticSearch on board... more to come (next: mongoDB)
+-  authentication with Twitter, Google on board
 
 Super easy, quick to start and all the basics on board:
 -------------------------------------------------------

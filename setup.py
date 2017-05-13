@@ -1,13 +1,16 @@
 from setuptools import setup
+import os
 
-def readme():
-    with open('README.rst') as f:
-        return f.read()
+here = os.path.abspath(os.path.dirname(__file__))
+
+with open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
+    long_description = f.read()
+
 
 setup(name='pythononwheels',
-      version='0.5.27b',
+      version='0.6.13b',
       description='The simple, quick and easy generative web framework for python',
-      long_description=readme(),
+      long_description=long_description,
       classifiers=[
         'Development Status :: 4 - Beta',
         "Environment :: Web Environment",
@@ -45,7 +48,7 @@ setup(name='pythononwheels',
             "start/tests/*",
         ]},
       install_requires=[
-        #"tornado>=4"
+        #"tornado>4"
       ],
       entry_points={
         'console_scripts': [

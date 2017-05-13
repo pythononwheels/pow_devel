@@ -1,5 +1,5 @@
 import datetime
-from testfinal.config import myapp
+from {{appname}}.config import myapp
 import re
 
 def pow_json_deserializer(dct):
