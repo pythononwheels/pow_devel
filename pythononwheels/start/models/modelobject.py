@@ -111,6 +111,8 @@ class ModelObject():
         """
             creates a Model from the given data dictionary
         """
+        print("init from dict")
+        print(d)
         for key in d:
             if ignore:
                 setattr(self, key, d[key])
@@ -153,7 +155,7 @@ class ModelObject():
             sets the instance attributes 
         """
         d=json.loads(data,object_hook=pow_json_deserializer)
-        return self.init_from_dict(data, ignore)
+        return self.init_from_dict(d, ignore)
 
 
     def init_from_csv(self, keys, data, ignore=True):

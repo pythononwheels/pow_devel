@@ -74,8 +74,8 @@ class {{handler_class_name}}(PowHandler):
             print("  .. GET Edit Data (ID): " + id)
             res = m.find_by_id(id)
             self.success(message="{{handler_name}}, edit id: " + str(id), data=res)
-        except:
-            self.error(message="{{handler_name}}, edit id: " + str(id), data=None)
+        except Exception as e:
+            self.error(message="{{handler_name}}, edit id: " + str(id) + "msg: " + str(e) , data=None)
 
     @tornado.web.authenticated
     def new(self):
@@ -88,7 +88,7 @@ class {{handler_class_name}}(PowHandler):
             data_json = self.request.body
             print("  .. Post Data: " + str(data_json))
             m=Model()
-            m.init_from_dict(json.load(data_json))
+            m.init_from_dict(json.loads(data_json))
             m.upsert()
             self.success(message="{{handler_name}}, successfully created " + str(m.id), 
                 data=m, format="json")
@@ -100,7 +100,7 @@ class {{handler_class_name}}(PowHandler):
     def update(self, id=None):
         data_json = self.request.body
         m=Model()
-        m.init_from_json()
+        m.init_from_json(data_json)
         res = m.find_by_id(m.id)
         res.init_from_json(data_json)
         try:

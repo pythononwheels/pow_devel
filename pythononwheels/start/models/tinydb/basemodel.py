@@ -218,24 +218,39 @@ class TinyBaseModel(ModelObject):
             reslist.append(m)
         return reslist
     
+    def dict_result_to_object(self, res):
+        reslist = []
+        for elem in res:
+            m = self.__class__()
+            #print(str(type(elem)) + "->" + str(elem))
+            m.init_from_dict(elem)
+            #print("adding model to reslist: " + str(m))
+            setattr(m,"eid", elem.get("eid", None))
+            reslist.append(m)
+        print(reslist)
+        print(str(type(reslist[0])))
+        return reslist
+    
     # def res_to_json(self, res):
     #     """
     #         returns a list of results in a json serialized format.
     #     """
     #     return json.loads(json.dumps(res, default=pow_json_serializer))
-    def _return_find(self, res, as_json=True):
+    def _return_find(self, res, as_json=False):
         """
             _return_find gives the right result.
             either as json
             or as object (Model Class / Instance)
         """
-        reslist = self.json_result_to_object(res)
+        print(res)
+        print(str(type(res)))
+        res = self.dict_result_to_object(res)
         if as_json:
-            return self.res_to_json(reslist)
+            return self.res_to_json(res)
         else:
-            if len(reslist) == 1:
-                return reslist[0]
-            return reslist
+            if len(res) == 1:
+                return res[0]
+            return res
 
     def find(self,*criterion, as_json=False):
         """ Find something given a query or criterion 
@@ -248,11 +263,9 @@ class TinyBaseModel(ModelObject):
     
     def find_by_id(self, id=None):
         """ return by id """
-        if not self.id:
-            id = self.id
         Q = Query()
         res = self.table.search(Q.id == str(id))
-        return res
+        return self._return_find(res)
         
     def find_random(self, as_json=False):
         """ Find and return a random element """

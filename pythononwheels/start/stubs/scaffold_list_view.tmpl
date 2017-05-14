@@ -61,16 +61,17 @@
             Create</a> a new {{model_name}} here.</p>
         </div>
     </div>
-    {% if len(data)>0 %}
+    
         <table class="table table-bordered table-hover">
             <thead class="thead-inverse">
                 <tr>
-                    {% for key in data[0].schema.keys() %}
+                    {% for key in model.schema.keys() %}
                         <th>{{key}}</th>
                     {% end %}
                     <th colspan="3">Actions:</th>
                 </tr>
             </thead>
+    {% if len(data)>0 %}
             <tbody>
                 {% for elem in data %}
                     <tr id="{{elem.get("id")}}">
@@ -91,15 +92,20 @@
                     </td>
                     </tr>
                 {% end %}
-            </tbody>
-        </table>
+           
     {% else %}
-        <h2> No data, yet, dude !</h2>
+        <tr>
+            <td colspan="{{len(model.schema.keys()+1}}">
+                <a href="{{base_route_rest}}/new" class="btn btn-success">+</a> create a new {{model.__class__.__name__}}.
+            </td>
+        </tr>
     {% end %}
+        </tbody>
+    </table>
     <hr>
     <h2>Raw: </h2>
     {{data}}
     <hr>
-    <b>ModelClass:</b> {{ str(type(data[0])) }}
+    <b>ModelClass:</b> {{ str(type(model)) }}
 </div>
 {% end %}

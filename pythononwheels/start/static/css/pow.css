@@ -31,19 +31,7 @@ hr{
     margin: 1px;    
     color: green;
 } 
-a:link{
-  color: black;
-  text-decoration: underline;
-  
-}
-a:visited {
-  color: darkgreen;
-}
-a:hover
-  {
-    color: orange;
-    
-  }
+
 
 .middle {
   vertical-align: middle;
