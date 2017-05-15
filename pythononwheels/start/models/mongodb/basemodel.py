@@ -77,7 +77,7 @@ class MongoBaseModel(ModelObject):
     #
     # These Mehtods should be implemented by every subclass
     # 
-    def to_json(self, res):
+    def to_json(self):
         """ just dump to json formatted string
             parameter:  res must be pymongo cursor. 
                         Example: res = self.table.find() 
