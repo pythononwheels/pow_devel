@@ -1,5 +1,5 @@
 #
-#
+# base connection for TinyDB 
 #
 from {{appname}}.config import database
 from tinydb import TinyDB, Query

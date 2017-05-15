@@ -1,5 +1,5 @@
 #
-#
+# base connection for sql DBs
 #
 from {{appname}}.config import database, myapp
 from sqlalchemy import create_engine

@@ -69,6 +69,14 @@ database = {
         "passwd"    :   None,
         "enabled"   :   False
     },
+    "mongodb" : {
+        "dbname"    :   "testdb",   # == elasticsearch index 
+        "host"      :   "localhost",       
+        "port"      :   27017,   
+        "user"      :   None,
+        "passwd"    :   None,
+        "enabled"   :   False
+    },
     "elastic" : {
         "dbname"    :   "testdb",   # == elasticsearch index 
         "hosts"     :   ["localhost"],       

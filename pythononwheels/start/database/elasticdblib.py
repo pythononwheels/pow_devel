@@ -1,5 +1,5 @@
 #
-# dblib for elastic 
+# base connection for Elasticsearch
 #
 from {{appname}}.config import database
 from elasticsearch import Elasticsearch

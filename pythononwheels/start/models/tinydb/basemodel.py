@@ -164,7 +164,7 @@ class TinyBaseModel(ModelObject):
             if res:
                 #update. object is already in db
                 print("update by id:" + str(self.id))
-                self.last_updated = datetime.datetime.now()
+                self.last_updated = datetime.datetime.utcnow()
                 self.table.update(self.to_dict(),Q.id==self.id)
             else:
                 # insert  
