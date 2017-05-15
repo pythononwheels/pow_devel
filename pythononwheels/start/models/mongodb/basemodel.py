@@ -95,11 +95,10 @@ class MongoBaseModel(ModelObject):
             returns a list of models from a given cursor.
             parameter:  res must be pymongo cursor. 
                         Example: res = self.table.find() 
-        """
-        if isinstance(res, (list)):
-            return [x.init_from_dict() for x in res]
-        else:
-            return res.init_from_dict()
+        """        
+        m=self.__class__()
+        m.init_from_dict(res)
+        return m
 
     def print_full(self):
         """ Subclasses should overwrite this Method. 
