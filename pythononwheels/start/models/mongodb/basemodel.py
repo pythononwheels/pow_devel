@@ -96,7 +96,10 @@ class MongoBaseModel(ModelObject):
             parameter:  res must be pymongo cursor. 
                         Example: res = self.table.find() 
         """
-        return [x.init_from_dict() for x in list(res)]
+        if isinstance(res, (list)):
+            return [x.init_from_dict() for x in res]
+        else:
+            return res.init_from_dict()
 
     def print_full(self):
         """ Subclasses should overwrite this Method. 
