@@ -95,7 +95,7 @@
            
     {% else %}
         <tr>
-            <td colspan="{{len(model.schema.keys()+1}}">
+            <td colspan="{{len(model.schema.keys())+1}}">
                 <a href="{{base_route_rest}}/new" class="btn btn-success">+</a> create a new {{model.__class__.__name__}}.
             </td>
         </tr>

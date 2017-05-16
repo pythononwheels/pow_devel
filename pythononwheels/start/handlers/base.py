@@ -295,6 +295,8 @@ class BaseHandler(tornado.web.RequestHandler):
             # special case where we render the classical html templates
             if not isinstance(data, (list)):
                 data=[data]
+            for elem in data:
+                print("elem: " + str(type(elem)))
             viewname = self.__class__.__name__ + "_" + self.view + ".tmpl"
             if self.view is not None:
                 model=self.__class__.model

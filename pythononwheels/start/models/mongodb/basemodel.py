@@ -30,10 +30,8 @@ class MongoBaseModel(ModelObject):
         """
             basic setup for all mongoDB models.
         """
-        self.tablename = pluralize(self.__class__.__name__.lower())
-        self.table = self.__class__.table
-        self._id = None
-        self.id = str(uuid.uuid4())
+        print("executin init_on_load")
+        
         #create an index for our own id field.
         
         #
@@ -74,6 +72,11 @@ class MongoBaseModel(ModelObject):
                 #if key in self.__class__.__dict__:
                 if key in self.schema:
                     setattr(self, key, kwargs[key])
+        self.tablename = pluralize(self.__class__.__name__.lower())
+        self.table = self.__class__.table
+        self._id = None
+        self.id = str(uuid.uuid4())
+        print("new id is: " + self.id) 
                            
     #
     # These Methods should be implemented by every subclass
@@ -105,6 +108,8 @@ class MongoBaseModel(ModelObject):
         if not isinstance(res, (pymongo.cursor.Cursor)):       
             m=self.__class__()
             m.init_from_dict(res)
+            print("returning: " +str(m))
+            print("   type: " + str(type(m)))
             return m
         # handle cursor (many result elelemts)
         reslist = []
@@ -169,11 +174,13 @@ class MongoBaseModel(ModelObject):
             return self._id
         else:
             # update
-            self._id = self.table.update_one({"_id" : self._id}, self.to_dict())
+            self._id = self.table.update_one({"_id" : self._id}, {"$set": self.to_dict()} )
             return self._id
-              
-    def delete(self, filter, many=False):
+       
+    def delete(self, filter=None, many=False):
         """ delete item """
+        if filter == None:
+            filter = {"id" : self.id }
         if not many:
             return self.table.delete_one(filter)
         else:
@@ -185,9 +192,9 @@ class MongoBaseModel(ModelObject):
                         else use the PoW id (uuid4)
         """
         if use_object_id:
-            return self.table.find_one({"_id": id})
+            return self.find_one({"_id": id})
         else:
-            return self.table.find_one({"id": id})
+            return self.find_one({"id": id})
 
 
     def from_statement(self, statement):
