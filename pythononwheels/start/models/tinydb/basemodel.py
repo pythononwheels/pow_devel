@@ -155,7 +155,8 @@ class TinyBaseModel(ModelObject):
             # update
             print("update by eid:" + str(self.eid))
             Q = Query()
-            self.last_updated = datetime.datetime.now()
+            #self.last_updated = datetime.datetime.now()
+            self.last_updated = datetime.datetime.utcnow()
             self.table.update(self.to_dict(),Q.id==self.id)
         else:
             #first check if id is in db:
@@ -165,10 +166,10 @@ class TinyBaseModel(ModelObject):
                 #update. object is already in db
                 print("update by id:" + str(self.id))
                 self.last_updated = datetime.datetime.utcnow()
+                #self.last_updated = datetime.datetime.now()
                 self.table.update(self.to_dict(),Q.id==self.id)
             else:
                 # insert  
-                 
                 self.last_updated = datetime.datetime.now()
                 self.created_at = self.last_updated
                 self.id = str(uuid.uuid4())
@@ -228,7 +229,7 @@ class TinyBaseModel(ModelObject):
             setattr(m,"eid", elem.get("eid", None))
             reslist.append(m)
         print(reslist)
-        print(str(type(reslist[0])))
+        
         return reslist
     
     # def res_to_json(self, res):

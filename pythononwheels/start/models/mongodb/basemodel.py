@@ -89,6 +89,9 @@ class MongoBaseModel(ModelObject):
             parameter:  res must be pymongo cursor. 
                         Example: res = self.table.find() 
         """
+        # uses bson.json_util dumps
+        from bson.json_util import DEFAULT_JSON_OPTIONS
+        DEFAULT_JSON_OPTIONS.datetime_representation = 2
         return dumps(self.to_dict())
 
     def json_result_to_object(self, res):
@@ -165,6 +168,7 @@ class MongoBaseModel(ModelObject):
 
     def upsert(self):
         """ insert or update intelligently """
+        #self.last_updated = datetime.datetime.utcnow().strftime(myapp["date_format"])
         self.last_updated = datetime.datetime.utcnow()
         if self._id == None:
             # insert. so set created at            
