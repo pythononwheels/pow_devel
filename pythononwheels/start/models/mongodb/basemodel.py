@@ -8,8 +8,8 @@ from {{appname}}.config import myapp
 from {{appname}}.powlib import merge_two_dicts
 from {{appname}}.encoders import pow_json_serializer
 from {{appname}}.models.modelobject import ModelObject
-#from bson.json_util import dumps
-import bson
+from bson.json_util import dumps
+
 import pymongo
 import uuid
 
@@ -33,6 +33,7 @@ class MongoBaseModel(ModelObject):
         self.tablename = pluralize(self.__class__.__name__.lower())
         self.table = self.__class__.table
         self._id = None
+        self.id = str(uuid.uuid4())
         #create an index for our own id field.
         
         #
@@ -75,30 +76,45 @@ class MongoBaseModel(ModelObject):
                     setattr(self, key, kwargs[key])
                            
     #
-    # These Mehtods should be implemented by every subclass
+    # These Methods should be implemented by every subclass
     # 
+    def get(self, name):
+        return getattr(self,name)
+    
     def to_json(self):
         """ just dump to json formatted string
             parameter:  res must be pymongo cursor. 
                         Example: res = self.table.find() 
         """
-        return bson.json_util.dumps(list(cursor))
+        return dumps(self.to_dict())
 
     def json_result_to_object(self, res):
         """
             returns a list of objects from a given json list (string) 
         """
         raise NotImplementedError("Subclasses should overwrite this Method.")
-    
+
     def result_to_object(self, res):
         """ 
             returns a list of models from a given cursor.
-            parameter:  res must be pymongo cursor. 
+            parameter:  res can be pymongo cursor or is handled as a single document (dict). 
                         Example: res = self.table.find() 
-        """        
-        m=self.__class__()
-        m.init_from_dict(res)
-        return m
+            returns: a sinlge Model or a [Models]
+        """ 
+        # single result element
+        if not isinstance(res, (pymongo.cursor.Cursor)):       
+            m=self.__class__()
+            m.init_from_dict(res)
+            return m
+        # handle cursor (many result elelemts)
+        reslist = []
+        for elem in res:
+            m=self.__class__()
+            m.init_from_dict(elem)
+            print("appending: " +str(m))
+            print("   type: " + str(type(m)))
+            reslist.append(m)
+        return reslist
 
     def print_full(self):
         """ Subclasses should overwrite this Method. 
@@ -141,24 +157,27 @@ class MongoBaseModel(ModelObject):
         """
         raise NotImplementedError("drop_table is not implemented, yet.")
     
-    def upsert(self, many=False):
+
+    def upsert(self):
         """ insert or update intelligently """
         self.last_updated = datetime.datetime.utcnow()
         if self._id == None:
-            # insert. so set created at
-            self.id = str(uuid.uuid4())
+            # insert. so set created at            
             self.created_at = datetime.datetime.utcnow()
             self.last_updated = self.created_at
-        if not many:
             self._id = self.table.insert_one(self.to_dict())
             return self._id
         else:
-            raise NotImplementedError("upsert many is not implemented yet")
-    
-    
-    def delete(self, id, session=None):
+            # update
+            self._id = self.table.update_one({"_id" : self._id}, self.to_dict())
+            return self._id
+              
+    def delete(self, filter, many=False):
         """ delete item """
-        raise NotImplementedError("Subclasses should overwrite this Method.")
+        if not many:
+            return self.table.delete_one(filter)
+        else:
+            return self.table.delete_many(filter)
 
     def find_by_id(self, id, use_object_id=False):
         """ return result by id (only)
@@ -179,22 +198,24 @@ class MongoBaseModel(ModelObject):
         """ return the next page of results. See config["myapp"].page_size """
         raise NotImplementedError("Subclasses should overwrite this Method.")
 
-    def find(self,*criterion):
-        """ Find something given a query or criterion """
-        print("Find parameter:" + criterion)
-        return self.table.find(criterion)
+    def find(self,filter=None):
+        """ Find something given a query or criterion 
+            filter = { "key" : value, ..}
+        """
+        print("Find parameter:" + str(filter))
+        return self.result_to_object(self.table.find(filter))
     
-    def find_all(self, *criterion, raw=False, as_json=False, limit=None, offset=None):
+    def find_all(self, filter=None, raw=False, as_json=False, limit=None, offset=None):
         """ Find something given a query or criterion and parameters """
-        raise NotImplementedError("Subclasses should overwrite this Method.")
+        return self.find(filter)
     
-    def find_one(self, *criterion, as_json=False):
+    def find_one(self, filter, as_json=False):
         """ find only one result. Raise Excaption if more than one was found"""
-        raise NotImplementedError("Subclasses should overwrite this Method.")
-
+        return self.result_to_object(self.table.find_one(filter))
+        
     def find_first(self, *criterion, as_json=False):
         """ return the first hit, or None"""
-        raise NotImplementedError("Subclasses should overwrite this Method.")
+        raise NotImplementedError("Not available for MongoDB")
 
     def q(self):
         """ return a raw query so the user can do
@@ -203,8 +224,9 @@ class MongoBaseModel(ModelObject):
             for sqlalchemy: return session.query(self.__class__)
             for elastic: return  Q
             for tinyDB return Query
+            for MongoDB: not implemented
         """
-        raise NotImplementedError("Subclasses should overwrite this Method.")
+        raise NotImplementedError("Not implemented for MongoDB.")
         
 
 
