@@ -156,20 +156,20 @@ class SqlBaseModel(ModelObject):
                 #print("  .. skipping: " + col_name )
                 pass
                 
-    def init_from_json(self, data, ignore=False, autoconvert=True):
-        """
-            makes a py dict from input json and
-            sets the instance attributes 
-        """
+    # def init_from_json(self, data, ignore=False, autoconvert=True):
+    #     """
+    #         makes a py dict from input json and
+    #         sets the instance attributes 
+    #     """
 
-        print("  ..  marshmallow load data input: " + str(data))
-        if not isinstance(data,(dict)):
-            data=json.loads(data)
-        d=self.marshmallow_schema.load(data, session=session).data
-        print("  . .. init_from_json returned Model d: " + str(d))
-        print("  . .. init_from_json returned Model d type: " + str(type(d)))
-        self.__dict__ = d.__dict__
-        return 
+    #     print("  ..  marshmallow load data input: " + str(data))
+    #     if not isinstance(data,(dict)):
+    #         data=json.loads(data)
+    #     d=self.marshmallow_schema.load(data, session=session).data
+    #     print("  . .. init_from_json returned Model d: " + str(d))
+    #     print("  . .. init_from_json returned Model d type: " + str(type(d)))
+    #     self.__dict__ = d.__dict__
+    #     return 
     
     def to_json(self):
         return json.dumps(self.marshmallow_schema.dump(self).data)
