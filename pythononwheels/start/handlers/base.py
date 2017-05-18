@@ -95,7 +95,7 @@ class BaseHandler(tornado.web.RequestHandler):
             if len (self.path.split(".")) > 1:
                 format = self.path.split(".")[-1]
                 if format in cfg.myapp["supported_formats"]:
-                    return fo
+                    return format
         
         # Try the Accept Header
         accept_header = self.request.headers.get("Accept", None)
