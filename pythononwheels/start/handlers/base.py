@@ -2,7 +2,7 @@ import tornado.web
 import tornado.escape
 import json
 from {{appname}} import config as cfg
-from {{appname}}.models.sql.user import User
+#from {{appname}}.models.sql.user import User
 
 
 
@@ -87,8 +87,17 @@ class BaseHandler(tornado.web.RequestHandler):
             or default_format
             example: /post/12.json (will return json)
         """
-        # Try the Accept Header first:
+        
         format = None
+        # Try the dotformat first (if activated)
+        if cfg.beta_settings["dot_format"]:
+            # try the .format
+            if len (self.path.split(".")) > 1:
+                format = self.path.split(".")[-1]
+                if format in cfg.myapp["supported_formats"]:
+                    return fo
+        
+        # Try the Accept Header
         accept_header = self.request.headers.get("Accept", None)
         if accept_header:
             format_list = self.get_format_list(accept_header)
@@ -97,12 +106,6 @@ class BaseHandler(tornado.web.RequestHandler):
             for fo in format_list:
                 if fo in cfg.myapp["supported_formats"]:
                     return fo
-        
-        if cfg.beta_settings["dot_format"]:
-            # try the .format
-            if len (self.path.split(".")) > 1:
-                format = self.path.split(".")[-1]
-        
         
         if format == None:
             # take the default app format (see config.cfg.myapp)

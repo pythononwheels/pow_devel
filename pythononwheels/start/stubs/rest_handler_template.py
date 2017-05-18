@@ -86,9 +86,8 @@ class {{handler_class_name}}(PowHandler):
     def create(self):
         try:
             data_json = self.request.body
-            print("  .. Post Data: " + str(data_json))
             m=Model()
-            m.init_from_dict(json.loads(data_json))
+            m.init_from_json(data_json)
             m.upsert()
             self.success(message="{{handler_name}}, successfully created " + str(m.id), 
                 data=m, format="json")

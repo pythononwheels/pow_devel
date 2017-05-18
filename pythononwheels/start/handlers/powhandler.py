@@ -21,11 +21,12 @@ class PowHandler(BaseHandler):
         """
         if myapp["enable_authentication"]:
             # try to find the user
-            user_id = self.get_secure_cookie("user_id")
-            if not user_id: return None
-            u=User()
-            u=u.find_one(User.id==user_id)
-            return u
+            # user_id = self.get_secure_cookie("user_id")
+            # if not user_id: return None
+            # u=User()
+            # u=u.find_one(User.id==user_id)
+            # return u
+            raise NotImplementedError("USer Authentication not implemented, yet")
         else:
             # if authentication is disabled return a dummy guest user
             return True
