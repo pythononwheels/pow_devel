@@ -94,6 +94,27 @@ class MongoBaseModel(ModelObject):
         DEFAULT_JSON_OPTIONS.datetime_representation = 2
         return dumps(self.to_dict())
 
+    # def init_from_json(self, data, ignore=False):
+    #     """
+    #         makes a py dict from input json and
+    #         sets the instance attributes 
+    #     """
+    #     from bson.json_util import loads
+    #     print(data)
+    #     try:
+    #         d=loads(data)
+    #     except Exception as e:
+    #         print("Ex1 : " + str(e))
+    #         try:
+    #             d=loads(data.decode("utf-8") )
+    #         except Exception as e:
+    #             print("E2: " + str(e))
+    #             raise e
+    #     print(d)
+    #     print(str(type(d)))
+    #     return self.init_from_dict(d, ignore)
+
+
     def json_result_to_object(self, res):
         """
             returns a list of objects from a given json list (string) 

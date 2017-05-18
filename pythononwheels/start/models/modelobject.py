@@ -111,8 +111,13 @@ class ModelObject():
         """
             creates a Model from the given data dictionary
         """
+        from {{appname}}.decoders import pow_init_from_dict_deserializer
         print("init from dict")
         print(d)
+        d=pow_init_from_dict_deserializer(d,self.schema)
+        print("after conversion: ")
+        for elem in d:
+            print(str(elem) + "->" + str(type(elem)))
         for key in d:
             if ignore:
                 setattr(self, key, d[key])
@@ -121,6 +126,7 @@ class ModelObject():
                     setattr(self, key, d[key])
                 else:
                     raise Exception(" Key: " + str(key) + " is not in schema for: " + self.__class__.__name__)
+        
 
     def init_from_xml(self, data, root="root", ignore=True):
         """
