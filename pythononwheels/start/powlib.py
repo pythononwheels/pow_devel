@@ -4,7 +4,8 @@ import os
 from sqlalchemy import Table
 import logging
 import copy
-
+from sqlalchemy import Column, Integer, String, Date, DateTime, Float
+from sqlalchemy import Unicode, Text, Boolean, Numeric, BigInteger, LargeBinary
 
 
 def make_logger(name, level, handler, format=None, logfile=None):
@@ -192,15 +193,20 @@ class powDecNew():
                 mod = importlib.import_module('{{appname}}.models.sql.' + child_module_name)
                 #mod = __import__('{{appname}}.models.sql.'+rel_module_name, fromlist=[rel_class_name])
                 child_klass = getattr(mod, child_class_name)
+            if backref:
+                setattr(parent_class, child_as_str, relationship(child_class_name, 
+                    order_by=child_klass.id,
+                    back_populates=parent_name))
+            else:
+                setattr(parent_class, child_as_str, relationship(child_class_name))
 
-            setattr(parent_class, child_as_str, relationship(child_class_name, 
-                order_by=child_klass.id,
-                back_populates=parent_name))
             setattr(child_klass, parent_name + "_id", Column(Integer, ForeignKey(pluralize(parent_name)+".id")))
             if backref:
                 setattr(child_klass, parent_name, relationship(parent_class_name, back_populates=child_as_str))
             ##print(dir(rel))
-            print("RELATION: I see a: " + parent_class_name + " has many: " + child_as_str)
+            print("RELATION: I see a: " + parent_class_name + " has many: " + child_as_str )
+            if backref:
+                print( "  .. and " + child_as_str + " belongs_to " + parent_name)
             return parent_class
         return decorator    
     
@@ -210,28 +216,27 @@ class powDecNew():
         # rel_as_str is the plueral name of the child class (adresses, comments)
         # klass below is the real class instance of the child
         def decorator(child_class):
-            child_name = child_class.__name__.lower()
             
+            child_name = child_class.__name__.lower()
             parent_class_name = parent_as_str.capitalize()
             parent_module_name = parent_as_str
+            parent_class = None
             import sys
             if ("{{appname}}.models.sql."+parent_module_name) in sys.modules.keys():
-                parent_klass = getattr(sys.modules["{{appname}}.models.sql."+parent_module_name], parent_class_name)
+                parent_class = getattr(sys.modules["{{appname}}.models.sql."+parent_module_name], parent_class_name)
             else:
                 import importlib
                 mod = importlib.import_module('{{appname}}.models.sql.' + parent_module_name)
                 #mod = __import__('{{appname}}.models.sql.'+rel_module_name, fromlist=[rel_class_name])
-                klass = getattr(mod, parent_class_name)
-            #print("rel_class: " + str(klass))
+                parent_class = getattr(mod, parent_class_name)
+            #print("parent_class: " + str(parent_class))
             #print(dir(klass))
-            setattr(cls, rel_as_str, relationship(rel_class_name, 
-                order_by=klass.id,
-                back_populates=cls_name))
-            setattr(klass, cls_name + "_id", Column(Integer, ForeignKey(pluralize(cls_name)+".id")))
-            setattr(klass, cls_name, relationship(cls_name.capitalize(), back_populates=rel_as_str))
+            setattr(parent_class, child_name, relationship(child_class.__name__))
+            setattr(parent_class, child_name + "_id", Column(Integer, ForeignKey(pluralize(child_name)+".id")))
+            
             ##print(dir(rel))
-            print("RELATION: I see a: " + cls_name.capitalize() + " has many: " + rel_as_str)
-            return cls
+            print("RELATION: I see a: " + child_name + " belongs_to: " + parent_as_str)
+            return child_class
         return decorator
 
     def one_to_one(self, child_as_str):
@@ -468,8 +473,7 @@ class powDecNew():
             # now set the right elastic types for the doc
             #
             from datetime import datetime
-            #from elasticsearch_dsl import DocType, String, Date, Nested, Boolean, Integer\
-            #    Float, Byte, Text, analyzer, InnerObjectWrapper, Completion
+            #from elasticsearch_dsl import DocType, String, Date, Nested, Boolean, Integer            #    Float, Byte, Text, analyzer, InnerObjectWrapper, Completion
             import elasticsearch_dsl
             
             for elem in cls.schema.keys():

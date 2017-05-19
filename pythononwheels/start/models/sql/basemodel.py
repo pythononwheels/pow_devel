@@ -210,20 +210,38 @@ class SqlBaseModel(ModelObject):
             reslist.append(m)
         return reslist
     
-    def get_relationships(self):
+    def relationships(self):
         """
             returns the raw relationships
             see: http://stackoverflow.com/questions/21206818/sqlalchemy-flask-get-relationships-from-a-db-model
         """
         return sqlalchemy.inspection.inspect(self.__class__).relationships
 
-    def get_relations(self):
+    def relations(self):
         """
             returns a list of the relation names
             see: http://stackoverflow.com/questions/21206818/sqlalchemy-flask-get-relationships-from-a-db-model
         """
         rels = sqlalchemy.inspection.inspect(self.__class__).relationships
         return rels.keys()
+    
+    
+
+    def __repr__(self):
+        """
+            __repr__ method is what happens when you look at it with the interactive prompt
+            or (unlikely: use the builtin repr() function)
+            usage: at interactive python prompt
+            p=Post()
+            p
+        """
+        from pprint import pformat
+        #j = self.json_dump()
+        d = self.to_dict()
+        # add the related objects
+        for elem in self.relations():
+            d[elem] = getattr(self, elem)
+        return pformat(d,indent=+4)
 
     def print_full(self):
         #

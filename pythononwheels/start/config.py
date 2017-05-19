@@ -92,7 +92,7 @@ beta_settings = {
     # on www.pythononwheels.org/beta
     
     # Name          :    Enabled ?
-    "dot_format"    :   False
+    "dot_format"    :   True
 }
 
 #from handlers.very_raw_own_handler import VeryRawOwnHandler
