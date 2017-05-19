@@ -204,12 +204,13 @@ def main():
     print(50*"-")
     generate_app(args.name, args.force, args.path, dbtype=args.db, update_only=args.update_only)
 
-    base = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+    base = os.path.normpath(os.path.join(os.getcwd(), args.path))
     apppath = os.path.normpath(os.path.join(base, args.name))
     tpath = os.path.normpath(os.path.join(base, "migrations"))
-    # make the versions dir
+    # create the versions directory
     os.makedirs(os.path.normpath(os.path.join(tpath, "versions")), exist_ok=True)
-
+    # create the views directory
+    #os.makedirs(os.path.normpath(os.path.join(base, "migrations")), exist_ok=True)
     print()
     print(50*"-")
     if args.update_only:

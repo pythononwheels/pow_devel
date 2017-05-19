@@ -95,7 +95,7 @@ class ModelObject():
 
     def validate(self):
         """
-            checks if the instance has a schema.
+            checks the instance against a schema.
             validatees the current values
         """
         if getattr(self,"schema", False):

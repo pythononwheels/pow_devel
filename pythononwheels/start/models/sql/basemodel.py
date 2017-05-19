@@ -1,4 +1,5 @@
 
+import os
 from sqlalchemy import Column, Integer, String, DateTime, Float
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.sql.expression import func 
@@ -226,7 +227,23 @@ class SqlBaseModel(ModelObject):
         return rels.keys()
     
     
+    def _rep_model_as_str(self):
+        line = ""
+        for a in self.__mapper__.attrs:
+            if isinstance(a, orm.properties.ColumnProperty):
+                c = a.columns[0]
+                line += '{:20}'.format(a.key)
+                line += ": " + str(getattr(self, a.key))
+                if c.primary_key:
+                    line += '{:15}'.format(" (primary key)")
+                if c.foreign_keys:
+                    line += '{:30}'.format(", ".join([fk.target_fullname for fk in c.foreign_keys]))
+                line += os.linesep
+            elif isinstance(a, orm.properties.RelationshipProperty):
+                line += "{} -> {} relationship with <model {}>".format(a.key, a.direction.name, a.mapper.class_.__name__)
+                line += os.linesep
 
+        return line
     def __repr__(self):
         """
             __repr__ method is what happens when you look at it with the interactive prompt
@@ -236,20 +253,22 @@ class SqlBaseModel(ModelObject):
             p
             see: http://stackoverflow.com/questions/26147410/what-is-a-good-way-to-pretty-print-a-sqlalchemy-database-as-models-and-relations
         """
-        for a in self.__mapper__.attrs:
-            if isinstance(a, orm.properties.ColumnProperty):
-                c = a.columns[0]
-                line = a.key
-                line += str(getattr(self, a.key))
-                if c.primary_key:
-                    line += " (primary key)"
-                if c.foreign_keys:
-                    line += " -> " + ", ".join([fk.target_fullname for fk in c.foreign_keys])
-                print(line)
-            elif isinstance(a, orm.properties.RelationshipProperty):
-                print ("{} -> {} relationship with <model {}>".format(
-                    a.key, a.direction.name, a.mapper.class_.__name__))
-        return ""
+        # odict = {}
+        # for a in self.__mapper__.attrs:
+        #     if isinstance(a, orm.properties.ColumnProperty):
+        #         c = a.columns[0]
+        #         line = a.key
+        #         line += str(getattr(self, a.key))
+        #         if c.primary_key:
+        #             line += " (primary key)"
+        #         if c.foreign_keys:
+        #             line += " -> " + ", ".join([fk.target_fullname for fk in c.foreign_keys])
+        #         print(line)
+        #     elif isinstance(a, orm.properties.RelationshipProperty):
+        #         print ("{} -> {} relationship with <model {}>".format(
+        #             a.key, a.direction.name, a.mapper.class_.__name__))
+        # return ""
+        return self._rep_model_as_str()
         
 
     def print_full(self):

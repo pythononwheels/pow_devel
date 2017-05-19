@@ -271,7 +271,7 @@ class powDecNew():
         # the "parent" class
         # rel_as_str is the plueral name of the child class (adresses, comments)
         # klass below is the real class instance of the child
-        from {{appname}}.dblib import Base
+        from {{appname}}.database.sqldblib import Base
         def decorator(parent_class):
             parent_name = parent_class.__name__.lower()
             parent_class_name = parent_class.__name__
@@ -279,7 +279,7 @@ class powDecNew():
             #
             # create the new association Table and class
             #
-            assoc_table = Table("association_" + parent_name + "_" + children,
+            assoc_table = Table("association_" + parent_name + "_" + singularize(children),
                 Base.metadata, 
                 Column(parent_name + "_id", Integer, ForeignKey(pluralize(parent_name) + ".id")),
                 Column(singularize(children)+"_id", Integer, ForeignKey(children + ".id"))
