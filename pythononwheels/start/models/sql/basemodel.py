@@ -210,14 +210,14 @@ class SqlBaseModel(ModelObject):
             reslist.append(m)
         return reslist
     
-    def relationships(self):
+    def get_relationships(self):
         """
             returns the raw relationships
             see: http://stackoverflow.com/questions/21206818/sqlalchemy-flask-get-relationships-from-a-db-model
         """
         return sqlalchemy.inspection.inspect(self.__class__).relationships
 
-    def relations(self):
+    def get_relations(self):
         """
             returns a list of the relation names
             see: http://stackoverflow.com/questions/21206818/sqlalchemy-flask-get-relationships-from-a-db-model
@@ -234,14 +234,23 @@ class SqlBaseModel(ModelObject):
             usage: at interactive python prompt
             p=Post()
             p
+            see: http://stackoverflow.com/questions/26147410/what-is-a-good-way-to-pretty-print-a-sqlalchemy-database-as-models-and-relations
         """
-        from pprint import pformat
-        #j = self.json_dump()
-        d = self.to_dict()
-        # add the related objects
-        for elem in self.relations():
-            d[elem] = getattr(self, elem)
-        return pformat(d,indent=+4)
+        for a in self.__mapper__.attrs:
+            if isinstance(a, orm.properties.ColumnProperty):
+                c = a.columns[0]
+                line = a.key
+                line += str(getattr(self, a.key))
+                if c.primary_key:
+                    line += " (primary key)"
+                if c.foreign_keys:
+                    line += " -> " + ", ".join([fk.target_fullname for fk in c.foreign_keys])
+                print(line)
+            elif isinstance(a, orm.properties.RelationshipProperty):
+                print ("{} -> {} relationship with <model {}>".format(
+                    a.key, a.direction.name, a.mapper.class_.__name__))
+        return ""
+        
 
     def print_full(self):
         #
