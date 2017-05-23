@@ -31,11 +31,18 @@ def pow_init_from_dict_deserializer(dct, schema):
             print("converting: " + str(elem) + " : " + str(dct[elem]) + " => " + schema[elem]["type"] ) 
             if schema[elem]["type"].lower() == "datetime":
                 if not isinstance(dct[elem], (datetime.datetime)):
+                    #print(str(type(dct[elem])) + str(dct[elem]))
                     try:
+                        # expecting primarily a string
                         dct[elem] = datetime.datetime.strptime(dct[elem], myapp["date_format"])
-                        print(str(type(dct[elem])) + str(dct[elem]))
                     except Exception as e:
-                        raise e
+                        # try with epoch int
+                        try:
+                            dct[elem] = datetime.datetime.fromtimestamp(dct[elem])
+                        except Exception as e1:
+                            #print(elem + "->" +str(type(dct[elem])) + str(dct[elem]))
+                            #print(str(e))
+                            raise e1
             elif schema[elem]["type"].lower() == "integer":
                 if not isinstance(dct[elem], (int)):
                     try:

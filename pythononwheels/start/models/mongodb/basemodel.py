@@ -30,7 +30,7 @@ class MongoBaseModel(ModelObject):
         """
             basic setup for all mongoDB models.
         """
-        print("executin init_on_load")
+        #print("executin init_on_load")
         
         #create an index for our own id field.
         
@@ -192,15 +192,23 @@ class MongoBaseModel(ModelObject):
         #self.last_updated = datetime.datetime.utcnow().strftime(myapp["date_format"])
         self.last_updated = datetime.datetime.utcnow()
         if self._id == None:
+            print("** insert **")
             # insert. so set created at            
             self.created_at = datetime.datetime.utcnow()
             self.last_updated = self.created_at
-            self._id = self.table.insert_one(self.to_dict())
+            # returns an InsertOneResult 
+            # see: http://api.mongodb.com/python/current/api/pymongo/results.html#pymongo.results.InsertOneResult
+            ior = self.table.insert_one(self.to_dict())
+            self._id = ior.inserted_id
             return self._id
         else:
             # update
-            self._id = self.table.update_one({"_id" : self._id}, {"$set": self.to_dict()} )
-            return self._id
+            print("** update **")
+            #print(self.to_dict())
+            # returns an UpdateResult. 
+            # See: http://api.mongodb.com/python/current/api/pymongo/results.html#pymongo.results.InsertOneResult
+            ur = self.table.update_one({"_id" : self._id}, {"$set": self.to_dict()}, upsert=False )
+            return ur
        
     def delete(self, filter=None, many=False):
         """ delete item """
@@ -226,10 +234,10 @@ class MongoBaseModel(ModelObject):
         """ execute a given DB statement raw """
         raise NotImplementedError("from_statement is not available for mongoDB.")
 
-    def page(self, *criterion, limit=None, offset=None):
+    def page(self, filter={}, limit=0, offset=0):
         """ return the next page of results. See config["myapp"].page_size """
-        raise NotImplementedError("Subclasses should overwrite this Method.")
-
+        return self.result_to_object(self.table.find(filter).skip(offset).limit(limit))
+    
     def find(self,filter=None):
         """ Find something given a query or criterion 
             filter = { "key" : value, ..}

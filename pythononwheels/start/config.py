@@ -59,7 +59,7 @@ database = {
         "port"      :   None,   
         "user"      :   None,
         "passwd"    :   None,
-        "enabled"   :   True
+        "enabled"   :   True          # switch currently unused
     },
     "tinydb" : {
         "dbname"    :   r"{{tinydb_path}}",   # better leave the r to enable absolute paths with backslashes 
@@ -67,15 +67,15 @@ database = {
         "port"      :   None,   
         "user"      :   None,
         "passwd"    :   None,
-        "enabled"   :   False
+        "enabled"   :   False       # switch currently unused
     },
     "mongodb" : {
-        "dbname"    :   "testdb",   # == elasticsearch index 
+        "dbname"    :   "testdb",  
         "host"      :   "localhost",       
         "port"      :   27017,   
         "user"      :   None,
         "passwd"    :   None,
-        "enabled"   :   False
+        "enabled"   :   False       # switch currently unused
     },
     "elastic" : {
         "dbname"    :   "testdb",   # == elasticsearch index 
@@ -83,7 +83,7 @@ database = {
         "port"      :   9200,   
         "user"      :   None,
         "passwd"    :   None,
-        "enabled"   :   False
+        "enabled"   :   False       # switch currently unused
     }
 }
 
