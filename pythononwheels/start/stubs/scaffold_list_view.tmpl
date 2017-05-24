@@ -80,11 +80,11 @@
                     {% end %}
                     <td>                           
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 
-                        <a href='{{base_route_rest}}/{{getattr(elem, "id")}}' class="btn btn-primary">Show</a>
+                        <a href='/{{base_route_rest}}/{{getattr(elem, "id")}}' class="btn btn-primary">Show</a>
                     </td>
                     <td>
                         <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                        <a href='{{base_route_rest}}/{{getattr(elem, "id")}}/edit'class="btn btn-warning">Edit</a>
+                        <a href='/{{base_route_rest}}/{{getattr(elem, "id")}}/edit'class="btn btn-warning">Edit</a>
                     </td>
                     <td>
                         <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
@@ -96,16 +96,17 @@
     {% else %}
         <tr>
             <td colspan="{{len(model.schema.keys())+1}}">
-                <a href="{{base_route_rest}}/new" class="btn btn-success">+</a> create a new {{model.__class__.__name__}}.
+                <a href="/{{base_route_rest}}/new" class="btn btn-success">+</a> create a new {{model.__class__.__name__}}.
             </td>
         </tr>
     {% end %}
         </tbody>
     </table>
     <hr>
-    <h2>Raw: </h2>
-    {{data}}
+    <h2>Info: </h2>
     <hr>
     <b>ModelClass:</b> {{ str(type(model)) }}
+    <hr>
+base route rest: {{base_route_rest}}
 </div>
 {% end %}

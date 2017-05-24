@@ -1,4 +1,4 @@
-from {{appname}}.database.mongodblib import db, client, collection
+from {{appname}}.database.mongodblib import db, client
 from {{appname}}.powlib import pluralize
 import datetime
 import xmltodict
@@ -23,8 +23,6 @@ class MongoBaseModel(ModelObject):
         "created_at"    : { "type" : "datetime", "default" : None },
         "last_updated"    : { "type" : "datetime", "default" : None },
     }
-    table = collection
-    table.create_index([('id', pymongo.ASCENDING)], unique=True)
 
     def init_on_load(self, *args, **kwargs):
         """
@@ -72,11 +70,16 @@ class MongoBaseModel(ModelObject):
                 #if key in self.__class__.__dict__:
                 if key in self.schema:
                     setattr(self, key, kwargs[key])
+        
+        self.table = db[pluralize(self.__class__.__name__.lower())]
+        self.collection = self.table
+        self.table.create_index([('id', pymongo.ASCENDING)], unique=True)
+        
         self.tablename = pluralize(self.__class__.__name__.lower())
-        self.table = self.__class__.table
+        #self.table = self.__class__.table
         self._id = None
         self.id = str(uuid.uuid4())
-        print("new id is: " + self.id) 
+        #print("new id is: " + self.id) 
                            
     #
     # These Methods should be implemented by every subclass
@@ -132,16 +135,16 @@ class MongoBaseModel(ModelObject):
         if not isinstance(res, (pymongo.cursor.Cursor)):       
             m=self.__class__()
             m.init_from_dict(res)
-            print("returning: " +str(m))
-            print("   type: " + str(type(m)))
+            #print("returning: " +str(m))
+            #print("   type: " + str(type(m)))
             return m
         # handle cursor (many result elelemts)
         reslist = []
         for elem in res:
             m=self.__class__()
             m.init_from_dict(elem)
-            print("appending: " +str(m))
-            print("   type: " + str(type(m)))
+            #print("appending: " +str(m))
+            #print("   type: " + str(type(m)))
             reslist.append(m)
         return reslist
 
@@ -196,8 +199,6 @@ class MongoBaseModel(ModelObject):
             # insert. so set created at            
             self.created_at = datetime.datetime.utcnow()
             self.last_updated = self.created_at
-            # returns an InsertOneResult 
-            # see: http://api.mongodb.com/python/current/api/pymongo/results.html#pymongo.results.InsertOneResult
             ior = self.table.insert_one(self.to_dict())
             self._id = ior.inserted_id
             return self._id
@@ -205,10 +206,8 @@ class MongoBaseModel(ModelObject):
             # update
             print("** update **")
             #print(self.to_dict())
-            # returns an UpdateResult. 
-            # See: http://api.mongodb.com/python/current/api/pymongo/results.html#pymongo.results.InsertOneResult
-            ur = self.table.update_one({"_id" : self._id}, {"$set": self.to_dict()}, upsert=False )
-            return ur
+            ior = self.table.update_one({"_id" : self._id}, {"$set": self.to_dict()}, upsert=False )
+            return ior
        
     def delete(self, filter=None, many=False):
         """ delete item """
@@ -234,26 +233,36 @@ class MongoBaseModel(ModelObject):
         """ execute a given DB statement raw """
         raise NotImplementedError("from_statement is not available for mongoDB.")
 
-    def page(self, filter={}, limit=0, offset=0):
-        """ return the next page of results. See config["myapp"].page_size """
-        return self.result_to_object(self.table.find(filter).skip(offset).limit(limit))
-    
-    def find(self,filter=None):
+    def page(self, filter={}, page=0, page_size=None):
+        """ return the next page of results. See config["myapp"].page_size 
+            actually means: (taking the sql understandng)
+                 page === offset 
+                 limit === limit
+        """
+        if page_size == None:
+            page_size = myapp["page_size"] 
+        return self.result_to_object(self.table.find(filter).skip(page*page_size).limit(page_size))
+
+    def find(self,filter={}):
         """ Find something given a query or criterion 
             filter = { "key" : value, ..}
         """
-        print("Find parameter:" + str(filter))
+        #print("Find parameter:" + str(filter))
         return self.result_to_object(self.table.find(filter))
     
-    def find_all(self, filter=None, raw=False, as_json=False, limit=None, offset=None):
+    def find_all(self, filter=None, raw=False, as_json=False, limit=0, offset=0):
         """ Find something given a query or criterion and parameters """
-        return self.find(filter)
+        if (limit>0) or (offset>0):
+            return self.page(filter=filter, limit=limit, offset=offset)
+        else:
+            return self.find(filter)
     
-    def find_one(self, filter, as_json=False):
+    def find_one(self, filter={}, as_json=False):
         """ find only one result. Raise Excaption if more than one was found"""
-        return self.result_to_object(self.table.find_one(filter))
+        res = self.table.find_one(filter)
+        return self.result_to_object(res)
         
-    def find_first(self, *criterion, as_json=False):
+    def find_first(self, filter={}, as_json=False):
         """ return the first hit, or None"""
         raise NotImplementedError("Not available for MongoDB")
 
@@ -266,7 +275,7 @@ class MongoBaseModel(ModelObject):
             for tinyDB return Query
             for MongoDB: not implemented
         """
-        raise NotImplementedError("Not implemented for MongoDB.")
+        return self.table
         
 
 

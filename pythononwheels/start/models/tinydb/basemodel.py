@@ -189,16 +189,18 @@ class TinyBaseModel(ModelObject):
         """ Method not available for TinyDB Models """
         raise RuntimeError("Method not available for TinyDB Models ")
 
-    def page(self, *criterion, limit=None, offset=None):
+    def page(self, *criterion, page=0, page_size=None):
         """ return the next page 
             contains all elements from offset(first element) -> to limit (last element).
         """
+        if page_size == None:
+            page_size = myapp["page_size"]
         def testfunc(val, start, end ):
             return start <= val <= end
         Q = Query()
         print(str(*criterion))
         Att = getattr(Q, *crtiterion)
-        res = self.table.search(Att(testfunc, start, end ))
+        res = self.table.search(Att(testfunc, page*page_size, (page*page_size)+page_size ))
 
     def json_result_to_object(self, res):
         """

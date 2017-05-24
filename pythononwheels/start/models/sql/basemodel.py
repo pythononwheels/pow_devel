@@ -330,8 +330,23 @@ class SqlBaseModel(ModelObject):
         """
         return session.query(self.__class__).from_statement(statement)
 
-    def page(self, *criterion, limit=None, offset=None):
-        res = session.query(self.__class__).filter(*criterion).limit(limit).offset(offset).all()
+    def page(self, *criterion, page=0, page_size=None):
+        """ return the next page of results. See config["myapp"].page_size 
+            actually means: (taking the sql understandng)
+                 page === offset 
+                 limit === limit
+        """
+        if page_size == None:
+            page_size = myapp["page_size"]
+        if database["type"] == "sqlite":
+             limit=page_size
+        else:
+             limit=(page*page_size)+page_size
+        res = m.find_all( 
+             limit=limit,
+             offset=page*page_size
+             )
+        #res = session.query(self.__class__).filter(*criterion).limit(limit).offset(offset).all()
         return res
 
     def find(self,*criterion):

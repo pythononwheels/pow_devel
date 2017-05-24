@@ -40,6 +40,9 @@ class {{handler_class_name}}(PowHandler):
     
     model=Model()
     
+    # these fields will be hidden by scaffolded views:
+    show_list=["id", "title", "text"]
+
     def show(self, id=None):
         m=Model()
         res=m.find_by_id(id)
@@ -52,15 +55,7 @@ class {{handler_class_name}}(PowHandler):
     
     def page(self, page=0):
         m=Model()
-        page_size=myapp["page_size"]
-        if database["type"] == "sqlite":
-            limit=page_size
-        else:
-            limit=(page*page_size)+page_size
-        res = m.find_all( 
-            limit=limit,
-            offset=page*page_size
-            )
+        res=m.page(filter={}, page=int(page), page_size=myapp["page_size"])
         self.success(message="{{handler_name}} page: #" +str(page), data=res )  
     
     def search(self):
