@@ -123,6 +123,17 @@ class MongoBaseModel(ModelObject):
             returns a list of objects from a given json list (string) 
         """
         raise NotImplementedError("Subclasses should overwrite this Method.")
+    
+    def get_next_object(self, cursor):
+        """
+            return a generator that creates a Model object
+            for each next call.
+        """
+        for elem in cursor:
+            m=self.__class__()
+            m.init_from_dict(elem)
+            yield m
+   
 
     def result_to_object(self, res):
         """ 
@@ -138,15 +149,18 @@ class MongoBaseModel(ModelObject):
             #print("returning: " +str(m))
             #print("   type: " + str(type(m)))
             return m
+        
+        # return the generator function. 
+        return self.get_next_object(res)
         # handle cursor (many result elelemts)
-        reslist = []
-        for elem in res:
-            m=self.__class__()
-            m.init_from_dict(elem)
-            #print("appending: " +str(m))
-            #print("   type: " + str(type(m)))
-            reslist.append(m)
-        return reslist
+        # reslist = []
+        # for elem in res:
+        #     m=self.__class__()
+        #     m.init_from_dict(elem)
+        #     #print("appending: " +str(m))
+        #     #print("   type: " + str(type(m)))
+        #     reslist.append(m)
+        # return reslist
 
     def print_full(self):
         """ Subclasses should overwrite this Method. 
@@ -195,7 +209,7 @@ class MongoBaseModel(ModelObject):
         #self.last_updated = datetime.datetime.utcnow().strftime(myapp["date_format"])
         self.last_updated = datetime.datetime.utcnow()
         if self._id == None:
-            print("** insert **")
+            #print("** insert **")
             # insert. so set created at            
             self.created_at = datetime.datetime.utcnow()
             self.last_updated = self.created_at
@@ -204,7 +218,7 @@ class MongoBaseModel(ModelObject):
             return self._id
         else:
             # update
-            print("** update **")
+            #print("** update **")
             #print(self.to_dict())
             ior = self.table.update_one({"_id" : self._id}, {"$set": self.to_dict()}, upsert=False )
             return ior
@@ -260,7 +274,10 @@ class MongoBaseModel(ModelObject):
     def find_one(self, filter={}, as_json=False):
         """ find only one result. Raise Excaption if more than one was found"""
         res = self.table.find_one(filter)
-        return self.result_to_object(res)
+        if res != None:
+            return self.result_to_object(res)
+        else:
+            return None
         
     def find_first(self, filter={}, as_json=False):
         """ return the first hit, or None"""

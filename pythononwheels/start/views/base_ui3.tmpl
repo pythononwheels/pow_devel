@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>imhooverflow - a home for your opinions.</title>
+        <link rel="stylesheet" href="{{ static_url("css/uikit.min.css")}}" />
+        <link rel="stylesheet" href="{{ static_url("css/imho.css")}}" />
+        <script src="{{ static_url("js/jquery.min.js")}}"></script>
+        <script src="{{ static_url("js/jquery-tagcloud.js")}}"></script>
+        <script src="{{ static_url("js/uikit.min.js")}}"></script>
+        <script src="{{ static_url("js/uikit-icons.min.js")}}"></script>
+
+        <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css?family=Bitter" rel="stylesheet"> 
+
+        {% block css %}
+        {% end %}
+
+        {% block include_js %}
+        {% end %}
+
+        {% block js %}
+        {% end %}
+    </head>
+    <body>
+        <div class="uk-container">
+            <nav class="uk-navbar-container uk-navbar-transparent"  uk-navbar>
+                <div class="uk-navbar-left">
+                    <div class="uk-navbar-item uk-logo imho-width-medium">
+                        <a href="/"><img src="{{ static_url("images/pow_logo_128.png")}}"> </a>               
+                    </div>
+                    <ul class="uk-navbar-nav uk-width-expand">
+                        <li><a href="#">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="uk-navbar-right uk-width-1-4">
+                    <ul class="uk-navbar-nav">
+                            <li><a href="/login">login</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <hr class="uk-remove-padding-top uk-margin-remove-top">
+        {% block content %}
+        {% end %}
+    </body>
+</html>
