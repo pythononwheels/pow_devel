@@ -124,7 +124,7 @@ class MongoBaseModel(ModelObject):
         """
         raise NotImplementedError("Subclasses should overwrite this Method.")
     
-    def get_next_object(self, cursor):
+    def _get_next_object(self, cursor):
         """
             return a generator that creates a Model object
             for each next call.
@@ -133,9 +133,9 @@ class MongoBaseModel(ModelObject):
             m=self.__class__()
             m.init_from_dict(elem)
             yield m
-   
+    
 
-    def result_to_object(self, res):
+    def _return_find(self, res):
         """ 
             returns a list of models from a given cursor.
             parameter:  res can be pymongo cursor or is handled as a single document (dict). 
@@ -151,7 +151,7 @@ class MongoBaseModel(ModelObject):
             return m
         
         # return the generator function. 
-        return self.get_next_object(res)
+        return self._get_next_object(res)
         # handle cursor (many result elelemts)
         # reslist = []
         # for elem in res:
@@ -255,31 +255,31 @@ class MongoBaseModel(ModelObject):
         """
         if page_size == None:
             page_size = myapp["page_size"] 
-        return self.result_to_object(self.table.find(filter).skip(page*page_size).limit(page_size))
+        return self._return_find(self.table.find(filter).skip(page*page_size).limit(page_size))
 
     def find(self,filter={}):
         """ Find something given a query or criterion 
             filter = { "key" : value, ..}
         """
         #print("Find parameter:" + str(filter))
-        return self.result_to_object(self.table.find(filter))
+        return self._return_find(self.table.find(filter))
     
-    def find_all(self, filter=None, raw=False, as_json=False, limit=0, offset=0):
+    def find_all(self, filter=None, raw=False, limit=0, offset=0):
         """ Find something given a query or criterion and parameters """
         if (limit>0) or (offset>0):
             return self.page(filter=filter, limit=limit, offset=offset)
         else:
             return self.find(filter)
     
-    def find_one(self, filter={}, as_json=False):
+    def find_one(self, filter={}):
         """ find only one result. Raise Excaption if more than one was found"""
         res = self.table.find_one(filter)
         if res != None:
-            return self.result_to_object(res)
+            return self._return_find(res)
         else:
             return None
         
-    def find_first(self, filter={}, as_json=False):
+    def find_first(self, filter={}):
         """ return the first hit, or None"""
         raise NotImplementedError("Not available for MongoDB")
 

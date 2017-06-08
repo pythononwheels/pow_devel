@@ -239,7 +239,17 @@ class TinyBaseModel(ModelObject):
     #         returns a list of results in a json serialized format.
     #     """
     #     return json.loads(json.dumps(res, default=pow_json_serializer))
-    def _return_find(self, res, as_json=False):
+
+    def _get_next_object(self, cursor):
+        """
+            return a generator that creates a Model object
+            for each next call.
+        """
+        for elem in res:
+            obj = self.dict_result_to_object(res)
+            yield obj
+
+    def _return_find(self, res):
         """
             _return_find gives the right result.
             either as json
@@ -247,22 +257,21 @@ class TinyBaseModel(ModelObject):
         """
         print(res)
         print(str(type(res)))
-        res = self.dict_result_to_object(res)
-        if as_json:
-            return self.res_to_json(res)
-        else:
-            if len(res) == 1:
-                return res[0]
-            return res
+        if len(res) == 1:
+            res = self.dict_result_to_object(res)
+            return res[0]
+        # else return the generator
+        return self._get_next_object(res)
+        
 
-    def find(self,*criterion, as_json=False):
+    def find(self,*criterione):
         """ Find something given a query or criterion 
             example: r=t.find(t.where("id") == "c6492e1a-8740-40d9-9b15-d5f1bc73ba97")
             example2: r=t.find(t.Query.id == "c6492e1a-8740-40d9-9b15-d5f1bc73ba97")
         """
         print("  .. find: " + str(*criterion))
         res = self.table.search(*criterion)
-        return self._return_find(res, as_json)
+        return self._return_find(res)
     
     def find_by_id(self, id=None):
         """ return by id """
@@ -270,7 +279,7 @@ class TinyBaseModel(ModelObject):
         res = self.table.search(Q.id == str(id))
         return self._return_find(res)
         
-    def find_random(self, as_json=False):
+    def find_random(self):
         """ Find and return a random element """
         import random
         res = self.table.all() # returns a list of tinyDB DB-Elements
@@ -278,25 +287,25 @@ class TinyBaseModel(ModelObject):
         randnum = random.randrange(len(res))
         #print(" random: " + str(randnum))
         res=[res[randnum]]
-        return self._return_find(res, as_json)
+        return self._return_find(res)
 
-    def find_all(self, as_json=False):
+    def find_all(self):
         """ Find something given a query or criterion and parameters """
         res = self.table.all() # returns a list of tinyDB DB-Elements 
-        return self._return_find(res, as_json)
+        return self._return_find(res)
     
-    def find_one(self, *criterion, as_json=False):
+    def find_one(self, *criterion):
         """ find only one result. Raise Excaption if more than one was found"""
         print("criterion: " + str(criterion))
         try:
             res = self.table.get(*criterion)
-            return self._return_find(res, as_json)
+            return self._return_find(res)
         except Exception as e:
             raise e
 
-    def find_first(self, *criterion, as_json=False):
+    def find_first(self, *criterion):
         """ return the first hit, or None"""
-        return self.find_one(*criterion, as_json=as_json)
+        return self.find_one(*criterion)
 
     def q(self):
         """ return a raw query """
