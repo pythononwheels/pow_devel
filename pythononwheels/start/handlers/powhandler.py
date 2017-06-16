@@ -30,3 +30,12 @@ class PowHandler(BaseHandler):
         else:
             # if authentication is disabled return a dummy guest user
             return True
+        
+
+    def success(self, **kwargs):
+        """ 
+            just adding a user object to every success call
+        """
+        # add your modifications below.
+        # add arguements that are needed by all viwes etc ..
+        BaseHandler.success(self, **kwargs)
