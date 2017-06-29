@@ -1,37 +1,33 @@
-{% extends "base.tmpl" %}
+{% extends "base_semanticui.tmpl" %}
 {% block content %}
+    
     <div class="ui grid">
-        <div class="eight wide column" >
-            <img src={{ static_url("images/404_4.png")}} width="75%"/>
-        </div>
-        
-        <div class="six wide column">
-            
-            <div class="ui error message" role="alert">
-                <h1 class="alert-heading">Oh no HTTP 404! This URL cannot be Found. </h1> 
+        <div class="row">
+            <div class="one wide column">
+                &nbsp;
             </div>
-            <p class="lead">    
-                Hm, maybe you want to restart from here:  <a href="/">Home</a>
-            </p>
+            <div class="seven wide column" >
+                <img src={{ static_url("images/404_4.png")}} width="75%"/>
+                <p class="ui header">    
+                    Hm, maybe you want to restart from here:  <a href="/">Home</a>
+                </p>
+            </div>
             
-            <p>
-                <table class="table">
-                    <tr>
-                        <td><b>Status:</b></td><td> {{status}} </td>
-                    </tr>
-                    <tr>
-                        <td><b>Message:</b></td><td> {{message}} </td>
-                    </tr>
-                    <tr>
-                        <td><b>URI:</b></td><td> {{request.path}} </td>
-                    </tr>
-                    <tr>
-                        <td><b>Request:</b></td><td> {{request}} </td>
-                    </tr>
-                </table>
-        </div>
-        <div class="two wide column">
-            &nbsp;
+            <div class="seven wide column">
+                
+                <div class="ui error message" role="alert">
+                    <h1 class="alert-heading">Oh no-This URL cannot be Found. </h1> 
+                </div>
+                
+                
+                <div class="ui header message"><b>HTTP Status:</b>  {{status}} </div>
+                <div class="ui error message"><b>Message:</b> {{message}} </div>
+                <div class="ui warning message"><b>URI:</b> {{request.path}} </div>
+                <div class="ui message"><b>Request:</b> {{request}} </div>
+            </div>
+            <div class="one wide column">
+                &nbsp;
+            </div>
         </div>
     </div>
 

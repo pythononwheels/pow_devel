@@ -1,4 +1,3 @@
-
 import os
 from sqlalchemy import Column, Integer, String, DateTime, Float
 from sqlalchemy.ext.declarative import declared_attr
@@ -13,6 +12,7 @@ import xmltodict
 import simplejson as json
 import datetime, decimal
 from {{appname}}.config import myapp
+import {{appname}}.config as cfg
 from {{appname}}.models.modelobject import ModelObject
 #print ('importing module %s' % __name__)
 
@@ -226,6 +226,8 @@ class SqlBaseModel(ModelObject):
         rels = sqlalchemy.inspection.inspect(self.__class__).relationships
         return rels.keys()
     
+    def sync(self):
+        self.session.refresh(self)
     
     def _rep_model_as_str(self):
         line = ""
@@ -338,11 +340,11 @@ class SqlBaseModel(ModelObject):
         """
         if page_size == None:
             page_size = myapp["page_size"]
-        if database["type"] == "sqlite":
+        if cfg.database["sql"]["type"] == "sqlite":
              limit=page_size
         else:
              limit=(page*page_size)+page_size
-        res = m.find_all( 
+        res = self.find_all( 
              limit=limit,
              offset=page*page_size
              )

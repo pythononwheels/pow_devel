@@ -55,7 +55,7 @@ class {{handler_class_name}}(PowHandler):
     
     def page(self, page=0):
         m=Model()
-        res=m.page(filter={}, page=int(page), page_size=myapp["page_size"])
+        res=m.page(page=int(page), page_size=myapp["page_size"])
         self.success(message="{{handler_name}} page: #" +str(page), data=res )  
     
     def search(self):
