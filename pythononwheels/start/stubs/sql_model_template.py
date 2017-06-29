@@ -22,9 +22,9 @@ class {{model_class_name}}(Base):
     # with the special "sql" key you can hand Over
     # raw sqlalchemy column __init__ parameters.
     #
-    schema = {
-        'text': {'type': 'string'},
+    schema = {        
         'title': {'type': 'string', 'maxlength' : 35},
+        'text': {'type': 'string'},
         'likes': {
             'type': 'integer',
              "sql" : {          # sql attributes are handed raw to sqlalchemy Column

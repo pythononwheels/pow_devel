@@ -363,33 +363,27 @@ class SqlBaseModel(ModelObject):
         """
         return session.query(self.__class__).get(id)
 
-    def find_all(self, *criterion, raw=False, as_json=False, limit=None, offset=None):
+    def find_all(self, *criterion, raw=False, limit=None, offset=None):
         """
-            Searches the DB (Parameters: limit, offset, as_json)
+            Searches the DB (Parameters: limit, offset
         """
         if raw:
             return session.query(self.__class__).filter(*criterion).limit(limit).offset(offset)
         res = session.query(self.__class__).filter(*criterion).limit(limit).offset(offset).all()
-        if as_json:
-            return[x.json_dump() for x in res]
         return res
     
-    def find_one(self, *criterion, as_json=False):
+    def find_one(self, *criterion):
         """
             returns one or none
         """
         res = session.query(self.__class__).filter(*criterion).one()
-        if as_json:
-            return[x.json_dump() for x in res]
         return res
 
-    def find_first(self, *criterion, as_json=False):
+    def find_first(self, *criterion):
         """
             return the first match (if any)
         """
         res = session.query(self.__class__).filter(*criterion).first()
-        if as_json:
-            return[x.json_dump() for x in res]
         return res
 
     def q(self):

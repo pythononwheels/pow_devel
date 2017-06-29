@@ -122,15 +122,15 @@ class ElasticBaseModel(ModelObject):
         res = es.search(index=dbname, body=body)
         return res
     
-    def find_all(self, *criterion, raw=False, as_json=False, limit=None, offset=None):
+    def find_all(self, *criterion, raw=False, limit=None, offset=None):
         """ Find something given a query or criterion and parameters """
         raise NotImplementedError("Subclasses should overwrite this Method.")
     
-    def find_one(self, *criterion, as_json=False):
+    def find_one(self, *criterion):
         """ find only one result. Raise Excaption if more than one was found"""
         raise NotImplementedError("Subclasses should overwrite this Method.")
 
-    def find_first(self, *criterion, as_json=False):
+    def find_first(self, *criterion):
         """ return the first hit, or None"""
         raise NotImplementedError("Subclasses should overwrite this Method.")
 

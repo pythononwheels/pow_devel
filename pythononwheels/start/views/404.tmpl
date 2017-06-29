@@ -1,17 +1,13 @@
 {% extends "base.tmpl" %}
 {% block content %}
-    
-    <div class="row top-buffer-60">
-        <div class="col-md-2">
-            &nbsp;
-        </div>
-        <div class="col-md-4 text-right top-buffer-40" >
-          <img src={{ static_url("images/404_4.png")}} width="75%"/>
+    <div class="ui grid">
+        <div class="eight wide column" >
+            <img src={{ static_url("images/404_4.png")}} width="75%"/>
         </div>
         
-        <div class="col-md-4 top-buffer-40 text-left">
+        <div class="six wide column">
             
-            <div class="alert alert-danger" role="alert">
+            <div class="ui error message" role="alert">
                 <h1 class="alert-heading">Oh no HTTP 404! This URL cannot be Found. </h1> 
             </div>
             <p class="lead">    
@@ -34,9 +30,10 @@
                     </tr>
                 </table>
         </div>
-        <div class="col-md-2">
+        <div class="two wide column">
             &nbsp;
         </div>
+    </div>
 
 
 {% end %}

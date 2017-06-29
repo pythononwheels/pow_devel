@@ -1,17 +1,14 @@
-{% extends "base.tmpl" %}
+{% extends "base_semnaticui.tmpl" %}
 {% block content %}
     
-    <div class="row top-buffer-60">
-        <div class="col-md-2">
-            &nbsp;
-        </div>
-        <div class="col-md-4 text-right" >
+    <div class="ui grid">
+        <div class="eight wide column" >
           <img src={{ static_url("images/bug.png")}} width="75%"/>
         </div>
         
-        <div class="col-md-4 top-buffer-40 text-left">
+        <div class="six wide column">
             
-            <div class="alert alert-danger" role="alert">
+            <div class="ui warning message">
                 <h1 class="alert-heading">Oh no! An Error occured. </h1> 
             </div>
             <p class="lead">    
@@ -37,9 +34,7 @@
                     </tr>
                 </table>
         </div>
-        <div class="col-md-2">
+        <div class="two wide column">
             &nbsp;
         </div>
-
-
 {% end %}
