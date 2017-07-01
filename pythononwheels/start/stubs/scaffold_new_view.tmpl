@@ -1,4 +1,8 @@
-{% extends "base.tmpl" %}
+{% extends "base_semanticui.tmpl" %}
+
+{% block include_css %}
+    <link rel="stylesheet" href="{{ static_url("css/calendar.css")}}" />
+{% end %}
 
 {% block include_js %}
     <script
@@ -8,15 +12,16 @@
     </script>
 		
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/2.8.1/jquery.serializejson.js"></script>
+    <script type="text/javascript" src="{{ static_url("js/calendar.js")}} "></script>
+
 {% end %}
 
-{% block js %}
-
+{% block view_js %}
 
 <script>
-    $(document).ready(function(){   
+    function docready(){   
         $("#message-div").hide();
-
+        $('#example1').calendar();
         $("#create_form").submit(function()
             {
                 var data = $("#create_form").serializeJSON();
@@ -34,9 +39,9 @@
                             var obj = JSON.parse(od);
                             //alert("success sending put: " + data + textStatus)
                             console.log(obj);
-                            $("#message-div").attr("class", "alert alert-success alert-dismissible fade show");
+                            $("#message-div").attr("class", "ui positive message");
                             $("#message-div").append(
-                                "<strong>Well done!</strong> You successfully created:" + obj
+                                "<i class='close icon'></i><div class='header'>Well done!</div><p>You successfully created:</p>" + obj
                             );
                             $("#message-div").show();
                         },
@@ -46,98 +51,90 @@
                             $("#message-div").hide();
                             $("#message-div").attr("class", "alert alert-error alert-dismissible fade show");
                             $("#message-div").append(
-                                "<strong>Oh NO! Error!</strong> creating:"
+                                "<i class='close icon'></i><div class='header'>Oh NO! Error!</div> <p>creating the new dataset.</p>" 
                             );
                             $("#message-div").show();
                         }
                     });  
             return false;   
         });
-    });
+    }
 </script>
 
 {% end %}
 
 {% block content %}
     <!-- Begin page content -->
-    <div class="container">
-        <div class="jumbotron jumbotron-fluid">
-            <div class="container">
-                <h1 class="display-3">This is the <strong>{{handler_name}}</strong> Create view </h1>
+    <div class="ui grid container">
+        <div class="sixteen wide column">
+            <div class="ui message">
+                <div class="header">This is the <strong>{{handler_name}}</strong> Create view </div>
                 <p class="lead">Just go Ahead and create your data below</p>
+            </div>
+            <div id="message-div" class="">
+                <!-- this div is filled late by javascrupt (see above) -->
             </div>
         </div>
         
-         <div id="message-div" class="" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+        <div class="two wide column">
+            &nbsp;
         </div>
 
-        <form id="create_form" name="create_form">
-    
-            {% for key in model.schema.keys() %}
-                {% if key not in cfg.myapp["internal_fields"] %}
-                    {% set _type = model.schema[key]["type"] %}
-                    {% if  _type == "string" %}
-                    <div class="form-group row">
-                        <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
-                        <div class="col-10">
-                            <input  type="text" class="form-control" name="{{key}}" id="{{key}}" 
-                                    value="" />
-                        </div>
-                    </div>    
-                    {% elif _type == "number" or _type == "integer" or _type == "float" %}
-                    <div class="form-group row">
-                        <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
-                        <div class="col-10">
+        <div class="twelve wide column">
+            <form id="create_form" name="create_form" class="ui form">
+                {% for key in model.schema.keys() %}
+                    {% if key not in cfg.myapp["internal_fields"] %}
+                        {% set _type = model.schema[key]["type"] %}
+                        {% if  _type == "string" %}
+                        <div class="inline field">
+                            <label for="{{key}}">{{key}}</label>
+                            <input  type="text" class="form-control" name="{{key}}" id="{{key}}" value="" />
+                        </div>    
+                        {% elif _type == "number" or _type == "integer" or _type == "float" %}
+                        <div class="inline field">
+                            <label for="{{key}}" >{{key}}</label>
                             <input  type="text" class="form-control" name="{{key}}:number" id="{{key}}" 
                                     value="" />
                         </div>
-                    </div>
-                    {% elif _type == "boolean" %}
-                    <div class="form-group row">
-                        <label class="col-sm-2">{{key}}</label>
-                        <div class="col-sm-10">
-                            <div class="form-check">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" name="{{key}}" id="{{key}}"> {{key}}
-                            </label>
+                        {% elif _type == "boolean" %}
+                        <div class="inline field">
+                            <div class="ui checkbox">
+                                <input class="hidden" type="checkbox" name="{{key}}" id="{{key}}"> {{key}}
+                                <label>{{key}}</label>  
                             </div>
                         </div>
-                    </div>
-                    {% elif _type == "datetime" or _type == "date" %}
-                    <div class="form-group row">
-                    <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
-                    <div class="col-10">
-                        <input class="form-control" type="datetime-local" value="" 
-                        id="{{key}}" name="{{key}}">
-                    </div>
-                    </div>
-                    {% elif  _type == "list" %}
-                    <div class="form-group row">
-                        <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
-                        <div class="col-10">
-                            <input  type="text" class="form-control" name="{{key}}" id="{{key}}" 
-                                    value="" />
+                        {% elif _type == "datetime" or _type == "date" %}
+                        <div class="inline field">
+                            <label for="{{key}}">{{key}}</label>
+                            <div class="ui calendar" id="example1">
+                                <div class="ui input left icon">
+                                <i class="calendar icon"></i>
+                                <input type="text" placeholder="Date/Time" id="{{key}}" name="{{key}}">
+                                </div>
+                            </div>
                         </div>
-                    </div>    
+                        {% elif  _type == "list" %}
+                        <div class="inline fields">
+                            <label for="{{key}}">{{key}}</label>
+                            <input  type="text" name="{{key}}" id="{{key}}" value="" placeholder="one, two, three"/>
+                        </div>    
+                        {% end %}
                     {% end %}
                 {% end %}
-            {% end %}
+                
         
-        
-        <hr>
-        
-        <a href="/{{base_route_rest}}" class="btn btn-primary">Back to {{handler_name}}.list</a>
-        <input type="submit" class="btn btn-success" id="submit_edit_form" value="create item">
-
-        </form>
-        <hr>
-        <h2>Raw Data: </h2>
-        {{data}}
-        <hr>
-        <h2>Schema: </h2>
-        {{model.schema}}
+                <a href="/{{base_route_rest}}" class="ui button">Back to {{handler_name}}.list</a>
+                <input type="submit" class="ui green button" id="submit_create_form" value="create item">
+            </form>
+            
+            <h2>Raw Data: </h2>
+            {{data}}
+            
+            <h2>Schema: </h2>
+            {{model.schema}}
+        </div>
+        <div class="two wide column">
+            &nbsp;
+        </div>
     </div>
 {% end %}

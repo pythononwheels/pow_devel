@@ -75,7 +75,7 @@ class {{handler_class_name}}(PowHandler):
     @tornado.web.authenticated
     def new(self):
         m=Model()
-        self.success("{{handler_name}}, new",data=m)
+        self.success(message="{{handler_name}}, new",data=m)
 
     @tornado.web.authenticated
     def create(self):

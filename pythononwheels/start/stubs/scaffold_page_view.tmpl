@@ -1,52 +1,25 @@
 {% extends "base_semanticui.tmpl" %}
 
 {% block include_js %}
-    <script
-			  src="https://code.jquery.com/jquery-2.2.4.js"
-			  integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
-			  crossorigin="anonymous">
-    </script>
-		
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/2.8.1/jquery.serializejson.js"></script>
 {% end %}
 
 {% block view_js %}
 
 <script>
-    $(document).ready(function(){   
-        $(".btn-delete").click(function(e)
+    function docready(){   
+        console.log("docready executed");
+        $("btn-delete").click(function(e)
             {
                 console.log( "btn_delete: " + $(e.currentTarget).attr("value"));
                 var id = $(e.currentTarget).attr("value");
                 var data = jsonString = JSON.stringify({"id" : id});
                 console.log(data)
-                $.ajax({
-                        url : "/{{handler_name}}/" + id,
-                        type: "DELETE",
-                        data : data,
-                        success: function(data, textStatus, jqXHR)
-                        {
-                            
-                            var od = JSON.stringify(data);
-                            var obj = JSON.parse(od);
-                            //alert("success sending put: " + data + textStatus)
-                            console.log(obj);
-                            var curr_tr = $("#"+id);
-                            curr_tr.fadeOut();                            
-                            
-
-                        },
-                        error: function (jqXHR, textStatus, errorThrown)
-                        {
-                            console.log(jqXHR);
-                            var curr_tr = $("#"+id);
-                            curr_tr.fadeTo(100, 0.3, function() { $(this).fadeTo(500, 1.0); });
-                           // try fadeTo(0000)
-                        }
-                    });   // <--- end ajax
                 
-            });
-    });
+                
+            }
+        );
+    }
 </script>
 {% end %}
 
@@ -72,7 +45,6 @@
                             <th colspan="3">Actions:</th>
                         </tr>
                     </thead>
-                    {% if len(data)>0 %}
                     <tbody>
                         {% for elem in data %}
                             <tr id="{{elem.get("id")}}">
@@ -82,24 +54,20 @@
                                 {% end %}
                             {% end %}
                             <td>                           
-                                <a href='/{{base_route_rest}}/{{getattr(elem, "id")}}'>Show</a>
-                            </td>
-                            <td>
-                                <a href='/{{base_route_rest}}/{{getattr(elem, "id")}}/edit'>Edit</a>
-                            </td>
-                            <td>
-                                <button type="button"  value="{{elem.get("id")}}">Delete</a>
+                                <a class="compact ui button" href='/{{base_route_rest}}/{{getattr(elem, "id")}}'>Show</a>
+                                <a class="compact ui button" href='/{{base_route_rest}}/{{getattr(elem, "id")}}/edit'>Edit</a>
+                                <button class="compact ui red button" id="btn-delete"  value="{{elem.get("id")}}">Delete</a>
                             </td>
                             </tr>
                         {% end %}
-                
-                    {% else %}  
-                        <tr>
-                            <td colspan="{{len(model.schema.keys())+1}}">
-                                <a href="/{{base_route_rest}}/new" class="button">+</a> create a new {{model.__class__.__name__}}.
-                            </td>
-                        </tr>
-                    {% end %}
+                            <tr>
+                                <td colspan="{{len(model.schema.keys())+1}}">
+                                    <a href="/{{base_route_rest}}/new" class="ui green button">
+                                        <i class="plus icon"></i>
+                                        <span>create a new {{model.__class__.__name__}}.</span>
+                                    </a> 
+                                </td>
+                            </tr>
                     </tbody>
                 </table>
             </div>
