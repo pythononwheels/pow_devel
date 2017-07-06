@@ -1,79 +1,9 @@
-<!DOCTYPE html>
-<html>
+{% extends "base_semanticui.tmpl" %}
 
-<head>
-    <!-- Standard Meta -->
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+{% block content %} 
 
-    <!-- Site Properties -->
-    <title>Welcome to PythonOnWheels.</title>
-    <link rel="stylesheet" href="{{ static_url("css/semantic.css")}}" />
+test
 
-    <script src="{{ static_url("js/jquery.min.js")}}"></script>
-    <script src="{{ static_url("js/semantic.js")}}"></script>
-    <style type="text/css">
-        body {
-            background-color: #FFFFFF;
-        }
-
-        .ui.menu .item img.logo {
-            margin-right: 1.5em;
-        }
-
-        .main.container {
-            margin-top: 7em;
-        }
-
-        .wireframe {
-            margin-top: 2em;
-        }
-
-        .ui.footer.segment {
-            margin: 5em 0em 0em;
-            padding: 5em 0em;
-        }
-    </style>
-    {% block css %} {% end %} {% block include_js %} {% end %} {% block view_js %} {% end %}
-    <script>
-        $(document).ready(function () {
-            if (typeof docready === "function") {
-                docready();
-            }
-
-        });
-    </script>
-
-</head>
-
-<body>
-
-    <div class="ui stackable fixed inverted menu">
-        <div class="ui container">
-            <a href="/" class="header item">
-        <img class="logo" src="{{ static_url("images/pow_logo_128.png")}}">
-        PythonOnWheels
-      </a>
-            <a href="/question" class="item">Geting started</a>
-            <a href="/question/alltags" class="item">documentation</a>
-        </div>
-    </div>
-
-    <div class="ui main container">
-
-        {% block content %} 
-        
-        
-        {% end %}
+{% end %}
 
 
-        <div class="ui center aligned vertical footer segment">
-            <div class="ui section divider"></div>
-            <a href="http://www.pythononwheels.org">
-        <span class="ui centered"><img src="/static/images/pow_logo_128.png" class="ui centered mini image">powered by pythononwheels</span>
-      </a>
-        </div>
-</body>
-
-</html>

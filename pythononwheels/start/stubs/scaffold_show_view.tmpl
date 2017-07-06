@@ -104,25 +104,30 @@
             </div>
     </div>
     <div class="ui grid">
-        <div class="row">
+          <div class="two wide column">
             &nbsp;
-        </div>
-        <div class="row">
-            
-            <table class="ui table">
-                {% set elem = data %}
-                {% for key in model.schema.keys() %}
-                <tr>
-                    <td><b>{{key}} :</b></td>
-                    <td> {{getattr(elem,key,None) }}</td>
-                </tr>
-                {% end %}
-            </table>
-        </div>
-        <div class="row">
-            <a href="/{{base_route_rest}}" class="ui button">Back to {{handler_name}}.list</a>
-        </div>
-    </div>
-    <h2>Raw: </h2>
-    {{data}}
+          </div>
+          <div class="twelve wide column">
+            <div class="row">
+                <table class="ui table">
+                    {% set elem = data %}
+                    {% for key in model.schema.keys() %}
+                    <tr>
+                        <td><b>{{key}} :</b></td>
+                        <td> {{getattr(elem,key,None) }}</td>
+                    </tr>
+                    {% end %}
+                </table>
+            </div>
+          <div class="row">
+            <p>
+              <a href="/{{base_route_rest}}" class="ui button">Back to {{handler_name}}.list</a>
+            </p>
+            <h2>Raw: </h2>
+            {{data}}
+          </div>
+          <div class="two wide column">
+            &nbsp;
+          </div>
+      </div>
 {% end %}

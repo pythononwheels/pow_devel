@@ -8,11 +8,14 @@ import csv
 import dicttoxml
 from datetime import datetime
 import uuid
+import {{appname}}
+
 def pow_json_serializer(obj):
     """JSON serializer for objects not serializable by default json code"""
 
     if isinstance(obj, datetime):
-        serial = obj.isoformat()
+        #serial = obj.isoformat()
+        serial = obj.strftime({{appname}}.cofig.myapp["date_format"])
         return serial
     if isinstance(obj, uuid.UUID):
         return str(obj)

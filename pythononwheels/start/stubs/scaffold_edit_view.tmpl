@@ -1,4 +1,9 @@
-{% extends "base.tmpl" %}
+{% extends "base_semanticui.tmpl" %}
+
+{% block include_css %}
+    <link rel="stylesheet" href="{{ static_url("css/calendar.css")}}" />
+    
+{% end %}
 
 {% block include_js %}
     <script
@@ -8,26 +13,16 @@
     </script>
 		
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/2.8.1/jquery.serializejson.js"></script>
+    <script type="text/javascript" src="{{ static_url("js/calendar.js")}} "></script>
+
 {% end %}
 
-{% block js %}
-{% set elem = data[0] %}
+{% block view_js %}
 
 <script>
-    $(document).ready(function(){   
+    function docready(){   
         $("#message-div").hide();
-        $(".btn-delete").click(function(e)
-            {
-                console.log( "btn_delete: " + $(e.currentTarget).attr("value"));
-                var id = $(e.currentTarget).attr("value");
-                var data = jsonString = JSON.stringify({"id" : id});
-                console.log(data)
-                var curr_tr = $("#"+id);
-                curr_tr.fadeOut();     
-                
-                
-            });
-    
+        $('#example1').calendar();
         $("#edit_form").submit(function()
             {
                 var data = $("#edit_form").serializeJSON();
@@ -35,7 +30,7 @@
                 var jsonString = JSON.stringify(data);
                 console.log(jsonString);
                 $.ajax({
-                        url : "/{{handler_name}}/{{elem.get('id')}}",
+                        url : "/{{handler_name}}/{{data.get('id')}}",
                         type: "PUT",
                         data : jsonString,
                         success: function(data, textStatus, jqXHR)
@@ -45,131 +40,113 @@
                             var obj = JSON.parse(od);
                             //alert("success sending put: " + data + textStatus)
                             console.log(obj);
-                            $("#message-div").attr("class", "alert alert-success alert-dismissible fade show");
-                            $("#message-div").html(`
-                                <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-                                <span aria-hidden='true'>&times;</span>
-                                </button>
-                                <strong>Well done!</strong> You successfully updated:` + obj 
+                            $("#message-div").attr("class", "ui positive message");
+                            $("#message-div").append(
+                                "<i class='close icon'></i><div class='header'>Well done!</div><p>You successfully created:</p>" + obj
                             );
                             $("#message-div").show();
-                            
                         },
                         error: function (jqXHR, textStatus, errorThrown)
                         {
                             console.log(jqXHR);
                             $("#message-div").hide();
-                            $("#message-div").attr("class", "alert alert-error");
-                            $("#message-div").text("Problems");
+                            $("#message-div").attr("class", "ui negative message");
+                            $("#message-div").append(
+                                "<i class='close icon'></i><div class='header'>Oh NO! Error!</div> <p>updating the dataset.</p>" 
+                            );
                             $("#message-div").show();
                         }
                     });  
-            //setTimeout(function() {
-            //    $('#message-div').fadeOut('fast');
-            //}, 10000); // <-- time in milliseconds
             return false;   
         });
-    });
+    }
 </script>
-
 {% end %}
 
 {% block content %}
     <!-- Begin page content -->
-    <div class="container">
-        <div class="jumbotron jumbotron-fluid">
-            <div class="container">
-                <h1 class="display-3">This is the <strong>{{handler_name}}</strong> edit view </h1>
-                <p class="lead">Just go Ahead and edit your data below</p>
+    <div class="ui grid container">
+        
+        
+        <div class="two wide column">
+            &nbsp;
+        </div>
+
+        <div class="twelve wide column">
+            <div class="row">
+                <div class="ui yellow message">
+                    <div class="header">This is the <strong>{{handler_name}}</strong> Edit view </div>
+                    <p class="lead">Just go Ahead and edit your data below</p>
+                </div>
+                <div id="message-div" class="">
+                    <!-- this div is filled late by javascrupt (see above) -->
+                </div>
+            </div>
+            <div class="row">
+                <form id="edit_form" name="edit_form" class="ui form">
+                    {% for key in model.schema.keys() %}
+                        {% if key in cfg.myapp["internal_fields"] %}
+                            <input type="hidden" name="{{key}}" id="{{key}}" value="{{data.get(key)}}" />
+                        {% else %}
+                            {% set _type = model.schema[key]["type"] %}
+                            {% if  _type == "string" %}
+                            <div class="inline field">
+                                <label for="{{key}}">{{key}}</label>
+                                <input  type="text" class="form-control" name="{{key}}" 
+                                    id="{{key}}" value="{{data.get(key)}}" />
+                            </div>    
+                            {% elif _type == "number" or _type == "integer" or _type == "float" %}
+                            <div class="inline field">
+                                <label for="{{key}}" >{{key}}</label>
+                                <input  type="text" class="form-control" name="{{key}}:number" id="{{key}}" 
+                                        value="{{data.get(key)}}" />
+                            </div>
+                            {% elif _type == "boolean" %}
+                            <div class="inline field">
+                                <div class="ui checkbox">
+                                    <input class="hidden" type="checkbox" 
+                                    {% if  data.get(key) == True %}
+                                        checked="checked"
+                                    {% end %}
+                                    name="{{key}}" id="{{key}}"> {{key}}
+                                    <label>{{key}}</label>  
+                                </div>
+                            </div>
+                            {% elif _type == "datetime" or _type == "date" %}
+                            <div class="inline field">
+                                <label for="{{key}}">{{key}}</label>
+                                <div class="ui calendar" id="example1">
+                                    <div class="ui input left icon">
+                                    <i class="calendar icon"></i>
+                                    <input type="text" value="{{data.get(key)}}" id="{{key}}" name="{{key}}">
+                                    </div>
+                                </div>
+                            </div>
+                            {% elif  _type == "list" %}
+                            <div class="inline fields">
+                                <label for="{{key}}">{{key}}</label>
+                                <input  type="text" name="{{key}}" id="{{key}}" value="{{data.get(key)}}"/>
+                            </div>    
+                            {% end %}
+                        {% end %}
+                    {% end %}
+                    
+            
+                    <a href="/{{base_route_rest}}" class="ui button">Back to {{handler_name}}.list</a>
+                    <input type="submit" class="ui green button" id="submit_edit_form" value="update item">
+                </form>
+                <p>
+                    &nbsp;
+                </p>
+                <h2>Raw Data: </h2>
+                {{data}}
+                
+                <h2>Schema: </h2>
+                {{model.schema}}
             </div>
         </div>
-        
-        <div id="message-div" role="alert">    
+        <div class="two wide column">
+            &nbsp;
         </div>
-
-        <form id="edit_form" name="edit_form">
-    
-            {% for key in model.schema.keys() %}
-                {% if key in cfg.myapp["internal_fields"] %}
-                    {% set class_hidden = "hidden" %}
-                {% else %}
-                    {% set class_hidden = "" %}
-                {% end %}
-                    {% set _type = elem.schema[key]["type"] %}
-                    {% if  _type == "string" or _type == "number" or _type == "integer" or _type == "float" %}
-                    <div class="form-group row">
-                        <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
-                        <div class="col-10">
-                            <input  type="text" class="form-control" name="{{key}}" id="{{key}}" 
-                                    value="{{elem.get(key)}}" />
-                        </div>
-                    </div>    
-                    {% elif _type == "boolean" %}
-                    <div class="form-group row">
-                        <label class="col-sm-2">{{key}}</label>
-                        <div class="col-sm-10">
-                            <div class="form-check">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" name="{{key}}" id="{{key}}"
-                                {% if  elem.get(key) == True %}
-                                    checked="checked"
-                                {% end %}
-                                > {{key}}
-                            </label>
-                            </div>
-                        </div>
-                    </div>
-                    {% elif _type == "datetime" or _type == "date" %}
-                    <div class="form-group row">
-                    <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
-                    <div class="col-10">
-                        <input class="form-control" type="datetime-local" value="{{elem.get(key).strftime(cfg.myapp["date_format"])}}" 
-                        id="{{key}}" name="{{key}}">
-                    </div>
-                    </div>
-                    {% elif  _type == "list" %}
-                        <div class="form-group row">
-                            <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
-                            <div class="col-10">
-                                    {% if len(elem.get(key)) == 0 %}
-                                        Len=0
-                                        <input  type="text" class="form-control" name="{{key}}[]" id="{{key}}" 
-                                                value="" />
-                                    {% elif len(elem.get(key)) > 0 %}
-                                        {% set item = elem.get(key) %}
-                                                len>0
-                                                type:{{type(item)}}
-                                                
-                                                {% for val in item %}
-                                                <table>    
-                                                    <tr id="{{val}}">
-                                                    <td><input  type="text" class="form-control" name="{{key}}[]" id="{{key}}" 
-                                                        value="{{val}}" />
-                                                    </td>
-                                                    <td>
-                                                    <button type="button" class="btn btn-danger btn-delete" value="{{val}}}">-</button>
-                                                    </td>
-                                                    </tr>
-                                                </table>
-                                                {% end %}
-                                                <button type="button" class="btn btn-success btn-add-to-list" value="{{key}}">+</button>
-                                    {% end %}
-                            </div>
-                        </div>    
-                    {% end %}
-            {% end %} 
-        
-        
-        <hr>
-        
-        <a href="/{{base_route_rest}}" class="btn btn-primary">Back to {{handler_name}}.list</a>
-        <input type="submit" class="btn btn-success" id="submit_edit_form" value="Update {{handler_name}}">
-
-        </form>
-        <hr>
-        <h2>Raw Data: </h2>
-        {{data}}
-        <hr>
-        Date format: {{cfg.myapp["date_format"] }} (see config.myapp["date_format"])
     </div>
 {% end %}

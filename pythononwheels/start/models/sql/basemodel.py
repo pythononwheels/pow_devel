@@ -25,7 +25,7 @@ class SqlBaseModel(ModelObject):
     #(which, depending on backend, compiles into NOW() or CURRENT_TIMESTAMP in most cases
     # see: http://docs.sqlalchemy.org/en/latest/core/defaults.html
     created_at = Column(DateTime, default=func.now())
-    last_updated = Column(DateTime, onupdate=datetime.datetime.now, default=func.now())
+    last_updated = Column(DateTime, onupdate=func.now(), default=func.now())
     session = session
 
     @orm.reconstructor

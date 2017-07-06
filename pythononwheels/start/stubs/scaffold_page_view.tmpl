@@ -1,33 +1,53 @@
 {% extends "base_semanticui.tmpl" %}
 
 {% block include_js %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/2.8.1/jquery.serializejson.js"></script>
+    <script src="{{ static_url("js/jquery.serializejson.js")}}"></script>
 {% end %}
 
 {% block view_js %}
 
 <script>
     function docready(){   
-        console.log("docready executed");
-        $("btn-delete").click(function(e)
-            {
-                console.log( "btn_delete: " + $(e.currentTarget).attr("value"));
-                var id = $(e.currentTarget).attr("value");
-                var data = jsonString = JSON.stringify({"id" : id});
-                console.log(data)
-                
-                
-            }
-        );
+        $(".btn-delete").click(function(e){ 
+            console.log("jo");
+            console.log( "btn_delete: " + $(e.currentTarget).attr("value"));
+            var id = $(e.currentTarget).attr("value");
+            var data = jsonString = JSON.stringify({"id" : id});
+            console.log(data);
+            $.ajax({
+                url : "/{{handler_name}}/" + id,
+                type: "DELETE",
+                data : data,
+                success: function(data, textStatus, jqXHR)
+                {
+                    
+                    var od = JSON.stringify(data);
+                    var obj = JSON.parse(od);
+                    //alert("success sending put: " + data + textStatus)
+                    console.log(obj);
+                    var curr_tr = $("#"+id);
+                    //curr_tr.transition("jiggle");   
+                    curr_tr.transition("fade");                      
+                    
+
+                },
+                error: function (jqXHR, textStatus, errorThrown)
+                {
+                    console.log(jqXHR);
+                    var curr_tr = $("#"+id);
+                    curr_tr.transition("jiggle");
+                    // try fadeTo(0000)
+                }
+            }); // <--- end ajax
+        });
     }
+
 </script>
 {% end %}
 
 {% block content %}
 
 <!-- Begin page content -->
-
-    
     <div class="ui grid">
         <div class="one wide column">
             &nbsp;
@@ -48,16 +68,20 @@
                     <tbody>
                         {% for elem in data %}
                             <tr id="{{elem.get("id")}}">
-                            {% for key in elem.schema.keys() %}
-                                {% if key in show_list %}
-                                    <td>{{getattr(elem, key)}}</td>
+                                {% for key in elem.schema.keys() %}
+                                    {% if key in show_list %}
+                                        <td>{{getattr(elem, key)}}</td>
+                                    {% end %}
                                 {% end %}
-                            {% end %}
-                            <td>                           
-                                <a class="compact ui button" href='/{{base_route_rest}}/{{getattr(elem, "id")}}'>Show</a>
-                                <a class="compact ui button" href='/{{base_route_rest}}/{{getattr(elem, "id")}}/edit'>Edit</a>
-                                <button class="compact ui red button" id="btn-delete"  value="{{elem.get("id")}}">Delete</a>
-                            </td>
+                                <td>                           
+                                    <a class="compact ui button" href='/{{base_route_rest}}/{{getattr(elem, "id")}}'>Show</a>
+                                    <a class="compact ui button" href='/{{base_route_rest}}/{{getattr(elem, "id")}}/edit'>Edit</a>
+        
+                                    <div class="compact ui red button btn-delete" value="{{elem.get("id")}}">
+                                        Delete
+                                    </div>
+                                
+                                </td>
                             </tr>
                         {% end %}
                             <tr>
@@ -71,14 +95,10 @@
                     </tbody>
                 </table>
             </div>
-            
-
         </div>
         <div class="one wide column">
             &nbsp;
         </div>
     </div>
-
-
 
 {% end %}

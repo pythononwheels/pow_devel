@@ -114,9 +114,8 @@ class {{handler_class_name}}(PowHandler):
             print("  .. DELETE Data: ID:" + str(data_json))
             m=Model()
             m.init_from_json(data_json)
-            res = m.find_by_id(id)
+            res = m.find_by_id(m.id)
             res.delete()
-            self.success("{{handler_name}}, destroy id: " + str(id))
-        except:
-            self.error("{{handler_name}}, destroy id: " + str(id))
-
+            self.success(message="todo, destroy id: " + str(m.id))
+        except Exception as e:
+            self.error(message="todo, destroy id: " + str(e))
