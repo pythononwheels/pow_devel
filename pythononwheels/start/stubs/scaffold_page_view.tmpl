@@ -58,7 +58,7 @@
                     <thead>
                         <tr>
                             {% for key in model.schema.keys() %}
-                                {% if key in show_list %}
+                                {% if key not in hide_list %}
                                     <th>{{key}}</th>
                                 {% end %}
                             {% end %}
@@ -69,7 +69,7 @@
                         {% for elem in data %}
                             <tr id="{{elem.get("id")}}">
                                 {% for key in elem.schema.keys() %}
-                                    {% if key in show_list %}
+                                    {% if key not in hide_list %}
                                         <td>{{getattr(elem, key)}}</td>
                                     {% end %}
                                 {% end %}

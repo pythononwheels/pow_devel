@@ -13,6 +13,7 @@ class PowHandler(BaseHandler):
         Example is authentication.
     """
     show_list=[]
+    hide_list=[]
     def get_current_user(self):
         """
             very simple implementation. 

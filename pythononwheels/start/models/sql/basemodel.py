@@ -18,7 +18,7 @@ from {{appname}}.models.modelobject import ModelObject
 
 class SqlBaseModel(ModelObject):
     
-    #__table_args__ = { "extend_existing": True }
+    __table_args__ = { "extend_existing": True }
 
     id =  Column(Integer, primary_key=True)
     # create_date column will be populated with the result of the now() SQL function 

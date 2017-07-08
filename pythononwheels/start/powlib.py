@@ -429,7 +429,7 @@ class powDecNew():
                             setattr(cls, elem, Column(elem, String(length=cls.schema[elem]["maxlength"]), **sql))
                         else:
                             setattr(cls, elem, Column(elem, String, **sql))
-                elif cls.schema[elem]["type"] == "bool":
+                elif cls.schema[elem]["type"] == "boolean":
                     setattr(cls, elem, Column(elem, Boolean, **sql))
                 elif cls.schema[elem]["type"] == "date":
                     setattr(cls, elem, Column(elem, Date, **sql))
