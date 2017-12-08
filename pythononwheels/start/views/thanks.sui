@@ -1,4 +1,4 @@
-{% extends "base.bs4" %}
+{% extends "base.tmpl" %}
   {% block content %}
     <div class="container">
     <div class="m-t-1">

@@ -167,7 +167,7 @@ class TinyBaseModel(ModelObject):
                 print("update by id:" + str(self.id))
                 self.last_updated = datetime.datetime.utcnow()
                 #self.last_updated = datetime.datetime.now()
-                self.table.update(self.to_dict(),Q.id==self.id)
+                self.eid = self.table.update(self.to_dict(),Q.id==self.id)
             else:
                 # insert  
                 self.last_updated = datetime.datetime.now()
@@ -230,9 +230,11 @@ class TinyBaseModel(ModelObject):
             #print("adding model to reslist: " + str(m))
             setattr(m,"eid", elem.get("eid", None))
             reslist.append(m)
-        print(reslist)
-        
-        return reslist
+        #print(reslist)
+        if len(reslist) == 1:
+            return reslist[0]
+        else:
+            return reslist
     
     # def res_to_json(self, res):
     #     """
@@ -240,7 +242,7 @@ class TinyBaseModel(ModelObject):
     #     """
     #     return json.loads(json.dumps(res, default=pow_json_serializer))
 
-    def _get_next_object(self, cursor):
+    def _get_next_object(self, res):
         """
             return a generator that creates a Model object
             for each next call.
@@ -255,16 +257,20 @@ class TinyBaseModel(ModelObject):
             either as json
             or as object (Model Class / Instance)
         """
-        print(res)
-        print(str(type(res)))
+        #print(res)
+        #print(str(type(res)))
         if len(res) == 1:
             res = self.dict_result_to_object(res)
             return res[0]
         # else return the generator
-        return self._get_next_object(res)
+        else:
+            for elem in res:
+                obj = self.dict_result_to_object(elem)
+                yield obj
+        #return self._get_next_object(res)
         
 
-    def find(self,*criterione):
+    def find(self,*criterion):
         """ Find something given a query or criterion 
             example: r=t.find(t.where("id") == "c6492e1a-8740-40d9-9b15-d5f1bc73ba97")
             example2: r=t.find(t.Query.id == "c6492e1a-8740-40d9-9b15-d5f1bc73ba97")
@@ -288,11 +294,18 @@ class TinyBaseModel(ModelObject):
         #print(" random: " + str(randnum))
         res=[res[randnum]]
         return self._return_find(res)
-
-    def find_all(self):
-        """ Find something given a query or criterion and parameters """
+    def get_all(self):
+        """
+            return all element in the db
+        """
         res = self.table.all() # returns a list of tinyDB DB-Elements 
         return self._return_find(res)
+
+        #res = self.table.all() # returns a list of tinyDB DB-Elements 
+    def find_all(self, *criterion):
+        """ Find something given a query or criterion and parameters """
+        #res = self.table.all() # returns a list of tinyDB DB-Elements 
+        return self.find(*criterion)
     
     def find_one(self, *criterion):
         """ find only one result. Raise Excaption if more than one was found"""

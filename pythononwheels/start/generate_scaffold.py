@@ -20,7 +20,7 @@ def camel_case(name):
     """
     return "".join([x.capitalize() for x in name.split("_")])
 
-def generate_scaffold(handler_name, appname=None):
+def generate_scaffold(handler_name, appname=None, view_type=None):
     """ 
         generates the plain html view scaffolding
     """
@@ -37,7 +37,7 @@ def generate_scaffold(handler_name, appname=None):
     print(" generating Scaffolds for: " + handler_name)
     print(40*"-")
     for view in views:
-        template_file =  os.path.join(cfg.templates["stubs_path"], "scaffold_" + view + "_view.tmpl")
+        template_file =  os.path.join(cfg.templates["stubs_path"], "scaffold_" + view + "_view." + view_type )
         #
         # copy to dest dir first
         #
@@ -64,6 +64,10 @@ def main():
                         dest="handler_name", help='-n handler_name',
                         required=True)
     
+    parser.add_argument('-t', "--type", action="store", 
+                        dest="view_type", help='-t bs4 (for bootstrap 4) || -t sui (for semantic ui)',
+                        required=True, default="bs4")
+    
     args = parser.parse_args()
     #
     # show some args
@@ -71,7 +75,7 @@ def main():
     #print("all args: ", args)
     #print(dir(args))
     print("CamelCased handler name: ", camel_case(args.handler_name))
-    generate_scaffold(args.handler_name, appname="{{appname}}")
+    generate_scaffold(args.handler_name, appname="{{appname}}", type=args.view_type)
 
 if __name__ == "__main__":
     main()

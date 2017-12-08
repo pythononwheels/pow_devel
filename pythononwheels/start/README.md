@@ -11,7 +11,7 @@ Ever, ever, ever!!
 I call it *SQUEEZY* => for Simple, Quick and Easy.
 
 ## Principle
-As simple to use as possible. Everything you always need on board. And you can always escape and go RAW.
+As simple to use as possible. Everything you always need on board. And you can always escape and go *RAW*.
 Batteries included! (tornado Webswerver, SQLite DB)
 
 ## Strong Foundation:

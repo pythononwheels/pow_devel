@@ -1,0 +1,33 @@
+{% extends "base_semanticui.tmpl" %}
+{% block content %}
+    
+    <div class="ui grid"> 
+        <div class="row">
+            <div class="one wide column">
+                &nbsp;
+            </div>
+            <div class="seven wide column" >
+                <img src={{ static_url("images/bug.png")}} width="80%"/>
+            </div>
+        
+            <div class="seven wide column">
+                <div class="ui warning message">
+                    <h1 class="alert-heading">Oh no! An Error occured. </h1> 
+                </div>
+                <p class="ui header">    
+                    Sorry, this should not have happended!
+                </p>
+                <div class="ui message"><b>HTTP Status:</b> {{status}} </div>
+                <div class="ui error message"><b>Message:</b> {{message}} </div>
+                <div class="ui message"><b>Data:</b> {{data}} </div>
+                <div class="ui warning message"><b>URI:</b> {{request.path}} </div>
+                <div class="ui message"><b>Request:</b>
+                        {{request}} 
+                </div>
+            </div>
+            <div class="one wide column">
+                &nbsp;
+            </div>
+        </div>
+    </div>
+{% end %}

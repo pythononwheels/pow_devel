@@ -28,7 +28,7 @@ def copy_or_pump(src, dest, copy=False, appname=None, sqlite_path=None,
         print("    skipping copy_or_pump: exists AND force = False ")
     else:
         if not copy:
-            print("    pumping to ----->", dest )
+            print("    pumping to ----->", dest)
             f = open(src, "r", encoding="utf-8")
             instr = f.read()
             f.close()
@@ -51,15 +51,15 @@ def copy_or_pump(src, dest, copy=False, appname=None, sqlite_path=None,
             # just copy file
             print("    copying to ----->", dest )
             print("    .. :" + str(shutil.copy( src, dest )))
-        
 
-def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=False):
+
+def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=False, view_type=None):
     """ generates a small model with the given modelname
         also sets the right db and table settings and further boilerplate configuration.
         Template engine = tornado.templates
     """    
     print("  generating app:" + str(appname))
-    #base=os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+    import os,sys
     base=os.path.normpath(outpath)
 
     print("  base: " + base)
@@ -161,6 +161,45 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
             else:
                 print("skipped in update_only: " + str(f))
     print(" DB path: " + sqlite_path)
+    #
+    # rename the view file extension according the --view paramter
+    #
+    if view_type:
+        print(50*"-")
+        print("preparing app for view_type: " + str(view_type))
+        print(50*"-")
+        if view_type == "bs4":
+            print("   ... Done. Bootstrap4 is the default")
+            # nothing else to do since everything is already prepared for bs4 (default)
+        else:
+            # for all others the trick is to 
+            # 1. rename all .tmpl to .bs4 (default)
+            # 2. rename all .view_type to .tmpl
+            print("outdir: " + outdir)
+            import os,sys
+            folder = os.path.normpath(os.path.join( outdir, "views"))
+            rename_extensions(folder, ".tmpl", ".bs4")
+            rename_extensions(folder, "." + view_type, ".tmpl")
+    else:
+        print("Error: viewtype not set and apparantly no Default set either!")
+
+def rename_extensions(folder, old_ext, new_ext):
+    """
+        renames all file extension in the givben folder 
+        from *.old_ext to *.new_ext
+    """
+    for filename in os.listdir(folder):
+        infilename = os.path.join(folder,filename)
+        if not os.path.isfile(infilename): continue
+        oldbase, ext = os.path.splitext(filename)
+        #print("   ...   found a: " + str(ext) + " file")
+        if not ext == old_ext: continue
+        #newname = infilename.replace( old_ext, + new_ext)
+        newname = oldbase + new_ext
+        print("   ... renaming: " + infilename + " -> " + newname)
+        #output = os.rename(infilename, newname)
+        output = shutil.move(infilename, newname)
+    return
 
 def main():
     parser = argparse.ArgumentParser()
@@ -181,12 +220,16 @@ def main():
         action="store_true", dest="update_only", default=False,
         help="Only update the Pow parts. Leaves everyathin in models")
 
+    parser.add_argument("-v", "--view", 
+        action="store", dest="view_type", default="bs4",
+        help="set the default view framework. (semanticui = sui || bootstrap 4 = bs4 (default))")
+
     #
     # db type
     # 
-    parser.add_argument('-d', "--db", action="store", 
-                        dest="db", help='-d which_db (mongo || tiny || peewee_sqlite) default = tiny',
-                        default="sql", required=False)
+    #parser.add_argument('-d', "--db", action="store", 
+    #                    dest="db", help='-d which_db (mongo || tiny || peewee_sqlite) default = sql',
+    #                    default="sql", required=False)
     
     
     
@@ -202,7 +245,8 @@ def main():
     print(50*"-")
     print(" Generating your app: " + args.name)
     print(50*"-")
-    generate_app(args.name, args.force, args.path, dbtype=args.db, update_only=args.update_only)
+    #generate_app(args.name, args.force, args.path, dbtype=args.db, update_only=args.update_only)
+    generate_app(args.name, force=args.force, outpath=args.path, update_only=args.update_only, view_type=args.view_type)
 
     base = os.path.normpath(os.path.join(os.getcwd(), args.path))
     apppath = os.path.normpath(os.path.join(base, args.name))
