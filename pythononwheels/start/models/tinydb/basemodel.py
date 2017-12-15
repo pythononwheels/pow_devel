@@ -199,7 +199,7 @@ class TinyBaseModel(ModelObject):
             return start <= val <= end
         Q = Query()
         print(str(*criterion))
-        Att = getattr(Q, *crtiterion)
+        Att = getattr(Q, *criterion)
         res = self.table.search(Att(testfunc, page*page_size, (page*page_size)+page_size ))
 
     def json_result_to_object(self, res):
@@ -222,6 +222,10 @@ class TinyBaseModel(ModelObject):
         return reslist
     
     def dict_result_to_object(self, res):
+        """
+            creates a list of instances of this model 
+            from a given dict resultlist
+        """
         reslist = []
         for elem in res:
             m = self.__class__()
@@ -242,31 +246,34 @@ class TinyBaseModel(ModelObject):
     #     """
     #     return json.loads(json.dumps(res, default=pow_json_serializer))
 
-    def _get_next_object(self, res):
-        """
-            return a generator that creates a Model object
-            for each next call.
-        """
-        for elem in res:
-            obj = self.dict_result_to_object(res)
-            yield obj
+    # def _get_next_object(self, res):
+    #     """
+    #         return a generator that creates a Model object
+    #         for each next call.
+    #     """
+    #     for elem in res:
+    #         obj = self.dict_result_to_object(res)
+    #         yield obj
 
     def _return_find(self, res):
         """
-            _return_find gives the right result.
-            either as json
-            or as object (Model Class / Instance)
+            _return_find as object (Model Class / Instance)
         """
         #print(res)
         #print(str(type(res)))
-        if len(res) == 1:
-            res = self.dict_result_to_object(res)
-            return res[0]
+        #print("len: " + str(len(res)))
+
+        #if len(res) == 1:
+        #    print("only 1 result")
+        #    r = self.dict_result_to_object(res)
+        #    return r
         # else return the generator
-        else:
-            for elem in res:
-                obj = self.dict_result_to_object(elem)
-                yield obj
+        #else:
+        #print("more than 1 result")
+        for elem in res:
+            #print("processing elem: " + str(elem))
+            obj = self.dict_result_to_object([elem])
+            yield obj
         #return self._get_next_object(res)
         
 
@@ -294,6 +301,7 @@ class TinyBaseModel(ModelObject):
         #print(" random: " + str(randnum))
         res=[res[randnum]]
         return self._return_find(res)
+    
     def get_all(self):
         """
             return all element in the db
@@ -326,7 +334,5 @@ class TinyBaseModel(ModelObject):
         # for elastic: return  Q
         # for tinyDB return Query
         return Query()
+
         
-
-
-

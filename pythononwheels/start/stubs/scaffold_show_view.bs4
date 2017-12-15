@@ -1,6 +1,7 @@
 {% extends "base.tmpl" %}
 
 {% block content %}
+
     <!-- Begin page content -->
     <div class="container">
         <div class="jumbotron jumbotron-fluid">
@@ -10,13 +11,14 @@
             </div>
         </div>
         <table class="table table-bordered">
-            {% set elem = data[0] %}
+            
             {% for key in model.schema.keys() %}
             <tr>
                 <td><b>{{key}} :</b></td>
-                <td> {{getattr(elem,key,None) }}</td>
+                <td> {{getattr(data,key,None) }}</td>
             </tr>
             {% end %}
+            
         </table>
         <hr>
         

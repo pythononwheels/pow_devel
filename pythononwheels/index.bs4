@@ -355,7 +355,7 @@ class TestHandler(BaseHandler):
       <!-- /END THE FEATURETTES -->
 
       <!-- Site footer -->
-      {% include "footer.bs4" %}
+      {% include "footer.tmpl" %}
 
     </div> <!-- /container -->
 {% end %}

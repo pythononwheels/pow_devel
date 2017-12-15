@@ -1,4 +1,4 @@
-{% extends "base.bs4" %}
+{% extends "base.tmpl" %}
 
 {% block content %}
     <!-- Begin page content -->
@@ -65,8 +65,11 @@
                 <li>Supported Databases
                   <ul> 
                     <li> SQL: <a href="https://www.sqlalchemy.org/">sqlalchemy</a> ORM (SQLite, MySQL, PostgreSQL, MS-SQL, Oracle, and more ..) </li>
-                    <li> NoSQL: <a href="http://tinydb.readthedocs.io/en/latest/">tinyDB</a>, 
-                    <a href="https://www.elastic.co/products/elasticsearch">elasticsearch</a>, (mongoDB coming..) </li>
+                    <li> 
+                      NoSQL: <a href="http://tinydb.readthedocs.io/en/latest/">tinyDB</a>, 
+                      <a href="https://www.mongodb.com/">MongoDB</a>,
+                      <a href="https://www.elastic.co/products/elasticsearch">elasticsearch</a>,  
+                  </li>
                   </ul>
                 </li>
                 <li>Database Migrations onboard (based on alembic)</li>                
@@ -355,7 +358,7 @@ class TestHandler(BaseHandler):
       <!-- /END THE FEATURETTES -->
 
       <!-- Site footer -->
-      {% include "footer.bs4" %}
+      {% include "footer.tmpl" %}
 
     </div> <!-- /container -->
 {% end %}

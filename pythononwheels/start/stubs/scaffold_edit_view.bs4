@@ -11,8 +11,7 @@
 {% end %}
 
 {% block js %}
-{% set elem = data[0] %}
-
+{% set elem = data %}
 <script>
     $(document).ready(function(){   
         $("#message-div").hide();

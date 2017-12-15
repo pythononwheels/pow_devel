@@ -17,7 +17,7 @@ def pow_json_deserializer(dct):
         
         return dct
 
-def pow_init_from_dict_deserializer(dct, schema):
+def pow_init_from_dict_deserializer(dct, schema, simple_conversion=False):
     """
         takes a dict with attributes and values 
         and (tries) to convert them to the specified types given in the schema
@@ -25,6 +25,12 @@ def pow_init_from_dict_deserializer(dct, schema):
                 HTTP Request (data) => init_from_json(data) => dict(data) => init_from_dict(data, schema) => Model
         Reason:
             json data from ajax requests has for example dates as string but you most probably want datetime.
+            list values come from html form text-fields as strings .. 
+         
+         simple_conversion = True tries to use simple logic to create 
+                a little bit more advanced python data types.
+                for example "a b c" will be model.attribute = "a b c".split(myapp["list_separator"])
+                Mainly used for handling request from simple html form scaffolding 
     """
     for elem in dct:
         if elem in schema.keys():
@@ -67,7 +73,11 @@ def pow_init_from_dict_deserializer(dct, schema):
             elif schema[elem]["type"].lower() == "list":
                 if not isinstance(dct[elem], (list)):
                     try:
-                        dct[elem] = list(dct[elem])
+                        if simple_conversion:
+                            # split the given input with config.list_separator
+                            dct[elem] = dct[elem].split(myapp["list_separator"])
+                        else:
+                            dct[elem] = list(dct[elem])
                     except Exception as e:
                         raise e
             elif schema[elem]["type"].lower() == "float":

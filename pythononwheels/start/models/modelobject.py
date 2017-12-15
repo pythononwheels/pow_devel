@@ -107,14 +107,18 @@ class ModelObject():
             else:
                 return v
     
-    def init_from_dict(self, d, ignore=True):
+    def init_from_dict(self, d, ignore=True, simple_conversion=False):
         """
             creates a Model from the given data dictionary
+            simple_conversion = True tries to use simple logic to create 
+                a little bit more advanced python data types.
+                for example "a b c" will be model.attribute = "a b c".split(myapp["list_separator"])
+                Mainly used for handling request from simple html form scaffolding 
         """
-        from {{appname}}.decoders import pow_init_from_dict_deserializer
+        from testapp.decoders import pow_init_from_dict_deserializer
         #print("init from dict")
         #print(d)
-        d=pow_init_from_dict_deserializer(d,self.schema)
+        d=pow_init_from_dict_deserializer(d,self.schema, simple_conversion)
         #print("after conversion: ")
         #for elem in d:
         #    print(str(elem) + "->" + str(type(elem)))
@@ -155,13 +159,13 @@ class ModelObject():
                     else:
                         raise Exception(" Key: " + str(key) + " is not in schema for: " + self.__class__.__name__)
 
-    def init_from_json(self, data, ignore=False):
+    def init_from_json(self, data, ignore=False, simple_conversion=False):
         """
             makes a py dict from input json and
             sets the instance attributes 
         """
         d=json.loads(data,object_hook=pow_json_deserializer)
-        return self.init_from_dict(d, ignore)
+        return self.init_from_dict(d, ignore, simple_conversion=simple_conversion)
 
 
     def init_from_csv(self, keys, data, ignore=True):

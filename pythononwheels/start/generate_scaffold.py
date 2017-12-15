@@ -35,6 +35,7 @@ def generate_scaffold(handler_name, appname=None, view_type=None):
     views = ["show", "list", "page", "edit","new"]
     print(40*"-")
     print(" generating Scaffolds for: " + handler_name)
+    print(" view_type: " +view_type)
     print(40*"-")
     for view in views:
         template_file =  os.path.join(cfg.templates["stubs_path"], "scaffold_" + view + "_view." + view_type )
@@ -55,6 +56,7 @@ def generate_scaffold(handler_name, appname=None, view_type=None):
         # ofile.write(res)
         # ofile.close()
         print("... created view: " + ofile_name)
+        print("...    -> using template: " + os.path.basename(template_file))
     return
 
 
@@ -75,7 +77,7 @@ def main():
     #print("all args: ", args)
     #print(dir(args))
     print("CamelCased handler name: ", camel_case(args.handler_name))
-    generate_scaffold(args.handler_name, appname="{{appname}}", type=args.view_type)
+    generate_scaffold(args.handler_name, appname="testapp", view_type=args.view_type)
 
 if __name__ == "__main__":
     main()

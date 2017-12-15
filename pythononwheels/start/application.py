@@ -225,7 +225,7 @@ class Application(tornado.web.Application):
                 ( r"/" + action_part + r"/(?P<id>"+ID_PATTERN+")/edit/?" , { "get" : "edit", "params" : ["id"] }),
                 ( r"/" + action_part + r"/(?P<id>"+ID_PATTERN+")?/?", 
                      { "get" : "show" , "put" : "update", "delete" : "destroy", "params" : ["id"]} ),
-                ( r"/" + action_part + r"/?", { "get" : "page", "post" : "create", "put" : "update", "delete" : "destroy" })                
+                ( r"/" + action_part + r"/?", { "get" : cfg.myapp["default_rest_route"], "post" : "create", "put" : "update", "delete" : "destroy" })                
             ]
             routes.reverse()
             # BETA: Add the .format regex to the RESTpattern   
