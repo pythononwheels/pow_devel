@@ -46,7 +46,6 @@ class {{handler_class_name}}(PowHandler):
     def show(self, id=None):
         m=Model()
         res=m.find_by_id(id)
-        res=next(res)
         self.success(message="User show", data=res)
     def list(self):
         m=Model()
@@ -68,7 +67,6 @@ class {{handler_class_name}}(PowHandler):
         try:
             print("  .. GET Edit Data (ID): " + id)
             res = m.find_by_id(id)
-            res = next(res)
             self.success(message="user, edit id: " + str(id), data=res)
         except Exception as e:
             self.error(message="user, edit id: " + str(id) + "msg: " + str(e) , data=None)
@@ -97,7 +95,6 @@ class {{handler_class_name}}(PowHandler):
         m=Model()
         m.init_from_json(data_json)
         res = m.find_by_id(m.id)
-        res=next(res)
         res.init_from_json(data_json)
         try:
             #res.tags= res.tags.split(",")
@@ -117,8 +114,7 @@ class {{handler_class_name}}(PowHandler):
             m=Model()
             m.init_from_json(data_json)
             res = m.find_by_id(m.id)
-            res=next(res)
-            elem.delete()
+            res.delete()
             self.success(message="todo, destroy id: " + str(m.id))
         except Exception as e:
             self.error(message="todo, destroy id: " + str(e))
