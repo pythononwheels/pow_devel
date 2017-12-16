@@ -4,14 +4,17 @@ backports-abc==0.5
 Cerberus==1.0.1
 dicttoxml==1.7.4
 jsonschema==2.5.1
+Mako==1.0.7
 MarkupSafe==0.23
 marshmallow==2.10.1
 marshmallow-sqlalchemy==0.10.0
 packaging==16.8
 py==1.4.33
+pymongo==3.6.0
 pyparsing==2.2.0
 pytest==3.0.7
 pytest-ordering==0.5
+python-editor==1.0.3
 requests==2.13.0
 simplejson==3.10.0
 six==1.10.0

@@ -271,6 +271,10 @@ class MongoBaseModel(ModelObject):
         else:
             return self.find(filter)
     
+    def get_all(self):
+        """ just a synonym for find_all . but without any filters or limits. """
+        return self.find_all()
+
     def find_one(self, filter={}):
         """ find only one result. Raise Excaption if more than one was found"""
         res = self.table.find_one(filter)

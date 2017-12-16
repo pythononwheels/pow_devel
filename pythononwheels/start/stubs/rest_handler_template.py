@@ -47,6 +47,7 @@ class {{handler_class_name}}(PowHandler):
         m=Model()
         res=m.find_by_id(id)
         self.success(message="User show", data=res)
+        
     def list(self):
         m=Model()
         res = m.get_all()  

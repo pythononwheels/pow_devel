@@ -18,7 +18,7 @@ server_settings = {
     "login_url"         :   "/login",
     "xsrf_cookies"      :   False,
     #"log_function"      :   you can give your own log function here.
-    "cookie_secret"     :   "{{cookie_secret}}"
+    "cookie_secret"     :   "7afe45ff-e5c2-4afe-ab5a-a943c5602583"
 }
 
 templates = {
@@ -30,13 +30,13 @@ templates = {
 }
 
 myapp = {
-    "app_name"          :   "{{appname}}",
+    "app_name"          :   "testapp",
     "default_format"    :   "json",
     "supported_formats" :   ["json", "csv", "xml", "html"],
     "encoder"           :   {
             "json"  :   json,
-            "csv"   :   {{appname}}.encoders.JsonToCsv(),
-            "xml"   :   {{appname}}.encoders.JsonToXml()
+            "csv"   :   testapp.encoders.JsonToCsv(),
+            "xml"   :   testapp.encoders.JsonToXml()
     },
     "page_size"         :   5,
     "enable_authentication"     :   False,   # False, simple or custom
@@ -52,11 +52,11 @@ myapp = {
     #"environment"       :   "development"       # set the current environment (also see the db section)
 }
 
-db_base_path = r"{{db_base_path}}"
+db_base_path = r"//Users/khz/development/testapp"
 database = {
     "sql"   : {
         "type"      :   "sqlite",
-        "dbname"    :   r"{{sqlite_path}}",   # better leave the r to enable absolute paths with backslashes 
+        "dbname"    :   r"//Users/khz/development/testapp/db.sqlite",   # better leave the r to enable absolute paths with backslashes 
         "host"      :   None,       
         "port"      :   None,   
         "user"      :   None,
@@ -64,7 +64,7 @@ database = {
         "enabled"   :   True          # switch currently unused
     },
     "tinydb" : {
-        "dbname"    :   r"{{tinydb_path}}",   # better leave the r to enable absolute paths with backslashes 
+        "dbname"    :   r"//Users/khz/development/testapp/tiny.db",   # better leave the r to enable absolute paths with backslashes 
         "host"      :   None,       
         "port"      :   None,   
         "user"      :   None,
@@ -73,7 +73,9 @@ database = {
     },
     "mongodb" : {
         "dbname"    :   "testdb",  
-        "host"      :   "localhost",       
+        "host"      :   "localhost",      
+        "atlas"     :   False,       # turn on if you use mongoDB atlas 
+        "atlas_conn_str" :  "mongodb+srv://USER:PASSWORD@cluster0-aetuw.mongodb.net/test",
         "port"      :   27017,   
         "user"      :   None,
         "passwd"    :   None,
@@ -101,4 +103,3 @@ beta_settings = {
 routes = [
             #(r'.*', VeryRawOwnHandler)
         ]
-
