@@ -1,4 +1,4 @@
-{% extends "base.tmpl" %}
+{% extends "base.bs4" %}
 
 {% block content %}
     <!-- Begin page content -->
@@ -358,7 +358,7 @@ class TestHandler(BaseHandler):
       <!-- /END THE FEATURETTES -->
 
       <!-- Site footer -->
-      {% include "footer.tmpl" %}
+      {% include "footer.bs4" %}
 
     </div> <!-- /container -->
 {% end %}

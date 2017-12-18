@@ -77,7 +77,7 @@ def main():
     #print("all args: ", args)
     #print(dir(args))
     print("CamelCased handler name: ", camel_case(args.handler_name))
-    generate_scaffold(args.handler_name, appname="testapp", view_type=args.view_type)
+    generate_scaffold(args.handler_name, appname="{{appname}}", view_type=args.view_type)
 
 if __name__ == "__main__":
     main()

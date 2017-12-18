@@ -1,4 +1,4 @@
-{% extends "base.tmpl" %}
+{% extends "base.sui" %}
   {% block content %}
     <div class="container">
     <div class="m-t-1">

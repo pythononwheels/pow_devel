@@ -374,6 +374,10 @@ class SqlBaseModel(ModelObject):
         res = session.query(self.__class__).filter(*criterion).limit(limit).offset(offset).all()
         return res
     
+    def get_all(self):
+        """ returns all elements without any filters"""
+        return self.find_all()
+     
     def find_one(self, *criterion):
         """
             returns one or none

@@ -169,6 +169,9 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
         print("preparing app for view_type: " + str(view_type))
         print(50*"-")
         if view_type == "bs4":
+            folder = os.path.normpath(os.path.join( outdir, "views"))
+            #rename_extensions(folder, ".tmpl", ".bs4")
+            rename_extensions(folder, "." + view_type, ".tmpl", files=["index", "error", "404"])
             print("   ... Done. Bootstrap4 is the default")
             # nothing else to do since everything is already prepared for bs4 (default)
         else:
@@ -178,24 +181,26 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
             print("outdir: " + outdir)
             import os,sys
             folder = os.path.normpath(os.path.join( outdir, "views"))
-            rename_extensions(folder, ".tmpl", ".bs4")
-            rename_extensions(folder, "." + view_type, ".tmpl")
+            #rename_extensions(folder, ".tmpl", ".bs4")
+            rename_extensions(folder, "." + view_type, ".tmpl",  files=["index", "error", "404"])
     else:
         print("Error: viewtype not set and apparantly no Default set either!")
 
-def rename_extensions(folder, old_ext, new_ext):
+def rename_extensions(folder, old_ext, new_ext, files=None):
     """
         renames all file extension in the givben folder 
         from *.old_ext to *.new_ext
     """
     for filename in os.listdir(folder):
         infilename = os.path.join(folder,filename)
+        # rename all file extensions
         if not os.path.isfile(infilename): continue
         oldbase, ext = os.path.splitext(filename)
+        if files and oldbase not in files: continue
         #print("   ...   found a: " + str(ext) + " file")
         if not ext == old_ext: continue
         #newname = infilename.replace( old_ext, + new_ext)
-        newname = oldbase + new_ext
+        newname = os.path.join(folder, oldbase + new_ext)
         print("   ... renaming: " + infilename + " -> " + newname)
         #output = os.rename(infilename, newname)
         output = shutil.move(infilename, newname)

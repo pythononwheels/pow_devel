@@ -115,7 +115,7 @@ class ModelObject():
                 for example "a b c" will be model.attribute = "a b c".split(myapp["list_separator"])
                 Mainly used for handling request from simple html form scaffolding 
         """
-        from testapp.decoders import pow_init_from_dict_deserializer
+        from {{appname}}.decoders import pow_init_from_dict_deserializer
         #print("init from dict")
         #print(d)
         d=pow_init_from_dict_deserializer(d,self.schema, simple_conversion)

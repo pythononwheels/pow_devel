@@ -7,10 +7,6 @@ from {{appname}}.application import app
 # (r"/([^/]+)/(.+)", ObjectHandler),
 # any regex goes. any group () will be handed to the handler 
 # 
-@app.add_route("/dash/*")
-class DashboardHandler(BaseHandler):
-    def get(self):
-        self.render("dash.tmpl")
 
 # if you specify a method, this method will be called for this route
 @app.add_route("/thanks/*", dispatch={"get": "_get"} )
@@ -46,7 +42,7 @@ class TestHandler(BaseHandler):
     
 @app.add_rest_routes("rest")
 class RestHandler(BaseHandler):
-    # on HTTP GET this method will be called. See dispatch parameter.
+    # on HTTP GET this method will be called. See config.py "default_rest_route"
     def list(self):
         self.write("REST")
 

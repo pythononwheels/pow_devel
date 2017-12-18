@@ -16,6 +16,7 @@ MODELNAME = "pow_test_model"
 class TestClass:
     @pytest.mark.notonosx
     @pytest.mark.run(order=1)
+    @pytest.mark.minimal
     def test_server(self):
         """ test if server starts
             calls baseurl:pot/test/12 
@@ -37,6 +38,7 @@ class TestClass:
         assert int(r.text)==12
     
     @pytest.mark.run(order=2)
+    @pytest.mark.minimal
     def test_generate_model(self):
         """ test if sql model is generated"""
         print(" .. Test generate_model")
@@ -49,6 +51,7 @@ class TestClass:
         assert os.path.exists(os.path.normpath("../models/sql/" + MODELNAME + ".py"))
 
     @pytest.mark.run(order=3)
+    @pytest.mark.minimal
     def test_model_type(self):
         """ based on test_generate_model. Tests if a model can insert values 
             DB sqlite by default.
@@ -62,10 +65,10 @@ class TestClass:
     def test_sql_dbsetup(self):
         """ test the setup of the alembic environment """
         print(" .. Test SQL: db_setup")
-        import {{appname}}.init_migrations
+        import {{appname}}.init_sqldb_environment
         import os
         os.chdir("..")
-        r = {{appname}}.init_migrations.init_migrations()
+        r = {{appname}}.init_sqldb_environment.init_migrations()
         assert r == True
         os.chdir(os.path.abspath(os.path.dirname(__file__)))
     
@@ -106,9 +109,9 @@ class TestClass:
         from {{appname}}.models.sql.pow_test_model import PowTestModel
         import os
         m = PowTestModel()
-        m.name = "Testname"
+        m.title = "TestnamePowTestRunner"
         m.upsert()
-        res=m.find(PowTestModel.name=="Testname")
+        res=m.find(PowTestModel.title=="TestnamePowTestRunner")
         assert res.count()==1
         os.chdir(os.path.abspath(os.path.dirname(__file__)))
 
