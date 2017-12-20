@@ -152,7 +152,7 @@ class powDecNew():
     def __init__(self):
         self.relations = {}
     
-    #
+    
     # below you can find the relation decorators
     # These types of relations are implementd:
     #   Functional notion       =>  sqlalchemy documentation notion
@@ -164,7 +164,7 @@ class powDecNew():
     #   many_to_many            =>  Many To Many
     #   is_tree                 => Adjacence List
     #
-
+    
     def has_many_and_belongs_to(self, child_as_str, backref=False):
        ##
        #

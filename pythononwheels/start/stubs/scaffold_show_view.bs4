@@ -10,6 +10,7 @@
                 <p class="lead">See your data below:</p>
             </div>
         </div>
+        <h2>Data:</h2>
         <table class="table table-bordered">
             
             {% for key in model.schema.keys() %}
@@ -19,6 +20,18 @@
             </tr>
             {% end %}
             
+        </table>
+        <hr>
+        <h2>Related Data Objects:</h2>
+        <table class="table table-bordered">
+            {% for rel in model.get_relations() %}
+                {% for idx, val in enumerate(getattr(data, rel)) %}
+                <tr>
+                    <td><b><a href="/{{rel}}/{{getattr(val, "id")}}">{{idx}}</a></b></td>
+                    <td>{{val}}</td>
+                </tr>
+                {% end %}
+            {% end %}
         </table>
         <hr>
         
