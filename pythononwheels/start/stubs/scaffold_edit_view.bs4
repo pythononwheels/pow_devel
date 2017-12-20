@@ -90,10 +90,8 @@
     
             {% for key in model.schema.keys() %}
                 {% if key in cfg.myapp["internal_fields"] %}
-                    {% set class_hidden = "hidden" %}
+                    <input type="hidden" name="{{key}}" id="{{key}}" value="{{data.get(key)}}" />
                 {% else %}
-                    {% set class_hidden = "" %}
-                {% end %}
                     {% set _type = elem.schema[key]["type"] %}
                     {% if  _type == "string" %}
                         {% if  "allowed" in model.schema[key].keys() %}
@@ -125,7 +123,7 @@
                                 <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
                                 <div class="col-10">
                                     <input  type="text" class="form-control" name="{{key}}" id="{{key}}" 
-                                        value="" />
+                                        value="{{elem.get(key)}}" />
                                 </div>
                             </div>    
                             {% end %}
@@ -192,6 +190,7 @@
                             </div>
                         </div>    
                     {% end %}
+                {% end %}
             {% end %} 
         
         

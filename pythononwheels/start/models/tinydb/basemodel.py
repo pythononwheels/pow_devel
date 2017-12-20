@@ -156,7 +156,7 @@ class TinyBaseModel(ModelObject):
             print("update by eid:" + str(self.eid))
             Q = Query()
             #self.last_updated = datetime.datetime.now()
-            self.last_updated = datetime.datetime.utcnow()
+            self.last_updated = datetime.datetime.utcnow().strftime(myapp["date_format"])
             self.table.update(self.to_dict(),Q.id==self.id)
         else:
             #first check if id is in db:
@@ -165,7 +165,7 @@ class TinyBaseModel(ModelObject):
             if res:
                 #update. object is already in db
                 print("update by id:" + str(self.id))
-                self.last_updated = datetime.datetime.utcnow()
+                self.last_updated = datetime.datetime.utcnow().strftime(myapp["date_format"])
                 #self.last_updated = datetime.datetime.now()
                 self.eid = self.table.update(self.to_dict(),Q.id==self.id)
             else:
@@ -290,6 +290,8 @@ class TinyBaseModel(ModelObject):
         """ return by id """
         Q = Query()
         res = self.table.search(Q.id == str(id))
+        if len(res) == 1:
+            return self.dict_result_to_object(res)
         return self._return_find(res)
         
     def find_random(self):
@@ -300,6 +302,8 @@ class TinyBaseModel(ModelObject):
         randnum = random.randrange(len(res))
         #print(" random: " + str(randnum))
         res=[res[randnum]]
+        if len(res) == 1:
+            return self.dict_result_to_object(res)
         return self._return_find(res)
     
     def get_all(self):
@@ -320,6 +324,8 @@ class TinyBaseModel(ModelObject):
         print("criterion: " + str(criterion))
         try:
             res = self.table.get(*criterion)
+            if len(res) == 1:
+                return self.dict_result_to_object(res)
             return self._return_find(res)
         except Exception as e:
             raise e

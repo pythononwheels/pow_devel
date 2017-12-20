@@ -45,7 +45,7 @@ myapp = {
     "logformat"         :   logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'),
     "id_pattern"        :   "[0-9\-a-zA-Z]+",       # the regex used to math IDs in URLs (uuid in this case)
     "list_separator"    :   ",",
-    "date_format"       :   "%Y-%m-%dT%H:%M:%S",
+    "date_format"       :   "%Y-%m-%d %H:%M:%S",
     "internal_fields"   :   ["created_at", "last_updated", "id"],  # these are hidden in the scaffolded views
     "default_rest_route":   "list",
     "list_separator"    :   " "
@@ -73,6 +73,8 @@ database = {
     },
     "mongodb" : {
         "dbname"    :   "testdb",  
+        "atlas"     :   False,
+        "atlas_conn_str" :  "mongodb+srv://<USER>:<PASSWORD>@cluster0-aetuw.mongodb.net/test", #this is just a sample
         "host"      :   "localhost",       
         "port"      :   27017,   
         "user"      :   None,

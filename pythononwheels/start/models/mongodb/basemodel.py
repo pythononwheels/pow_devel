@@ -211,7 +211,7 @@ class MongoBaseModel(ModelObject):
         if self._id == None:
             #print("** insert **")
             # insert. so set created at            
-            self.created_at = datetime.datetime.utcnow()
+            self.created_at = datetime.datetime.utcnow().strftime(myapp["date_format"])
             self.last_updated = self.created_at
             ior = self.table.insert_one(self.to_dict())
             self._id = ior.inserted_id
@@ -220,6 +220,7 @@ class MongoBaseModel(ModelObject):
             # update
             #print("** update **")
             #print(self.to_dict())
+            self.last_updated = datetime.datetime.utcnow().strftime(myapp["date_format"])
             ior = self.table.update_one({"_id" : self._id}, {"$set": self.to_dict()}, upsert=False )
             return ior
        

@@ -24,13 +24,17 @@
         <hr>
         <h2>Related Data Objects:</h2>
         <table class="table table-bordered">
-            {% for rel in model.get_relations() %}
-                {% for idx, val in enumerate(getattr(data, rel)) %}
-                <tr>
-                    <td><b><a href="/{{rel}}/{{getattr(val, "id")}}">{{idx}}</a></b></td>
-                    <td>{{val}}</td>
-                </tr>
+            {% try %}
+                {% for rel in model.get_relations() %}
+                    {% for idx, val in enumerate(getattr(data, rel)) %}
+                    <tr>
+                        <td><b><a href="/{{rel}}/{{getattr(val, "id")}}">{{idx}}</a></b></td>
+                        <td>{{val}}</td>
+                    </tr>
+                    {% end %}
                 {% end %}
+            {% except %}
+                No relations for this model
             {% end %}
         </table>
         <hr>

@@ -23,18 +23,26 @@ class {{model_class_name}}(Base):
     # raw sqlalchemy column __init__ parameters.
     #
     schema = {        
-        'title': {'type': 'string', 'maxlength' : 35},
-        'text': {'type': 'string'},
-        'likes': {
-            'type': 'integer',
-             "sql" : {          # sql attributes are handed raw to sqlalchemy Column
-                "primary_key"   : False,
-                "default"       : "123",
-                "unique"        : False, 
-                "nullable"      : False 
-            }
-        }
+        'title' :   {'type': 'string', 'maxlength' : 35},
+        'text'  :   {'type': 'string'},
+        "votes" :   { "type" : "integer", "default" : 0 }  
     }
+
+    # you can also use special sqlalchemy attributes which are handed raw ro sqlalchemy
+    # like this:
+    # schema = {        
+    #     'title': {'type': 'string', 'maxlength' : 35},
+    #     'text': {'type': 'string'},
+    #     'likes': {
+    #         'type': 'integer',
+    #          "sql" : {          # sql attributes are handed raw to sqlalchemy Column
+    #             "primary_key"   : False,
+    #             "default"       : "123",
+    #             "unique"        : False, 
+    #             "nullable"      : False 
+    #         }
+    #     }
+    # }
 
 
     #__table_args__ = { "autoload" : True  }

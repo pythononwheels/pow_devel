@@ -66,7 +66,9 @@
             <thead class="thead-inverse">
                 <tr>
                     {% for key in model.schema.keys() %}
-                        <th>{{key}}</th>
+                        {% if key not in hide_list %}
+                            <th>{{key}}</th>
+                        {% end %}
                     {% end %}
                     <th colspan="3">Actions:</th>
                 </tr>
@@ -77,7 +79,9 @@
                 {% for elem in data %}
                     <tr id="{{elem.get("id")}}">
                     {% for key in elem.schema.keys() %}
-                        <td>{{getattr(elem, key)}}</td>
+                        {% if key not in hide_list %}
+                            <td>{{getattr(elem, key)}}</td>
+                        {% end %}  
                     {% end %}
                     <td>                           
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 

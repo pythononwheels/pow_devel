@@ -41,7 +41,7 @@ class {{handler_class_name}}(PowHandler):
     model=Model()
     
     # these fields will be hidden by scaffolded views:
-    show_list=["id", "title", "text"]
+    hide_list=["id", "created_at", "last_updated"]
 
     def show(self, id=None):
         m=Model()
