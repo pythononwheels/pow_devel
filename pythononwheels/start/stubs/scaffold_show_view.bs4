@@ -36,6 +36,7 @@
         <hr>
         
         <a href="/{{base_route_rest}}" class="btn btn-primary">Back to {{handler_name}}.list</a>
+        <a href='/{{base_route_rest}}/{{getattr(data, "id")}}/edit'class="btn btn-warning">Edit</a>
         
         <hr>
         <h2>Raw: </h2>

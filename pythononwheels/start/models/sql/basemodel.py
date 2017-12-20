@@ -357,18 +357,21 @@ class SqlBaseModel(ModelObject):
             Example: model.find(ModelClass.attribute == "someval")
                      p.find(Post.title=="first")
         """
+        self.session.expire_all()
         return session.query(self.__class__).filter(*criterion)
     
     def find_by_id(self, id):
         """
             Searches the DB by id
         """
+        self.session.expire_all()
         return session.query(self.__class__).get(id)
 
     def find_all(self, *criterion, raw=False, limit=None, offset=None):
         """
             Searches the DB (Parameters: limit, offset
         """
+        self.session.expire_all()
         if raw:
             return session.query(self.__class__).filter(*criterion).limit(limit).offset(offset)
         res = session.query(self.__class__).filter(*criterion).limit(limit).offset(offset).all()
@@ -377,11 +380,12 @@ class SqlBaseModel(ModelObject):
     def get_all(self):
         """ returns all elements without any filters"""
         return self.find_all()
-     
+
     def find_one(self, *criterion):
         """
             returns one or none
         """
+        self.session.expire_all()
         res = session.query(self.__class__).filter(*criterion).one()
         return res
 
@@ -389,6 +393,7 @@ class SqlBaseModel(ModelObject):
         """
             return the first match (if any)
         """
+        self.session.expire_all()
         res = session.query(self.__class__).filter(*criterion).first()
         return res
 

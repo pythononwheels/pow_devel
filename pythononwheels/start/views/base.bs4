@@ -23,7 +23,7 @@
     <link href="{{ static_url("css/justified-nav.css") }}" rel="stylesheet">
     <link href="{{ static_url("css/prism.css") }}" rel="stylesheet">
     <link href="{{ static_url("css/pow.css") }}" rel="stylesheet">
-    
+    <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
     
     {% block css %}
       
@@ -50,5 +50,6 @@
     
     <script src="{{ static_url("js/tether.min.js") }}"></script>
     <script src="{{ static_url("js/bootstrap.min.js") }}"></script>
+    <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
   </body>
 </html>
