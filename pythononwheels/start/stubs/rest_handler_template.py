@@ -13,16 +13,16 @@ class {{handler_class_name}}(PowHandler):
     # every pow handler automatically gets these RESTful routes
     # thru the @app.add_rest_routes() decorator.
     #
-    # 1  GET    /user        #=> list
-    # 2  GET    /user/1      #=> show
-    # 3  GET    /user/new    #=> new
-    # 4  GET    /user/1/edit #=> edit 
-    # 5  GET    /user/page/1 #=> page
-    # 6  GET    /user/search #=> search
-    # 7  PUT    /user/1      #=> update
-    # 8  PUT    /user        #=> update (You have to send the id as json payload)
-    # 9  POST   /user        #=> create
-    # 10 DELETE /user/1      #=> destroy
+    # 1  GET    /{{handler_name}}        #=> list
+    # 2  GET    /{{handler_name}}/1      #=> show
+    # 3  GET    /{{handler_name}}/new    #=> new
+    # 4  GET    /{{handler_name}}/1/edit #=> edit 
+    # 5  GET    /{{handler_name}}/page/1 #=> page
+    # 6  GET    /{{handler_name}}/search #=> search
+    # 7  PUT    /{{handler_name}}/1      #=> update
+    # 8  PUT    /{{handler_name}}        #=> update (You have to send the id as json payload)
+    # 9  POST   /{{handler_name}}        #=> create
+    # 10 DELETE /{{handler_name}}/1      #=> destroy
     #
 
     # standard supported http methods are:

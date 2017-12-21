@@ -61,6 +61,8 @@ def pow_init_from_dict_deserializer(dct, schema, simple_conversion=False):
             elif schema[elem]["type"].lower() == "boolean":
                 if not isinstance(dct[elem], (bool)):
                     try:
+                        if isinstance(dct[elem], (str)):
+                            dct[elem] = int(dct[elem])
                         dct[elem] = bool(dct[elem])
                     except Exception as e:
                         raise e
