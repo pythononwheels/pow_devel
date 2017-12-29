@@ -8,7 +8,7 @@ with open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 
 setup(name='pythononwheels',
-      version='0.7.0b',
+      version='0.7.2b',
       description='The simple, quick and easy generative web framework for python',
       long_description=long_description,
       classifiers=[
@@ -49,11 +49,11 @@ setup(name='pythononwheels',
             "start/views/*",
         ]},
       install_requires=[
-        #"tornado>4"
+        "tornado"
       ],
       entry_points={
         'console_scripts': [
-            'pow_generate_app = pythononwheels.generate_app:main',
+            'generate_app = pythononwheels.generate_app:main',
         ]
       },
       #scripts=['bin/generate_app'],

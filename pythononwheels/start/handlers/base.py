@@ -2,6 +2,7 @@ import tornado.web
 import tornado.escape
 import json
 from {{appname}} import config as cfg
+import os
 #from {{appname}}.models.sql.user import User
 
 
@@ -301,6 +302,9 @@ class BaseHandler(tornado.web.RequestHandler):
             # for elem in data:
             #     print("elem: " + str(type(elem)))
             viewname = self.__class__.__name__ + "_" + self.view + ".tmpl"
+            vpath = os.path.join(cfg.templates["template_path"], str.lower(self.__class__.__name__ ))
+            viewname = os.path.join(vpath, viewname)
+            print(" ... looking for view: " + viewname)
             if self.view is not None:
                 model=self.__class__.model
                 show_list=getattr(self.__class__, "show_list", [])

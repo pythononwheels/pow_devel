@@ -6,6 +6,7 @@ import simplejson as json
 import {{appname}}.encoders
 import os
 import logging
+import datetime
 
 server_settings = {
     "base_url"          :   "http://localhost",
@@ -54,6 +55,17 @@ myapp = {
 
 db_base_path = r"{{db_base_path}}"
 database = {
+    "default_values": {
+        "string"    :   "",
+        "integer"   :   0,
+        "float"     :   0.0,
+        "list"      :   [],
+        "boolean"   :   False,
+        "datetime"  :   datetime.datetime.utcnow(),
+        "dict"      :   {},
+        "binary"    :   None
+
+    },
     "sql"   : {
         "type"      :   "sqlite",
         "dbname"    :   r"{{sqlite_path}}",   # better leave the r to enable absolute paths with backslashes 

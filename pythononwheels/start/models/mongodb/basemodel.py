@@ -43,14 +43,14 @@ class MongoBaseModel(ModelObject):
             #print("  .. Schema is now: " + str(self.schema))
 
         # setup  the instance attributes from schema
-        for key in self.schema.keys():
-            if self.schema[key].get("default", None) != None:
-                setattr(self,key,self.schema[key].get("default"))
-                self.schema[key].pop("default", None)
-            else:
-                #print("no default for: " + str(self.schema[key]))
-                setattr(self, key, None)
-                    
+        #for key in self.schema.keys():
+        #    if self.schema[key].get("default", None) != None:
+        #        setattr(self,key,self.schema[key].get("default"))
+        #        self.schema[key].pop("default", None)
+        #    else:
+        #        #print("no default for: " + str(self.schema[key]))
+        #        setattr(self, key, None)
+        self.setup_instance_values()           
         #
         # setup values from kwargs or from init_from_<format> if format="someformat"
         # example: m = Model( data = { 'test' : 1 }, format="json")

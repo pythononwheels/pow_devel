@@ -8,6 +8,7 @@ from {{appname}}.config import myapp
 from {{appname}}.powlib import merge_two_dicts
 from {{appname}}.encoders import pow_json_serializer
 from {{appname}}.decoders import pow_json_deserializer
+import {{appname}}.config as cfg
 
 class ModelObject():
     """
@@ -42,6 +43,22 @@ class ModelObject():
                 basic_schema)
         print("  .. Schema is now: " + str(self.schema))
 
+    def setup_instance_values(self):
+        """ fills the instance with defined default values"""
+        for key in self.schema.keys():
+            if self.schema[key].get("default", None) != None:
+                setattr(self,key,self.schema[key].get("default"))
+                self.schema[key].pop("default", None)
+            else:
+                #print("no default for: " + str(self.schema[key]))
+                #print("trying: " + str(cfg.database["default_values"][self.schema[key]["type"]]))
+                try:
+                    #print("trying: " + config.database["default_values"][self.schema[key]["type"]])
+                    setattr(self,key,cfg.database["default_values"][self.schema[key]["type"]])
+                except Exception as e:
+                    print(e.message)
+                    setattr(self, key, None)
+        
     def setup_from_format(self, *args, **kwargs):
         """
             setup values from kwargs or from init_from_<format> if format="someformat"
@@ -103,9 +120,9 @@ class ModelObject():
             #v = cerberus.Validator(self.schema)
             v = Validator(self.schema)
             if v.validate(self.to_dict(lazy=False)):
-                return True
+                return (True, None)
             else:
-                return v
+                return (False,v)
     
     def init_from_dict(self, d, ignore=True, simple_conversion=False):
         """

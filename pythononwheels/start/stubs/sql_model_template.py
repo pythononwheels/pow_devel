@@ -49,6 +49,7 @@ class {{model_class_name}}(Base):
 
     # init
     def __init__(self, **kwargs):
+        self.setup_instance_values()
         self.init_on_load(**kwargs)
     #
     # your model's methods down here

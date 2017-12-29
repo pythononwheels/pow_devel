@@ -48,10 +48,11 @@ def main(stdout=False):
     #app = tornado.web.Application(handlers=routes, **app_settings)
     if stdout:
         for idx, elem in enumerate(db_settings.keys()):
-            if elem.lower() == "sql":
-                print("  DB #" +str(idx) + ": " + db_settings[elem]["type"] + "  enabled: " + str(db_settings[elem]["enabled"]) )
-            else:
-                print("  DB #" +str(idx) + ": " + elem + " enabled: " + str(db_settings[elem]["enabled"]))
+            if elem != "default_values":
+                if elem.lower() == "sql":
+                    print("  DB #" +str(idx) + ": " + db_settings[elem]["type"] + "  enabled: " + str(db_settings[elem]["enabled"]) )
+                else:
+                    print("  DB #" +str(idx) + ": " + elem + " enabled: " + str(db_settings[elem]["enabled"]))
     #app.listen(app_settings["port"], **server_settings)#
     #app=Application()
     #print(app)

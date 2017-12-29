@@ -64,7 +64,7 @@ class SqlBaseModel(ModelObject):
         if myapp["sql_auto_schema"]:
             self._setup_schema_from_sql()
             
-
+        #self.setup_instance_values()
         #
         # setup values from kwargs or from init_from_<format> if format="someformat"
         # example: m = Model( data = { 'test' : 1 }, format="json")
@@ -91,6 +91,23 @@ class SqlBaseModel(ModelObject):
         """ returns the tablename for this model """
         return pluralize(cls.__name__.lower())
     
+    def setup_instance_values(self):
+        """ fills the instance with defined default values"""
+        for key in self.schema.keys():
+            if self.schema[key].get("default", None) != None:
+                setattr(self,key,self.schema[key].get("default"))
+                self.schema[key].pop("default", None)
+            else:
+                #print("no default for: " + str(self.schema[key]))
+                #print("trying: " + str(cfg.database["default_values"][self.schema[key]["type"]]))
+                try:
+                    #print("trying: " + config.database["default_values"][self.schema[key]["type"]])
+                    if key not in ["created_at", "last_updated", "id"]:
+                        setattr(self,key,cfg.database["default_values"][self.schema[key]["type"]])
+                except Exception as e:
+                    print(e.message)
+                    setattr(self, key, None)
+
     def _setup_schema_from_sql(self):
         """
             Constructs a cerberus definition schema 
