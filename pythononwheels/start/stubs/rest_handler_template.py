@@ -46,21 +46,21 @@ class {{handler_class_name}}(PowHandler):
     def show(self, id=None):
         m=Model()
         res=m.find_by_id(id)
-        self.success(message="User show", data=res)
+        self.success(message="{{handler_name}} show", data=res)
         
     def list(self):
         m=Model()
         res = m.get_all()  
-        self.success(message="User, index", data=res)         
+        self.success(message="{{handler_name}}, index", data=res)         
     
     def page(self, page=0):
         m=Model()
         res=m.page(page=int(page), page_size=myapp["page_size"])
-        self.success(message="user page: #" +str(page), data=res )  
+        self.success(message="{{handler_name}} page: #" +str(page), data=res )  
     
     def search(self):
         m=Model()
-        return self.error(message="user search: not implemented yet ")
+        return self.error(message="{{handler_name}} search: not implemented yet ")
         
     @tornado.web.authenticated
     def edit(self, id=None):
@@ -68,14 +68,14 @@ class {{handler_class_name}}(PowHandler):
         try:
             print("  .. GET Edit Data (ID): " + id)
             res = m.find_by_id(id)
-            self.success(message="user, edit id: " + str(id), data=res)
+            self.success(message="{{handler_name}}, edit id: " + str(id), data=res)
         except Exception as e:
-            self.error(message="user, edit id: " + str(id) + "msg: " + str(e) , data=None)
+            self.error(message="{{handler_name}}, edit id: " + str(id) + "msg: " + str(e) , data=None)
 
     @tornado.web.authenticated
     def new(self):
         m=Model()
-        self.success(message="user, new",data=m)
+        self.success(message="{{handler_name}}, new",data=m)
 
     @tornado.web.authenticated
     def create(self):
@@ -84,10 +84,10 @@ class {{handler_class_name}}(PowHandler):
             m=Model()
             m.init_from_json(data_json, simple_conversion=True)
             m.upsert()
-            self.success(message="user, successfully created " + str(m.id), 
+            self.success(message="{{handler_name}}, successfully created " + str(m.id), 
                 data=m, format="json")
         except Exception as e:
-            self.error(message="user, error updating " + str(m.id) + "msg: " + str(e), 
+            self.error(message="{{handler_name}}, error updating " + str(m.id) + "msg: " + str(e), 
                 data=m, format="json")
     
     @tornado.web.authenticated
@@ -100,10 +100,10 @@ class {{handler_class_name}}(PowHandler):
         try:
             #res.tags= res.tags.split(",")
             res.upsert()
-            self.success(message="user, successfully updated " + str(res.id), 
+            self.success(message="{{handler_name}}, successfully updated " + str(res.id), 
                 data=res, format="json")
         except Exception as e:
-            self.error(message="user, error updating: " + str(m.id) + "msg: " + str(e), data=data_json, format="json")
+            self.error(message="{{handler_name}}, error updating: " + str(m.id) + "msg: " + str(e), data=data_json, format="json")
 
 
 

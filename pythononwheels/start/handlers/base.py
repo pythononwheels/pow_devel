@@ -61,7 +61,7 @@ class BaseHandler(tornado.web.RequestHandler):
         if not h:
             h = self.request.headers.get("Accept")
         headers_raw = h.split(",")
-        print(headers_raw)
+        print(" raw Accept header:" + str( headers_raw ))
         h_final = []
         # example Accept-header: text/html, application/xhtml+xml, application/xml;q=0.9, */*;q=0.8 
         for elem in headers_raw:
@@ -102,20 +102,20 @@ class BaseHandler(tornado.web.RequestHandler):
         accept_header = self.request.headers.get("Accept", None)
         if accept_header:
             format_list = self.get_format_list(accept_header)
-            print("formats from Accept-Header: " + str(format_list))
+            print(" formats from Accept-Header: " + str(format_list))
             # returns the first matched format from ordered Accept-Header list.
             for fo in format_list:
                 if fo in cfg.myapp["supported_formats"]:
                     return fo
-        
-        if format == None:
+        #print("format: " +format)
+        if format == None or format == "*":
             # take the default app format (see config.cfg.myapp)
             format = cfg.myapp["default_format"]
         
         if format in cfg.myapp["supported_formats"]:
             return format
         else:
-            print("format error")
+            print(" format error: " + str(format))
             return self.error(
                     message="Format not supported. (see data.format)",
                     data={
@@ -391,7 +391,7 @@ class BaseHandler(tornado.web.RequestHandler):
             If this error was caused by an uncaught exception 
             (including HTTPError), an exc_info triple will be available as 
             kwargs["exc_info"]. Note that this exception may not be the 
-            current exception for purposes of methods like sys.exc_info() 
+            currentÂ exception for purposes of methods like sys.exc_info() 
             or traceback.format_exc.
         """
         #if status_code == 404:

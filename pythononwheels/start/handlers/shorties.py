@@ -2,7 +2,7 @@ import tornado.ioloop
 import tornado.web
 from {{appname}}.handlers.base import BaseHandler
 from {{appname}}.application import app
-#
+
 # you can use regex in the routes as well:
 # (r"/([^/]+)/(.+)", ObjectHandler),
 # any regex goes. any group () will be handed to the handler 
@@ -13,8 +13,8 @@ from {{appname}}.application import app
 @app.add_route("/thanks/([0-9]+)*", dispatch={"get": "testme"})
 class ThanksHandler(BaseHandler):
     def _get(self):
-        print("  .. in _get: index = " + str(index))
-        self.render("thanks.tmpl", index=index)
+        print("  .. in _get" )
+        self.render("thanks.tmpl")
 
     def testme(self, index=0 ):
         print("  .. in testme: index = " + str(index))
@@ -25,7 +25,7 @@ class ThanksHandler(BaseHandler):
 @app.add_route("/", pos=1)
 class IndexdHandler(BaseHandler):
     def get(self, index=None):
-        print("  index:" + str(index))
+        print(" Calling IndexHandler from handlers/shorties.py: parameter index: " + str(index))
         self.render("index.tmpl")
 
 # this will be the last route since it has the lowest pos.

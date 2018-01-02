@@ -76,7 +76,7 @@
 
         <form id="create_form" name="create_form">
             {% for key in model.schema.keys() %}
-                {% if key not in cfg.myapp["internal_fields"] %}
+                {% if key not in cfg.myapp["internal_fields"] and key not in hide_list %}
                     {% set _type = model.schema[key]["type"] %}
                     {% if  _type == "string" %}
                         {% if  "allowed" in model.schema[key].keys() %}

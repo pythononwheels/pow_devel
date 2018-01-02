@@ -89,7 +89,7 @@
         <form id="edit_form" name="edit_form">
     
             {% for key in model.schema.keys() %}
-                {% if key in cfg.myapp["internal_fields"] %}
+                {% if key in cfg.myapp["internal_fields"] or key in hidden_list%}
                     <input type="hidden" name="{{key}}" id="{{key}}" value="{{data.get(key)}}" />
                 {% else %}
                     {% set _type = elem.schema[key]["type"] %}

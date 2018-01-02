@@ -61,7 +61,7 @@
             Create</a> a new {{model_name}} here.</p>
         </div>
     </div>
-    
+    <div class="table-responsive">
         <table class="table table-bordered table-hover">
             <thead class="thead-inverse">
                 <tr>
@@ -99,14 +99,15 @@
                 {% end %}
            
     {% except %}
-        <tr>
-            <td colspan="{{len(model.schema.keys())+1}}">
-                <a href="/{{base_route_rest}}/new" class="btn btn-success">+</a> create a new {{model.__class__.__name__}}.
-            </td>
-        </tr>
+            <tr>
+                <td colspan="{{len(model.schema.keys())+1}}">
+                    <a href="/{{base_route_rest}}/new" class="btn btn-success">+</a> create a new {{model.__class__.__name__}}.
+                </td>
+            </tr>
     {% end %}
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div> <!-- div class=table-responsive-->
     <hr>
     <h2>Info: </h2>
     <hr>
