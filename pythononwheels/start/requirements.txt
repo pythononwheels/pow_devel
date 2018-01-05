@@ -2,6 +2,7 @@ alembic==0.8.8
 appdirs==1.4.3
 backports-abc==0.5
 Cerberus==1.0.1
+colorama==0.3.9
 dicttoxml==1.7.4
 jsonschema==2.5.1
 Mako==1.0.7
@@ -22,4 +23,5 @@ SQLAlchemy==1.1.0b3
 tinydb==3.2.1
 tinydb-serialization==1.0.3
 tornado==4.4.1
+Werkzeug==0.14.1
 xmltodict==0.10.2

@@ -49,12 +49,13 @@ class RestHandler(BaseHandler):
 
 @app.add_route('/werkzeug/<int:year>', dispatch={"get" : "test"})
 @app.add_route('/werkzeug/<uuid:identifier>', dispatch={"get" : "testuuid"})
+@app.add_route('/werkzeug/<uuid:identifier>.<format>', dispatch={"get" : "testuuid"})
 class WerkzeugTestHandler(BaseHandler):
     # on HTTP GET this method will be called. See dispatch parameter.
     def test(self, year=None):
         self.write("I got year: " + str(year))
     
-    def testuuid(self, anotherone=None, identifier=None):
+    def testuuid(self, anotherone=None, identifier=None, format="html"):
         self.write("I got uuid: " + str(identifier)
                     + "<hr> I got anotherone ? == " + str(anotherone)
         )
