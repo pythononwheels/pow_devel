@@ -264,15 +264,30 @@ class Application(tornado.web.Application):
             # parent is the parent class of the relation
             cls_name = cls.__name__.lower()
             handlers=getattr(self.__class__, "handlers", None)
-            # BETA: this regex is added to every route to make 
-            # 1.the slash at the end optional
-            # 2.it possible to add a .format paramter.
-            # Example: route = /test -> also test.json will work
-            # Example: route = /test/([0-9]+) -> also /test/12.xml will work 
-            if cfg.beta_settings["dot_format"]:
-                fin_route = route  + r"(?:/?\.\w+)?/?"
+            if _rule_re.match(route):
+                #
+                # compile the route using werkzeug.
+                #
+                r=Rule(route, endpoint=cls_name)
+                m = Map()
+                m.add(r)
+                c=m.bind(cfg.server_settings["host"]+":"+cfg.server_settings["host"], "/")
+                r.compile()
+                print("r1: " +  str(r._regex.pattern))
+                pattern = r._regex.pattern.replace('^\\|', "")
+                print("r1: " +  str(pattern))
+                fin_route = pattern
             else:
-                fin_route = route
+                # BETA: this regex is added to every route to make 
+                # 1.the slash at the end optional
+                # 2.it possible to add a .format paramter.
+                # Example: route = /test -> also test.json will work
+                # Example: route = /test/([0-9]+) -> also /test/12.xml will work 
+                if cfg.beta_settings["dot_format"]:
+                    fin_route = route  + r"(?:/?\.\w+)?/?"
+                else:
+                    fin_route = route
+
             route_tuple = (fin_route,cls, dispatch)
             handlers.append((route_tuple,pos))
             #print("handlers: " + str(self.handlers))

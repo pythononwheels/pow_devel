@@ -1,4 +1,4 @@
-{% extends "base.bs4" %}
+{% extends "../base.bs4" %}
 
 {% block include_js %}
     <script

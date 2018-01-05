@@ -317,6 +317,8 @@ class TinyBaseModel(ModelObject):
     def find_all(self, *criterion):
         """ Find something given a query or criterion and parameters """
         #res = self.table.all() # returns a list of tinyDB DB-Elements 
+        if criterion == ():
+            return self.get_all()
         return self.find(*criterion)
     
     def find_one(self, *criterion):
