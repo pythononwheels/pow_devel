@@ -9,7 +9,8 @@ import logging
 import datetime
 
 server_settings = {
-    "base_url"          :   "http://localhost",
+    "protocol"          :   "http://",
+    "host"              :   "localhost",
     "port"              :   8080,
     "debug"             :   True,
     "https"             :   False,

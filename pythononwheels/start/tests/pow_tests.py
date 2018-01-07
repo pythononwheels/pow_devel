@@ -31,7 +31,7 @@ class TestClass:
         import time
         p = Process(target={{appname}}.server.main)
         p.start()
-        testurl=cfg.server_settings["base_url"] + ":" + str(cfg.server_settings["port"]) + "/test/12"  
+        testurl=cfg.server_settings["protocol"] + cfg.server_settings["host"] + ":" + str(cfg.server_settings["port"]) + "/test/12"  
 
         r = requests.get(testurl)
         p.terminate()

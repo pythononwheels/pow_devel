@@ -5,6 +5,7 @@ import tornado.web
 import os
 import os.path
 import sys
+from werkzeug.routing import Rule, Map, _rule_re
 
 import {{appname}}.config as cfg
 from {{appname}}.powlib import merge_two_dicts
@@ -277,6 +278,21 @@ class Application(tornado.web.Application):
                 pattern = r._regex.pattern.replace('^\\|', "")
                 print("r1: " +  str(pattern))
                 fin_route = pattern
+                route_tuple = (fin_route,cls, dispatch)
+                handlers.append((route_tuple,pos))
+                # now add the route for the optional format parameter
+                
+                # r=Rule(route+r".<format>", endpoint=cls_name)
+                # m = Map()
+                # m.add(r)
+                # c=m.bind(cfg.server_settings["host"]+":"+cfg.server_settings["host"], "/")
+                # r.compile()
+                # print("r1: " +  str(r._regex.pattern))
+                # pattern = r._regex.pattern.replace('^\\|', "")
+                # print("r1: " +  str(pattern))
+                # fin_route = pattern
+                # route_tuple = (fin_route,cls, dispatch)
+                # handlers.append((route_tuple,pos))
             else:
                 # BETA: this regex is added to every route to make 
                 # 1.the slash at the end optional
@@ -288,8 +304,8 @@ class Application(tornado.web.Application):
                 else:
                     fin_route = route
 
-            route_tuple = (fin_route,cls, dispatch)
-            handlers.append((route_tuple,pos))
+                route_tuple = (fin_route,cls, dispatch)
+                handlers.append((route_tuple,pos))
             #print("handlers: " + str(self.handlers))
             print("ROUTING: added route for: " + cls.__name__ +  ": " + route + " -> " + fin_route)
             return cls
