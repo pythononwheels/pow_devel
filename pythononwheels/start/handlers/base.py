@@ -302,7 +302,8 @@ class BaseHandler(tornado.web.RequestHandler):
             # for elem in data:
             #     print("elem: " + str(type(elem)))
             viewname = self.__class__.__name__ + "_" + self.view + ".tmpl"
-            vpath = os.path.join(cfg.templates["template_path"], str.lower(self.__class__.__name__ ))
+            #vpath = os.path.join(cfg.templates["template_path"], str.lower(self.__class__.__name__ ))
+            vpath = str.lower(self.__class__.__name__ )
             viewname = os.path.join(vpath, viewname)
             print(" ... looking for view: " + viewname)
             if self.view is not None:
