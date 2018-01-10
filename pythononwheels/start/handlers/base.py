@@ -17,9 +17,10 @@ class BaseHandler(tornado.web.RequestHandler):
             { "http_verb" : "method_to_call", ...}
             { "params" : ["id", "name", ... ]}
         """
-        print("  .. in initialize")
-        print("  .. .. args: " + str(args))
-        print("  .. .. kwargs: " + str(kwargs))
+        if cfg.server_settings["debug_print"]:
+            print("  .. in initialize")
+            print("  .. .. args: " + str(args))
+            print("  .. .. kwargs: " + str(kwargs))
         self.dispatch_kwargs = kwargs
         self.dispatch_args = args
         
@@ -31,14 +32,16 @@ class BaseHandler(tornado.web.RequestHandler):
         
         #print(self.request)
         self.uri = self.request.uri
-        print("Request:" )
-        print(30*"-")
-        print(" Mehtod: " + self.request.method)
-        print(" URI: " + self.uri)
-        print(" Handler: " + self.__class__.__name__)
+        if cfg.server_settings["debug_print"]:
+            print("Request:" )
+            print(30*"-")
+            print(" Mehtod: " + self.request.method)
+            print(" URI: " + self.uri)
+            print(" Handler: " + self.__class__.__name__)
         # path = anything before url-parameters
         self.path = self.request.uri.split('?')[0]
-        print(" path: " + self.path)
+        if cfg.server_settings["debug_print"]:
+            print(" path: " + self.path)
         #
         # You can use the before_handler in a local controller to
         # process your own prepare stuff.
@@ -47,7 +50,8 @@ class BaseHandler(tornado.web.RequestHandler):
         # 
         before_handler = getattr(self, "before_handler", None)
         if callable(before_handler):
-            print("calling before_handler for " +  str(self.__class__))
+            if cfg.server_settings["debug_print"]:
+                print("calling before_handler for " +  str(self.__class__))
             before_handler()
         self.format = self.get_accept_format()
 
@@ -61,7 +65,8 @@ class BaseHandler(tornado.web.RequestHandler):
         if not h:
             h = self.request.headers.get("Accept")
         headers_raw = h.split(",")
-        print(" raw Accept header:" + str( headers_raw ))
+        if cfg.server_settings["debug_print"]:
+            print(" raw Accept header:" + str( headers_raw ))
         h_final = []
         # example Accept-header: text/html, application/xhtml+xml, application/xml;q=0.9, */*;q=0.8 
         for elem in headers_raw:
@@ -102,7 +107,8 @@ class BaseHandler(tornado.web.RequestHandler):
         accept_header = self.request.headers.get("Accept", None)
         if accept_header:
             format_list = self.get_format_list(accept_header)
-            print(" formats from Accept-Header: " + str(format_list))
+            if cfg.server_settings["debug_print"]:
+                print(" formats from Accept-Header: " + str(format_list))
             # returns the first matched format from ordered Accept-Header list.
             for fo in format_list:
                 if fo in cfg.myapp["supported_formats"]:
@@ -115,7 +121,8 @@ class BaseHandler(tornado.web.RequestHandler):
         if format in cfg.myapp["supported_formats"]:
             return format
         else:
-            print(" format error: " + str(format))
+            if cfg.server_settings["debug_print"]:
+                print(" format error: " + str(format))
             return self.error(
                     message="Format not supported. (see data.format)",
                     data={
@@ -133,20 +140,22 @@ class BaseHandler(tornado.web.RequestHandler):
     # @app.add_route2("/thanks/*", dispatch={"get": "_get"} )
     def get(self, *args, **params):
         #url_params=self.get_arguments("id")
-        print(" ----> GET / BaseHandler")
-        print("  .. params : " + str(params))
-        print("  .. args : " + str(args))
-        print("  .. self.dispatch_kwargs : " + str(self.dispatch_kwargs))
+        if cfg.server_settings["debug_print"]:
+            print(" ----> GET / BaseHandler")
+            print("  .. params : " + str(params))
+            print("  .. args : " + str(args))
+            print("  .. self.dispatch_kwargs : " + str(self.dispatch_kwargs))
         if self.dispatch_kwargs.get("get", None) != None:
             try:
                 # this is the view that will be rendered by success or error,
                 # if the format is .html
                 # rule: handlerName_methodName
                 self.view = self.dispatch_kwargs.get("get", None)
-
-                print("  .. Trying to call handler method: " + self.dispatch_kwargs.get("get") )
+                if cfg.server_settings["debug_print"]:
+                    print("  .. Trying to call handler method: " + self.dispatch_kwargs.get("get") )
                 f=getattr(self, self.dispatch_kwargs.get("get"))
-                print("  .. trying to call: " + str(f))
+                if cfg.server_settings["debug_print"]:
+                    print("  .. trying to call: " + str(f))
                 if callable(f):
                     # call the given method
                     return f(*args, **params)
@@ -171,20 +180,22 @@ class BaseHandler(tornado.web.RequestHandler):
     # POST   /items     #=> create
     #
     def post(self, *args, **params):
-        print(" ---> POST / BaseHandler")
-        print("  .. params : " + str(params))
-        print("  .. args : " + str(args))
-        print("  .. self.dispatch_kwargs : " + str(self.dispatch_kwargs))
+        if cfg.server_settings["debug_print"]:
+            print(" ---> POST / BaseHandler")
+            print("  .. params : " + str(params))
+            print("  .. args : " + str(args))
+            print("  .. self.dispatch_kwargs : " + str(self.dispatch_kwargs))
         if self.dispatch_kwargs.get("post", None) != None:
             try:
                 # this is the view that will be rendered by success or error,
                 # if the format is .html
                 # rule: handlerName_methodName
                 self.view = self.dispatch_kwargs.get("post", None)
-
-                print("  .. Trying to call handler method: " + self.dispatch_kwargs.get("post") )
+                if cfg.server_settings["debug_print"]:
+                    print("  .. Trying to call handler method: " + self.dispatch_kwargs.get("post") )
                 f=getattr(self, self.dispatch_kwargs.get("post"))
-                print("  .. trying to call: " + str(f))
+                if cfg.server_settings["debug_print"]:
+                    print("  .. trying to call: " + str(f))
                 if callable(f):
                     # call the given method
                     return f(*args, **params)
@@ -209,20 +220,22 @@ class BaseHandler(tornado.web.RequestHandler):
     # PUT    /items/1      #=> update
     #
     def put(self, *args, **params):
-        print(" ---> PUT / BaseHandler")
-        print("  .. params : " + str(params))
-        print("  .. args : " + str(args))
-        print("  .. self.dispatch_kwargs : " + str(self.dispatch_kwargs))
+        if cfg.server_settings["debug_print"]:
+            print(" ---> PUT / BaseHandler")
+            print("  .. params : " + str(params))
+            print("  .. args : " + str(args))
+            print("  .. self.dispatch_kwargs : " + str(self.dispatch_kwargs))
         if self.dispatch_kwargs.get("put", None) != None:
             try:
                 # this is the view that will be rendered by success or error,
                 # if the format is .html
                 # rule: handlerName_methodName
                 self.view = self.dispatch_kwargs.get("put", None)
-
-                print("  .. Trying to call handler method: " + self.dispatch_kwargs.get("put") )
+                if cfg.server_settings["debug_print"]:
+                    print("  .. Trying to call handler method: " + self.dispatch_kwargs.get("put") )
                 f=getattr(self, self.dispatch_kwargs.get("put"))
-                print("  .. trying to call: " + str(f))
+                if cfg.server_settings["debug_print"]:
+                    print("  .. trying to call: " + str(f))
                 if callable(f):
                     # call the given method
                     return f(*args, **params)
@@ -245,20 +258,22 @@ class BaseHandler(tornado.web.RequestHandler):
     # DELETE /items/1      #=> destroy
     # 
     def delete(self, *args, **params):
-        print(" ---> DELETE / BaseHandler")
-        print("  .. params : " + str(params))
-        print("  .. args : " + str(args))
-        print("  .. self.dispatch_kwargs : " + str(self.dispatch_kwargs))
+        if cfg.server_settings["debug_print"]:
+            print(" ---> DELETE / BaseHandler")
+            print("  .. params : " + str(params))
+            print("  .. args : " + str(args))
+            print("  .. self.dispatch_kwargs : " + str(self.dispatch_kwargs))
         if self.dispatch_kwargs.get("delete", None) != None:
             try:
                 # this is the view that will be rendered by success or error,
                 # if the format is .html
                 # rule: handlerName_methodName
                 self.view = self.dispatch_kwargs.get("delete", None)
-
-                print("  .. Trying to call handler method: " + self.dispatch_kwargs.get("delete") )
+                if cfg.server_settings["debug_print"]:
+                    print("  .. Trying to call handler method: " + self.dispatch_kwargs.get("delete") )
                 f=getattr(self, self.dispatch_kwargs.get("delete"))
-                print("  .. trying to call: " + str(f))
+                if cfg.server_settings["debug_print"]:
+                    print("  .. trying to call: " + str(f))
                 if callable(f):
                     # call the given method
                     return f(*args, **params)
@@ -280,7 +295,7 @@ class BaseHandler(tornado.web.RequestHandler):
 
 
     def success(self, message=None, data=None, succ=None, prev=None,
-        http_code=200, format=None, encoder=None):
+        http_code=200, format=None, encoder=None, **kwargs):
         """
             returns data and http_code.
             data will be converted to format.  (std = json)
@@ -305,7 +320,8 @@ class BaseHandler(tornado.web.RequestHandler):
             #vpath = os.path.join(cfg.templates["template_path"], str.lower(self.__class__.__name__ ))
             vpath = str.lower(self.__class__.__name__ )
             viewname = os.path.join(vpath, viewname)
-            print(" ... looking for view: " + viewname)
+            if cfg.server_settings["debug_print"]:
+                print(" ... looking for view: " + viewname)
             if self.view is not None:
                 model=self.__class__.model
                 show_list=getattr(self.__class__, "show_list", [])
@@ -313,7 +329,7 @@ class BaseHandler(tornado.web.RequestHandler):
                 return self.render( viewname, data=data, message=message, 
                     handler_name = self.__class__.__name__.lower(), base_route_rest=self.base_route_rest , 
                     model=model, status=http_code, next=succ, prev=prev, model_name=model.__class__.__name__.lower(),
-                    show_list=show_list, hide_list=hide_list )
+                    show_list=show_list, hide_list=hide_list,**kwargs )
             else:
                 self.error(message="Sorry, View: " + viewname +  " can not be found.", 
                     format=format, data=data)
@@ -337,13 +353,13 @@ class BaseHandler(tornado.web.RequestHandler):
         self.finish()
 
     def error(self, message=None, data=None, succ=None, prev=None,
-        http_code=500, format=None, encoder=None, template=None):
+        http_code=500, format=None, encoder=None, template=None, **kwargs):
         
         self.application.log_request(self, message="base.error:" + str(message))
         
         if template != None:
             self.render(template, message=message, data=data, succ=succ, prev=prev,
-                        status=http_code, request=self.request)
+                        status=http_code, request=self.request, **kwargs)
         self.set_status(http_code)
         
         if not format:
@@ -351,29 +367,30 @@ class BaseHandler(tornado.web.RequestHandler):
         if not format:
             format = cfg.myapp["default_format"]
         if format.lower() == "html":
-            return self.render("error.tmpl", data=data, message=message, status=http_code)
+            return self.render("error.tmpl", data=data, message=message, status=http_code, **kwargs)
         
         # encode the data to json.
         # the encoders convert the json to any requested output format then.
         if not data == None:
             data = self.model.res_to_json(data)
-
-        print(" In base.error:")
-        print("  .. data: " + str(data))
-        print("  .. Encoding reply into: " + format)
+        if cfg.server_settings["debug_print"]:
+            print(" In base.error:")
+            print("  .. data: " + str(data))
+            print("  .. Encoding reply into: " + format)
         if encoder:
             encoder = encoder
         else:
             encoder = cfg.myapp["encoder"][format]
-        print("  .. Encoded reply: " + encoder.dumps({
-            "status"    : http_code,
-            "data"      : data,
-            "error"     : {
-                "message"   : message
-                },
-            "next"      : succ,
-            "prev"      : prev
-        }))
+        if cfg.server_settings["debug_print"]:
+            print("  .. Encoded reply: " + encoder.dumps({
+                "status"    : http_code,
+                "data"      : data,
+                "error"     : {
+                    "message"   : message
+                    },
+                "next"      : succ,
+                "prev"      : prev
+            }))
         self.write(encoder.dumps({
             "status"    : http_code,
             "data"      : data,

@@ -115,7 +115,7 @@
                                 <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
                                 <div class="col-10">
                                     <textarea  class="form-control" name="{{key}}" id="{{key}}" 
-                                        rows={{model.schema[key]["maxlength"] / 30 }}></textarea>
+                                        rows={{model.schema[key]["maxlength"] / 30 }}>{{elem.get(key)}}</textarea>
                                 </div>
                             </div>    
                             {% else %}

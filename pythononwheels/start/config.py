@@ -13,6 +13,8 @@ server_settings = {
     "host"              :   "localhost",
     "port"              :   8080,
     "debug"             :   True,
+    "debug_print"       :   True,
+    "logging"           :   True,
     "https"             :   False,
     "template_path"     :   os.path.join(os.path.dirname(__file__), "views"),
     "static_url_prefix" :   "/static/",
