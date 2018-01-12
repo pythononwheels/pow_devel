@@ -316,7 +316,7 @@ class BaseHandler(tornado.web.RequestHandler):
             #     data=[data]
             # for elem in data:
             #     print("elem: " + str(type(elem)))
-            viewname = self.__class__.__name__ + "_" + self.view + ".tmpl"
+            viewname = str.lower(self.__class__.__name__) + "_" + self.view + ".tmpl"
             #vpath = os.path.join(cfg.templates["template_path"], str.lower(self.__class__.__name__ ))
             vpath = str.lower(self.__class__.__name__ )
             viewname = os.path.join(vpath, viewname)

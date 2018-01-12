@@ -72,7 +72,11 @@ def main(stdout=False):
         print("running...")
     http_server = tornado.httpserver.HTTPServer(app)
     http_server.listen(app_settings["port"])
-    tornado.ioloop.IOLoop.instance().start()
+    ioloop = tornado.ioloop.IOLoop.instance()
+    if app_settings["IOLoop.set_blocking_log_threshold"]:
+        ioloop.set_blocking_log_threshold( app_settings["IOLoop.set_blocking_log_threshold"])
+    ioloop.start()
+    #tornado.ioloop.IOLoop.instance().start()
     
 
 if __name__ == "__main__":
