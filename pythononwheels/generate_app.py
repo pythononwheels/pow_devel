@@ -80,7 +80,8 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
         # only update pow versions. Leave all non pow or possibly changed stuff untouched
         exclude_files.extend([
             "alembic.ini", "db.sqlite", "tiny.db",
-            "env.py", "shorties.py", "config.py", "encoders.py", "powhandler.py"
+            "env.py", "shorties.py", "config.py", "encoders.py", "powhandler.py", "decoders.py",
+            "powmodel.py", "tinymodel.py", "mongomodel.py"
             ])
         
         skip_dirs.extend([
@@ -263,7 +264,9 @@ def main():
     print()
     print(50*"-")
     if args.update_only:
-        print(" Successfully updated your application")    
+        print(50*"-")
+        print(" UPDATED YOUR APP!!!")
+        print(" Successfully updated your application")   
     else:
         print(" Successfully created your application")
     print()
