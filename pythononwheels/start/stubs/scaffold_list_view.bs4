@@ -55,7 +55,7 @@
 <div class="container">
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
-            <h1 class="display-3">This is the <strong>{{handler_name}}</strong> list view </h1>
+            <h1>This is the <strong>{{handler_name}}</strong> list view </h1>
             <p class="lead">Just go Ahead and show, edit or delete your data below using the action links.</p>
             <p class="lead">Of course you can also <a href="{{base_route_rest}}/new" class="btn btn-success">
             Create</a> a new {{model_name}} here.</p>

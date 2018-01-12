@@ -41,12 +41,20 @@
 
   <body>
 
-    <!--div class="container"  -->
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+          &nbsp;
+      </div>
+      <div class="col-md-10">
+        {% block content %}
 
-     {% block content %}
-
-     {% end %}
-    <!-- /div> <!-- /container -->
+        {% end %}
+      </div>
+      <div class="col-md-1">
+        &nbsp;
+      </div>
+    </div> <!-- /container -->
     
     <script src="{{ static_url("js/tether.min.js") }}"></script>
     <script src="{{ static_url("js/bootstrap.min.js") }}"></script>
