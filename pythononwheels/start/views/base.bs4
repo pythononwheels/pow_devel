@@ -54,10 +54,11 @@
       <div class="col-md-1">
         &nbsp;
       </div>
-    </div> <!-- /container -->
+    </div> 
+    <!-- Site footer -->
+    {% include "footer.bs4" %}
+  </div><!-- /container -->
     
-    <script src="{{ static_url("js/tether.min.js") }}"></script>
-    <script src="{{ static_url("js/bootstrap.min.js") }}"></script>
-    <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
+    
   </body>
 </html>

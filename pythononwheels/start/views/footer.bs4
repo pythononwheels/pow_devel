@@ -3,10 +3,10 @@
 <footer class="footer">
   <div class="container text-center">
     <!--div class="container" -->
-      <p class="text-muted"><a href="http://www.opentoni.org">OpenToni</a> & <a href="http://www.pythononwheels.org">PythonOnWheels</a>
-      2017 by khz. <a href="https://en.wikipedia.org/wiki/Open_source_model">Open source</a> AND 
+    <p class="text-muted">PythonOnWheels 2017 by khz. <a href="https://en.wikipedia.org/wiki/Open_source_model">Open source</a> AND 
       <a href="https://en.wikipedia.org/wiki/Free_software">free</a> for any use. 
       Licence: <a href="http://choosealicense.com/licenses/mit/">MIT Licence</a>.
+    </p>
       </p>
   <!--/div -->
   </div>
@@ -41,16 +41,17 @@
 {% end %}
 
 {% block js %}
-  <script>
-    $(document).ready(function(){   
-     
-
-      {% block document_ready %}
-
-      {% end %}
-    });
-  </script>
+  
 {% end %}
 
+<script>
+  $(document).ready(function(){   
+   
+
+    {% block document_ready %}
+
+    {% end %}
+  });
+</script>
 
 <!-- End page footer -->

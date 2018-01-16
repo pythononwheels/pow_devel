@@ -17,7 +17,7 @@ def camel_case(name):
     """
     return "".join([x.capitalize() for x in name.split("_")])
 
-def generate_handler(handler_name, model_type, appname=None):
+def generate_handler(handler_name, model_type, rest, appname=None):
     """ 
         generates a small handler
     """
@@ -34,10 +34,19 @@ def generate_handler(handler_name, model_type, appname=None):
     #
     # create the handler
     #
-    if model_type.lower() == "none":
-        template_file =  "rest_handler_nodb_template.py"
-    else:
-        template_file = "rest_handler_template.py"
+    if rest:
+        # this is going to be a rest handler. Full rest actions and routing.
+        if model_type.lower() == "none":
+            template_file =  "rest_handler_nodb_template.py"
+        else:
+            template_file = "rest_handler_template.py"
+    else
+        # this will generate a simple handler with only two example routes and actions.
+        if model_type.lower() == "none":
+            template_file =  "simple_handler_nodb_template.py"
+        else:
+            template_file = "simple_handler_template.py"
+     
     ofile_name = os.path.join(cfg.templates["handler_path"], handler_name+".py")
     ofile = open(ofile_name, "wb")
     res = loader.load(template_file).generate( 
@@ -65,6 +74,11 @@ def main():
     parser.add_argument('-t', "--type", action="store", 
                         dest="type", help="-t type (" + "|| ".join(cfg.database.keys()) + " || none) default=none",
                         default="none", required=False)
+    
+    parser.add_argument('-r', "--rest", action="store_true", 
+                        dest="rest", help="-r false ",
+                        default="False", required=False)
+    
     args = parser.parse_args()
     #
     # show some args
@@ -72,7 +86,7 @@ def main():
     #print("all args: ", args)
     #print(dir(args))
     print("CamelCased handler name: ", camel_case(args.name))
-    generate_handler(args.name, args.type, appname="{{appname}}")
+    generate_handler(args.name, args.type, args.rest, appname="{{appname}}")
 
 if __name__ == "__main__":
     main()

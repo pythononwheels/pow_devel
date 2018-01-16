@@ -295,7 +295,7 @@ class BaseHandler(tornado.web.RequestHandler):
 
 
     def success(self, message=None, data=None, succ=None, prev=None,
-        http_code=200, format=None, encoder=None, **kwargs):
+        http_code=200, format=None, encoder=None, model=None, raw_data=False, **kwargs):
         """
             returns data and http_code.
             data will be converted to format.  (std = json)
@@ -310,6 +310,17 @@ class BaseHandler(tornado.web.RequestHandler):
             format = self.format
         if not format:
             format = cfg.myapp["default_format"]
+        
+        # set the model. if there used to convert the data (if raw_data==False)
+        # also handed over to the view. Used there to iterate over  schema, keys, etc
+        if model:
+            model = model
+        else:
+            try:
+                model=self.model
+            except:
+                model=None
+
         if format.lower() == "html":
             # special case where we render the classical html templates
             # if not isinstance(data, (list)):
@@ -337,8 +348,11 @@ class BaseHandler(tornado.web.RequestHandler):
         # if not format == html convert the model or [model] to json 
         # the encoders can convert json to any requested target format.
         # 
-        if not data == None:
-            data = self.model.res_to_json(data)
+        if not raw_data:
+            # if you want PoW to convert the data you have to have a model here.
+            # either as instance attribute (also via class) or as an arguent to success(model=m)
+            if not data == None:
+                data = model.res_to_json(data)
         if encoder:
             encoder = encoder
         else:
