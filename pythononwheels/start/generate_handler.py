@@ -36,11 +36,13 @@ def generate_handler(handler_name, model_type, rest, appname=None):
     #
     if rest:
         # this is going to be a rest handler. Full rest actions and routing.
+        print("... REST Handler")
         if model_type.lower() == "none":
             template_file =  "rest_handler_nodb_template.py"
         else:
             template_file = "rest_handler_template.py"
-    else
+    else:
+        print("... SIMPLE Handler")
         # this will generate a simple handler with only two example routes and actions.
         if model_type.lower() == "none":
             template_file =  "simple_handler_nodb_template.py"
@@ -76,8 +78,8 @@ def main():
                         default="none", required=False)
     
     parser.add_argument('-r', "--rest", action="store_true", 
-                        dest="rest", help="-r false ",
-                        default="False", required=False)
+                        dest="rest", help="-r | --rest to generate a handler with full rest routes and actions. ",
+                        default=False, required=False)
     
     args = parser.parse_args()
     #
