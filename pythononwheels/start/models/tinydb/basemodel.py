@@ -191,16 +191,19 @@ class TinyBaseModel(ModelObject):
 
     def page(self, *criterion, page=0, page_size=None):
         """ return the next page 
-            contains all elements from offset(first element) -> to limit (last element).
+            contains page_size  elements from offset page*page_size.
         """
         if page_size == None:
             page_size = myapp["page_size"]
-        def testfunc(val, start, end ):
-            return start <= val <= end
-        Q = Query()
-        print(str(*criterion))
-        Att = getattr(Q, *criterion)
-        res = self.table.search(Att(testfunc, page*page_size, (page*page_size)+page_size ))
+        #def testfunc(val, start, end ):
+        #    return start <= val <= end
+        #Q = Query()
+        #print(str(*criterion))
+        #Att = getattr(Q, *criterion)
+        #res = self.table.search(Att(testfunc, page*page_size, (page*page_size)+page_size ))
+        res = self.table.all()
+        return list(res)[page*page_size:(page*page_size)+page_size]
+
 
     def json_result_to_object(self, res):
         """
