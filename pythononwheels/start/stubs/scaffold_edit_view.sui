@@ -1,4 +1,4 @@
-{% extends "base.sui" %}
+{% extends ../base.sui %}
 
 {% block include_css %}
     <link rel="stylesheet" href="{{ static_url("css/calendar.css")}}" />
@@ -23,15 +23,15 @@
     function docready(){   
         $("#message-div").hide();
         $('#example1').calendar();
-        $("#create_form").submit(function()
+        $("#edit_form").submit(function()
             {
-                var data = $("#create_form").serializeJSON();
+                var data = $("#edit_form").serializeJSON();
                 console.log( data );
                 var jsonString = JSON.stringify(data);
                 console.log(jsonString);
                 $.ajax({
-                        url : "/{{handler_name}}",
-                        type: "POST",
+                        url : "/{{handler_name}}/{{data.get('id')}}",
+                        type: "PUT",
                         data : jsonString,
                         success: function(data, textStatus, jqXHR)
                         {
@@ -50,9 +50,9 @@
                         {
                             console.log(jqXHR);
                             $("#message-div").hide();
-                            $("#message-div").attr("class", "ui positive message");
+                            $("#message-div").attr("class", "ui negative message");
                             $("#message-div").append(
-                                "<i class='close icon'></i><div class='header'>Oh NO! Error!</div> <p>creating the new dataset.</p>" 
+                                "<i class='close icon'></i><div class='header'>Oh NO! Error!</div> <p>updating the dataset.</p>" 
                             );
                             $("#message-div").show();
                         }
@@ -61,7 +61,6 @@
         });
     }
 </script>
-
 {% end %}
 
 {% block content %}
@@ -75,34 +74,41 @@
 
         <div class="twelve wide column">
             <div class="row">
-                <div class="ui blue message">
-                    <div class="header">This is the <strong>{{handler_name}}</strong> Create view </div>
-                    <p class="lead">Just go Ahead and create your data below</p>
+                <div class="ui yellow message">
+                    <div class="header">This is the <strong>{{handler_name}}</strong> Edit view </div>
+                    <p class="lead">Just go Ahead and edit your data below</p>
                 </div>
                 <div id="message-div" class="">
                     <!-- this div is filled late by javascrupt (see above) -->
                 </div>
             </div>
             <div class="row">
-                <form id="create_form" name="create_form" class="ui form">
+                <form id="edit_form" name="edit_form" class="ui form">
                     {% for key in model.schema.keys() %}
-                        {% if key not in cfg.myapp["internal_fields"] %}
+                        {% if key in cfg.myapp["internal_fields"] %}
+                            <input type="hidden" name="{{key}}" id="{{key}}" value="{{data.get(key)}}" />
+                        {% else %}
                             {% set _type = model.schema[key]["type"] %}
                             {% if  _type == "string" %}
                             <div class="inline field">
                                 <label for="{{key}}">{{key}}</label>
-                                <input  type="text" class="form-control" name="{{key}}" id="{{key}}" value="" />
+                                <input  type="text" class="form-control" name="{{key}}" 
+                                    id="{{key}}" value="{{data.get(key)}}" />
                             </div>    
                             {% elif _type == "number" or _type == "integer" or _type == "float" %}
                             <div class="inline field">
                                 <label for="{{key}}" >{{key}}</label>
                                 <input  type="text" class="form-control" name="{{key}}:number" id="{{key}}" 
-                                        value="" />
+                                        value="{{data.get(key)}}" />
                             </div>
                             {% elif _type == "boolean" %}
                             <div class="inline field">
                                 <div class="ui checkbox">
-                                    <input class="hidden" type="checkbox" name="{{key}}" id="{{key}}"> {{key}}
+                                    <input class="hidden" type="checkbox" 
+                                    {% if  data.get(key) == True %}
+                                        checked="checked"
+                                    {% end %}
+                                    name="{{key}}" id="{{key}}"> {{key}}
                                     <label>{{key}}</label>  
                                 </div>
                             </div>
@@ -112,14 +118,14 @@
                                 <div class="ui calendar" id="example1">
                                     <div class="ui input left icon">
                                     <i class="calendar icon"></i>
-                                    <input type="text" placeholder="Date/Time" id="{{key}}" name="{{key}}">
+                                    <input type="text" value="{{data.get(key)}}" id="{{key}}" name="{{key}}">
                                     </div>
                                 </div>
                             </div>
                             {% elif  _type == "list" %}
                             <div class="inline fields">
                                 <label for="{{key}}">{{key}}</label>
-                                <input  type="text" name="{{key}}" id="{{key}}" value="" placeholder="one, two, three"/>
+                                <input  type="text" name="{{key}}" id="{{key}}" value="{{data.get(key)}}"/>
                             </div>    
                             {% end %}
                         {% end %}
@@ -127,7 +133,7 @@
                     
             
                     <a href="/{{base_route_rest}}" class="ui button">Back to {{handler_name}}.list</a>
-                    <input type="submit" class="ui green button" id="submit_create_form" value="create item">
+                    <input type="submit" class="ui green button" id="submit_edit_form" value="update item">
                 </form>
                 <p>
                     &nbsp;

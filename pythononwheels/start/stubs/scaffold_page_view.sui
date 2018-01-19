@@ -1,4 +1,4 @@
-{% extends "base.sui" %}
+{% extends ../base.sui %}
 
 {% block include_js %}
     <script src="{{ static_url("js/jquery.serializejson.js")}}"></script>

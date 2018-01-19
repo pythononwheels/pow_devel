@@ -1,4 +1,4 @@
-{% extends "base.sui" %}
+{% extends ../base.sui %}
 
 {% block include_js %}
     <script
@@ -14,7 +14,7 @@
 
 <script>
     $(document).ready(function(){   
-        $(".btn-delete").click(function(e)
+        $(".negative").click(function(e)
             {
                 console.log( "btn_delete: " + $(e.currentTarget).attr("value"));
                 var id = $(e.currentTarget).attr("value");
@@ -53,17 +53,20 @@
 {% block content %}
 <!-- Begin page content -->
 <div class="container">
-    <div class="jumbotron jumbotron-fluid">
+    <div>
         <div class="container">
             <h1 class="display-3">This is the <strong>{{handler_name}}</strong> list view </h1>
             <p class="lead">Just go Ahead and show, edit or delete your data below using the action links.</p>
-            <p class="lead">Of course you can also <a href="{{base_route_rest}}/new" class="btn btn-success">
-            Create</a> a new {{model_name}} here.</p>
+            <p class="lead">Of course you can also 
+            <button class="ui green button">
+                <a href="{{base_route_rest}}/new"></a>Create</a> 
+            </button>
+                a new {{model_name}} here.</p>
         </div>
     </div>
     
-        <table class="table table-bordered table-hover">
-            <thead class="thead-inverse">
+    <table class="ui celled table">
+            <thead>
                 <tr>
                     {% for key in model.schema.keys() %}
                         <th>{{key}}</th>
@@ -71,7 +74,6 @@
                     <th colspan="3">Actions:</th>
                 </tr>
             </thead>
-    {% if len(data)>0 %}
             <tbody>
                 {% for elem in data %}
                     <tr id="{{elem.get("id")}}">
@@ -79,27 +81,21 @@
                         <td>{{getattr(elem, key)}}</td>
                     {% end %}
                     <td>                           
-                        <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 
-                        <a href='/{{base_route_rest}}/{{getattr(elem, "id")}}' class="btn btn-primary">Show</a>
+                        <button class="ui primary basic button">
+                            <a href='/{{base_route_rest}}/{{getattr(elem, "id")}}'>Show</a>
+                        </button>
                     </td>
                     <td>
-                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                        <a href='/{{base_route_rest}}/{{getattr(elem, "id")}}/edit'class="btn btn-warning">Edit</a>
+                        <button class="ui positive basic button">
+                            <a href='/{{base_route_rest}}/{{getattr(elem, "id")}}/edit'class="btn btn-warning">Edit</a>
+                        </button>
                     </td>
                     <td>
-                        <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
-                        <button type="button" class="btn btn-danger btn-delete" value="{{elem.get("id")}}">Delete</a>
+                        
+                        <button class="ui negative basic button" value="{{elem.get("id")}}">Delete</a>
                     </td>
                     </tr>
                 {% end %}
-           
-    {% else %}
-        <tr>
-            <td colspan="{{len(model.schema.keys())+1}}">
-                <a href="/{{base_route_rest}}/new" class="btn btn-success">+</a> create a new {{model.__class__.__name__}}.
-            </td>
-        </tr>
-    {% end %}
         </tbody>
     </table>
     <hr>
