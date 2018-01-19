@@ -14,6 +14,8 @@ server_settings = {
     "port"              :   8080,
     "debug"             :   True,
     "debug_print"       :   True,
+    #Logs a stack trace if the IOLoop is blocked for more than s seconds. so 0.050 means 50ms
+    "IOLoop.set_blocking_log_threshold" : 0, 
     "logging"           :   True,
     "https"             :   False,
     "template_path"     :   os.path.join(os.path.dirname(__file__), "views"),
@@ -42,6 +44,7 @@ myapp = {
             "csv"   :   {{appname}}.encoders.JsonToCsv(),
             "xml"   :   {{appname}}.encoders.JsonToXml()
     },
+    "upload_path"       :   os.path.join(server_settings["static_path"], "upload"), #this is just a demo.
     "page_size"         :   5,
     "enable_authentication"     :   False,   # False, simple or custom
     "sql_auto_schema"   :   True,

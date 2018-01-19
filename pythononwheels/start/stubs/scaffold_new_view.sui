@@ -6,13 +6,12 @@
 {% end %}
 
 {% block include_js %}
-    <script
+    <!--script
 			  src="https://code.jquery.com/jquery-2.2.4.js"
 			  integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
 			  crossorigin="anonymous">
-    </script>
-		
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/2.8.1/jquery.serializejson.js"></script>
+    </script-->
+    <!--script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/2.8.1/jquery.serializejson.js"></script-->
     <script type="text/javascript" src="{{ static_url("js/calendar.js")}} "></script>
 
 {% end %}
@@ -37,12 +36,12 @@
                         {
                             $("#message-div").hide();
                             var od = JSON.stringify(data);
-                            var obj = JSON.parse(od);
+                            var obj = JSON.parse(data);
                             //alert("success sending put: " + data + textStatus)
                             console.log(obj);
                             $("#message-div").attr("class", "ui positive message");
                             $("#message-div").append(
-                                "<i class='close icon'></i><div class='header'>Well done!</div><p>You successfully created:</p>" + obj
+                                "<i class='close icon'></i><div class='header'>Well done!</div><p>You successfully created:</p>" + od
                             );
                             $("#message-div").show();
                         },
