@@ -159,12 +159,13 @@
                             <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
                             <div class="col-10">
                                 <!--input  type="text" class="form-control" name="tags[]" id="tags" --> 
-                                <input  type="text" class="form-control" name="{{key}}" id="{{key}}" 
-                                {% if len(data.get({{key}})) == 0 %}
-                                        value="" />
-                                {% elif len(data.get({{key}})) > 0 %}                        
-                                        value="{{ ' '.join( data.get({{key}}) ) }}" />
+                                <input  type="text" class="form-control" name="{{key}}" id="{{key}}"
+                                {% if len(data.get(key)) == 0 %}
+                                        value="" 
+                                {% else %}                        
+                                        value="{{ ' '.join( data.get(key) ) }}" 
                                 {% end %}
+                                />
                             </div>
                         </div>    
                     {% end %}

@@ -108,7 +108,7 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
         db_base_path="/"+db_base_path
 
     else:
-        sqlite_path="Unknown system platform (" + sys.platform + "). Please set sqlite connection string yourself"
+        sqlite_path="Unknown system platform (" + sys.platform + "). Please set sqlite connection string yourself accordingly"
     
     cookie_secret = uuid.uuid4()
 

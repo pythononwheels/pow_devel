@@ -3,7 +3,7 @@
 
    Pow logo
 
-This is the new pow 2017. And it's really good.
+This is the new pow 2018. And it's really good.
 ===============================================
 
 (ok I might be biased ;)
@@ -31,7 +31,7 @@ Strong Foundation:
 -  DB migrations generated for you (based on alembic)
 -  cerberus schemas and validation on board
 -  template engine (tornado templates)
--  tinyDB and ElasticSearch on board... more to come (next: mongoDB)
+-  Many SQL DBs[sqlite, mysql, postgres, ms-sql,orcale ] NoSql DBs: tinyDB, MongoDB and ElasticSearch on board... 
 -  authentication with Twitter, Google on board
 
 Super easy, quick to start and all the basics on board:
@@ -59,12 +59,19 @@ Routes:
 
 ::
 
+    # You can use regex routes
     # this will call the myget method on HTTP GET calls and will hand over the re-group as the 1st parameter.
     @app.add_route("/index/([0-9]+)*", dispatch={"get" : "myget"})
+    # Or you can also use Flask/Werkzeug routes
+    @app.add_route('/index/<int:year>', dispatch={"get" : "myyear"})
     class IndexdHandler(BaseHandler):
         def myget(self, index=None):
             print("  index:" + str(index))
             self.render("index.tmpl")
+        
+        def myyear(self, year=None):
+            self.write("I got year: " + str(year))
+        
 
 Relations: (SQL Models)
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -75,10 +82,37 @@ Relations: (SQL Models)
     class Post(Base):
         # a blog Post
         schema = {
-            'text': {'type': 'string'},
-            'name': {'type': 'string', 'maxlength' : 35},
-            'last': {'type': 'number'}
+            'text'      : {'type': 'string'},
+            'name'      : {'type': 'string', 'maxlength' : 35},
+            'votes'     : {'type': 'integer'},
+            'status'    : {'type': 'string', 'allowed' : ['ready to publish', 'needs review', 'draft'] },
+            'published' : {'type': 'boolean', 'default' : False }
+
         }
+
+NoSQL Models
+~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    class Post(Base):
+        # a blog Post
+        schema = {
+            'text'      : {'type': 'string'},
+            'name'      : {'type': 'string', 'maxlength' : 35},
+            'votes'     : {'type': 'integer'},
+            'status'    : {'type': 'string', 'allowed' : ['ready to publish', 'needs review', 'draft'] },
+            'published' : {'type': 'boolean', 'default' : False },
+            'tags'      : {'type': 'list', 'default' : [] }
+
+        }
+
+
+Hope you see that SQL and NoSQL are pretty much the same. No need for relations in NoSQL. But you have enhanced
+datatypes like lists and dicts in NoSQL.
+A NoSql List can be mapped to a SQL  @relation.has_many() ....
+
+Enjoy!
 
 Check: `The PythonOnWheels Homepage <http://www.pythononwheels.org>`__
 ----------------------------------------------------------------------

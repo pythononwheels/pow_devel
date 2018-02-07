@@ -1,6 +1,0 @@
-# Include the license file
-include LICENCE.txt
-include README.rst
-include README.md
-
-# Include the all pow files

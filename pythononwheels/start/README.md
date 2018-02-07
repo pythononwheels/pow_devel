@@ -20,7 +20,7 @@ Batteries included! (tornado Webswerver, SQLite DB)
 * sqlalchemy ORM
 * cerberus schemas and validation on board
 * tornado templates
-* tinyDB and ElasticSearch on board... more to come
+* tinyDB, MongoDB and ElasticSearch on board... more to come
 
 ## Super easy, quick to start and all the basics on board:
 * super easy relations with decorators @relations.has_many("comments")
@@ -34,11 +34,10 @@ Batteries included! (tornado Webswerver, SQLite DB)
 * update_db script
 * generate_handlers 
 * generate_app
-* automatic scaffolding views (work in progress)
+* automatic scaffolding views 
 
 ## Current Status:
-The current <master> version in this repo is fully working except for:
-* automatic scaffolding views
+The current <master> version in this repo is fully working 
 
 ## Code examples
 
