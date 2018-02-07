@@ -294,8 +294,9 @@ class BaseHandler(tornado.web.RequestHandler):
     
 
 
-    def success(self, message=None, data=None, succ=None, prev=None,
-        http_code=200, format=None, encoder=None, model=None, raw_data=False, **kwargs):
+    def success(self, message="", data=None, succ=None, prev=None,
+        http_code=200, format=None, encoder=None, model=None, raw_data=False, 
+        login=None, template=None, **kwargs):
         """
             returns data and http_code.
             data will be converted to format.  (std = json)
@@ -304,6 +305,8 @@ class BaseHandler(tornado.web.RequestHandler):
 
             data input is model or list of models.
         """
+        if not login:
+            login=self.get_current_user()
         self.application.log_request(self, message="base.success:" + message)
         self.set_status(http_code)
         if not format:
@@ -327,18 +330,23 @@ class BaseHandler(tornado.web.RequestHandler):
             #     data=[data]
             # for elem in data:
             #     print("elem: " + str(type(elem)))
-            viewname = str.lower(self.__class__.__name__) + "_" + self.view + ".tmpl"
-            #vpath = os.path.join(cfg.templates["template_path"], str.lower(self.__class__.__name__ ))
-            vpath = str.lower(self.__class__.__name__ )
-            viewname = os.path.join(vpath, viewname)
+            if not template:
+                viewname = str.lower(self.__class__.__name__) + "_" + self.view + ".tmpl"
+                #vpath = os.path.join(cfg.templates["template_path"], str.lower(self.__class__.__name__ ))
+                vpath = str.lower(self.__class__.__name__ )
+                viewname = os.path.join(vpath, viewname)
+            else:
+                viewname=os.path.normpath(template)
             if cfg.server_settings["debug_print"]:
                 print(" ... looking for view: " + viewname)
             if self.view is not None:
-                model=self.__class__.model
+                if not model:
+                    model=self.__class__.model
                 show_list=getattr(self.__class__, "show_list", [])
                 hide_list=getattr(self.__class__, "hide_list", [])
+                base_route_rest=getattr(self, "base_route_rest", "None")
                 return self.render( viewname, data=data, message=message, 
-                    handler_name = self.__class__.__name__.lower(), base_route_rest=self.base_route_rest , 
+                    handler_name = self.__class__.__name__.lower(), base_route_rest=base_route_rest, 
                     model=model, status=http_code, next=succ, prev=prev, model_name=model.__class__.__name__.lower(),
                     show_list=show_list, hide_list=hide_list,**kwargs )
             else:

@@ -287,6 +287,8 @@ class TinyBaseModel(ModelObject):
         """
         print("  .. find: " + str(*criterion))
         res = self.table.search(*criterion)
+        if len(res) == 1:
+            return self.dict_result_to_object(res)
         return self._return_find(res)
     
     def find_by_id(self, id=None):

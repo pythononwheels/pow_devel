@@ -1,6 +1,8 @@
 import tornado.web
 import tornado.escape
 import json
+import werkzeug.security 
+import os
 from {{appname}}.config import myapp 
 from {{appname}}.handlers.base import BaseHandler
 
@@ -32,6 +34,41 @@ class PowHandler(BaseHandler):
             # if authentication is disabled return a dummy guest user
             return True
         
+    def check_password_hash(self, pwhash, password ):
+        """
+            uses werkzeug.security.check_password_hash
+            see: http://werkzeug.pocoo.org/docs/0.14/utils/#module-werkzeug.security
+            get the password from for example a login form (make sure you use https)
+            get the hash from the user model table (see generate_password_hash below)
+        """
+        return werkzeug.security.check_password_hash(pwhash, password)
+
+    def generate_password_hash( password ):
+        """
+            uses werkzeug.security.generate_password_hash 
+            see: http://werkzeug.pocoo.org/docs/0.14/utils/#module-werkzeug.security
+            store this returned hash in the user models table as password
+            when the user is first registered or changed his password.
+            Use https to secure the plaintext POSTed pwd.
+        """
+        method = myapp["pwhash_method"]
+        return werkzeug.security.generate_password_hash(password, method=method, salt_length=8)
+
+    def get_post_file(self, form_field_name ):
+        """ 
+            gets the file info from a POSTed html form.
+            param: name of the 
+        """
+        # [{'filename': 'test.mp3', 'body': b'Nur ein Test', 'content_type': 'audio/mpeg'}]
+        file_info = self.request.files['file'][0]
+        original_fname = file1['filename']
+        fname, extension = os.path.splitext(original_fname)
+        file_info["extension"] = extension
+        file_info["fname"] = fname
+        sec_filename = secure_filename(original_fname)
+        file_info["secure_filename"] = sec_filename
+        file_info["secure_upload_path"]= os.path.join(myapp["upload_path"],sec_filename )
+        return file_info
 
     def success(self, **kwargs):
         """ 

@@ -42,13 +42,17 @@ def pow_init_from_dict_deserializer(dct, schema, simple_conversion=False):
                         # expecting primarily a string
                         dct[elem] = datetime.datetime.strptime(dct[elem], myapp["date_format"])
                     except Exception as e:
-                        # try with epoch int
+                        # give dateutil a chance .. (99% good)
                         try:
-                            dct[elem] = datetime.datetime.fromtimestamp(dct[elem])
-                        except Exception as e1:
-                            print(elem + "->" +str(type(dct[elem])) + str(dct[elem]))
-                            print("Exception for field: " + elem)
-                            raise e1
+                            dct[elem]=dateutil.parser.parse(dct[elem])
+                        except:
+                            # last try with epoch int
+                            try:
+                                dct[elem] = datetime.datetime.fromtimestamp(dct[elem])
+                            except Exception as e1:
+                                print(elem + "->" +str(type(dct[elem])) + str(dct[elem]))
+                                print("Exception for field: " + elem)
+                                raise e1
             elif schema[elem]["type"].lower() == "integer":
                 if not isinstance(dct[elem], (int)):
                     try:

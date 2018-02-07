@@ -5,7 +5,7 @@
 {% end %}
 
 {% block js %}
-{% set elem = data %}
+
 <script>
     $(document).ready(function(){   
         $("#message-div").hide();
@@ -28,7 +28,7 @@
                 var jsonString = JSON.stringify(data);
                 console.log(jsonString);
                 $.ajax({
-                        url : "/{{handler_name}}/{{elem.get('id')}}",
+                        url : "/{{handler_name}}/{{data.get('id')}}",
                         type: "PUT",
                         data : jsonString,
                         success: function(data, textStatus, jqXHR)
@@ -86,7 +86,7 @@
                 {% if key in cfg.myapp["internal_fields"] or key in hide_list%}
                     <input type="hidden" name="{{key}}" id="{{key}}" value="{{data.get(key)}}" />
                 {% else %}
-                    {% set _type = elem.schema[key]["type"] %}
+                    {% set _type = data.schema[key]["type"] %}
                     {% if  _type == "string" %}
                         {% if  "allowed" in model.schema[key].keys() %}
                             <div class="form-group row">
@@ -94,7 +94,7 @@
                                 <div class="col-10">
                                     <select class="form-control" name="{{key}}" id="{{key}}">
                                     {% for val in model.schema[key]["allowed"] %}
-                                        {% if val == elem.get(key) %}
+                                        {% if val == data.get(key) %}
                                             <option selected>{{val}}</option>
                                         {% else %}
                                             <option>{{val}}</option>
@@ -109,7 +109,7 @@
                                 <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
                                 <div class="col-10">
                                     <textarea  class="form-control" name="{{key}}" id="{{key}}" 
-                                        rows={{model.schema[key]["maxlength"] / 30 }}>{{elem.get(key)}}</textarea>
+                                        rows={{model.schema[key]["maxlength"] / 30 }}>{{data.get(key)}}</textarea>
                                 </div>
                             </div>    
                             {% else %}
@@ -117,7 +117,7 @@
                                 <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
                                 <div class="col-10">
                                     <input  type="text" class="form-control" name="{{key}}" id="{{key}}" 
-                                        value="{{elem.get(key)}}" />
+                                        value="{{data.get(key)}}" />
                                 </div>
                             </div>    
                             {% end %}
@@ -127,7 +127,7 @@
                         <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
                         <div class="col-10">
                             <input  type="text" class="form-control" name="{{key}}" id="{{key}}" 
-                                    value="{{elem.get(key)}}" />
+                                    value="{{data.get(key)}}" />
                         </div>
                     </div>    
                     {% elif _type == "boolean" %}
@@ -138,7 +138,7 @@
                             <label class="form-check-label">
                                 <input class="form-check-input" type="hidden" name="{{key}}" id="{{key}}" value="0" />
                                 <input class="form-check-input" type="checkbox" name="{{key}}" id="{{key}}"  value="1" 
-                                {% if  elem.get(key) == True %}
+                                {% if  data.get(key) == True %}
                                     checked="checked"
                                 {% end %}
                                  /> {{key}}
@@ -150,7 +150,7 @@
                     <div class="form-group row">
                     <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
                     <div class="col-10">
-                        <input class="form-control" type="datetime-local" value="{{elem.get(key).strftime(cfg.myapp["date_format"])}}" 
+                        <input class="form-control" type="datetime-local" value="{{data.get(key).strftime(cfg.myapp["date_format"])}}" 
                         id="{{key}}" name="{{key}}">
                     </div>
                     </div>
@@ -158,29 +158,13 @@
                         <div class="form-group row">
                             <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
                             <div class="col-10">
-                                    {% if len(elem.get(key)) == 0 %}
-                                        Len=0
-                                        <input  type="text" class="form-control" name="{{key}}[]" id="{{key}}" 
-                                                value="" />
-                                    {% elif len(elem.get(key)) > 0 %}
-                                        {% set item = elem.get(key) %}
-                                                len>0
-                                                type:{{type(item)}}
-                                                
-                                                {% for val in item %}
-                                                <table>    
-                                                    <tr id="{{val}}">
-                                                    <td><input  type="text" class="form-control" name="{{key}}[]" id="{{key}}" 
-                                                        value="{{val}}" />
-                                                    </td>
-                                                    <td>
-                                                    <button type="button" class="btn btn-danger btn-delete" value="{{val}}}">-</button>
-                                                    </td>
-                                                    </tr>
-                                                </table>
-                                                {% end %}
-                                                <button type="button" class="btn btn-success btn-add-to-list" value="{{key}}">+</button>
-                                    {% end %}
+                                <!--input  type="text" class="form-control" name="tags[]" id="tags" --> 
+                                <input  type="text" class="form-control" name="{{key}}" id="{{key}}" 
+                                {% if len(data.get({{key}})) == 0 %}
+                                        value="" />
+                                {% elif len(data.get({{key}})) > 0 %}                        
+                                        value="{{ ' '.join( data.get({{key}}) ) }}" />
+                                {% end %}
                             </div>
                         </div>    
                     {% end %}

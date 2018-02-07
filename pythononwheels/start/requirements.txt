@@ -15,6 +15,7 @@ pymongo==3.6.0
 pyparsing==2.2.0
 pytest==3.0.7
 pytest-ordering==0.5
+python-dateutil==2.6.1
 python-editor==1.0.3
 requests==2.13.0
 simplejson==3.10.0

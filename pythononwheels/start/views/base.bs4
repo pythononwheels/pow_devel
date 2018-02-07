@@ -29,14 +29,6 @@
       
     {% end %}
 
-    {% block include_js %}
-
-    {% end %}
-
-    
-    {% block js %}
-        
-    {% end %}
   </head>
 
   <body>
@@ -58,7 +50,6 @@
     <!-- Site footer -->
     {% include "footer.bs4" %}
   </div><!-- /container -->
-    
-    
+
   </body>
 </html>

@@ -94,9 +94,8 @@ class {{handler_class_name}}(PowHandler):
     def update(self, id=None):
         data_json = self.request.body
         m=Model()
-        m.init_from_json(data_json)
-        res = m.find_by_id(m.id)
-        res.init_from_json(data_json)
+        res = m.find_by_id(id)
+        res.init_from_json(data_json, simple_conversion=True)
         try:
             #res.tags= res.tags.split(",")
             res.upsert()

@@ -55,11 +55,12 @@ myapp = {
     "date_format"       :   "%Y-%m-%d %H:%M:%S",
     "internal_fields"   :   ["created_at", "last_updated", "id"],  # these are hidden in the scaffolded views
     "default_rest_route":   "list",
-    "list_separator"    :   " "
+    "list_separator"    :   " ",
+    "pwhash_method"     :   "pbkdf2:sha256"      # see: http://werkzeug.pocoo.org/docs/0.14/utils/#module-werkzeug.security
     #"environment"       :   "development"       # set the current environment (also see the db section)
 }
 
-db_base_path = r"{{db_base_path}}"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 database = {
     "default_values": {
         "string"    :   "",
@@ -74,7 +75,7 @@ database = {
     },
     "sql"   : {
         "type"      :   "sqlite",
-        "dbname"    :   r"{{sqlite_path}}",   # better leave the r to enable absolute paths with backslashes 
+        "dbname"    :   os.path.join(BASE_DIR, 'db.sqlite'),   
         "host"      :   None,       
         "port"      :   None,   
         "user"      :   None,
@@ -82,12 +83,12 @@ database = {
         "enabled"   :   True          # switch currently unused
     },
     "tinydb" : {
-        "dbname"    :   r"{{tinydb_path}}",   # better leave the r to enable absolute paths with backslashes 
+        "dbname"    :   os.path.join(BASE_DIR, 'tiny.db'),
         "host"      :   None,       
         "port"      :   None,   
         "user"      :   None,
         "passwd"    :   None,
-        "enabled"   :   False       # switch currently unused
+        "enabled"   :   True       # switch currently unused
     },
     "mongodb" : {
         "dbname"    :   "testdb",  
