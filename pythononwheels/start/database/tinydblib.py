@@ -5,7 +5,7 @@ from {{appname}}.config import database
 from tinydb import TinyDB, Query
 from tinydb.storages import JSONStorage
 from tinydb_serialization import SerializationMiddleware
-from models.tinydb.serializer import DateTimeSerializer
+from {{appname}}.models.tinydb.serializer import DateTimeSerializer
 
 
 tinydb = database.get("tinydb", None)

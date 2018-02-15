@@ -39,7 +39,7 @@ class TestClass:
     
     @pytest.mark.run(order=2)
     @pytest.mark.minimal
-    def test_generate_model(self):
+    def test_sql_generate_model(self):
         """ test if sql model is generated"""
         print(" .. Test generate_model")
         import {{appname}}.generate_model as gm
@@ -52,7 +52,7 @@ class TestClass:
 
     @pytest.mark.run(order=3)
     @pytest.mark.minimal
-    def test_model_type(self):
+    def test_sql_model_type(self):
         """ based on test_generate_model. Tests if a model can insert values 
             DB sqlite by default.
         """ 
@@ -115,6 +115,47 @@ class TestClass:
         assert res.count()==1
         os.chdir(os.path.abspath(os.path.dirname(__file__)))
 
+    #
+    # tinyDB tests
+    #
+    @pytest.mark.run(order=8)
+    @pytest.mark.minimal
+    def test_tinydb_generate_model(self):
+        """ test if sql model is generated"""
+        print(" .. Test tinyDB generate_model")
+        import {{appname}}.generate_model as gm
+        import uuid
+        import os.path
+        ret = gm.generate_model(MODELNAME, "tinydb", appname="{{appname}}")
+        # generate model returns true in case of success
+        assert ret is True
+        assert os.path.exists(os.path.normpath("../models/tinydb/" + MODELNAME + ".py"))
+
+    @pytest.mark.run(order=9)
+    @pytest.mark.minimal
+    def test_tinydb_model_type(self):
+        """ based on test_generate_model. Tests if a model can insert values 
+            DB sqlite by default.
+        """ 
+        print(" .. Test model tinyDB is correct type")
+        from {{appname}}.models.tinydb.pow_test_model import PowTestModel
+        m = PowTestModel()
+        assert isinstance(m, PowTestModel)
+    
+    @pytest.mark.run(order=10)
+    def test_tinydb_insert_and_find(self):
+        """ based on test_generate_model. Tests if a model can insert values 
+            and can be found back.
+        """ 
+        print(" .. Test tinyDB: model.upsert() and model.find()")
+        from {{appname}}.models.tinydb.pow_test_model import PowTestModel
+        import os
+        m = PowTestModel()
+        m.title = "TestnamePowTestRunner"
+        m.upsert()
+        res=m.find(m.Query.title=="TestnamePowTestRunner")
+        assert res
+        os.chdir(os.path.abspath(os.path.dirname(__file__)))
 
 if __name__ == "__main__":
     
