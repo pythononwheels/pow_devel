@@ -29,6 +29,16 @@ class ModelObject():
         if "format" in kwargs:
             self.setup_from_format( args, kwargs)
     
+    def __setattr__(self, name, value):
+        #print("trying to set attribute: {} -> to {}".format(str(name), str(value)))
+        #
+        # try to convert the value to the schema type
+        #
+        d={}
+        d[name]=value
+        d=pow_init_from_dict_deserializer(d, self.schema, simple_conversion=myapp["simple_conversion"])
+        super().__setattr__(name, d[name])
+    
     #
     # These Methods can normally be inherited
     # 

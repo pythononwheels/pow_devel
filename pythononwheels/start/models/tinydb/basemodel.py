@@ -156,7 +156,8 @@ class TinyBaseModel(ModelObject):
             print("update by eid:" + str(self.eid))
             Q = Query()
             #self.last_updated = datetime.datetime.now()
-            self.last_updated = datetime.datetime.utcnow().strftime(myapp["date_format"])
+            #self.last_updated = datetime.datetime.utcnow().strftime(myapp["date_format"])
+            self.last_updated = datetime.datetime.utcnow()
             self.table.update(self.to_dict(),Q.id==self.id)
         else:
             #first check if id is in db:
@@ -165,12 +166,12 @@ class TinyBaseModel(ModelObject):
             if res:
                 #update. object is already in db
                 print("update by id:" + str(self.id))
-                self.last_updated = datetime.datetime.utcnow().strftime(myapp["date_format"])
-                #self.last_updated = datetime.datetime.now()
+                #self.last_updated = datetime.datetime.utcnow().strftime(myapp["date_format"])
+                self.last_updated = datetime.datetime.utcnow()
                 self.eid = self.table.update(self.to_dict(),Q.id==self.id)
             else:
                 # insert  
-                self.last_updated = datetime.datetime.now()
+                self.last_updated = datetime.datetime.utcnow()
                 self.created_at = self.last_updated
                 self.id = str(uuid.uuid4())
                 self.eid = self.table.insert(self.to_dict())         
@@ -278,7 +279,8 @@ class TinyBaseModel(ModelObject):
             obj = self.dict_result_to_object([elem])
             yield obj
         #return self._get_next_object(res)
-        
+    
+    
 
     def find(self,*criterion):
         """ Find something given a query or criterion 
@@ -287,7 +289,7 @@ class TinyBaseModel(ModelObject):
         """
         print("  .. find: " + str(*criterion))
         res = self.table.search(*criterion)
-        if len(res) == 1:
+        if len(res) <= 1:
             return self.dict_result_to_object(res)
         return self._return_find(res)
     
@@ -295,7 +297,7 @@ class TinyBaseModel(ModelObject):
         """ return by id """
         Q = Query()
         res = self.table.search(Q.id == str(id))
-        if len(res) == 1:
+        if len(res) <= 1:
             return self.dict_result_to_object(res)
         return self._return_find(res)
         
@@ -307,7 +309,7 @@ class TinyBaseModel(ModelObject):
         randnum = random.randrange(len(res))
         #print(" random: " + str(randnum))
         res=[res[randnum]]
-        if len(res) == 1:
+        if len(res) <= 1:
             return self.dict_result_to_object(res)
         return self._return_find(res)
     
@@ -316,6 +318,9 @@ class TinyBaseModel(ModelObject):
             return all element in the db
         """
         res = self.table.all() # returns a list of tinyDB DB-Elements 
+        print("res: {} -> type({})".format( str(res), type(res)))
+        #if len(res) <= 1:
+        #    return self.dict_result_to_object(res)
         return self._return_find(res)
 
         #res = self.table.all() # returns a list of tinyDB DB-Elements 
@@ -331,9 +336,11 @@ class TinyBaseModel(ModelObject):
         print("criterion: " + str(criterion))
         try:
             res = self.table.get(*criterion)
-            if len(res) == 1:
+            if len(res) <= 1:
                 return self.dict_result_to_object(res)
-            return self._return_find(res)
+            #return self._return_find(res)
+            else:
+                raise Exception("used find_one / find_first but more than on result found.")
         except Exception as e:
             raise e
 

@@ -40,18 +40,26 @@ def pow_init_from_dict_deserializer(dct, schema, simple_conversion=False):
                     #print(str(type(dct[elem])) + str(dct[elem]))
                     try:
                         # expecting primarily a string
-                        dct[elem] = datetime.datetime.strptime(dct[elem], myapp["date_format"])
+                        dat = datetime.datetime.strptime(dct[elem], myapp["date_format"])
+                        dat = dat.replace(tzinfo=None)
+                        print("date: str -> setting: {} to {}".format(elem, str(dct[elem])))
+                        dct[elem]=dat
                     except Exception as e:
                         # give dateutil a chance .. (99% good)
                         try:
-                            dct[elem]=dateutil.parser.parse(dct[elem])
+                            print("date: dateutil setting: {} to {}".format(elem, str(dct[elem])))
+                            dat=dateutil.parser.parse(dct[elem])
+                            dat=dat.replace(tzinfo=None)
+                            dct[elem]=dat
                         except:
                             # last try with epoch int
                             try:
-                                dct[elem] = datetime.datetime.fromtimestamp(dct[elem])
+                                dat = datetime.datetime.fromtimestamp(dct[elem])
+                                dat=dat.replace(tzinfo=None)
+                                dct[elem]=dat
                             except Exception as e1:
                                 print(elem + "->" +str(type(dct[elem])) + str(dct[elem]))
-                                print("Exception for field: " + elem)
+                                print("Pow Decoders Exception for field: " + elem)
                                 raise e1
             elif schema[elem]["type"].lower() == "integer":
                 if not isinstance(dct[elem], (int)):
