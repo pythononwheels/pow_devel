@@ -56,11 +56,12 @@ myapp = {
     "internal_fields"   :   ["created_at", "last_updated"],  # these are not included in the scaffolded views at all
     "default_rest_route":   "list",
     "list_separator"    :   " ",
-    "pwhash_method"     :   "pbkdf2:sha256"      # see: http://werkzeug.pocoo.org/docs/0.14/utils/#module-werkzeug.security
-    #"environment"       :   "development"       # set the current environment (also see the db section)
+    "pwhash_method"     :   "pbkdf2:sha256",      # see: http://werkzeug.pocoo.org/docs/0.14/utils/#module-werkzeug.security
+     "simple_conversion":   True
+    #"environment"      :   "development"       # set the current environment (also see the db section)
 }
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(__file__)
 database = {
     "default_values": {
         "string"    :   "",

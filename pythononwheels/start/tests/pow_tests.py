@@ -19,7 +19,7 @@ class TestClass:
     @pytest.mark.minimal
     def test_server(self):
         """ test if server starts
-            calls baseurl:pot/test/12 
+            calls baseurl:port/test/12 
             must return 12.
             This test the server, routing and method dispatching
         """
