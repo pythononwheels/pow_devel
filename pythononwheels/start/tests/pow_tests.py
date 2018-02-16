@@ -113,6 +113,7 @@ class TestClass:
         m.upsert()
         res=m.find(PowTestModel.title=="TestnamePowTestRunner")
         assert res.count()==1
+        m.session.close()
         os.chdir(os.path.abspath(os.path.dirname(__file__)))
 
     #
@@ -155,6 +156,7 @@ class TestClass:
         m.upsert()
         res=m.find(m.Query.title=="TestnamePowTestRunner")
         assert res
+        m.db.close()
         os.chdir(os.path.abspath(os.path.dirname(__file__)))
 
 if __name__ == "__main__":

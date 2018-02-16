@@ -35,10 +35,18 @@ class ErrorHandler(BaseHandler):
         return self.error( template="404.tmpl", http_code=404  )
 
 @app.add_route("/test/([0-9]+)*", dispatch={"get" : "test"})
+@app.add_route("/testresults", dispatch={"get" : "_show_results"})
 class TestHandler(BaseHandler):
     # on HTTP GET this method will be called. See dispatch parameter.
     def test(self, index=None):
         self.write(index)
+    
+    def _show_results(self):
+        """
+            this action will show the testresults from
+            test/runtests.py 
+        """
+        self.render("result.html")
     
 @app.add_rest_routes("rest")
 class RestHandler(BaseHandler):

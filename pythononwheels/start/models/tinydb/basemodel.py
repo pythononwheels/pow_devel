@@ -24,7 +24,7 @@ class TinyBaseModel(ModelObject):
     
     where=where
     Query=Query()
-
+    db=tinydb
     def init_on_load(self, *args, **kwargs):
         
         #self.id = uuid.uuid4()

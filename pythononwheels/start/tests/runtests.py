@@ -60,8 +60,14 @@ if __name__ == "__main__":
     print(SPACES*"-")
     print("  removing the Test DBs")
     print(SPACES*"-")
-    os.remove(dbname)
-    os.remove(dbname_tiny)
+    try:
+        os.remove(dbname)
+    except Exception as e:
+        print(e)
+    try:
+        os.remove(dbname_tiny)
+    except Exception as e:
+        print(e)
     print("  .. done.")
     #
     # restoring the old DBs
@@ -86,7 +92,18 @@ if __name__ == "__main__":
     print(SPACES*"-")
     print("  .. finally removing the Test model...")
     os.remove(os.path.join("../models/sql/", "pow_test_model.py"))
+    
+    print("  .. creating an html test report (using junit2html)...")
+    curr_path=os.path.dirname(__file__)
+    if curr_path == "":
+        curr_path=os.getcwd()
+    print("  .. curr_path: {}".format(curr_path))
+    try:
+        from junit2htmlreport import runner
+        runner.run([os.path.join(curr_path,"result.xml"), os.path.join(curr_path,"../views/result.html")])
+    except Exception as e:
+        print(e)
     print("  .. done.")
     print(SPACES*"*")
-    print("  You can use: junit2html result.xml result.html to generate a html test report.")
+    print("  To see the test results run the server ad go to localhost:8080/testresults ")
     print(SPACES*"*")
