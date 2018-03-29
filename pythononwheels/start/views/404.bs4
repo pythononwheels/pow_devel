@@ -1,15 +1,23 @@
 {% extends "base.bs4" %}
 {% block content %}
-    
+    <style>
+        table {
+            table-layout: fixed;
+            width: 100%;
+        }
+
+        table td {
+            word-wrap: break-word;         /* All browsers since IE 5.5+ */
+            overflow-wrap: break-word;     /* Renamed property in CSS3 draft spec */
+        }
+    </style>
     <div class="row top-buffer-60">
-        <div class="col-md-2">
-            &nbsp;
-        </div>
+
         <div class="col-md-4 text-right top-buffer-40" >
           <img src={{ static_url("images/404_4.png")}} width="75%"/>
         </div>
         
-        <div class="col-md-4 top-buffer-40 text-left">
+        <div class="col-md-8 top-buffer-40 text-left">
             
             <div class="alert alert-danger" role="alert">
                 <h1 class="alert-heading">Oh no HTTP 404! This URL cannot be Found. </h1> 
@@ -34,9 +42,6 @@
                     </tr>
                 </table>
         </div>
-        <div class="col-md-2">
-            &nbsp;
-        </div>
-
+    </div>
 
 {% end %}

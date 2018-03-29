@@ -266,34 +266,27 @@ class Application(tornado.web.Application):
             cls_name = cls.__name__.lower()
             handlers=getattr(self.__class__, "handlers", None)
             if _rule_re.match(route):
-                #
-                # compile the route using werkzeug.
-                #
+                ########################################
+                # new style Werkzeug route
+                ########################################
                 r=Rule(route, endpoint=cls_name)
                 m = Map()
                 m.add(r)
                 c=m.bind(cfg.server_settings["host"]+":"+cfg.server_settings["host"], "/")
                 r.compile()
-                print("r1: " +  str(r._regex.pattern))
-                pattern = r._regex.pattern.replace('^\\|', "")
-                print("r1: " +  str(pattern))
+                #print("r1: " +  str(r._regex.pattern))
+                pattern = r._regex.pattern.replace('^\|', "")
+                #print("r1: " +  str(pattern))
                 fin_route = pattern
-                route_tuple = (fin_route,cls, dispatch)
+                # convert the HTTP Methods in dispatch to lowercase
+                dispatch_lower=dict((k.lower(), v) for k,v in dispatch.items())
+                route_tuple = (fin_route,cls, dispatch_lower)
                 handlers.append((route_tuple,pos))
-                # now add the route for the optional format parameter
-                
-                # r=Rule(route+r".<format>", endpoint=cls_name)
-                # m = Map()
-                # m.add(r)
-                # c=m.bind(cfg.server_settings["host"]+":"+cfg.server_settings["host"], "/")
-                # r.compile()
-                # print("r1: " +  str(r._regex.pattern))
-                # pattern = r._regex.pattern.replace('^\\|', "")
-                # print("r1: " +  str(pattern))
-                # fin_route = pattern
-                # route_tuple = (fin_route,cls, dispatch)
-                # handlers.append((route_tuple,pos))
             else:
+                ###################################
+                #  old style regex route
+                ###################################
+
                 # BETA: this regex is added to every route to make 
                 # 1.the slash at the end optional
                 # 2.it possible to add a .format paramter.
@@ -303,11 +296,15 @@ class Application(tornado.web.Application):
                     fin_route = route  + r"(?:/?\.\w+)?/?"
                 else:
                     fin_route = route
-
-                route_tuple = (fin_route,cls, dispatch)
+                # convert the HTTP Methods in dispatch to lowercase
+                dispatch_lower=dict((k.lower(), v) for k,v in dispatch.items())
+                route_tuple = (fin_route,cls, dispatch_lower)
+                #route_tuple = (fin_route,cls, dispatch)
                 handlers.append((route_tuple,pos))
             #print("handlers: " + str(self.handlers))
-            print("ROUTING: added route for: " + cls.__name__ +  ": " + route + " -> " + fin_route)
+            #print("ROUTING: added route for: " + cls.__name__ +  ": " + route + " -> " + fin_route +  " dispatch")
+            print("STD ROUTE (+) : handler: {}, route: {}, fin_route: {}, dispatch(lower): {} ".format( 
+                str(cls.__name__), route, fin_route, str(dispatch_lower)))
             return cls
         return decorator
     
