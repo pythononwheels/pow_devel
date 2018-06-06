@@ -19,18 +19,40 @@ def is_date(string):
         return False
 
 if __name__ == "__main__":
+    cerberus_schema = {}
+    # sample output schema format:
+    # schema = {'name': {'type': 'string'} }
+
     f = open("sampledata.json","r")
+    # already covers bool, list, dict
     data = json.load(f)
     #print(data)
     for elem in data[0]:
-        print("{0} : {2} : {1}".format(elem, str(type(data[0][elem])), str(data[0][elem])), end='')
-        if isinstance(data[0][elem], str):
-            # check for uuid
-            if uuid.match(data[0][elem]):
-                print(" AND string is => uuid")
-            elif is_date(data[0][elem]):
-                print(" AND string is => date or datetime")
+        #print("{0} : {2} : {1}".format(elem, str(type(data[0][elem])), str(data[0][elem])), end='')
+        current_element=data[0][elem]
+        if isinstance(current_element, bool):
+            cerberus_schema[elem] = {"type" : "boolean" }
+        elif isinstance(current_element, int):
+            cerberus_schema[elem] = {"type" : "integer" }
+        elif isinstance(current_element, float):
+            cerberus_schema[elem] = {"type" : "float" }
+        elif isinstance(current_element, list):
+            cerberus_schema[elem] = {"type" : "list" }
+        elif isinstance(current_element, dict):
+            cerberus_schema[elem] = {"type" : "dictionary" }
+        elif isinstance(current_element, str):
+            # date and datetime (date = datetime with constantly missing h:m:s)
+            if is_date(data[0][elem]):
+                cerberus_schema[elem] = {"type" : "datetime" }
+                #print(" AND string is => date or datetime")
             else:
-                print()
+                cerberus_schema[elem] = {"type" : "string" }
+                #print()
+        elif isinstance(current_element, bytes) or isinstance(current_element, bytearray):
+            cerberus_schema[elem] = {"type" : "binary" }
+            #print(" AND binary")
         else:
             print()
+    from pprint import PrettyPrinter
+    pp = PrettyPrinter(indent=4)
+    pp.pprint(cerberus_schema)

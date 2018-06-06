@@ -1,0 +1,228 @@
+[
+  {
+    "_id": "5b15619a45720d61acfecabb",
+    "index": 0,
+    "guid": "89c16d65-0bda-4773-a8c0-6f28bb6bcd84",
+    "isActive": true,
+    "balance": "$1,357.47",
+    "picture": "http://placehold.it/32x32",
+    "age": 34,
+    "eyeColor": "blue",
+    "name": "Nash Morse",
+    "gender": "male",
+    "company": "ARCTIQ",
+    "email": "nashmorse@arctiq.com",
+    "phone": "+1 (932) 503-2728",
+    "address": "495 Florence Avenue, Slovan, Kentucky, 2871",
+    "about": "Do ut esse esse consectetur ut amet enim sit sit. Veniam exercitation voluptate in ad cupidatat est eiusmod nostrud aliquip aute laborum eiusmod excepteur. Excepteur laboris incididunt excepteur irure commodo occaecat reprehenderit amet ea deserunt commodo sunt ad ullamco. Nisi est exercitation qui voluptate.\r\n",
+    "registered": "2016-12-25T02:41:05 -01:00",
+    "latitude": 72.443511,
+    "longitude": -162.040976,
+    "tags": [
+      "sit",
+      "exercitation",
+      "quis",
+      "sunt",
+      "enim",
+      "fugiat",
+      "ea"
+    ],
+    "testdict": { "one" : "two", "three" : 3 },
+    "friends": [
+      {
+        "id": 0,
+        "name": "Mccarty Buck"
+      },
+      {
+        "id": 1,
+        "name": "Christensen Nielsen"
+      },
+      {
+        "id": 2,
+        "name": "Hughes Peck"
+      }
+    ],
+    "greeting": "Hello, Nash Morse! You have 5 unread messages.",
+    "favoriteFruit": "apple"
+  },
+  {
+    "_id": "5b15619a46b71af0a71ce919",
+    "index": 1,
+    "guid": "f40e8726-d3e6-4955-b4b0-234617f3a4df",
+    "isActive": false,
+    "balance": "$3,476.55",
+    "picture": "http://placehold.it/32x32",
+    "age": 39,
+    "eyeColor": "green",
+    "name": "Tamika Oneal",
+    "gender": "female",
+    "company": "ULTRIMAX",
+    "email": "tamikaoneal@ultrimax.com",
+    "phone": "+1 (941) 458-2128",
+    "address": "427 Louisa Street, Bendon, Northern Mariana Islands, 2363",
+    "about": "Dolor cupidatat adipisicing enim ipsum. Exercitation commodo ipsum amet occaecat laborum minim officia consectetur officia do. Sint laborum minim consequat do sint qui sunt ipsum eiusmod. Velit esse do labore labore est commodo est cillum. Sunt aliqua labore Lorem adipisicing sit cupidatat Lorem amet anim consectetur cillum Lorem laborum aute. Id exercitation officia sint commodo sint commodo consequat non ex Lorem veniam deserunt do.\r\n",
+    "registered": "2016-06-18T02:11:41 -02:00",
+    "latitude": 51.093592,
+    "longitude": 128.823642,
+    "tags": [
+      "adipisicing",
+      "laboris",
+      "nulla",
+      "enim",
+      "do",
+      "nulla",
+      "et"
+    ],
+    "friends": [
+      {
+        "id": 0,
+        "name": "Duran Henson"
+      },
+      {
+        "id": 1,
+        "name": "Katheryn Hood"
+      },
+      {
+        "id": 2,
+        "name": "Christy Hammond"
+      }
+    ],
+    "greeting": "Hello, Tamika Oneal! You have 5 unread messages.",
+    "favoriteFruit": "apple"
+  },
+  {
+    "_id": "5b15619a583be635e6a5fb83",
+    "index": 2,
+    "guid": "4181d567-f450-4f21-b9ab-ff3b09e24a69",
+    "isActive": true,
+    "balance": "$1,284.12",
+    "picture": "http://placehold.it/32x32",
+    "age": 37,
+    "eyeColor": "green",
+    "name": "Valdez Whitley",
+    "gender": "male",
+    "company": "ZORROMOP",
+    "email": "valdezwhitley@zorromop.com",
+    "phone": "+1 (842) 483-3636",
+    "address": "814 Woodpoint Road, Templeton, New Hampshire, 5925",
+    "about": "Culpa sit magna non est tempor nisi adipisicing culpa labore enim eiusmod enim. Aliquip duis velit irure ad ullamco do minim enim reprehenderit mollit eu mollit. Irure reprehenderit officia proident cillum ullamco deserunt reprehenderit. Sit ex in amet aute proident. Quis proident ex ipsum et. Eiusmod ut pariatur enim occaecat et ea laborum ipsum quis. Dolor exercitation cupidatat laborum aliqua cillum labore sint velit.\r\n",
+    "registered": "2017-03-19T05:47:03 -01:00",
+    "latitude": 13.937568,
+    "longitude": 157.428352,
+    "tags": [
+      "laborum",
+      "ad",
+      "magna",
+      "consectetur",
+      "id",
+      "non",
+      "consectetur"
+    ],
+    "friends": [
+      {
+        "id": 0,
+        "name": "Wolf Castro"
+      },
+      {
+        "id": 1,
+        "name": "Walker Craft"
+      },
+      {
+        "id": 2,
+        "name": "Colon Kidd"
+      }
+    ],
+    "greeting": "Hello, Valdez Whitley! You have 1 unread messages.",
+    "favoriteFruit": "apple"
+  },
+  {
+    "_id": "5b15619afc7478e55233ea95",
+    "index": 3,
+    "guid": "1cf72a45-57d6-4602-a36e-cb76321b8fdf",
+    "isActive": false,
+    "balance": "$2,439.65",
+    "picture": "http://placehold.it/32x32",
+    "age": 34,
+    "eyeColor": "blue",
+    "name": "Acosta Kaufman",
+    "gender": "male",
+    "company": "ACUSAGE",
+    "email": "acostakaufman@acusage.com",
+    "phone": "+1 (945) 487-3459",
+    "address": "398 Durland Place, Grandview, Florida, 680",
+    "about": "Labore amet occaecat labore proident qui incididunt adipisicing velit amet irure. Pariatur est adipisicing ullamco duis est ullamco in quis aliquip dolore adipisicing quis. Fugiat esse elit dolor in duis aliqua in eiusmod esse laborum irure.\r\n",
+    "registered": "2017-12-17T12:33:16 -01:00",
+    "latitude": 42.805317,
+    "longitude": -25.298864,
+    "tags": [
+      "aute",
+      "tempor",
+      "Lorem",
+      "irure",
+      "excepteur",
+      "incididunt",
+      "cillum"
+    ],
+    "friends": [
+      {
+        "id": 0,
+        "name": "Charmaine Potts"
+      },
+      {
+        "id": 1,
+        "name": "Le Ray"
+      },
+      {
+        "id": 2,
+        "name": "Osborne Yang"
+      }
+    ],
+    "greeting": "Hello, Acosta Kaufman! You have 5 unread messages.",
+    "favoriteFruit": "strawberry"
+  },
+  {
+    "_id": "5b15619a65f2224986cfd797",
+    "index": 4,
+    "guid": "0a252d29-c71d-4d0f-afd6-2507e6befba4",
+    "isActive": false,
+    "balance": "$2,281.49",
+    "picture": "http://placehold.it/32x32",
+    "age": 29,
+    "eyeColor": "brown",
+    "name": "Greene Combs",
+    "gender": "male",
+    "company": "ENTALITY",
+    "email": "greenecombs@entality.com",
+    "phone": "+1 (915) 551-2463",
+    "address": "129 Devon Avenue, Venice, Missouri, 8493",
+    "about": "Laboris sint nulla ullamco non. Aliqua mollit nostrud amet ea veniam magna consequat. Aute dolor est pariatur voluptate. Ipsum ullamco sint ex minim dolore aliquip dolore eiusmod ut cillum. Duis qui reprehenderit adipisicing ut. Consectetur enim deserunt amet veniam excepteur Lorem incididunt.\r\n",
+    "registered": "2015-06-02T07:58:56 -02:00",
+    "latitude": 19.830433,
+    "longitude": 84.749869,
+    "tags": [
+      "ut",
+      "do",
+      "adipisicing",
+      "reprehenderit",
+      "nostrud",
+      "ut",
+      "do"
+    ],
+    "friends": [
+      {
+        "id": 0,
+        "name": "Helene Wise"
+      },
+      {
+        "id": 1,
+        "name": "Tanisha Terrell"
+      },
+      {
+        "id": 2,
+        "name": "Garza Ramsey"
+      }
+    ],
+    "greeting": "Hello, Greene Combs! You have 10 unread messages.",
+    "favoriteFruit": "banana"
+  }
+]
