@@ -4,6 +4,7 @@ backports-abc==0.5
 Cerberus==1.0.1
 colorama==0.3.9
 dicttoxml==1.7.4
+dnspython==1.15.0
 jsonschema==2.5.1
 junit2html==18
 Mako==1.0.7

@@ -2,7 +2,8 @@
 # base connection for TinyDB 
 #
 from {{appname}}.config import database
-from pymongo import MongoClient
+#from pymongo import MongoClient
+import pymongo
 
 if not database["mongodb"]["atlas"]:
     # normal mongodb server (local or remote)
