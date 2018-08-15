@@ -133,7 +133,7 @@ class TinyBaseModel(ModelObject):
 
     def drop_table(self):
         """
-            created the physical table in the DB
+            drop the physical table from the DB
         """
         tinydb.purge_table(self.tablename)
     

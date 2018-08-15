@@ -84,6 +84,29 @@ class SqlBaseModel(ModelObject):
                 #if key in self.__class__.__dict__:
                 if key in self.schema:
                     setattr(self, key, kwargs[key])
+        #
+        # Try to find Observers.
+        # 
+        obs = getattr(self,"observers", False)
+        if obs:
+            # try to load the classes and fire their action on the corresponding model actions.
+            # rails:  (remark: obervers are a separate module since 3.2)
+            #   https://api.rubyonrails.org/v3.2.13/classes/ActiveRecord/Callbacks.html
+            #   https://api.rubyonrails.org/v3.2.13/classes/ActiveRecord/Observer.html#method-i-define_callbacks
+            # pow:
+            #   before & after:  save, create, commit, validation, delete.
+            pass
+        from pydoc import locate
+        print("trying to find possible observer in {}".format(
+            str(self.__class__.__module__)+"_observer."+ str(self.__class__.__name__)+ "Observer"
+            )
+        )
+        try:
+            obs = locate(str(self.__class__.__module__) +"_observer." +  str(self.__class__.__name__) + "Observer")
+            o=obs()
+            print(" ... Found: {}".format(str(o.__class__)))
+        except Exception as e:
+            print (" ... Found None: {}".format(str(e) ))
         
 
     @declared_attr
