@@ -39,8 +39,28 @@ engine = create_engine(conn_str, echo=False)
 metadata = MetaData(engine)
 
 Session = sessionmaker(bind=engine)
-Transaction = Session
+
+#Transaction = Session   # see:
+
 session = Session()
+transaction = session
+
+# for transcations you can use either
+# session.begin_nested() or session.begin()  (see below)
+# OR transcation.begin_nested() or transaction.begin()  (see below)
+# more:
+#  http://docs.sqlalchemy.org/en/latest/orm/session_transaction.html
+
+
+# easiest way to use transactions is:
+# session.add(u1)
+# session.add(u2)
+
+# session.begin_nested() # establish a savepoint
+# session.add(u3)
+# session.rollback()  # rolls back u3, keeps u1 and u2
+
+# session.commit() # commits u1 and u2
 
 from sqlalchemy.ext.declarative import declarative_base
 from {{appname}}.models.sql.basemodel import SqlBaseModel
