@@ -36,7 +36,10 @@ module_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'm
 for mod in os.listdir( module_path ):
     mod = mod.split(".")[0]
     if not mod.startswith("_") and not mod in exclude_list:
-        mods.append(mod)
+        tmp_mod=mod.split("_")[-1]
+        # exclude all ending with _observer (which are not models but observers by convention ;)
+        if tmp_mod != "observer":
+            mods.append(mod)
 
 from sqlalchemy import engine_from_config, pool, MetaData
 print(mods)

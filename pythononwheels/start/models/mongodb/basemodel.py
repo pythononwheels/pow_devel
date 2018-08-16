@@ -207,6 +207,12 @@ class MongoBaseModel(ModelObject):
     def upsert(self):
         """ insert or update intelligently """
         #self.last_updated = datetime.datetime.utcnow().strftime(myapp["date_format"])
+         if self.observers_initialized:
+            for observer in self.observers:
+                try:
+                    observer.before_upsert(self)
+                except:
+                    pass
         self.last_updated = datetime.datetime.utcnow()
         if self._id == None:
             #print("** insert **")
@@ -215,6 +221,12 @@ class MongoBaseModel(ModelObject):
             self.last_updated = self.created_at
             ior = self.table.insert_one(self.to_dict())
             self._id = ior.inserted_id
+            if self.observers_initialized:
+                for observer in self.observers:
+                    try:
+                        ret = observer.before_upsert(self)
+                    except:
+                        pass
             return self._id
         else:
             # update
@@ -222,6 +234,12 @@ class MongoBaseModel(ModelObject):
             #print(self.to_dict())
             self.last_updated = datetime.datetime.utcnow().strftime(myapp["date_format"])
             ior = self.table.update_one({"_id" : self._id}, {"$set": self.to_dict()}, upsert=False )
+            if self.observers_initialized:
+                for observer in self.observers:
+                    try:
+                        ret = observer.before_upsert(self)
+                    except:
+                        pass
             return ior
        
     def delete(self, filter=None, many=False):

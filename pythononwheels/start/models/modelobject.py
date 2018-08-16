@@ -17,6 +17,9 @@ class ModelObject():
     """    
     # if you need a basic schema in the class override this (see tinyDB BaseModel)
     basic_schema={}
+    observers_initialized = False
+    observers = []
+    autocommit = True
 
     def init_on_load(self, *args, **kwargs):
         """
@@ -89,6 +92,35 @@ class ModelObject():
             for key in kwargs.keys():
                 if key in self.schema:
                     setattr(self, key, kwargs[key])
+
+    def init_observers(self):
+        #
+        # Try to find Observers.
+        # 
+        if self.__class__.observers_initialized:
+            return
+        obs = getattr(self,"observers", False)
+        if obs:
+            # try to load the classes and fire their action on the corresponding model actions.
+            # rails:  (remark: obervers are a separate module since 3.2)
+            #   https://api.rubyonrails.org/v3.2.13/classes/ActiveRecord/Callbacks.html
+            #   https://api.rubyonrails.org/v3.2.13/classes/ActiveRecord/Observer.html#method-i-define_callbacks
+            # pow:
+            #   before & after:  save, create, commit, validation, delete.
+            pass
+        from pydoc import locate
+        print("trying to find possible observer in {}".format(
+            str(self.__class__.__module__)+"_observer."+ str(self.__class__.__name__)+ "Observer"
+            )
+        )
+        try:
+            obs = locate(str(self.__class__.__module__) +"_observer." +  str(self.__class__.__name__) + "Observer")
+            o=obs()
+            print(" ... Found: {}".format(str(o.__class__)))
+            self.__class__.observers_initialized = True
+            self.__class__.observers.append(o)
+        except Exception as e:
+            print (" ... Found None: {}".format(str(e) ))
           
     def api(self):
         """ just for conveniance """
@@ -130,6 +162,21 @@ class ModelObject():
             # if instance has a schema. (also see init_on_load)
             #v = cerberus.Validator(self.schema)
             v = Validator(self.schema)
+
+            if self.observers_initialized:
+                for observer in self.observers:
+                    try:
+                        ret = observer.before_validate(self, v)
+                    except:
+                        pass
+            
+            res = v.validate(self.to_dict(lazy=False))
+            if self.observers_initialized:
+                for observer in self.observers:
+                    try:
+                        ret = observer.after_validate(self, res)
+                    except:
+                        pass
             if v.validate(self.to_dict(lazy=False)):
                 return (True, None)
             else:

@@ -143,13 +143,32 @@ class TinyBaseModel(ModelObject):
             Key is the id
         """
         Q = Query()
-        return self.table.remove(Q.id==self.id)
+        if self.observers_initialized:
+            for observer in self.observers:
+                try:
+                    ret = observer.before_delete(self)
+                except:
+                    pass
+        ret = self.table.remove(Q.id==self.id)
+        if self.observers_initialized:
+            for observer in self.observers:
+                try:
+                    ret = observer.after_delete(self, ret)
+                except:
+                    pass
+        return ret
 
     def upsert(self):
         """ insert or update intelligently """
         
         #self.created_at = datetime.datetime.now()
         #self.last_updated = datetime.datetime.now()
+        if self.observers_initialized:
+            for observer in self.observers:
+                try:
+                    ret = observer.before_upsert(self)
+                except:
+                    pass
         if getattr(self, "eid", None):
             # if the instance has an eid its already in the db
             # update
@@ -175,7 +194,13 @@ class TinyBaseModel(ModelObject):
                 self.created_at = self.last_updated
                 self.id = str(uuid.uuid4())
                 self.eid = self.table.insert(self.to_dict())         
-                print("insert, new eid: " +str(self.eid))            
+                print("insert, new eid: " +str(self.eid))    
+         if self.observers_initialized:
+            for observer in self.observers:
+                try:
+                    ret = observer.after_upsert(self)
+                except:
+                    pass        
 
 
     def get_by_eid(self, eid=None):

@@ -84,29 +84,7 @@ class SqlBaseModel(ModelObject):
                 #if key in self.__class__.__dict__:
                 if key in self.schema:
                     setattr(self, key, kwargs[key])
-        #
-        # Try to find Observers.
-        # 
-        obs = getattr(self,"observers", False)
-        if obs:
-            # try to load the classes and fire their action on the corresponding model actions.
-            # rails:  (remark: obervers are a separate module since 3.2)
-            #   https://api.rubyonrails.org/v3.2.13/classes/ActiveRecord/Callbacks.html
-            #   https://api.rubyonrails.org/v3.2.13/classes/ActiveRecord/Observer.html#method-i-define_callbacks
-            # pow:
-            #   before & after:  save, create, commit, validation, delete.
-            pass
-        from pydoc import locate
-        print("trying to find possible observer in {}".format(
-            str(self.__class__.__module__)+"_observer."+ str(self.__class__.__name__)+ "Observer"
-            )
-        )
-        try:
-            obs = locate(str(self.__class__.__module__) +"_observer." +  str(self.__class__.__name__) + "Observer")
-            o=obs()
-            print(" ... Found: {}".format(str(o.__class__)))
-        except Exception as e:
-            print (" ... Found None: {}".format(str(e) ))
+        self.init_observers()
         
 
     @declared_attr
@@ -348,21 +326,45 @@ class SqlBaseModel(ModelObject):
         """
             intelligently updates or inserts the elememt 
         """
+        if self.observers_initialized:
+            for observer in self.observers:
+                try:
+                    ret = observer.before_upsert(self)
+                except:
+                    pass
         if not session:
             session = self.session
         session.add(self)
-        session.commit()        
+        session.commit()
+        if self.observers_initialized:
+            for observer in self.observers:
+                try:
+                    ret = observer.after_upsert(self)
+                except Exception as e:
+                    print(str(e))        
         #session.flush()
     
     def delete(self, session=None):
         """
             deltest the element from the db
         """
+        if self.observers_initialized:
+            for observer in self.observers:
+                try:
+                    ret = observer.before_delete(self)
+                except:
+                    pass
         if not session:
             session = self.session
         session.delete(self)
         session.commit()        
         #session.flush()
+        if self.observers_initialized:
+            for observer in self.observers:
+                try:
+                    ret= observer.after_delete(self)
+                except:
+                    pass
 
     
 
