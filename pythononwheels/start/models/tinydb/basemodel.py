@@ -77,6 +77,8 @@ class TinyBaseModel(ModelObject):
                 #if key in self.__class__.__dict__:
                 if key in self.schema:
                     setattr(self, key, kwargs[key])
+        self.init_observers()
+        self.setup_dirty_model()
 
 
     def json_load_from_db(self, data, keep_id=False):
@@ -195,7 +197,10 @@ class TinyBaseModel(ModelObject):
                 self.id = str(uuid.uuid4())
                 self.eid = self.table.insert(self.to_dict())         
                 print("insert, new eid: " +str(self.eid))    
-         if self.observers_initialized:
+        # clean dirty marks
+        self.dirty = {}
+        self.is_dirty = False
+        if self.observers_initialized:
             for observer in self.observers:
                 try:
                     ret = observer.after_upsert(self)

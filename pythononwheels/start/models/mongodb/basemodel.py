@@ -80,6 +80,8 @@ class MongoBaseModel(ModelObject):
         self._id = None
         self.id = str(uuid.uuid4())
         #print("new id is: " + self.id) 
+        self.init_observers()
+        self.setup_dirty_model()
                            
     #
     # These Methods should be implemented by every subclass
@@ -214,6 +216,12 @@ class MongoBaseModel(ModelObject):
                 except:
                     pass
         self.last_updated = datetime.datetime.utcnow()
+        if self.observers_initialized:
+                for observer in self.observers:
+                    try:
+                        ret = observer.before_upsert(self)
+                    except:
+                        pass
         if self._id == None:
             #print("** insert **")
             # insert. so set created at            
@@ -221,12 +229,6 @@ class MongoBaseModel(ModelObject):
             self.last_updated = self.created_at
             ior = self.table.insert_one(self.to_dict())
             self._id = ior.inserted_id
-            if self.observers_initialized:
-                for observer in self.observers:
-                    try:
-                        ret = observer.before_upsert(self)
-                    except:
-                        pass
             return self._id
         else:
             # update
@@ -234,22 +236,23 @@ class MongoBaseModel(ModelObject):
             #print(self.to_dict())
             self.last_updated = datetime.datetime.utcnow().strftime(myapp["date_format"])
             ior = self.table.update_one({"_id" : self._id}, {"$set": self.to_dict()}, upsert=False )
-            if self.observers_initialized:
-                for observer in self.observers:
-                    try:
-                        ret = observer.before_upsert(self)
-                    except:
-                        pass
             return ior
+        # clean dirty marks
+        self.dirty = {}
+        self.is_dirty = False
        
     def delete(self, filter=None, many=False):
         """ delete item """
         if filter == None:
             filter = {"id" : self.id }
+        # clean dirty marks
+        self.dirty = {}
+        self.is_dirty = False
         if not many:
             return self.table.delete_one(filter)
         else:
             return self.table.delete_many(filter)
+
 
     def find_by_id(self, id, use_object_id=False):
         """ return result by id (only)

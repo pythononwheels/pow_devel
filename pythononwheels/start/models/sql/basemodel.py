@@ -85,6 +85,7 @@ class SqlBaseModel(ModelObject):
                 if key in self.schema:
                     setattr(self, key, kwargs[key])
         self.init_observers()
+        self.setup_dirty_model()
         
 
     @declared_attr
@@ -341,7 +342,10 @@ class SqlBaseModel(ModelObject):
                 try:
                     ret = observer.after_upsert(self)
                 except Exception as e:
-                    print(str(e))        
+                    print(str(e))    
+        # clean the dirty marks. 
+        self.dirty = {}
+        self.is_dirty = False    
         #session.flush()
     
     def delete(self, session=None):
@@ -359,12 +363,18 @@ class SqlBaseModel(ModelObject):
         session.delete(self)
         session.commit()        
         #session.flush()
+        
+        # clean the dirty marks. 
+        self.dirty = {}
+        self.is_dirty = False 
+
         if self.observers_initialized:
             for observer in self.observers:
                 try:
                     ret= observer.after_delete(self)
                 except:
                     pass
+        
 
     
 
