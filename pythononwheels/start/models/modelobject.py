@@ -43,7 +43,7 @@ class ModelObject():
         self.dirty = {}
         self.is_dirty = False
 
-    def rollback_dirty(self):
+    def rollback_dirty(self, name=None):
         """
             Rolls back the changes made to the object since last save operation to DB
             see: https://apidock.com/rails/ActiveRecord/Dirty
@@ -51,6 +51,13 @@ class ModelObject():
             Look at session.rollback() Bfor SQL or accordinug for mongoDB > 4 or other transation capable DBs
         """
         if self.is_dirty:
+            if name:
+                # only rollback attribute changes for name
+                try:
+                    setattr(self, name, self.dirty[name]["value"])
+                except Exception as e:
+                    print("ERROR Dirty rollback : {}".format(str(e)))
+            # else: rollback all changes
             for elem in self.dirty:
                 try:
                     setattr(self, elem, self.dirty[elem]["value"])
@@ -213,7 +220,7 @@ class ModelObject():
         """
             checks the instance against a schema.
             validatees the current values
-        """
+        """            
         if getattr(self,"schema", False):
             # if instance has a schema. (also see init_on_load)
             #v = cerberus.Validator(self.schema)
