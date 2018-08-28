@@ -51,10 +51,14 @@ class ModelObject():
             Look at session.rollback() Bfor SQL or accordinug for mongoDB > 4 or other transation capable DBs
         """
         if self.is_dirty:
-            if name:
+            if name in self.dirty:
                 # only rollback attribute changes for name
                 try:
                     setattr(self, name, self.dirty[name]["value"])
+                    self.dirty.pop(name, None)
+                    # check if still elements in dirty
+                    if not self.dirty:
+                        self.is_dirty = False
                 except Exception as e:
                     print("ERROR Dirty rollback : {}".format(str(e)))
             # else: rollback all changes
@@ -183,7 +187,8 @@ class ModelObject():
             self.__class__.observers_initialized = True
             self.__class__.observers.append(o)
         except Exception as e:
-            print (" ... Found None: {}".format(str(e) ))
+            self.__class__.observers_initialized = True
+            #print (" ... Found None: {}".format(str(e) ))
           
     def api(self):
         """ just for conveniance """
