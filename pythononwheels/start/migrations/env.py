@@ -26,7 +26,7 @@ logging.getLogger('alembic').addHandler(log_handler)
 # to the declarative schema
 # 
 import os
-exclude_list=["modelobject", "basemodel", "elastic", "tinydb"]
+exclude_list=["modelobject", "basemodel", "elastic", "tinydb", "tinymodel", "sqlmodel", "mongomodel"]
 #
 # the list of modules (excluding _ones and basemodel. Add more you dont want
 # to be loaded or inspected to exclude_list above.)
