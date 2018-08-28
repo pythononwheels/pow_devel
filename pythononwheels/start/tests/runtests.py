@@ -52,8 +52,11 @@ if __name__ == "__main__":
     del_migs=list(set(migs_after) - set(migs_before))
     print("    .. Migrationss to delete: {}".format(str(del_migs)))
     for elem in del_migs:
-        os.remove(os.path.join("../migrations/versions", elem))
-        print("      .. deleted: {}".format(elem))
+        try:
+            os.remove(os.path.join("../migrations/versions", elem))
+            print("      .. deleted: {}".format(elem))
+        except Exception as e:
+            print("      .. failed: {}".format(e))
     #
     # removing the test DBs
     #
