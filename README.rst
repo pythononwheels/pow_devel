@@ -3,28 +3,28 @@
 
    Pow logo
 
-This is the new pow 2018. And it's really good.
-===============================================
-
-(ok I might be biased ;)
-
-But it's by far the best PoW (concept and implementation) ever! (Ever,ever, ever!!)
-
+PythonOnWheels reStructured and reImplemented.
+=================================================
 I call it *SQUEEZY* => for Simple, Quick and Easy.
 
 Principle
----------
+---------------
+> Designed for simplicity, happiness and Quick results!
 
-    Designed for simplicity, happiness and Quick results!
+As simple to use as possible. Everything you always need on board. 
+Batteries included! (tornado Webserver, SQLite DB, NoSQL DBs: tinyDB, MongoDB, MongoDB Atlas Service)
+Non intrusive! You can always escape and go RAW. 
 
-As simple to use as possible. Everything you always need on board.
-Batteries included! (tornado Webserver, SQLite DB, NoSQL DBs: tinyDB,
-ElasticSearch, MongoDB following next) Non intrusive! You can always
-escape and go RAW.
+Newly implemented:
+---------------------
+- MongoDB support (Transactions usable with Mongo >4)
+- MongoDB Atlas support for even quicker start in the cloud
+- Observer for Models (Like ActiveRedcord. Just add a class Named: ModelNameObserver. Will be found and used by convention)
+- Added Dirty Model support (like ActiveRecord). Track changes, Show, rollback.
+
 
 Strong Foundation:
 ------------------
-
 -  python 3.x
 -  tornado webserver
 -  sqlalchemy ORM onboard (sqlite, mysql, postgres, oralce, ms-sql ...)
