@@ -294,7 +294,7 @@ class BaseHandler(tornado.web.RequestHandler):
     
 
 
-    def success(self, message="", data=None, succ=None, prev=None,
+    def success(self, message="", pure=False, data=None, succ=None, prev=None,
         http_code=200, format=None, encoder=None, model=None, raw_data=False, 
         login=None, template=None, **kwargs):
         """
@@ -304,6 +304,11 @@ class BaseHandler(tornado.web.RequestHandler):
             (see json as an example)
 
             data input is model or list of models.
+
+            if pure == True:
+                the data given in pure will be transmitted untouched.
+                if format is given as well, it will be tried to encode
+                using the given format.
         """
         if not login:
             login=self.get_current_user()
@@ -365,13 +370,20 @@ class BaseHandler(tornado.web.RequestHandler):
             encoder = encoder
         else:
             encoder = cfg.myapp["encoder"][format]
-        self.write(encoder.dumps({
-            "status"    : http_code,
-            "message"   : message,
-            "data"      : data,
-            "next"      : succ,
-            "prev"      : prev
-        }))
+        if not pure:
+            self.write(encoder.dumps({
+                "status"    : http_code,
+                "message"   : message,
+                "data"      : data,
+                "next"      : succ,
+                "prev"      : prev
+            }))
+        else:
+            # pure => just send the data given in pure= probably a dict untouched.
+            # most often direct json
+            # this function is for sending self defined json responses without any
+            # changes from pow.
+            self.write(encoder.dumps(pure))
         self.finish()
 
     def error(self, message=None, data=None, succ=None, prev=None,

@@ -9,7 +9,7 @@ from {{appname}}.powlib import merge_two_dicts
 from {{appname}}.encoders import pow_json_serializer
 from {{appname}}.decoders import pow_json_deserializer
 import {{appname}}.config as cfg
-from insight_dash.decoders import pow_init_from_dict_deserializer
+from {{appname}}.decoders import pow_init_from_dict_deserializer
 
 class ModelObject():
     """
