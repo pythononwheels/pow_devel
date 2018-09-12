@@ -303,6 +303,15 @@ class BaseHandler(tornado.web.RequestHandler):
             for other formats you have to define an encoder in config.py
             (see json as an example)
 
+            All aditional parameters will be handed over to the template.
+            
+            template=None => 
+                ClassName_action.tmpl
+                Example GET request on /blog
+                    => blog_list.tmpl
+                Example GET /blog/id
+                    => blog_show.tmpl
+            
             data input is model or list of models.
 
             if pure == True:
