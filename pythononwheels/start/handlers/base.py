@@ -294,11 +294,13 @@ class BaseHandler(tornado.web.RequestHandler):
     
 
 
-    def success(self, message="", pure=False, data=None, succ=None, prev=None,
+     def success(self, message="", pure=False, data=None, succ=None, prev=None,
         http_code=200, format=None, encoder=None, model=None, raw_data=False, 
         login=None, template=None, **kwargs):
         """
-            returns data and http_code.
+            Sending an Successful reply (HTTP_STATUS 2xx) back to the client.
+            Returns data and http_code.
+
             data will be converted to given format.  (std = json)
             for other formats you have to define an encoder in config.py
             (see json as an example)
@@ -314,15 +316,49 @@ class BaseHandler(tornado.web.RequestHandler):
 
             data input is model or list of models.
 
-            if pure == True:
-                the data given in pure will be transmitted untouched.
-                if format is given as well, it will be tried to encode
-                using the given format.
+            
+            Reply Structure:
+                "status"    : http_code,
+                "message"   : message,
+                "data"      : data,
+                "next"      : succ,
+                "prev"      : prev
+            Example:
+                 self.success(message="article page: #" +str(page), data=res )    
+
+            if raw_data == True => data is no (auto)converted to a given format (format)
+            if pure == True: only the data given will be sent.
+                
+                self.write(data)                       untouched. No other structure added
+                                                       [if you give a format as well it will be 
+                                                        converted to that format for conveniance reasons.]
+            Example: 
+                self.error(pure=True, format="json", data={"message" : "you can only vote once"} )
+                => Will sent {"message" : "you can only vote once"}  [JSON encoded]
         """
         if not login:
             login=self.get_current_user()
         self.application.log_request(self, message="base.success:" + message)
         self.set_status(http_code)
+        
+        if pure:
+            # pure => just send the data given in pure= probably a dict untouched.
+            # most often direct json
+            # this function is for sending self defined json responses without any
+            # changes from pow.
+            print("Sending pure data: {}".format(data))
+            if format:
+                try:
+                    encoder = cfg.myapp["encoder"][format]
+                    self.write(encoder.dumps(data))
+                    print("formatted to: {}".format(format))
+                except:
+                    self.write(data)
+            else:
+                self.write(data)
+            self.finish()
+        
+        
         if not format:
             format = self.format
         if not format:
@@ -370,7 +406,7 @@ class BaseHandler(tornado.web.RequestHandler):
         # if not format == html convert the model or [model] to json 
         # the encoders can convert json to any requested target format.
         # 
-        if not raw_data and not pure:
+        if not raw_data:
             # if you want PoW to convert the data you have to have a model here.
             # either as instance attribute (also via class) or as an arguent to success(model=m)
             if not data == None:
@@ -379,34 +415,73 @@ class BaseHandler(tornado.web.RequestHandler):
             encoder = encoder
         else:
             encoder = cfg.myapp["encoder"][format]
-        if not pure:
-            self.write(encoder.dumps({
+
+        # write the result
+        self.write(encoder.dumps({
+            "status"    : http_code,
+            "message"   : message,
+            "data"      : data,
+            "next"      : succ,
+            "prev"      : prev
+        }))
+
+        self.finish()
+
+    def error(self, pure=False, message=None, data=None, succ=None, prev=None,
+        http_code=500, format=None, encoder=None, template=None, **kwargs):
+        """
+            Sending an error (HTTP_CODE (3xx?),4xx, 5xx) back to the client.
+            You can set the status_code as a parameter. Default is 500.
+
+            Reply Structure:
                 "status"    : http_code,
                 "message"   : message,
                 "data"      : data,
                 "next"      : succ,
                 "prev"      : prev
-            }))
-        else:
+            
+            Example:
+                 self.success(message="article page: #" +str(page), data=res )    
+
+            if raw_data == True => data is no (auto)converted to a given format (format)
+            if pure == True: only the data given will be sent.
+                
+                self.write(data)                       untouched. No other structure added
+                                                       [if you give a format as well it will be 
+                                                        converted to that format for conveniance reasons.]
+            Example: 
+                self.error(pure=True, format="json", data={"message" : "you can only vote once"} )
+                => Will sent {"message" : "you can only vote once"}  [JSON encoded]
+
+
+        """
+        # some global preparations 
+        self.application.log_request(self, message="base.error:" + str(message))
+        self.set_status(http_code)
+        if not login:
+            login=self.get_current_user()
+
+        if pure:
             # pure => just send the data given in pure= probably a dict untouched.
             # most often direct json
             # this function is for sending self defined json responses without any
             # changes from pow.
+            print("Sending pure data: {}".format(data))
             if format:
-                self.write(encoder.dumps(data))
+                try:
+                    encoder = cfg.myapp["encoder"][format]
+                    self.write(encoder.dumps(data))
+                    print("formatted to: {}".format(format))
+                except:
+                    self.write(data)
             else:
                 self.write(data)
-        self.finish()
-
-    def error(self, pure=False, message=None, data=None, succ=None, prev=None,
-        http_code=500, format=None, encoder=None, template=None, **kwargs):
-        
-        self.application.log_request(self, message="base.error:" + str(message))
-        
+            self.finish()
+            
         if template != None:
             self.render(template, message=message, data=data, succ=succ, prev=prev,
                         status=http_code, request=self.request, **kwargs)
-        self.set_status(http_code)
+        
         
         if not format:
             format = self.format
@@ -437,25 +512,18 @@ class BaseHandler(tornado.web.RequestHandler):
                 "next"      : succ,
                 "prev"      : prev
             }))
-        if not pure:
-            self.write(encoder.dumps({
-                "status"    : http_code,
-                "data"      : data,
-                "error"     : {
-                    "message"   : message
-                    },
-                "next"      : succ,
-                "prev"      : prev
-            }))
-        else:
-            # pure => just send the data given in pure= probably a dict untouched.
-            # most often direct json
-            # this function is for sending self defined json responses without any
-            # changes from pow.
-            if format:
-                self.write(encoder.dumps(data))
-            else:
-                self.write(data)
+
+        # write the result
+        self.write(encoder.dumps({
+            "status"    : http_code,
+            "data"      : data,
+            "error"     : {
+                "message"   : message
+                },
+            "next"      : succ,
+            "prev"      : prev
+        }))
+            
         self.finish()
 
     def write_error(status_code, **kwargs):

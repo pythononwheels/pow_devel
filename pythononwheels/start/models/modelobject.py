@@ -342,8 +342,8 @@ class ModelObject():
         """
             returns a list of results in a json serialized format.
         """
-        if not isinstance(res, type([])):
-            res = [res]
+        if not isinstance(res, list):
+            res = list(res)
         #return json.loads(json.dumps(res, default=pow_json_serializer))   
         reslist =  [x.to_json() for x in res]
         if len(reslist) == 1:
