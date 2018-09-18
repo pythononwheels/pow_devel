@@ -428,7 +428,7 @@ class BaseHandler(tornado.web.RequestHandler):
         self.finish()
 
     def error(self, pure=False, message=None, data=None, succ=None, prev=None,
-        http_code=500, format=None, encoder=None, template=None, **kwargs):
+        http_code=500, format=None, encoder=None, template=None, login=None, **kwargs):
         """
             Sending an error (HTTP_CODE (3xx?),4xx, 5xx) back to the client.
             You can set the status_code as a parameter. Default is 500.
