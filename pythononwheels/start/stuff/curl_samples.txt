@@ -1,0 +1,17 @@
+## get a listr of posts
+
+curl -X GET "http://localhost:8080/post/list" -H "Accept: application/json"
+
+##
+
+# get home
+
+curl -i -H "Accept: application/json" "http://localhost:8080" 
+
+## 
+
+curl -i -H "Accept: application/json" "http://localhost:8080/post/list" 
+
+## Add a post
+
+curl -X PUT -H "Content-Type: application/json" -d '{"title":"curl post","text":"A post created through curl!!"}' http://localhost:8080/user/100

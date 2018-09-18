@@ -299,7 +299,7 @@ class BaseHandler(tornado.web.RequestHandler):
         login=None, template=None, **kwargs):
         """
             returns data and http_code.
-            data will be converted to format.  (std = json)
+            data will be converted to given format.  (std = json)
             for other formats you have to define an encoder in config.py
             (see json as an example)
 
@@ -310,8 +310,8 @@ class BaseHandler(tornado.web.RequestHandler):
                 Example GET request on /blog
                     => blog_list.tmpl
                 Example GET /blog/id
-                    => blog_show.tmpl
-            
+                    => blog_show.tmpl 
+
             data input is model or list of models.
 
             if pure == True:
@@ -370,11 +370,11 @@ class BaseHandler(tornado.web.RequestHandler):
         # if not format == html convert the model or [model] to json 
         # the encoders can convert json to any requested target format.
         # 
-        if not raw_data:
+        if not raw_data and not pure:
             # if you want PoW to convert the data you have to have a model here.
             # either as instance attribute (also via class) or as an arguent to success(model=m)
             if not data == None:
-                data = model.res_to_json(data)
+                data = self.model.res_to_json(data)
         if encoder:
             encoder = encoder
         else:
@@ -392,10 +392,13 @@ class BaseHandler(tornado.web.RequestHandler):
             # most often direct json
             # this function is for sending self defined json responses without any
             # changes from pow.
-            self.write(encoder.dumps(pure))
+            if format:
+                self.write(encoder.dumps(data))
+            else:
+                self.write(data)
         self.finish()
 
-    def error(self, message=None, data=None, succ=None, prev=None,
+    def error(self, pure=False, message=None, data=None, succ=None, prev=None,
         http_code=500, format=None, encoder=None, template=None, **kwargs):
         
         self.application.log_request(self, message="base.error:" + str(message))
@@ -434,15 +437,25 @@ class BaseHandler(tornado.web.RequestHandler):
                 "next"      : succ,
                 "prev"      : prev
             }))
-        self.write(encoder.dumps({
-            "status"    : http_code,
-            "data"      : data,
-            "error"     : {
-                "message"   : message
-                },
-            "next"      : succ,
-            "prev"      : prev
-        }))
+        if not pure:
+            self.write(encoder.dumps({
+                "status"    : http_code,
+                "data"      : data,
+                "error"     : {
+                    "message"   : message
+                    },
+                "next"      : succ,
+                "prev"      : prev
+            }))
+        else:
+            # pure => just send the data given in pure= probably a dict untouched.
+            # most often direct json
+            # this function is for sending self defined json responses without any
+            # changes from pow.
+            if format:
+                self.write(encoder.dumps(data))
+            else:
+                self.write(data)
         self.finish()
 
     def write_error(status_code, **kwargs):
@@ -452,7 +465,7 @@ class BaseHandler(tornado.web.RequestHandler):
             If this error was caused by an uncaught exception 
             (including HTTPError), an exc_info triple will be available as 
             kwargs["exc_info"]. Note that this exception may not be the 
-            currentÂ exception for purposes of methods like sys.exc_info() 
+            current exception for purposes of methods like sys.exc_info() 
             or traceback.format_exc.
         """
         #if status_code == 404:
