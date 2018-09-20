@@ -302,7 +302,7 @@ class ModelObject():
                     else:
                         raise Exception(" Key: " + str(key) + " is not in schema for: " + self.__class__.__name__)
 
-    def init_from_json(self, data, ignore=False, simple_conversion=False):
+    def init_from_json(self, data, ignore=True, simple_conversion=False):
         """
             makes a py dict from input json and
             sets the instance attributes 
@@ -343,7 +343,10 @@ class ModelObject():
             returns a list of results in a json serialized format.
         """
         if not isinstance(res, list):
-            res = list(res)
+            try:
+                res = list(res)
+            except:
+                return res.to_json()
         #return json.loads(json.dumps(res, default=pow_json_serializer))   
         reslist =  [x.to_json() for x in res]
         if len(reslist) == 1:
