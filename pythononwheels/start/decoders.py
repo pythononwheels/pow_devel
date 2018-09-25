@@ -43,12 +43,12 @@ def pow_init_from_dict_deserializer(dct, schema, simple_conversion=False):
                         # expecting primarily a string
                         dat = datetime.datetime.strptime(dct[elem], myapp["date_format"])
                         dat = dat.replace(tzinfo=None)
-                        print("date: str -> setting: {} to {}".format(elem, str(dct[elem])))
+                        #print("date: str -> setting: {} to {}".format(elem, str(dct[elem])))
                         dct[elem]=dat
                     except Exception as e:
                         # give dateutil a chance .. (99% good)
                         try:
-                            print("date: dateutil setting: {} to {}".format(elem, str(dct[elem])))
+                            #print("date: dateutil setting: {} to {}".format(elem, str(dct[elem])))
                             dat=dateutil.parser.parse(dct[elem])
                             dat=dat.replace(tzinfo=None)
                             dct[elem]=dat
