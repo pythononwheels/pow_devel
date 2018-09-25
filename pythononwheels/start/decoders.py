@@ -1,6 +1,7 @@
 import datetime
 from {{appname}}.config import myapp
 import re
+import dateutil.parser
 
 def pow_json_deserializer(dct):
         """

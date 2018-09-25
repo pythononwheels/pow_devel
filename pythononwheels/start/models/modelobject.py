@@ -301,16 +301,67 @@ class ModelObject():
                         setattr(self, key, d[key])
                     else:
                         raise Exception(" Key: " + str(key) + " is not in schema for: " + self.__class__.__name__)
+    
+    
+    def init_from_json_file(self, json_file=None, ignore=True, simple_conversion=False):
+        """
+            returns a generator that yields models instances per row
+            of the json file.
+        """
+        with open(json_file) as f:
+            data = json.load(f)
+            for d in data:
+                m = self.__class__()
+                m.init_from_dict(d, ignore, simple_conversion=simple_conversion)
+                yield m
+
 
     def init_from_json(self, data, ignore=True, simple_conversion=False):
         """
             makes a py dict from input json and
             sets the instance attributes 
+            sets the attributes on self if len(data) == 1
+            returns a generator if len(data)>1
         """
         d=json.loads(data,object_hook=pow_json_deserializer)
-        return self.init_from_dict(d, ignore, simple_conversion=simple_conversion)
+        if len(data) == 1:
+            return self.init_from_dict(d, ignore, simple_conversion=simple_conversion)
+        else:
+            for d in data:
+                m = self.__class__()
+                m.init_from_dict(d, ignore, simple_conversion=simple_conversion)
+                yield m
+    
+    # def init_from_json(self, data, ignore=True, simple_conversion=False):
+    #     """
+    #         makes a py dict from input json and
+    #         sets the instance attributes 
+    #     """
+    #     d=json.loads(data,object_hook=pow_json_deserializer)
+    #     return self.init_from_dict(d, ignore, simple_conversion=simple_conversion)
 
-
+    def init_from_csv_file(self, csv_file=None, newline='', ignore=True):
+        """
+            inits instances of this model from the given csv
+            returns a generator that yields models instances per row
+            of the csv file.
+        """
+        import csv
+        with open(csv_file, newline=newline) as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                #print(row)
+                m = self.__class__()
+                for key,value in row.items():
+                    if ignore:
+                        setattr(m, key, value)
+                    else:
+                        if key in self.schema:
+                            setattr(m, key, value)
+                        else:
+                            raise Exception(" Key: " + str(key) + " is not in schema for: " + self.__class__.__name__)
+                yield m
+        
     def init_from_csv(self, keys, data, ignore=True):
         """
             makes a py dict from input ^csv and
@@ -337,6 +388,29 @@ class ModelObject():
         #return json.loads(self.json_dumps(*args, **kwargs))
         return json.dumps(self.to_dict(), *args, default=default, **kwargs)
     
+    def to_json_file(self, data=[], filename=None):
+        """
+            if data==[] just save this model to json
+            else create a json file with the givel list of models.
+        """
+        if not filename:
+            filename=self.__class__.__name.__ + "_" + datetime.datetime.utcnow().isoformat() + ".json"
+        with open(filename, "w") as outfile:
+            if len(data)==0:
+                # just me
+                outfile.write(self.to_json())
+            else:
+                outfile.write("[")
+                counter = 0
+                length = len(data)
+                for elem in data:
+                    counter += 1
+                    if counter < length:
+                        outfile.write(elem.to_json() + "," + "\n" )
+                    else:
+                        outfile.write(elem.to_json() ) 
+                outfile.write("]")
+        print(" ..JSON written to: {}".format(filename))
     
     def res_to_json(self, res):
         """
