@@ -438,7 +438,25 @@ class ModelObject():
             encoder = myapp["encoder"]["csv"]
         return encoder.dumps(self.to_json())
             
-
+    def to_csv_file(self, data=[], filename=None):
+        """
+            if data==[] just save this model to json
+            else create a json file with the givel list of models.
+        """
+        import csv
+        if not filename:
+            filename=self.__class__.__name__ + "_" + datetime.datetime.utcnow().isoformat() + ".csv"
+        
+        with open(filename, "w") as outf:
+            # write the header
+            #outfile.write(",".join([str(x) for x in self.schema.keys()]) +"\n")
+            writer = csv.DictWriter(outf, self.schema.keys())
+            writer.writeheader()
+            for row in data:
+                writer.writerow(row.to_dict())
+        
+        print(" ..CSV written to: {}".format(filename))
+    
     def to_dict(self, lazy=True):
         """
             return vars / attributes of this instance as dict
