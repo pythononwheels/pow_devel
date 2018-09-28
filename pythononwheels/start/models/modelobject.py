@@ -406,7 +406,7 @@ class ModelObject():
                 for elem in data:
                     counter += 1
                     if counter < length:
-                        outfile.write(elem.to_json() + "," + "\n" )
+                        outfile.write(elem.to_json() + "," + "\\n" )
                     else:
                         outfile.write(elem.to_json() ) 
                 outfile.write("]")
@@ -449,7 +449,7 @@ class ModelObject():
         
         with open(filename, "w") as outf:
             # write the header
-            #outfile.write(",".join([str(x) for x in self.schema.keys()]) +"\n")
+            #outfile.write(",".join([str(x) for x in self.schema.keys()]) +"\\n")
             writer = csv.DictWriter(outf, self.schema.keys())
             writer.writeheader()
             for row in data:
