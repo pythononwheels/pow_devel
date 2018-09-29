@@ -69,12 +69,18 @@ class JsonToCsv():
         return output.getvalue()
 
 class JsonToXml():
-    def dumps(self, data, root="root"):
-        """ returns the xml representation of a dict input data
+    def dumps(self, data, root="pow_model"):
+        """ 
+            returns the xml representation of a dict input data
+            root / custom_root is the root node name of the xml document.
+
+            data is a dict.
+
+            usage: encoder.dumps(model.to_dict, root="some custom root name")
         """
         #print(data)
         #print(dicttoxml.dicttoxml(data))
-        return dicttoxml.dicttoxml(data)
+        return dicttoxml.dicttoxml(data, custom_root=root)
 
 
 

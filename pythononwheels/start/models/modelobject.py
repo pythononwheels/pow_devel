@@ -388,6 +388,18 @@ class ModelObject():
         #return json.loads(self.json_dumps(*args, **kwargs))
         return json.dumps(self.to_dict(), *args, default=default, **kwargs)
     
+    def to_xml(self):
+        """
+            returns an xml representation of the model
+            using the configured xml encoder from config->my_app->encoders->xml
+        """
+        try:
+            encoder = myapp["encoder"]["xml"]
+            return encoder.dumps(self.to_dict(), root=self.__class__.__name__)
+        except:
+            raise Exception("ERROR: problems to convert to xml. Probably no encoder defined in config.")
+    
+    
     def to_json_file(self, data=[], filename=None):
         """
             if data==[] just save this model to json
