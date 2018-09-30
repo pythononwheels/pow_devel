@@ -324,13 +324,12 @@ class ModelObject():
             returns a generator if len(data)>1
         """
         d=json.loads(data,object_hook=pow_json_deserializer)
-        if len(data) == 1:
-            return self.init_from_dict(d, ignore, simple_conversion=simple_conversion)
-        else:
-            for d in data:
-                m = self.__class__()
-                m.init_from_dict(d, ignore, simple_conversion=simple_conversion)
-                yield m
+        return self.init_from_dict(d, ignore, simple_conversion=simple_conversion)
+        #else:
+        #    for d in data:
+        #        m = self.__class__()
+        #        m.init_from_dict(d, ignore, simple_conversion=simple_conversion)
+        #        yield m
     
     # def init_from_json(self, data, ignore=True, simple_conversion=False):
     #     """
