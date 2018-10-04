@@ -11,20 +11,20 @@ class {{handler_class_name}}(PowHandler):
 
     # 
     # every pow handler automatically gets these RESTful routes
-    # thru the @app.add_rest_routes() decorator.
+    # when you add the : app.add_rest_routes() decorator.
     #
-    # 1  GET    /{{handler_name}}        #=> list
-    # 2  GET    /{{handler_name}}/1      #=> show
-    # 3  GET    /{{handler_name}}/new    #=> new
-    # 4  GET    /{{handler_name}}/1/edit #=> edit 
-    # 5  GET    /{{handler_name}}/page/1 #=> page
-    # 6  GET    /{{handler_name}}/search #=> search
-    # 7  PUT    /{{handler_name}}/1      #=> update
-    # 8  PUT    /{{handler_name}}        #=> update (You have to send the id as json payload)
-    # 9  POST   /{{handler_name}}        #=> create
-    # 10 DELETE /{{handler_name}}/1      #=> destroy
+    # 1  GET    /todo                           #=> list
+    # 2  GET    /todo/<uuid:identifier>         #=> show
+    # 3  GET    /todo/new                       #=> new
+    # 4  GET    /todo/<uuid:identifier>/edit    #=> edit 
+    # 5  GET    /todo/page/<uuid:identifier>    #=> page
+    # 6  GET    /todo/search                    #=> search
+    # 7  PUT    /todo/<uuid:identifier>         #=> update
+    # 8  PUT    /todo                           #=> update (You have to send the id as json payload)
+    # 9  POST   /todo                           #=> create
+    # 10 DELETE /todo/<uuid:identifier>         #=> destroy
     #
-
+    
     # standard supported http methods are:
     # SUPPORTED_METHODS = ("GET", "HEAD", "POST", "DELETE", "PATCH", "PUT", "OPTIONS")
     # you can overwrite any of those directly or leave the @add_rest_routes out to have a basic 
@@ -33,10 +33,10 @@ class {{handler_class_name}}(PowHandler):
     # curl test:
     # windows: (the quotes need to be escape in cmd.exe)
     #   (You must generate a post model andf handler first... update the db...)
-    #   POST:   curl -H "Content-Type: application/json" -X POST -d "{ \"title\" : \"first post\" }" http://localhost:8080/post
-    #   GET:    curl -H "Content-Type: application/json" -X GET http://localhost:8080/post
-    #   PUT:    curl -H "Content-Type: application/json" -X PUT -d "{ \"id\" : \"1\", \"text\": \"lalala\" }" http://localhost:8080/post
-    #   DELETE: curl -H "Content-Type: application/json" -X DELETE -d "{ \"id\" : \"1\" }" http://localhost:8080/post
+    #   POST:   curl -H "Content-Type: application/json" -X POST -d "{ \"title\" : \"first {{handler_name}}\" }" http://localhost:8080/{{handler_name}}
+    #   GET:    curl -H "Content-Type: application/json" -X GET http://localhost:8080/{{handler_name}}
+    #   PUT:    curl -H "Content-Type: application/json" -X PUT -d "{ \"id\" : \"1\", \"text\": \"lalala\" }" http://localhost:8080/{{handler_name}}
+    #   DELETE: curl -H "Content-Type: application/json" -X DELETE -d "{ \"id\" : \"1\" }" http://localhost:8080/{{handler_name}}
     
     model=Model()
     
@@ -57,10 +57,6 @@ class {{handler_class_name}}(PowHandler):
         m=Model()
         res=m.page(page=int(page), page_size=myapp["page_size"])
         self.success(message="{{handler_name}} page: #" +str(page), data=res )  
-    
-    def search(self):
-        m=Model()
-        return self.error(message="{{handler_name}} search: not implemented yet ")
         
     @tornado.web.authenticated
     def edit(self, id=None):
@@ -118,3 +114,7 @@ class {{handler_class_name}}(PowHandler):
             self.success(message="todo, destroy id: " + str(m.id))
         except Exception as e:
             self.error(message="todo, destroy id: " + str(e))
+    
+    def search(self):
+        m=Model()
+        return self.error(message="{{handler_name}} search: not implemented yet ")

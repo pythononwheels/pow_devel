@@ -125,6 +125,35 @@ class Application(tornado.web.Application):
         if message:
             log_method("%s %d %s", handler.request.remote_ip, handler.get_status(), str(message))
 
+    def log(self, message, status="INFO"):
+        """ 
+            custom log method
+            access_log is importef from tornado.log (http://www.tornadoweb.org/en/stable/_modules/tornado/log.html)
+            access_log = logging.getLogger("tornado.access")
+            you can define you own log_function in config.py server_settings
+
+            status can be: INFO, WARN(INF), ERFR(OR)
+        """
+        
+        if "log_function" in self.settings:
+            self.settings["log_function"](status, message)
+            return
+        
+        if status.lower()== "warn" or status == "warning":
+            log_method = access_log.warning
+            status="WARNING"
+
+        elif status.lower() == "error" or status == "err": 
+            log_method = access_log.error
+            status="ERROR"
+            #log_method("%s %d %s", handler.request.remote_ip, handler.get_status(), str(message))
+            log_method("%s %s %.2fms", status, message, datetime.datetime.utcnow())
+        else:
+            log_method = access_log.info
+            status="INFO"
+        
+        self.log("You have to give a message when using the application.log() function")
+        #raise Exception("You have to give a message when using the application.log() function")
     
     def import_all_handlers(self):
         """

@@ -409,8 +409,15 @@ class BaseHandler(tornado.web.RequestHandler):
         if not raw_data:
             # if you want PoW to convert the data you have to have a model here.
             # either as instance attribute (also via class) or as an arguent to success(model=m)
-            if not data == None and isinstance(data,self.model.__class__):
-                data = self.model.res_to_json(data)
+            #if not data == None and isinstance(data,self.model.__class__):
+            if not data == None:
+                try:
+                    data = self.model.res_to_json(data)
+                except:
+                    self.application.log(
+                        message="Error: base handler: {} has no method res_to_json".format(str(type(data))),
+                        status="ERROR" 
+                    )
         if encoder:
             encoder = encoder
         else:
