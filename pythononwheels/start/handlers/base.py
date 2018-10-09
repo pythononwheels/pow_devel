@@ -336,8 +336,8 @@ class BaseHandler(tornado.web.RequestHandler):
                 self.error(pure=True, format="json", data={"message" : "you can only vote once"} )
                 => Will sent {"message" : "you can only vote once"}  [JSON encoded]
         """
-        if not login:
-            login=self.get_current_user()
+        #if not login:
+        #    login=self.get_current_user()
         self.application.log_request(self, message="base.success:" + message)
         self.set_status(http_code)
         
@@ -465,8 +465,8 @@ class BaseHandler(tornado.web.RequestHandler):
         # some global preparations 
         self.application.log_request(self, message="base.error:" + str(message))
         self.set_status(http_code)
-        if not login:
-            login=self.get_current_user()
+        #if not login:
+        #    login=self.get_current_user()
 
         if pure == True:
             # pure => just send the data given in pure= probably a dict untouched.
