@@ -209,7 +209,7 @@ class MongoBaseModel(ModelObject):
     def upsert(self):
         """ insert or update intelligently """
         #self.last_updated = datetime.datetime.utcnow().strftime(myapp["date_format"])
-         if self.observers_initialized:
+        if self.observers_initialized:
             for observer in self.observers:
                 try:
                     observer.before_upsert(self)

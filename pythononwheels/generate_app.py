@@ -78,9 +78,10 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
     exclude_files=[]
     if update_only:
         # only update pow versions. Leave all non pow or possibly changed stuff untouched
+        # maybe add encoders.py, decoders.py to the list in the future.
         exclude_files.extend([
             "alembic.ini", "db.sqlite", "tiny.db",
-            "env.py", "shorties.py", "config.py", "encoders.py", "powhandler.py", "decoders.py",
+            "env.py", "shorties.py", "config.py", "powhandler.py", 
             "powmodel.py", "tinymodel.py", "mongomodel.py"
             ])
         

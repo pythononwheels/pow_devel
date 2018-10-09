@@ -137,7 +137,7 @@ class ModelObject():
                     #print("trying: " + config.database["default_values"][self.schema[key]["type"]])
                     setattr(self,key,cfg.database["default_values"][self.schema[key]["type"]])
                 except Exception as e:
-                    print(e.message)
+                    print(str(e))
                     setattr(self, key, None)
         
     def setup_from_format(self, *args, **kwargs):

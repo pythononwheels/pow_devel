@@ -23,8 +23,8 @@ class {{model_class_name}}(Base):
     # raw sqlalchemy column __init__ parameters.
     #
     schema = {        
-        'title' :   {'type': 'string', 'maxlength' : 35},
-        'text'  :   {'type': 'string'},
+        'title' :   { 'type' : 'string', 'maxlength' : 35 },
+        'text'  :   { 'type' : 'string' },
         "votes" :   { "type" : "integer", "default" : 0 }  
     }
 
