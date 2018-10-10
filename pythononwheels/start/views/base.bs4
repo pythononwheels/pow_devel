@@ -9,8 +9,8 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
-
+    <!--link rel="icon" href="../../favicon.ico"-->
+    <link rel="shortcut icon" type="image/x-icon" href="{{ static_url("images/pow_favicon-16x16.png")}}">
     <title>Welcome to PythonOnWheels</title>
 
     <!-- Bootstrap core CSS -->

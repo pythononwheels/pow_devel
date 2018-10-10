@@ -190,9 +190,14 @@ class Application(tornado.web.Application):
                  the BIg G ;)
         """
         log_method=analytics_logger.info 
-
-        log_method("%s %s %s %.2fms %s", 
+        x_real_ip="None"
+        try:
+            x_real_ip = request.headers.get("X-Real-IP")
+        except:
+            pass
+        log_method("%s %s %s %s %.2fms %s", 
                 request.remote_ip, 
+                x_real_ip,
                 request.method,
                 request.uri, 
                 1000.0 * request.request_time(),
