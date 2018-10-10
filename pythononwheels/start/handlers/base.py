@@ -29,6 +29,9 @@ class BaseHandler(tornado.web.RequestHandler):
         """
             Called at the beginning of a request before get/post/etc.
         """
+        # log analytics (ip, method, timestamp, uri)
+        # see pow_analytics.log
+        self.application.log_analytics(self.request)
         
         #print(self.request)
         self.uri = self.request.uri

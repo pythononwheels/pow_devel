@@ -348,7 +348,7 @@ class TinyBaseModel(ModelObject):
             return all element in the db
         """
         res = self.table.all() # returns a list of tinyDB DB-Elements 
-        print("res: {} -> type({})".format( str(res), type(res)))
+        #print("res: {} -> type({})".format( str(res), type(res)))
         #if len(res) <= 1:
         #    return self.dict_result_to_object(res)
         return self._return_find(res)

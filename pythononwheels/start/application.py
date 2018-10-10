@@ -15,14 +15,30 @@ from {{appname}}.config import routes
 from tornado.log import access_log
 import logging
 import datetime
+from logging.handlers import RotatingFileHandler
 
-
+#
 # global logger settings
+#
 formatter = myapp["logformat"]
 log_handler = logging.FileHandler(os.path.abspath(os.path.normpath(myapp["logfile"])))
 #log_handler.setLevel(db_handler_log_level)
 log_handler.setFormatter(formatter)
 
+#
+# analytics_log_handler 
+#
+LOG_FILENAME = './pow_analytics.log'
+
+# Set up a specific logger with our desired output level
+analytics_logger = logging.getLogger('PowAnalyticsLogger')
+analytics_logger.setLevel(logging.INFO)
+
+# Add the log message handler to the logger
+handler = logging.handlers.RotatingFileHandler(
+              LOG_FILENAME, maxBytes=20000, backupCount=5)
+
+analytics_logger.addHandler(handler)
 class Application(tornado.web.Application):
     #
     # handlers class variable is filled by the @add_route decorator.
@@ -120,10 +136,16 @@ class Application(tornado.web.Application):
         request_time = 1000.0 * handler.request.request_time()
         #log_method("%d %s %.2fms", handler.get_status(),
         #           handler._request_summary(), request_time)
-        log_method("%s %d %s %.2fms", handler.request.remote_ip, handler.get_status(),
-                handler._request_summary(), request_time)
+        log_method("%s %d %s %.2fms %s", handler.request.remote_ip, handler.get_status(),
+                handler._request_summary(), request_time, datetime.datetime.utcnow().strftime(myapp["date_format"]) 
+            )
         if message:
-            log_method("%s %d %s", handler.request.remote_ip, handler.get_status(), str(message))
+            log_method("%s %d %s %s", 
+                handler.request.remote_ip, 
+                handler.get_status(), 
+                str(message), 
+                datetime.datetime.utcnow().strftime(myapp["date_format"])  
+            )
 
     def log(self, message, status="INFO"):
         """ 
@@ -147,7 +169,10 @@ class Application(tornado.web.Application):
             log_method = access_log.error
             status="ERROR"
             #log_method("%s %d %s", handler.request.remote_ip, handler.get_status(), str(message))
-            log_method("%s %s %.2fms", status, message, datetime.datetime.utcnow())
+            log_method("%s %s %s", 
+                status, 
+                message, 
+                datetime.datetime.utcnow().strftime(myapp["date_format"]))
         else:
             log_method = access_log.info
             status="INFO"
@@ -155,6 +180,25 @@ class Application(tornado.web.Application):
         self.log("You have to give a message when using the application.log() function")
         #raise Exception("You have to give a message when using the application.log() function")
     
+    def log_analytics(self, request):
+        """ 
+            logs the request's:
+                 remote IP,
+                 URI
+                 timestamp 
+                 for statistical reasons. So you have a basic analytics without installing
+                 the BIg G ;)
+        """
+        log_method=analytics_logger.info 
+
+        log_method("%s %s %s %.2fms %s", 
+                request.remote_ip, 
+                request.method,
+                request.uri, 
+                1000.0 * request.request_time(),
+                datetime.datetime.utcnow().strftime(myapp["date_format"])
+                )
+            
     def import_all_handlers(self):
         """
             imports all handlers to execue the @add_routes decorator.
