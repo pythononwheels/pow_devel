@@ -58,7 +58,7 @@
             <p class="lead">Just go Ahead and show, edit or delete your data below using the action links.</p>
             <p class="lead">Of course you can also 
             <button class="ui green button">
-                <a href="{{base_route_rest}}/new"></a>Create</a> 
+                <a href="/{{base_route_rest}}/new"></a>Create</a> 
             </button>
                 a new {{model_name}} here.</p>
         </div>

@@ -43,7 +43,7 @@ class PowHandler(BaseHandler):
         """
         return werkzeug.security.check_password_hash(pwhash, password)
 
-    def generate_password_hash( password ):
+    def generate_password_hash(self, password ):
         """
             uses werkzeug.security.generate_password_hash 
             see: http://werkzeug.pocoo.org/docs/0.14/utils/#module-werkzeug.security

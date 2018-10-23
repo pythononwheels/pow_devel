@@ -6,7 +6,28 @@ import logging
 import copy
 from sqlalchemy import Column, Integer, String, Date, DateTime, Float
 from sqlalchemy import Unicode, Text, Boolean, Numeric, BigInteger, LargeBinary
+import werkzeug.security
+from {{appname}}.config import myapp 
 
+def check_password_hash(pwhash, password ):
+    """
+        uses werkzeug.security.check_password_hash
+        see: http://werkzeug.pocoo.org/docs/0.14/utils/#module-werkzeug.security
+        get the password from for example a login form (make sure you use https)
+        get the hash from the user model table (see generate_password_hash below)
+    """
+    return werkzeug.security.check_password_hash(pwhash, password)
+
+def generate_password_hash( password ):
+    """
+        uses werkzeug.security.generate_password_hash 
+        see: http://werkzeug.pocoo.org/docs/0.14/utils/#module-werkzeug.security
+        store this returned hash in the user models table as password
+        when the user is first registered or changed his password.
+        Use https to secure the plaintext POSTed pwd.
+    """
+    method = myapp["pwhash_method"]
+    return werkzeug.security.generate_password_hash(password, method=method, salt_length=8)
 
 def make_logger(name, level, handler, format=None, logfile=None):
     """

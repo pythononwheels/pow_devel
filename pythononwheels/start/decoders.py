@@ -71,6 +71,15 @@ def pow_init_from_dict_deserializer(dct, schema, simple_conversion=False):
                               str(type(dct[elem])) + str(dct[elem]))
                         print("Exception for field: " + elem)
                         raise e
+            elif schema[elem]["type"].lower() == "dict":
+                if not isinstance(dct[elem], (dict)):
+                    try:
+                        import ast
+                        if isinstance(dct[elem], (str)):
+                            # see: https://stackoverflow.com/questions/988228/convert-a-string-representation-of-a-dictionary-to-a-dictionary
+                            dct[elem] = ast.literal_eval(dct[elem])
+                    except Exception as e:
+                        raise e
             elif schema[elem]["type"].lower() == "boolean":
                 if not isinstance(dct[elem], (bool)):
                     try:
