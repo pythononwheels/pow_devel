@@ -489,7 +489,7 @@ class BaseHandler(tornado.web.RequestHandler):
             return
             
         if template != None:
-            self.render(template, message=message, data=data, succ=succ, prev=prev,
+            return self.render(template, message=message, data=data, succ=succ, prev=prev,
                         status=http_code, request=self.request, **kwargs)
         
         
