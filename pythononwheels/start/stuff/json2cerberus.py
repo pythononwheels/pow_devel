@@ -30,11 +30,19 @@ if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("usage: python json2cerberus.py jsondata.json <optional_start_element>")
         sys.exit()
-    
-    print("opening json data file: {}".format(sys.argv[1]))
-    f = open(sys.argv[1],"r")
+    infile=sys.argv[1]
+    print("opening json data file: {}".format(infile))
+    f = open(infile,"r")
     # already covers bool, list, dict
-    data = json.load(f)
+    try:
+        raw_data=f.read()
+        raw_data=raw_data
+        data = json.loads(raw_data)
+        #print(dir(data))
+        #print(type(data))
+        #print(type(data[0]))
+    except Exception as e:
+        print(e)
     #print(data)
     startelement = None
     if len(sys.argv) == 3:
@@ -43,21 +51,23 @@ if __name__ == "__main__":
         mydata=data[startelement][0]
     else:
         mydata=data[0]
+    #print(mydata)
+    #print(type(mydata))
     for elem in mydata:
-        #print("{0} : {2} : {1}".format(elem, str(type(data[0][elem])), str(data[0][elem])), end='')
-        #current_element=mydata[elem]
-        current_element=elem
-        if isinstance(current_element, bool):
+        #print("{0} : {2} : {1}".format(elem, str(type(elem)), str(elem), end=''))
+        print("Checking Elem: {}".format(elem))
+    
+        if isinstance(mydata[elem], bool):
             cerberus_schema[elem] = {"type" : "boolean" }
-        elif isinstance(current_element, int):
+        elif isinstance(mydata[elem], int):
             cerberus_schema[elem] = {"type" : "integer" }
-        elif isinstance(current_element, float):
+        elif isinstance(mydata[elem], float):
             cerberus_schema[elem] = {"type" : "float" }
-        elif isinstance(current_element, list):
+        elif isinstance(mydata[elem], list):
             cerberus_schema[elem] = {"type" : "list" }
-        elif isinstance(current_element, dict):
+        elif isinstance(mydata[elem], dict):
             cerberus_schema[elem] = {"type" : "dictionary" }
-        elif isinstance(current_element, str):
+        elif isinstance(mydata[elem], str):
             # date and datetime (date = datetime with constantly missing h:m:s)
             if is_date(elem):
                 cerberus_schema[elem] = {"type" : "datetime" }
@@ -65,11 +75,20 @@ if __name__ == "__main__":
             else:
                 cerberus_schema[elem] = {"type" : "string" }
                 #print()
-        elif isinstance(current_element, bytes) or isinstance(current_element, bytearray):
+        elif isinstance(mydata[elem], bytes) or isinstance(mydata[elem], bytearray):
             cerberus_schema[elem] = {"type" : "binary" }
             #print(" AND binary")
         else:
-            print()
+            cerberus_schema[elem] = {"type" : "string" }
+            print("type unknown, setting string.")
     from pprint import PrettyPrinter
     pp = PrettyPrinter(indent=4)
+    print(70*"-")
+    print("|   find model schema for: {}".format(infile) )
+    print(70*"-")
+    print("schema=", end="")
     pp.pprint(cerberus_schema)
+    print(70*"-")
+    print("|   you can copy&paste this right into any PythonOnWheels model schema"  )
+    print(70*"-")
+    
