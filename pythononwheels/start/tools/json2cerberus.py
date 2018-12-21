@@ -13,6 +13,7 @@ import simplejson as json
 import re
 from dateutil.parser import parse
 import sys
+import click
 
 uuid = re.compile('[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}', re.I)
 
@@ -23,14 +24,13 @@ def is_date(string):
     except ValueError:
         return False
 
-if __name__ == "__main__":
+@click.command()
+@click.option('--infile', help='json file to read')
+@click.option('--start_element', default=0, help="Element to process, if json file contains a list. Default=0")
+def json_to_cerberus(infile, start_element):
     cerberus_schema = {}
     # sample output schema format:
     # schema = {'name': {'type': 'string'} }
-    if len(sys.argv) < 2:
-        print("usage: python json2cerberus.py jsondata.json <optional_start_element>")
-        sys.exit()
-    infile=sys.argv[1]
     print("opening json data file: {}".format(infile))
     f = open(infile,"r")
     # already covers bool, list, dict
@@ -44,18 +44,12 @@ if __name__ == "__main__":
     except Exception as e:
         print(e)
     #print(data)
-    startelement = None
-    if len(sys.argv) == 3:
-        startelement = sys.argv[2]
-    if startelement:
-        mydata=data[startelement][0]
-    else:
-        mydata=data[0]
+    mydata=data[start_element]
     #print(mydata)
     #print(type(mydata))
     for elem in mydata:
         #print("{0} : {2} : {1}".format(elem, str(type(elem)), str(elem), end=''))
-        print("Checking Elem: {}".format(elem))
+        #print("Checking Elem: {}".format(elem))
     
         if isinstance(mydata[elem], bool):
             cerberus_schema[elem] = {"type" : "boolean" }
@@ -68,10 +62,11 @@ if __name__ == "__main__":
         elif isinstance(mydata[elem], dict):
             cerberus_schema[elem] = {"type" : "dictionary" }
         elif isinstance(mydata[elem], str):
-            # date and datetime (date = datetime with constantly missing h:m:s)
-            if is_date(elem):
+            # check if sring is a date format...
+            if is_date(mydata[elem]):
                 cerberus_schema[elem] = {"type" : "datetime" }
                 #print(" AND string is => date or datetime")
+                # todo check if it is a dat (date = datetime without h:m:s:.xx)
             else:
                 cerberus_schema[elem] = {"type" : "string" }
                 #print()
@@ -84,11 +79,14 @@ if __name__ == "__main__":
     from pprint import PrettyPrinter
     pp = PrettyPrinter(indent=4)
     print(70*"-")
-    print("|   find model schema for: {}".format(infile) )
+    print("|  Model schema for: {}".format(infile) )
     print(70*"-")
     print("schema=", end="")
     pp.pprint(cerberus_schema)
     print(70*"-")
     print("|   you can copy&paste this right into any PythonOnWheels model schema"  )
     print(70*"-")
+
+if __name__ == "__main__":
+    json_to_cerberus()
     
