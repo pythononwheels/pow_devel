@@ -10,7 +10,7 @@ jsonschema==2.5.1
 junit2html==18
 Mako==1.0.7
 MarkupSafe==0.23
-marshmallow==2.10.1
+marshmallow>=2.15.1
 marshmallow-sqlalchemy==0.10.0
 packaging==16.8
 py==1.4.33
@@ -20,7 +20,7 @@ pytest==3.0.7
 pytest-ordering==0.5
 python-dateutil==2.6.1
 python-editor==1.0.3
-requests==2.13.0
+requests==2.20.0
 simplejson==3.10.0
 six==1.10.0
 SQLAlchemy==1.1.0b3
