@@ -1,36 +1,57 @@
 import tornado.ioloop
 import tornado.web
 from {{appname}}.handlers.base import BaseHandler
-from {{appname}}.application import app
+from {{appname}}.application import app, route
 
-# You can uese flask/werkzeug routing.
-# @app.add_route('/test/<uuid:identifier>', dispatch={"get" : "testuuid"})
+# ROUTING:
+# You can decorate routes on the handler classes or on the methods directly.
+# 
+# You can use flask/werkzeug style routing.
+#      example: @app.add_route('/test/<uuid:identifier>', dispatch={"get" : "testuuid"})
 # Or you can use regex in the routes as well:
-# (r"/([^/]+)/(.+)", ObjectHandler),
-# any regex goes. any group () will be handed to the handler 
-# see example handler below.
+#      example: @route('/test/([0-9]+)', dispatch=["get"] )
+#      any regex goes. any group () will be handed to the handler 
+#      see example handler below.
+# 
+# Check the docs for more info: https://www.pythononwheels.org/documentation
+#
 
-
-
-@app.add_route("/", pos=1)
-@app.add_route('/index/<int:year>', dispatch={"get" : "test"})
-#@app.add_route('/index/<uuid:identifier>', dispatch={"get" : "testuuid"})
-#@app.add_route('/index/<uuid:identifier>.<format>', dispatch={"get" : "testuuid"})
+@app.add_route(r"/", dispatch={"get" : "index"}, pos=1)
+@app.make_routes()
 class IndexdHandler(BaseHandler):
-    def get(self, year=None):
-        print(" Calling IndexHandler from handlers/shorties.py: parameter index: " + str(year))
+    def index(self, year=None):
+        """
+            Example Method with class attached routing (see above "/" )
+        """
+        print(" Calling IndexHandler.index from handlers/shorties.py: parameter index: " + str(year))
         self.render("index.tmpl")
     
-    def get(self, year=None):
-        print(" Calling IndexHandler from handlers/shorties.py: parameter index: " + str(year))
-        self.render("index.tmpl")
-    
+    @route(r'/test/<int:identifier>', dispatch=["get"])
     def testuuid(self, identifier=None, format=None):
-        print(" Calling Indexhandler. Indentifier: {}, format: {}".format(str(identifier), str(format)))
+        """
+            Example method with Method attached route and Flask style route
+        """
+        print(" Calling Indexhandler.tetuuid Indentifier: {}, format: {}".format(str(identifier), str(format)))
+        self.render("index.tmpl")
+    
+    @route(r"/story/([0-9]+)", dispatch=["get"])
+    def get_story(self, identifier=None, format=None):
+        """
+            Example method with Method attached route and tornado/regex style route
+        """
+        print(" Calling Indexhandler.get_story Indentifier: {}, format: {}".format(str(identifier), str(format)))
         self.render("index.tmpl")
 
+@app.add_route(r"/testresults", dispatch={"get" : "show_results"})
+class PyTestHandler(BaseHandler):
+    def show_results(self):
+        """
+            this action will show the pytest from test/runtests.py 
+        """
+        self.render("result.html")
+    
 # this will be the last route since it has the lowest pos.
-@app.add_route(".*", pos=0)
+@app.add_route(r".*", pos=0)
 class ErrorHandler(BaseHandler):
     def get(self):
         return self.error( template="404.tmpl", http_code=404  )

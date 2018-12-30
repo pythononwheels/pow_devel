@@ -8,8 +8,8 @@ from sqlalchemy import MetaData
 import logging
 
 db_log_file_name = myapp["logfile"]
-db_handler_log_level = logging.INFO
-db_logger_log_level = logging.DEBUG
+db_handler_log_level = database["sql"]["loglevel"]
+db_logger_log_level = database["sql"]["loglevel"]
 
 formatter = myapp["logformat"]
 

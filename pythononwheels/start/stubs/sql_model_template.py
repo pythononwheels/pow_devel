@@ -13,8 +13,8 @@ class {{model_class_name}}(Base):
     # You can use column definitions in sqlalchemy classic style
     # which offer you all sqlalchemy options
     #
-    #title = Column(String(50))
-    #text = Column(String)
+    # title = Column(String(50))
+    # text = Column(String)
     
     #
     # Or use the new preferred cerberus schema style 
@@ -43,7 +43,6 @@ class {{model_class_name}}(Base):
     #         }
     #     }
     # }
-
 
     #__table_args__ = { "autoload" : True  }
 

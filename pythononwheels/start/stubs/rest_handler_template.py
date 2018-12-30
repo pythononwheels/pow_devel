@@ -8,36 +8,34 @@ import tornado.web
 
 @app.add_rest_routes("{{handler_name}}")
 class {{handler_class_name}}(PowHandler):
-
-    # 
-    # every pow handler automatically gets these RESTful routes
-    # when you add the : app.add_rest_routes() decorator.
-    #
-    # 1  GET    /todo                           #=> list
-    # 2  GET    /todo/<uuid:identifier>         #=> show
-    # 3  GET    /todo/new                       #=> new
-    # 4  GET    /todo/<uuid:identifier>/edit    #=> edit 
-    # 5  GET    /todo/page/<uuid:identifier>    #=> page
-    # 6  GET    /todo/search                    #=> search
-    # 7  PUT    /todo/<uuid:identifier>         #=> update
-    # 8  PUT    /todo                           #=> update (You have to send the id as json payload)
-    # 9  POST   /todo                           #=> create
-    # 10 DELETE /todo/<uuid:identifier>         #=> destroy
-    #
+    """
+    every pow handler automatically gets these RESTful routes
+    when you add the : app.add_rest_routes() decorator.
     
-    # standard supported http methods are:
-    # SUPPORTED_METHODS = ("GET", "HEAD", "POST", "DELETE", "PATCH", "PUT", "OPTIONS")
-    # you can overwrite any of those directly or leave the @add_rest_routes out to have a basic 
-    # handler.
-
-    # curl test:
-    # windows: (the quotes need to be escape in cmd.exe)
-    #   (You must generate a post model andf handler first... update the db...)
-    #   POST:   curl -H "Content-Type: application/json" -X POST -d "{ \"title\" : \"first {{handler_name}}\" }" http://localhost:8080/{{handler_name}}
-    #   GET:    curl -H "Content-Type: application/json" -X GET http://localhost:8080/{{handler_name}}
-    #   PUT:    curl -H "Content-Type: application/json" -X PUT -d "{ \"id\" : \"1\", \"text\": \"lalala\" }" http://localhost:8080/{{handler_name}}
-    #   DELETE: curl -H "Content-Type: application/json" -X DELETE -d "{ \"id\" : \"1\" }" http://localhost:8080/{{handler_name}}
+    1  GET    /todo                           #=> list
+    2  GET    /todo/<uuid:identifier>         #=> show
+    3  GET    /todo/new                       #=> new
+    4  GET    /todo/<uuid:identifier>/edit    #=> edit 
+    5  GET    /todo/page/<uuid:identifier>    #=> page
+    6  GET    /todo/search                    #=> search
+    7  PUT    /todo/<uuid:identifier>         #=> update
+    8  PUT    /todo                           #=> update (You have to send the id as json payload)
+    9  POST   /todo                           #=> create
+    10 DELETE /todo/<uuid:identifier>         #=> destroy
     
+    Standard supported http methods are:
+    SUPPORTED_METHODS = ("GET", "HEAD", "POST", "DELETE", "PATCH", "PUT", "OPTIONS")
+    you can overwrite any of those directly or leave the @add_rest_routes out to have a basic 
+    handler.
+
+    curl tests:
+    for windows: (the quotes need to be escape in cmd.exe)
+      (You must generate a post model andf handler first... update the db...)
+      POST:   curl -H "Content-Type: application/json" -X POST -d "{ \"title\" : \"first {{handler_name}}\" }" http://localhost:8080/{{handler_name}}
+      GET:    curl -H "Content-Type: application/json" -X GET http://localhost:8080/{{handler_name}}
+      PUT:    curl -H "Content-Type: application/json" -X PUT -d "{ \"id\" : \"1\", \"text\": \"lalala\" }" http://localhost:8080/{{handler_name}}
+      DELETE: curl -H "Content-Type: application/json" -X DELETE -d "{ \"id\" : \"1\" }" http://localhost:8080/{{handler_name}}
+    """
     model=Model()
     
     # these fields will be hidden by scaffolded views:

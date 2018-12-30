@@ -20,21 +20,36 @@
             
             <p>
                 <table class="table">
+                    {% try %}
                     <tr>
                         <td><b>Status:</b></td><td> {{status}} </td>
                     </tr>
+                    {% except %}
+                    {% end %}
+                    {% try %}
                     <tr>
                         <td><b>Message:</b></td><td> {{message}} </td>
                     </tr>
+                    {% except %}
+                    {% end %}
+                    {% try %}
                     <tr>
                         <td><b>Data:</b></td><td> {{data}} </td>
                     </tr>
+                    {% except %}
+                    {% end %}
+                    {% try %}
                     <tr>
                         <td><b>URI:</b></td><td> {{request.path}} </td>
                     </tr>
+                    {% except %}
+                    {% end %}
+                    {% try %}
                     <tr>
                         <td><b>Request:</b></td><td> {{request}} </td>
                     </tr>
+                    {% except %}
+                    {% end %}
                 </table>
         </div>
         <div class="col-md-2">

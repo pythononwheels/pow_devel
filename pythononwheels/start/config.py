@@ -74,13 +74,27 @@ database = {
 
     },
     "sql"   : {
-        "type"      :   "sqlite",
-        "dbname"    :   os.path.join(BASE_DIR, 'db.sqlite'),   
-        "host"      :   None,       
-        "port"      :   None,   
-        "user"      :   None,
+        "loglevel"  :   logging.INFO,
+        #
+        # this is an example for sqlite
+        #
+        "type"      :   "sqlite", #or: "db+driver" e.g. => "postgres+psycopg2" ...
+        "dbname"    :   os.path.join(BASE_DIR, 'db.sqlite'),   # just a name for non file based DBs
+        "host"      :   None,     
+        "port"      :   None,     
+        "user"      :   None,     
         "passwd"    :   None,
         "enabled"   :   True          # switch currently unused
+        #
+        # this is an example for postgres (psycopg2 driver) you can use your preferred driver of course 
+        #     
+        # "type"      :   "postgres+psycopg2",
+        # "dbname"    :   "powdb",   
+        # "host"      :   "localhost",       
+        # "port"      :   5432,   
+        # "user"      :   "postgres",
+        # "passwd"    :   "postgres",
+        # "enabled"   :   True          # switch currently unused
     },
     "tinydb" : {
         "dbname"    :   os.path.join(BASE_DIR, 'tiny.db'),

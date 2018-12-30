@@ -21,6 +21,7 @@ class SqlBaseModel(ModelObject):
     __table_args__ = { "extend_existing": True }
 
     id =  Column(Integer, primary_key=True)
+    uuid = Column(String, default=str(uuid.uuid4()))
     # create_date column will be populated with the result of the now() SQL function 
     #(which, depending on backend, compiles into NOW() or CURRENT_TIMESTAMP in most cases
     # see: http://docs.sqlalchemy.org/en/latest/core/defaults.html
@@ -246,6 +247,7 @@ class SqlBaseModel(ModelObject):
         return rels.keys()
     
     def sync(self):
+        self.session.expire(self)
         self.session.refresh(self)
     
     def _rep_model_as_str(self):

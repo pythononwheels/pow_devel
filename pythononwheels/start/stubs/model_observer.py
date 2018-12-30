@@ -13,7 +13,6 @@ class {{model_class_name}}Observer:
             before_validation
             ... and so on
     """    
-
     #
     # example observer method:
     #

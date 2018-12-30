@@ -46,7 +46,7 @@ class BaseHandler(tornado.web.RequestHandler):
         if cfg.server_settings["debug_print"]:
             print(" path: " + self.path)
         #
-        # You can use the before_handler in a local controller to
+        # You can use the before_handler in a local handler/controller to
         # process your own prepare stuff.
         # a common use case is to call: self.print_debug_info().
         # which then applies only to this specific Controller.
@@ -132,10 +132,9 @@ class BaseHandler(tornado.web.RequestHandler):
                         "format was" : format,
                         "supported_formats" : cfg.myapp["supported_formats"]
                     }
-            )
-                
+            )   
     #
-    # GET
+    # HTTP GET
     #
     # routes have the form: 
     # ( r"/" + action + r"/" + str(api) + r"/(?P<id>.+)/edit/?" , { "get" : "edit", "params" : ["id"] }),
@@ -331,10 +330,9 @@ class BaseHandler(tornado.web.RequestHandler):
 
             if raw_data == True => data is no (auto)converted to a given format (format)
             if pure == True: only the data given will be sent.
-                
-                self.write(data)                       untouched. No other structure added
-                                                       [if you give a format as well it will be 
-                                                        converted to that format for conveniance reasons.]
+                self.write(data) untouched. No other structure added
+                [if you give a format as well it will be 
+                converted to that format for conveniance reasons.]
             Example: 
                 self.error(pure=True, format="json", data={"message" : "you can only vote once"} )
                 => Will sent {"message" : "you can only vote once"}  [JSON encoded]
@@ -455,15 +453,12 @@ class BaseHandler(tornado.web.RequestHandler):
 
             if raw_data == True => data is no (auto)converted to a given format (format)
             if pure == True: only the data given will be sent.
-                
-                self.write(data)                       untouched. No other structure added
-                                                       [if you give a format as well it will be 
-                                                        converted to that format for conveniance reasons.]
+                self.write(data) untouched. No other structure added
+                [if you give a format as well it will be 
+                converted to that format for conveniance reasons.]
             Example: 
                 self.error(pure=True, format="json", data={"message" : "you can only vote once"} )
                 => Will sent {"message" : "you can only vote once"}  [JSON encoded]
-
-
         """
         # some global preparations 
         self.application.log_request(self, message="base.error:" + str(message))

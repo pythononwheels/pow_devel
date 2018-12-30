@@ -8,7 +8,6 @@ import tornado.web
 from tornado import gen
 # Please import your model here. (from yourapp.models.dbtype)
 
-
 @app.add_route('/{{handler_name}}/test/<int:testval>', dispatch={"get" : "_get_method"})
 class {{handler_class_name}}(PowHandler):
     

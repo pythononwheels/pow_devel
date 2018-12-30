@@ -39,6 +39,32 @@ handler = logging.handlers.RotatingFileHandler(
               LOG_FILENAME, maxBytes=20000, backupCount=5)
 
 analytics_logger.addHandler(handler)
+
+#
+# the direct method decorator
+# see: https://stackoverflow.com/questions/2366713/can-a-python-decorator-of-an-instance-method-access-the-class
+#
+# marks a method as routed and injects and attribute (route) which
+# has all the necessary routing parameters (route, dispatch, pos)
+# dispatch is a list (not a dict in this case) since the method doesnt have to be
+# explicitly defined twice.
+#
+# the actual routes are added by the class decorator @app.route which
+# iterates over all handler-class methods and adds routes for all marked methods.
+#
+# see the route method(decorator) in the Application class below.
+def route(route, dispatch=[], pos=-1):
+    def decorator(method):
+        #print("decorating method route: {} : {} : {}".format(route, str(dispatch), method))
+        method.routed=True
+        method.route={
+            "route" : route,
+            "dispatch" : dispatch,
+            "pos" : pos
+        }
+        return method
+    return decorator
+
 class Application(tornado.web.Application):
     #
     # handlers class variable is filled by the @add_route decorator.
@@ -323,8 +349,92 @@ class Application(tornado.web.Application):
             #print(dir())
             return cls
         return decorator
-
     
+    #
+    # direct method routing
+    # decorate methods directly like this:
+    # @route( "/route/here/<int:val>", dispatch=[ "HTTP_VERB", "HTTP_VERB2" ], pos=num )
+    #
+    # then decorate the class with @app.route()
+    def make_routes(self):
+        """
+            the app.route decorator collects all marked methods and
+            creates the actual routes.
+            The methods are marked using the @route() decorator. (see above)
+        """
+        def decorator(cls):
+            #
+            # first, check all methods for the method decorator mark
+            #
+            #for name, method in cls.__dict__.iteritems():
+            #    if hasattr(method, "has_route"):
+            #        # do something with the method and class
+            #        print("Method route: {}, {}".format(name, str(cls)))
+            # parent is the parent class of the relation
+            cls_name = cls.__name__.lower()
+            #print("in @app.route")
+            for name, method in cls.__dict__.items():
+                if hasattr(method, "routed"):
+                    #print(30*"--")
+                    #print("  routed Method  ")    
+                    #print("  * name: {}, method: {}". format(name,method))
+                    #print("  ** routes: {}".format(str(method.route)))
+                    #print(30*"--")
+                    # Create the route parameters from the route marked by @route
+                    # route, dispatch, pos
+                    route=method.route.get("route", None)
+                    # construct the dispatch dict from the http_vers list
+                    # ["get"] => 
+                    #       { "get" : method_name }
+                    #
+                    dispatch = {key: name for key in method.route.get("dispatch", [])}
+                    pos = method.route.get("pos", -1)
+                    # now just do the same as for the class decorator
+                    handlers=getattr(self.__class__, "handlers", None)
+                    if _rule_re.match(route):
+                        ########################################
+                        # new style Werkzeug route
+                        ########################################
+                        r=Rule(route, endpoint=cls_name)
+                        m = Map()
+                        m.add(r)
+                        c=m.bind(cfg.server_settings["host"]+":"+cfg.server_settings["host"], "/")
+                        r.compile()
+                        #print("r1: " +  str(r._regex.pattern))
+                        pattern = r._regex.pattern.replace('^\|', "")
+                        #print("r1: " +  str(pattern))
+                        fin_route = pattern
+                        # convert the HTTP Methods in dispatch to lowercase
+                        dispatch_lower=dict((k.lower(), v) for k,v in dispatch.items())
+                        route_tuple = (fin_route,cls, dispatch_lower)
+                        handlers.append((route_tuple,pos))
+                    else:
+                        ###################################
+                        #  old style regex route
+                        ###################################
+
+                        # BETA: this regex is added to every route to make 
+                        # 1.the slash at the end optional
+                        # 2.it possible to add a .format paramter.
+                        # Example: route = /test -> also test.json will work
+                        # Example: route = /test/([0-9]+) -> also /test/12.xml will work 
+                        if cfg.beta_settings["dot_format"]:
+                            fin_route = route  + r"(?:/?\.\w+)?/?"
+                        else:
+                            fin_route = route
+                        # convert the HTTP Methods in dispatch to lowercase
+                        dispatch_lower=dict((k.lower(), v) for k,v in dispatch.items())
+                        route_tuple = (fin_route,cls, dispatch_lower)
+                        #route_tuple = (fin_route,cls, dispatch)
+                        handlers.append((route_tuple,pos))
+                    #print("handlers: " + str(self.handlers))
+                    #print("ROUTING: added route for: " + cls.__name__ +  ": " + route + " -> " + fin_route +  " dispatch")
+                    print("ROUTING: METHOD ROUTE (+) : handler: {}, route: {}, fin_route: {}, dispatch(lower): {} ".format( 
+                        str(cls.__name__), route, fin_route, str(dispatch_lower)))
+            return cls
+        return decorator
+    
+    # 
     #
     # the direct route decorator
     #
@@ -340,7 +450,9 @@ class Application(tornado.web.Application):
             http://stackoverflow.com/questions/9018947/regex-string-with-optional-parts
         """
         def decorator(cls):
-            # parent is the parent class of the relation
+            """
+                the actual decorator
+            """
             cls_name = cls.__name__.lower()
             handlers=getattr(self.__class__, "handlers", None)
             if _rule_re.match(route):
@@ -381,7 +493,7 @@ class Application(tornado.web.Application):
                 handlers.append((route_tuple,pos))
             #print("handlers: " + str(self.handlers))
             #print("ROUTING: added route for: " + cls.__name__ +  ": " + route + " -> " + fin_route +  " dispatch")
-            print("STD ROUTE (+) : handler: {}, route: {}, fin_route: {}, dispatch(lower): {} ".format( 
+            print("ROUTING:  CLASS ROUTE (+) : handler: {}, route: {}, fin_route: {}, dispatch(lower): {} ".format( 
                 str(cls.__name__), route, fin_route, str(dispatch_lower)))
             return cls
         return decorator
