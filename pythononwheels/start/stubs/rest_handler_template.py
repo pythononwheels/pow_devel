@@ -12,16 +12,16 @@ class {{handler_class_name}}(PowHandler):
     every pow handler automatically gets these RESTful routes
     when you add the : app.add_rest_routes() decorator.
     
-    1  GET    /todo                           #=> list
-    2  GET    /todo/<uuid:identifier>         #=> show
-    3  GET    /todo/new                       #=> new
-    4  GET    /todo/<uuid:identifier>/edit    #=> edit 
-    5  GET    /todo/page/<uuid:identifier>    #=> page
-    6  GET    /todo/search                    #=> search
-    7  PUT    /todo/<uuid:identifier>         #=> update
-    8  PUT    /todo                           #=> update (You have to send the id as json payload)
-    9  POST   /todo                           #=> create
-    10 DELETE /todo/<uuid:identifier>         #=> destroy
+    1  GET    /{{handler_name}}                           #=> list
+    2  GET    /{{handler_name}}/<uuid:identifier>         #=> show
+    3  GET    /{{handler_name}}/new                       #=> new
+    4  GET    /{{handler_name}}/<uuid:identifier>/edit    #=> edit 
+    5  GET    /{{handler_name}}/page/<uuid:identifier>    #=> page
+    6  GET    /{{handler_name}}/search                    #=> search
+    7  PUT    /{{handler_name}}/<uuid:identifier>         #=> update
+    8  PUT    /{{handler_name}}                           #=> update (You have to send the id as json payload)
+    9  POST   /{{handler_name}}                           #=> create
+    10 DELETE /{{handler_name}}/<uuid:identifier>         #=> destroy
     
     Standard supported http methods are:
     SUPPORTED_METHODS = ("GET", "HEAD", "POST", "DELETE", "PATCH", "PUT", "OPTIONS")
@@ -109,9 +109,9 @@ class {{handler_class_name}}(PowHandler):
             m.init_from_json(data_json)
             res = m.find_by_id(m.id)
             res.delete()
-            self.success(message="todo, destroy id: " + str(m.id))
+            self.success(message="{{handler_name}}, destroy id: " + str(m.id))
         except Exception as e:
-            self.error(message="todo, destroy id: " + str(e))
+            self.error(message="{{handler_name}}, destroy id: " + str(e))
     
     def search(self):
         m=Model()

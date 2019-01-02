@@ -227,7 +227,7 @@ def main():
         action="store_true", dest="update_only", default=False,
         help="Only update the Pow parts. Leaves everyathin in models")
 
-    parser.add_argument("-v", "--view", 
+    parser.add_argument("-t", "--type", 
         action="store", dest="view_type", default="bs4",
         help="set the default view framework. (semanticui = sui || bootstrap 4 = bs4 (default))")
 

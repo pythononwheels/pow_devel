@@ -27,23 +27,24 @@ class IndexdHandler(BaseHandler):
         self.render("index.tmpl")
     
     @route(r'/test/<int:identifier>', dispatch=["get"])
-    def testuuid(self, identifier=None, format=None):
+    def testuuid(self, identifier=None):
         """
             Example method with Method attached route and Flask style route
         """
-        print(" Calling Indexhandler.tetuuid Indentifier: {}, format: {}".format(str(identifier), str(format)))
+        print(" Calling Indexhandler.tetuuid Indentifier: {}, format: {}".format(str(identifier)))
         self.render("index.tmpl")
     
     @route(r"/story/([0-9]+)", dispatch=["get"])
-    def get_story(self, identifier=None, format=None):
+    def get_story(self, identifier=None):
         """
             Example method with Method attached route and tornado/regex style route
         """
-        print(" Calling Indexhandler.get_story Indentifier: {}, format: {}".format(str(identifier), str(format)))
+        print(" Calling Indexhandler.get_story Indentifier: {}".format(str(identifier)))
         self.render("index.tmpl")
 
-@app.add_route(r"/testresults", dispatch={"get" : "show_results"})
+@app.make_routes()
 class PyTestHandler(BaseHandler):
+    @route(r"/testresults", dispatch=["get"])
     def show_results(self):
         """
             this action will show the pytest from test/runtests.py 

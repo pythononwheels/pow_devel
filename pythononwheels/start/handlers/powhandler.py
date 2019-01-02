@@ -22,7 +22,7 @@ class PowHandler(BaseHandler):
             change to you own needs here or in your own subclassed base handler.
 
         """
-        if myapp["enable_authentication"]:
+        if myapp["enable_auth"]:
             # try to find the user
             # user_id = self.get_secure_cookie("user_id")
             # if not user_id: return None

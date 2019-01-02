@@ -20,7 +20,7 @@ class MongoBaseModel(ModelObject):
 
     basic_schema = {
         "id"    :   { "type" : "string", "default" : None },
-        "uuid"    :   { "type" : "string", "default" : None },
+        "_uuid"    :   { "type" : "string", "default" : None },
         "created_at"    : { "type" : "datetime", "default" : None },
         "last_updated"    : { "type" : "datetime", "default" : None },
     }
@@ -80,7 +80,7 @@ class MongoBaseModel(ModelObject):
         #self.table = self.__class__.table
         self._id = None
         self.id = str(uuid.uuid4())
-        self.uuid = self.id
+        self._uuid = self.id
         #print("new id is: " + self.id) 
         self.init_observers()
         self.setup_dirty_model()

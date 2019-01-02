@@ -17,6 +17,7 @@ class TinyBaseModel(ModelObject):
     
     basic_schema = {
         "id"    :   { "type" : "string" },
+        "_uuid" :  { "type" : "string" },
         #"eid"   :   { "type" : "string" },
         "created_at"    : { "type" : "datetime" },
         "last_updated"    : { "type" : "datetime" },
@@ -77,6 +78,7 @@ class TinyBaseModel(ModelObject):
                 #if key in self.__class__.__dict__:
                 if key in self.schema:
                     setattr(self, key, kwargs[key])
+        #self._uuid = str(uuid.uuid4())
         self.init_observers()
         self.setup_dirty_model()
 
@@ -195,6 +197,7 @@ class TinyBaseModel(ModelObject):
                 self.last_updated = datetime.datetime.utcnow()
                 self.created_at = self.last_updated
                 self.id = str(uuid.uuid4())
+                self._uuid = self.id
                 self.eid = self.table.insert(self.to_dict())         
                 print("insert, new eid: " +str(self.eid))    
         # clean dirty marks

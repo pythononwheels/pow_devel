@@ -3,6 +3,7 @@ from {{appname}}.handlers.powhandler import PowHandler
 from {{appname}}.config import myapp
 from {{appname}}.models.{{model_type}}.{{handler_name}} import {{handler_model_class_name}} as Model
 from {{appname}}.config import myapp, database
+from {{appname}}.application import app
 import simplejson as json
 import tornado.web
 from tornado import gen

@@ -307,7 +307,7 @@ class Application(tornado.web.Application):
         """
         def decorator(cls):
             # parent is the parent class of the relation
-            print("in add_rest_routes")
+            #print("in add_rest_routes")
             cls_name = cls.__name__.lower()
             #print(cls_name)
             

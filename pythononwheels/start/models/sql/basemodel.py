@@ -5,6 +5,7 @@ from sqlalchemy.sql.expression import func
 from {{appname}}.database.sqldblib import engine,session
 from {{appname}}.powlib import pluralize
 import datetime
+import uuid
 from sqlalchemy import orm
 import sqlalchemy.inspection
 from cerberus import Validator
@@ -16,12 +17,28 @@ import {{appname}}.config as cfg
 from {{appname}}.models.modelobject import ModelObject
 #print ('importing module %s' % __name__)
 
+def make_uuid():
+    """
+        dummy function to test uuid default value.
+    """
+    return str(uuid.uuid4())
+
 class SqlBaseModel(ModelObject):
-    
+    """
+        All the basic stuff for SQL Models.
+        Defaults, init functions, observers, querys
+        upsert, delete, 
+        init_from (json, xml,csv ...)
+        printing
+        ...
+        all the stuff you dont need to implement.
+
+    """
     __table_args__ = { "extend_existing": True }
 
     id =  Column(Integer, primary_key=True)
-    uuid = Column(String, default=str(uuid.uuid4()))
+    #_uuid = Column(String, default=make_uuid)
+
     # create_date column will be populated with the result of the now() SQL function 
     #(which, depending on backend, compiles into NOW() or CURRENT_TIMESTAMP in most cases
     # see: http://docs.sqlalchemy.org/en/latest/core/defaults.html
@@ -251,6 +268,11 @@ class SqlBaseModel(ModelObject):
         self.session.refresh(self)
     
     def _rep_model_as_str(self):
+        """
+            returns a string with the models columns 
+            and value information
+            including realtion, keys etc..
+        """
         line = ""
         for a in self.__mapper__.attrs:
             if isinstance(a, orm.properties.ColumnProperty):
@@ -260,10 +282,12 @@ class SqlBaseModel(ModelObject):
                 if c.primary_key:
                     line += '{:15}'.format(" (primary key)")
                 if c.foreign_keys:
-                    line += '{:30}'.format(", ".join([fk.target_fullname for fk in c.foreign_keys]))
+                    for k in c.foreign_keys:
+                        line += '{:20}'.format(" (" + k.target_fullname + ")")
+                    #line += ' {:40}'.format(", ".join([fk.target_fullname for fk in c.foreign_keys]))
                 line += os.linesep
             elif isinstance(a, orm.properties.RelationshipProperty):
-                line += "{} -> {} relationship with <model {}>".format(a.key, a.direction.name, a.mapper.class_.__name__)
+                line += "{:20}: {} relationship with <model {}>".format(a.key, a.direction.name, a.mapper.class_.__name__)
                 line += os.linesep
 
         return line

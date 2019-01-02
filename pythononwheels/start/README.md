@@ -157,9 +157,6 @@ generative approach (but not noisy)
 # Enjoy! 
 See [getting started](http://www.pythononwheels.org/article/7de74cc6-8af2-45ac-b619-eea61e4da44f) or go to the [documentation](http://www.pythononwheels.org/article/2160fdfd-fc9f-4380-aeb3-bc13d2c201e0)
 
-## Current Status:
-The current <master> version in this repo is fully working 
-
 ## For more check: [The PythonOnWheels Homepage](http://www.pythononwheels.org)
 
 
