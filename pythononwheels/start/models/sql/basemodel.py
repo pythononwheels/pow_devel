@@ -445,9 +445,13 @@ class SqlBaseModel(ModelObject):
         self.session.expire_all()
         return session.query(self.__class__).get(id)
 
-    def find_all(self, *criterion, raw=False, limit=None, offset=None):
+    def find_all(self, *criterion, raw=True, limit=None, offset=None):
         """
-            Searches the DB (Parameters: limit, offset
+            Searches the DB (Parameters: limit, offset ..)
+            Returns a sqlalchemy.orm.query.Query object (raw=True)
+            Or a list of PoW Model instances (raw=False)
+
+            See get_all also.
         """
         self.session.expire_all()
         if raw:
@@ -456,8 +460,8 @@ class SqlBaseModel(ModelObject):
         return res
     
     def get_all(self):
-        """ returns all elements without any filters"""
-        return self.find_all()
+        """ returns all elements without any filters as a list of PoW models"""
+        return self.find_all(raw=True)
 
     def find_one(self, *criterion):
         """
