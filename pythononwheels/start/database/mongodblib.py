@@ -4,7 +4,7 @@
 from {{appname}}.config import database
 #from pymongo import MongoClient
 import pymongo
-
+import urllib
 if not database["mongodb"]["atlas"]:
     # normal mongodb server (local or remote)
     conn_str = "mongodb://" + database["mongodb"]["host"] + ":" + str(database["mongodb"]["port"]) + "/"    
@@ -15,8 +15,13 @@ if not database["mongodb"]["atlas"]:
 
 else:
     # go cloudy &  set it up for atlas use
-    conn_str=database["mongodb"]["atlas_conn_str"]
-    print(" ... setting it up for mongoDB: " + conn_str)
+    #conn_str = database["mongodb"]["atlas_cstr"]
+    conn_str="mongodb+srv://" + urllib.parse.quote(database["mongodb"]["atlas_user"]) + ":" 
+    conn_str += database["mongodb"]["atlas_pwd"] + r"@" + database["mongodb"]["atlas_cstr"]
+
+    #print(" ... setting it up for mongoDB: " + conn_str[conn_str.index(r"@"):] )
+    print(" ... setting it up for mongoDB Atlas: ({}) @{} ".format( 
+        database["mongodb"]["atlas_user"], database["mongodb"]["atlas_cstr"] ))
     client = pymongo.MongoClient(conn_str)
 
 db = client[database["mongodb"]["dbname"]]

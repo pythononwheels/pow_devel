@@ -281,11 +281,13 @@ class MongoBaseModel(ModelObject):
             page_size = myapp["page_size"] 
         return self._return_find(self.table.find(filter).skip(page*page_size).limit(page_size))
 
-    def find(self,filter={}):
+    def find(self,filter={}, raw=False):
         """ Find something given a query or criterion 
             filter = { "key" : value, ..}
         """
         #print("Find parameter:" + str(filter))
+        if raw:
+            return self.table.find(filter)
         return self._return_find(self.table.find(filter))
     
     def find_all(self, filter=None, raw=False, limit=0, offset=0):

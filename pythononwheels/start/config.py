@@ -106,8 +106,10 @@ database = {
     },
     "mongodb" : {
         "dbname"    :   "testdb",  
-        "atlas"     :   False,
-        "atlas_conn_str" :  "mongodb+srv://<USER>:<PASSWORD>@cluster0-aetuw.mongodb.net/test", #this is just a sample
+        "atlas"     :   True,
+        "atlas_cstr":   "", # everything after the @ goes here
+        "atlas_user":   "",
+        "atlas_pwd" :   "",
         "host"      :   "localhost",       
         "port"      :   27017,   
         "user"      :   None,
