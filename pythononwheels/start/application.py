@@ -53,14 +53,15 @@ analytics_logger.addHandler(handler)
 # iterates over all handler-class methods and adds routes for all marked methods.
 #
 # see the route method(decorator) in the Application class below.
-def route(route, dispatch=[], pos=-1):
+def route(route, dispatch=[], params=[], pos=-1):
     def decorator(method):
         #print("decorating method route: {} : {} : {}".format(route, str(dispatch), method))
         method.routed=True
         method.route={
-            "route" : route,
-            "dispatch" : dispatch,
-            "pos" : pos
+            "route"     : route,
+            "dispatch"  : dispatch,
+            "params"    : params, 
+            "pos"       : pos
         }
         return method
     return decorator

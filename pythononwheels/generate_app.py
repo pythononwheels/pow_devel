@@ -187,6 +187,14 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
             rename_extensions(folder, "." + view_type, ".tmpl",  files=["index", "error", "404"])
     else:
         print("Error: viewtype not set and apparantly no Default set either!")
+    
+    if update_only:
+        print(40*"-")
+        print("   Update only. ")
+        print(40*"-")
+        print( "  I did not touch:  ")
+        print(exclude_files)
+        print(skip_dirs)
 
 def rename_extensions(folder, old_ext, new_ext, files=None):
     """
@@ -263,11 +271,12 @@ def main():
     # create the views directory
     #os.makedirs(os.path.normpath(os.path.join(base, "migrations")), exist_ok=True)
     print()
-    print(50*"-")
+    #print(50*"-")
     if args.update_only:
         print(50*"-")
         print(" UPDATED YOUR APP!!!")
         print(" Successfully updated your application")   
+        sys.exit()
     else:
         print(" Successfully created your application")
     print()

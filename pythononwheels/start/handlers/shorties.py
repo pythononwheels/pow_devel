@@ -17,6 +17,7 @@ from {{appname}}.application import app, route
 #
 
 @app.add_route(r"/", dispatch={"get" : "index"}, pos=1)
+#@app.add_route(r"/index/([0-9]+)", dispatch={"get" : "index_identifier", "params" : ["identifier"] })
 @app.make_routes()
 class IndexdHandler(BaseHandler):
     def index(self, year=None):
@@ -26,21 +27,21 @@ class IndexdHandler(BaseHandler):
         print(" Calling IndexHandler.index from handlers/shorties.py: parameter index: " + str(year))
         self.render("index.tmpl")
     
-    @route(r'/test/<int:identifier>', dispatch=["get"])
-    def testuuid(self, identifier=None):
+    @route(r'/index/<uuid:identifier>', dispatch=["get"])
+    def index_uuid(self, identifier=None):
         """
             Example method with Method attached route and Flask style route
         """
-        print(" Calling Indexhandler.tetuuid Indentifier: {}, format: {}".format(str(identifier)))
-        self.render("index.tmpl")
+        print(" Calling Indexhandler.tetuuid Indentifier: {}".format(str(identifier)))
+        self.write("uuid: " + str(identifier))
     
-    @route(r"/story/([0-9]+)", dispatch=["get"])
-    def get_story(self, identifier=None):
+    @route(r"/index/([0-9]+)", dispatch=["get"], params=["identifier"])
+    def index_identifier(self, identifier=None):
         """
             Example method with Method attached route and tornado/regex style route
         """
         print(" Calling Indexhandler.get_story Indentifier: {}".format(str(identifier)))
-        self.render("index.tmpl")
+        self.write("int: " + str(identifier))
 
 @app.make_routes()
 class PyTestHandler(BaseHandler):
@@ -50,6 +51,14 @@ class PyTestHandler(BaseHandler):
             this action will show the pytest from test/runtests.py 
         """
         self.render("result.html")
+    
+    @route(r'/test/<uuid:identifier>', dispatch=["get"])
+    def testuuid(self, identifier=None):
+        """
+            Example method with Method attached route and Flask style route
+        """
+        print(" Calling Indexhandler.tetuuid Indentifier: {}, format: {}".format(str(identifier)))
+        self.render("index.tmpl")
     
 # this will be the last route since it has the lowest pos.
 @app.add_route(r".*", pos=0)
