@@ -106,10 +106,11 @@ database = {
     },
     "mongodb" : {
         "dbname"    :   "testdb",  
-        "atlas"     :   True,
-        "atlas_cstr":   "", # everything after the @ goes here
-        "atlas_user":   "",
-        "atlas_pwd" :   "",
+        "atlas"     :   False,
+        "atlas_cstr":   "",     # usually just copy the Atlas connection string here
+        "urlencode" :   False,  # if set to True you need to give usr / pwd below 
+        "atlas_user":   "",     # will be urllib.parse.quoted
+        "atlas_pwd" :   "",     # will still be raw
         "host"      :   "localhost",       
         "port"      :   27017,   
         "user"      :   None,

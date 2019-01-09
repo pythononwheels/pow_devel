@@ -15,13 +15,16 @@ if not database["mongodb"]["atlas"]:
 
 else:
     # go cloudy &  set it up for atlas use
-    #conn_str = database["mongodb"]["atlas_cstr"]
-    conn_str="mongodb+srv://" + urllib.parse.quote(database["mongodb"]["atlas_user"]) + ":" 
-    conn_str += database["mongodb"]["atlas_pwd"] + r"@" + database["mongodb"]["atlas_cstr"]
-
-    #print(" ... setting it up for mongoDB: " + conn_str[conn_str.index(r"@"):] )
-    print(" ... setting it up for mongoDB Atlas: ({}) @{} ".format( 
+    if not database["mongodb"]["urlencode"]:
+        conn_str = database["mongodb"]["atlas_cstr"]
+        print(" ... setting it up for mongoDB Atlas: {}".format( conn_str[conn_str.index(r"@"):] ))
+    else:
+        conn_str="mongodb+srv://" + urllib.parse.quote(database["mongodb"]["atlas_user"]) + ":" 
+        conn_str += database["mongodb"]["atlas_pwd"] + r"@" + database["mongodb"]["atlas_cstr"]
+        print(" ... setting it up for mongoDB Atlas: ({}) @{} ".format( 
         database["mongodb"]["atlas_user"], database["mongodb"]["atlas_cstr"] ))
+    
+    
     client = pymongo.MongoClient(conn_str)
 
 db = client[database["mongodb"]["dbname"]]
