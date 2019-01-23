@@ -127,6 +127,11 @@ database = {
     }
 }
 
+mydash={
+    # see: https://dash.plot.ly/getting-started
+    "external_stylesheets"  :   ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+}
+
 beta_settings = {
     # Beta settings are erxperimental. You can find details for each Beta setting
     # on www.pythononwheels.org/beta

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>Insight Dash</title>
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link href="{{ static_url("css/bootstrap.min.css")}}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    
+    <style>
+        /* from: pricing.css: view-source:https://getbootstrap.com/docs/4.0/examples/pricing/pricing.css */    
+        
+        html {
+            font-size: 14px;
+            }
+            @media (min-width: 768px) {
+            html {
+                font-size: 16px;
+            }
+            }
+
+            .container {
+            max-width: 960px;
+            }
+
+            .pricing-header {
+            max-width: 700px;
+            }
+
+            .card-deck .card {
+            min-width: 220px;
+            }
+
+            .border-top { border-top: 1px solid #e5e5e5; }
+            .border-bottom { border-bottom: 1px solid #e5e5e5; }
+
+            .box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
+        /* Show it is fixed to the top */
+        body {
+            min-height: 75rem;
+            padding-top: 0rem;
+        }
+
+        .loader {
+            border-top: 16px solid blue;
+            border-right: 16px solid green;
+            border-bottom: 16px solid red;
+        }
+        img.profile_small {
+          width:48px;
+        }
+    </style>
+
+    <script>
+        
+    
+    </script>
+
+  </head>
+
+  <body>
+
+    
+    
+    
+    {% block content %}
+        <div id="react-entry-point">
+            <div class="_dash-loading">
+            </div>
+        </div>
+    {% end %}
+    
+    <!--/main-->
+      <!-- Site footer -->
+      {% raw dash_block %}
+      {% include "footer.bs4" %}
+      <!-- Icons -->
+     
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!--script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="../../../../assets/js/vendor/popper.min.js"></script>
+    <script src="../../../../dist/js/bootstrap.min.js"></script-->
+  </body>
+</html>

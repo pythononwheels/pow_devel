@@ -34,7 +34,6 @@ def generate_observer(model_name=None, model_type=None, appname=None):
         #
         ofilePath = os.path.join(templates["model_path"], model_type)
         ofile = open(os.path.join(ofilePath, model_name + "_observer.py"), "wb")
-        print("shala")
         try:
             res = loader.load("model_observer.py").generate( 
                 model_name=model_name, 
