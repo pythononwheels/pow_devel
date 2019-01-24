@@ -1,95 +1,76 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../../../favicon.ico">
+{% extends "base.bs4" %}
 
-    <title>Insight Dash</title>
+{% block css %}
+  <!-- Fonts -->
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Righteous" rel="stylesheet">
+{% end %}
 
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <!-- Bootstrap core CSS -->
-    <link href="{{ static_url("css/bootstrap.min.css")}}" rel="stylesheet">
+{% block content %}
+    <!-- Begin page content -->
+    <div class="container">
+      <!-- The justified navigation menu is meant for single line per list item.
+           Multiple lines will require custom code not provided by Bootstrap. -->
+      
 
-    <!-- Custom styles for this template -->
-    
-    <style>
-        /* from: pricing.css: view-source:https://getbootstrap.com/docs/4.0/examples/pricing/pricing.css */    
+      <!-- Jumbotron -->
+      <div class="row navpow">
+        <div class="col-md-2">
+          &nbsp;
+        </div>
+        <div class="col-md-4 text-left">
+          <a href="https://www.pythononwheels.org">PythonOnWheels</a>
+        </div>
+        <div class="col-md-4 text-right">
+          <a href="http://www.pythononwheels.org/dash">getting started (Dash)</a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-2">
+          &nbsp;
+        </div>
+        <div class="col-md-8">
+          &nbsp;
+        </div>
         
-        html {
-            font-size: 14px;
-            }
-            @media (min-width: 768px) {
-            html {
-                font-size: 16px;
-            }
-            }
+        <div class="col-md-2">
+          &nbsp;
+        </div>
+      </div>
+      <div class="jumbotron">
+        <img src={{ static_url("images/dash_on_wheels_yellow.png") }}  width=300px; style="display: inline-block;" />
+           
+      </div>
+      <!-- START THE FEATURETTES -->
 
-            .container {
-            max-width: 960px;
-            }
+      <!--hr class="featurette-divider" -->
+      <div class="row featurette">
+        <div class="col-md-2">
+          &nbsp;
+        </div>
+        <div class="col-md-8 ">
+          <span style="justify-content:center;" class="text-center">
+            <h5><a href="https://www.pythononwheels.org">PythonOnWheels</a> now directly supports embedding 
+              <a href="https://plot.ly/products/dash/">plotly Dash</a>.</h3>
+            <p>So you can easily use  Database access, creating an API and bootstrap 4 view templates. 
+            Literally a matter of minutes from zero to your first webapp. Read 
+            the <a href="https://www.pythononwheels.org/dash">short Dash-on-wheels hands-on tutorial</a>.</p>
+          
+          </span>
 
-            .pricing-header {
-            max-width: 700px;
-            }
-
-            .card-deck .card {
-            min-width: 220px;
-            }
-
-            .border-top { border-top: 1px solid #e5e5e5; }
-            .border-bottom { border-bottom: 1px solid #e5e5e5; }
-
-            .box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
-        /* Show it is fixed to the top */
-        body {
-            min-height: 75rem;
-            padding-top: 0rem;
-        }
-
-        .loader {
-            border-top: 16px solid blue;
-            border-right: 16px solid green;
-            border-bottom: 16px solid red;
-        }
-        img.profile_small {
-          width:48px;
-        }
-    </style>
-
-    <script>
-        
-    
-    </script>
-
-  </head>
-
-  <body>
-
-    
-    
-    
-    {% block content %}
-        <div id="react-entry-point">
+          <div id="react-entry-point">
             <div class="_dash-loading">
             </div>
-        </div>
-    {% end %}
-    
-    <!--/main-->
-      <!-- Site footer -->
-      {% raw dash_block %}
-      {% include "footer.bs4" %}
-      <!-- Icons -->
-     
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <!--script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-    <script src="../../../../assets/js/vendor/popper.min.js"></script>
-    <script src="../../../../dist/js/bootstrap.min.js"></script-->
-  </body>
-</html>
+          </div>
+          {% raw dash_block %}
+        </div>  
+        <div class="col-md-2">
+        &nbsp;
+      </div>
+
+      
+
+      
+
+    </div> <!-- /container -->
+{% end %}

@@ -105,8 +105,8 @@ def main():
 if __name__ == "__main__":
     main()
     print(40*"-")
-    print("  Next Steps:")
-
+    print(" Next Steps:")
+    print(40*"-")
     print(" {:15}: {:30}".format("commandline", "pip install -r dash_requirements.txt"))
     print(" {:15}: {:30}".format("commandline", "python server.py"))
     print(" {:15}: {:30}".format("go to", "http://localhost:8080/dash"))
