@@ -10,6 +10,7 @@ import datetime
 import shutil
 from pathlib import Path
 import uuid
+from update_conf import update_conf
 
 def camel_case(name):
     """
@@ -79,18 +80,9 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
     if update_only:
         # only update pow versions. Leave all non pow or possibly changed stuff untouched
         # maybe add encoders.py, decoders.py to the list in the future.
-        exclude_files.extend([
-            "alembic.ini", "db.sqlite", "tiny.db",
-            "env.py", "shorties.py", "config.py", "powhandler.py", 
-            "powmodel.py", "tinymodel.py", "mongomodel.py"
-            ])
-        
-        skip_dirs.extend([
-            "migrations", "views", "static"
-            ]
-        )
-    
-        
+        exclude_files.extend(update_conf["update_exclude_files"])
+        skip_dirs.extend(update_conf["update_exclude_dirs"])
+
     #
     # walk the root (/pow/start)
     # and copy (for .py and .tmpl pump thru template engine first)
@@ -168,7 +160,12 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
     #
     if view_type:
         print(50*"-")
-        print("preparing app for view_type: " + str(view_type))
+        if view_type == "bs4":
+            print("preparing app for view_type: Bootstrap 4")
+        elif view_type == "sui":
+            print("preparing app for view_type: SemanticUI ")
+        else:
+            print("preparing app for view_type: " + str(view_type))
         print(50*"-")
         if view_type == "bs4":
             folder = os.path.normpath(os.path.join( outdir, "views"))
@@ -275,6 +272,7 @@ def main():
     if args.update_only:
         print(50*"-")
         print(" UPDATED YOUR APP!!!")
+        print(50*"-")
         print(" Successfully updated your application")   
         sys.exit()
     else:

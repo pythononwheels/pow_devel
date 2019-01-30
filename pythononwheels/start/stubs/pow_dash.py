@@ -28,7 +28,7 @@ class myDash(dash.Dash):
         scripts = self._generate_scripts_html()
         css = self._generate_css_dist_html()
         config = self._generate_config_html()
-        title = getattr(self, 'title', '{{appname}}')
+        title = getattr(self, 'title', 'dashtest')
         
         return '''
             {}
@@ -36,50 +36,15 @@ class myDash(dash.Dash):
             {}
         '''.format(css, config, scripts)
         
-        ret={
-            "title" :   title,
-            "css"   :   css,
-            "config"    : config,
-            "scripts"   : scripts
-        }
-        return ret
-
-def dispatcher(request,**kwargs):
-    '''
-
-    '''
-    #
-    #Just some debug prints... turn on or off as you like
-    #
-    #print(40*"-")
-    #print("as_dash dispatcher->request: " + str(request))
-    #print("dispatcher path: " + str(request.path))
-    #print("kwargs in dispatcher:")
-    #for key, value in kwargs.items():
-    #    print("The kwargs value of {} is {}".format(key, value))
-    #print("  ..Done..")
-    #print(40*"-")
-    kwargs["external_stylesheets"] = mydash["external_stylesheets"]
-    app = _create_app(**kwargs)
-    params = {
-        'data': request.body,
-        'method': request.method,
-        'content_type': request.headers.get('Content-type')
-    }
-    with app.server.test_request_context(request.path, **params):
-        app.server.preprocess_request()
-        try:
-            response = app.server.full_dispatch_request()
-        except Exception as e:
-            response = app.server.make_response(app.server.handle_exception(e))
-            print(70*"=")
-            print("done dash dispatching")
-            print(70*"=")
-        return response.get_data()
-    
+        # ret={
+        #     "title" :   title,
+        #     "css"   :   css,
+        #     "config"    : config,
+        #     "scripts"   : scripts
+        # }
 
 
-def _create_app(*args, **kwargs):
+def _create_app_orig(*args, **kwargs):
     ''' 
         Creates the actual dash application and layout
         Just put any Dash layout in here.
@@ -91,8 +56,8 @@ def _create_app(*args, **kwargs):
     df = pd.read_csv(
         'https://raw.githubusercontent.com/plotly/datasets/master/gapminderDataFiveYear.csv')
 
-    app = myDash(csrf_protect=False)
-    app.config['suppress_callback_exceptions']=True
+    #app = myDash(csrf_protect=False)
+    #app.config['suppress_callback_exceptions']=True
     #
     # The Dash Layout
     # This is rendered in views/pow_dash.tmpl -> { raw dash_block }
@@ -140,4 +105,39 @@ def _create_app(*args, **kwargs):
                 hovermode='closest'
             )
         }
-    return app
+    return app.layout
+
+# create the app once
+app = myDash(csrf_protect=False)
+app.config['suppress_callback_exceptions']=True
+#app.layout=_create_app_layout()
+#app.layout=html.Div([
+#            dcc.Graph()
+#])
+
+def dispatcher(request, index=True, **kwargs):
+    '''
+        Dispatch the Dash and Dash Ajax requests
+    '''
+    kwargs["external_stylesheets"] = mydash["external_stylesheets"]
+    #
+    # only serve the base layout once. 
+    # 
+    if index:
+        app.layout = _create_app_layout(**kwargs)
+    params = {
+        'data': request.body,
+        'method': request.method,
+        'content_type': request.headers.get('Content-type')
+    }
+    with app.server.test_request_context(request.path, **params):
+        app.server.preprocess_request()
+        try:
+            response = app.server.full_dispatch_request()
+        except Exception as e:
+            response = app.server.make_response(app.server.handle_exception(e))
+            print(70*"=")
+            print("done dash dispatching")
+            print(70*"=")
+        return response.get_data()
+    

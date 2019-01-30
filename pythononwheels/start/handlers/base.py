@@ -91,12 +91,12 @@ class BaseHandler(tornado.web.RequestHandler):
 
     def get_accept_format(self):
         """
-            format is either added as accept header format 
-            or as .format to the path
+            format is either added as 
+                HTTP accept header format 
+                or as .format attached to the path
             or default_format
             example: /post/12.json (will return json)
         """
-        
         format = None
         # Try the dotformat first (if activated)
         if cfg.beta_settings["dot_format"]:
@@ -487,9 +487,14 @@ class BaseHandler(tornado.web.RequestHandler):
             return self.render(template, message=message, data=data, succ=succ, prev=prev,
                         status=http_code, request=self.request, **kwargs)
         
-        
         if not format:
-            format = self.format
+            try:
+                format = self.format
+            except:
+                # get_accept_format() could not determine the format
+                # so this is probably why we are here now.
+                # we go on with the default format in this case.
+                format = cfg.myapp["default_format"]
         if not format:
             format = cfg.myapp["default_format"]
         if format.lower() == "html":

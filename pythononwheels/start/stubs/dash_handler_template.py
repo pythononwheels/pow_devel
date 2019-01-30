@@ -18,17 +18,13 @@ class Dash(PowHandler):
         """ 
             This is the place where dash is called.
             dispatcher returns the HMTL including title, css, scripts and config via => dash.Dash.index()
-            (See: in as_dash.py => myDash.index)
+            (See: in pow_dash.py => myDash.index)
             You can then insert the returned HTML into your template.
             I do this below in the self.render/self.success call => see base_dash.bs4 template (mustache like syntax)
         """
         print("processing dash method")
-        #external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-        retval = dispatcher(self.request, username="fake", session_id=1234)
-        
-        #
-        # get some data
-        #
+        #external_stylesheets = see config.py dash section
+        retval = dispatcher(self.request, username="fake", session_id=1234, index=True)
         
         # 
         # this is the render template call which embeds the dash code (dash_block=retval)
@@ -47,7 +43,7 @@ class Dash(PowHandler):
         #
         # now hand over to the dispatcher
         #
-        retval = dispatcher(self.request, username="fake", session_id=1234, powapp=self.application)
+        retval = dispatcher(self.request, index=False, username="fake", session_id=1234, powapp=self.application)
         
         self.set_header('Content-Type', 'application/json')
         self.write(retval)

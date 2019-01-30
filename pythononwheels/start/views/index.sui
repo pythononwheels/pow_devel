@@ -1,8 +1,119 @@
-{% extends "base.sui" %}
+{% extends "base2.sui" %}
+
+{% block css %} 
+    <!-- This block will be rendered in the css section of your base template-->
+    <link href="{{static_url("css/highlight-styles/hopscotch.css")}}" rel="stylesheet">
+
+{% end %}
+
+{% block js %} 
+    <!-- This block will be rendered in the js section of your base template-->
+    <script src="{{static_url("js/highlight.pack.js")}}"></script>
+{% end %}
+
+{% block document_ready %}
+    <!-- This block will be rendered in the document_ready section of your base template-->
+    hljs.configure({
+        //tabReplace: '    ',
+        languages: ['python', 'javascript', 'css'],
+        //useBR: true
+    });
+
+    $('pre').each(function(i, block) {
+        hljs.highlightBlock(block);
+    });
+
+{% end %}
 
 {% block content %} 
+    <!-- This block will be rendered in the document_ready section of your base template-->
+<div class="ui text container">
+    <h1 class="ui inverted header">
+      PythonOnWheels
+    </h1>
+    <h2>The quick and easy generative web framework for python3. Ready to go!</h2>
+    <a class="ui huge primary button" href="https://www.pythononwheels.org/gettingstarted">Get Started 
+        <i class="right arrow icon"></i></a>
+    <a class="ui huge youtube button" href="https://www.youtube.com/watch?v=70Y9GIW0V5M">
+        <i class="youtube icon"></i> Intro Video 
+    </a>
+  </div>
 
-test
+</div>
+
+<div class="ui vertical stripe segment">
+  <div class="ui middle aligned stackable grid container">
+    <div class="row">
+      <div class="eight wide column">
+        <h3 class="ui header">From  zero to your app and API in minutes </h3>
+        <p>Everything you need on board</p>
+        <p>The idea of PythonOnWheels is to include and offer the features and tools that most of the people implementing smaller to medium sized projects probably want. Therefore it includes a little more than the microFrameworks and a little less then the big enterprise frameworks out there. The trick is to offer these tools and features in an easy rails like workflow without much configuration need or boilerplate setup or coding. Makes you focus on your app, logic and visuals and not on the application infrastructure.</p>
+      </div>
+      <div class="six wide right floated column">
+        <h3>Hello World</h3>
+        <pre><code class="python">
+    @app.make_routes()  
+    class HelloHandler(BaseHandler):  
+        @route('/hello', dispatch=["get"])  
+        def hello(self):  
+            self.write("Hello world!") 
+        </code></pre>
+      </div>
+    </div>
+    <!--div class="row">
+      <div class="center aligned column">
+        <a class="ui huge button">Check Them Out</a>
+      </div>
+    </div-->
+  </div>
+</div>
+
+
+<div class="ui vertical stripe quote segment">
+  <div class="ui equal width stackable internally celled grid">
+    <div class="center aligned row">
+        <div class="three wide column">
+            &nbsp;
+        </div>
+      <div class="column">
+        <h3>The Vision:</h3>
+        <p>"If you want start to develop your web-application and focus on the App, instead of the frameworks, you are in the right place. PythonOnWheels feels right if you do not recognize that you use it."</p>
+      </div>
+      <div class="three wide column">
+            &nbsp;
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ui vertical stripe segment">
+  <div class="ui text container">
+    <h3 class="ui header">Probably the most simple SQL relations out there! </h3>
+    <p>Based on sqlalchemy.
+        With PythonOnWheels you simply add a class decorator like this to your SQL Post-model and every Post can have comments. It will be automatically mapped to the DB (SQLite, Postgres, MySQL, MariaDb, Oracle, MSSQL ...) and to all related comment Models. DB Migrations are created automatically in the background. </p>
+    <a class="ui large button" href="https://www.pythononwheels.org/article/ca01d640-ecfa-45f1-acf8-ec2c7d975ebf">Read More</a>
+    <h4 class="ui horizontal header divider">
+      <a href="#">Case Studies</a>
+    </h4>
+    <h3 class="ui header">Probably the most simple REST routing out there. One decorator. Done!</h3>
+    <p>With PythonOnWheels you simply add a class decorator like </p>
+        <pre><code class="python">
+            @app.add_rest_routes("basename")
+        </code></pre>
+        <p>
+          to your handler and you get all the typical REST routes mapped to the according CRUD methods of your handler class.
+        </p>
+        <pre><code class="python">
+            @app.make_routes()  
+            class HelloHandler(BaseHandler):  
+                @route('/hello', dispatch=["get"])  
+                def hello(self):  
+                    self.write("Hello world!") 
+                </code></pre>
+    <a class="ui large button">I'm Still Quite Interested</a>
+  </div>
+</div>
+
 
 {% end %}
 
