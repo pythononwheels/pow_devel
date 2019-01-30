@@ -8,7 +8,7 @@ with open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 
 setup(name='pythononwheels',
-      version='0.896b1',
+      version='0.896b3',
       description='The simple, quick and easy generative web framework for python',
       long_description=long_description,
       classifiers=[
@@ -49,6 +49,7 @@ setup(name='pythononwheels',
             "start/tests/*",
             "start/tools/*",
             "start/views/*",
+            "./update_conf.py"
         ]},
       install_requires=[
         "tornado"

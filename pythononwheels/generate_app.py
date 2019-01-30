@@ -10,7 +10,7 @@ import datetime
 import shutil
 from pathlib import Path
 import uuid
-from update_conf import update_conf
+#from .update_conf import update_conf
 
 def camel_case(name):
     """
@@ -80,8 +80,10 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
     if update_only:
         # only update pow versions. Leave all non pow or possibly changed stuff untouched
         # maybe add encoders.py, decoders.py to the list in the future.
-        exclude_files.extend(update_conf["update_exclude_files"])
-        skip_dirs.extend(update_conf["update_exclude_dirs"])
+        exclude_files.extend([ "alembic.ini", "db.sqlite", "tiny.db",
+                                "env.py", "shorties.py", "config.py", "powhandler.py", 
+                                "powmodel.py", "tinymodel.py", "mongomodel.py" ])
+        skip_dirs.extend([ "migrations",  "views", "static" ])
 
     #
     # walk the root (/pow/start)
