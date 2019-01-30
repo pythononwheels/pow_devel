@@ -44,7 +44,7 @@ class myDash(dash.Dash):
         # }
 
 
-def _create_app_orig(*args, **kwargs):
+def _create_app_layout(*args, **kwargs):
     ''' 
         Creates the actual dash application and layout
         Just put any Dash layout in here.
