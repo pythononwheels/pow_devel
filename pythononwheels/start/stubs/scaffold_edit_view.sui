@@ -1,4 +1,4 @@
-{% extends ../base.sui %}
+{% extends ../base_no_footer.sui %}
 
 {% block include_css %}
     <link rel="stylesheet" href="{{ static_url("css/calendar.css")}}" />

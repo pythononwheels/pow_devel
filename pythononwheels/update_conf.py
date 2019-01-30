@@ -10,5 +10,5 @@ update_conf = {
     "update_exclude_files"  : [ "alembic.ini", "db.sqlite", "tiny.db",
                                 "env.py", "shorties.py", "config.py", "powhandler.py", 
                                 "powmodel.py", "tinymodel.py", "mongomodel.py" ],
-    "update_exclude_dirs"   : [ "migrations", "views", "static" ]
+    "update_exclude_dirs"   : [ "migrations",  "static" ]
 }

@@ -1,4 +1,4 @@
-{% extends ../base.sui %}
+{% extends ../base_no_footer.sui %}
 
 {% block view_css %}
 <style type="text/css">

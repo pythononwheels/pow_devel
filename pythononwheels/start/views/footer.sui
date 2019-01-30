@@ -6,19 +6,23 @@
       <div class="three wide column">
         <h4 class="ui inverted header">About</h4>
         <div class="ui inverted link list">
-          <a href="https://github.com/pythononwheels/pow_devel" class="item">Github</a>
-          <a href="https://twitter.com/pythononwheels" class="ui twitter button"><i class="twitter icon"></i> PoW on Twitter</a>
-          <a href="https://www.pythononwheels.org" class="item">Homepage</a>
+          <p>
+          <a href="https://github.com/pythononwheels/pow_devel">
+            <i class="github icon"></i> PoW on Github</a>
+          </p>
+          <a href="https://twitter.com/pythononwheels">
+            <i class="twitter icon"></i> PoW on Twitter</a>
+          
         </div>
       </div>
       <div class="three wide column">
         <h4 class="ui inverted header">Docs</h4>
         <div class="ui inverted link list">
-          <a href="https://twitter.com/pythononwheels/documentation" class="item">Documentation</a>
+          <a href="https://www.pythononwheels.org/documentation" class="item">Documentation</a>
         </div>
       </div>
       <div class="seven wide column">
-        <h4 class="ui inverted header">Footer Header</h4>
+        <h4 class="ui inverted header">Hope you</h4>
         <p> Enjoy PythonOnWheels.</p>
       </div>
     </div>

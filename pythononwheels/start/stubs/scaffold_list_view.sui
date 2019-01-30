@@ -1,4 +1,4 @@
-{% extends ../base.sui %}
+{% extends ../base_no_footer.sui %}
 
 {% block include_js %}
     <!--script
@@ -51,14 +51,13 @@
 
 {% block content %}
 <!-- Begin page content -->
-<div class="container">
+<div class="ui container">
     <div>
-        <div class="container">
+        <div class="ui container">
             <h1 class="display-3">This is the <strong>{{handler_name}}</strong> list view </h1>
             <p class="lead">Just go Ahead and show, edit or delete your data below using the action links.</p>
             <p class="lead">Of course you can also 
-            <button class="ui green button">
-                <a href="/{{base_route_rest}}/new"></a>Create</a> 
+            <a class="ui green button" href="/{{base_route_rest}}/new">Create</a> 
             </button>
                 a new {{model_name}} here.</p>
         </div>

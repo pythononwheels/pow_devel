@@ -1,4 +1,4 @@
-
+{% import config as cfg %} 
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,6 +9,7 @@
 
   <!-- Site Properties -->
   <title>Homepage - Semantic</title>
+  <link rel="shortcut icon" type="image/x-icon" href="{{ static_url("images/pow_favicon-16x16.png")}}">
   <link rel="stylesheet" type="text/css" href="{{ static_url("sui/components/reset.css")}}">
   <link rel="stylesheet" type="text/css" href="{{ static_url("sui/components/site.css")}}">
 
@@ -190,7 +191,10 @@
         <a class="toc item">
           <i class="sidebar icon"></i>
         </a>
-        <a class="item" href="/"><img src="{{static_url("images/pow_logo_blue_transparent_bg.png")}}"></a>
+        <a class="item" href="/">
+            <img src="{{static_url("images/pow_logo_blue_transparent_bg.png")}}">
+            <span style="padding-left:10px">pythononwheels</span>
+        </a>
         <!--a class="item" href="https://www.pythononwheels.org/documentation">Documentation</a-->
         <div class="right item">
           <a class="item" href="https://www.pythononwheels.org/documentation">Documentation</a>
@@ -203,7 +207,7 @@
 
 {% end %}
 
-{% include footer.sui %}
+
   
 </div>  
 

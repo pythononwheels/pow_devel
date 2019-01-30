@@ -1,4 +1,4 @@
-{% extends "base2.sui" %}
+{% extends "base.sui" %}
 
 {% block css %} 
     <!-- This block will be rendered in the css section of your base template-->
@@ -19,7 +19,7 @@
         //useBR: true
     });
 
-    $('pre').each(function(i, block) {
+    $('code').each(function(i, block) {
         hljs.highlightBlock(block);
     });
 
@@ -47,7 +47,12 @@
       <div class="eight wide column">
         <h3 class="ui header">From  zero to your app and API in minutes </h3>
         <p>Everything you need on board</p>
-        <p>The idea of PythonOnWheels is to include and offer the features and tools that most of the people implementing smaller to medium sized projects probably want. Therefore it includes a little more than the microFrameworks and a little less then the big enterprise frameworks out there. The trick is to offer these tools and features in an easy rails like workflow without much configuration need or boilerplate setup or coding. Makes you focus on your app, logic and visuals and not on the application infrastructure.</p>
+        <p>The idea of PythonOnWheels (PoW) is to include and offer the features and tools that most of you,
+           implementing smaller to medium sized projects probably want. Therefore it includes a little 
+           more than the microFrameworks and a little less then the big enterprise frameworks out there. 
+           The trick is to offer these tools and features in an easy rails like workflow without 
+           much configuration need or boilerplate setup or coding. Makes you focus on your app, logic 
+           and visuals and not on the application infrastructure.</p>
       </div>
       <div class="six wide right floated column">
         <h3>Hello World</h3>
@@ -77,7 +82,10 @@
         </div>
       <div class="column">
         <h3>The Vision:</h3>
-        <p>"If you want start to develop your web-application and focus on the App, instead of the frameworks, you are in the right place. PythonOnWheels feels right if you do not recognize that you use it."</p>
+        <p>"If you want start to develop your web-application and focus on the App, 
+          instead of the frameworks, you are in the right place. 
+          PythonOnWheels feels right if you do not recognize that you use it."
+        </p>
       </div>
       <div class="three wide column">
             &nbsp;
@@ -86,31 +94,74 @@
   </div>
 </div>
 
+
+
 <div class="ui vertical stripe segment">
-  <div class="ui text container">
-    <h3 class="ui header">Probably the most simple SQL relations out there! </h3>
-    <p>Based on sqlalchemy.
-        With PythonOnWheels you simply add a class decorator like this to your SQL Post-model and every Post can have comments. It will be automatically mapped to the DB (SQLite, Postgres, MySQL, MariaDb, Oracle, MSSQL ...) and to all related comment Models. DB Migrations are created automatically in the background. </p>
-    <a class="ui large button" href="https://www.pythononwheels.org/article/ca01d640-ecfa-45f1-acf8-ec2c7d975ebf">Read More</a>
-    <h4 class="ui horizontal header divider">
-      <a href="#">Case Studies</a>
-    </h4>
-    <h3 class="ui header">Probably the most simple REST routing out there. One decorator. Done!</h3>
-    <p>With PythonOnWheels you simply add a class decorator like </p>
-        <pre><code class="python">
-            @app.add_rest_routes("basename")
-        </code></pre>
+  <div class="row">
+    <div class="ui text container">
+        <h4 class="ui horizontal header divider">
+            Database relations
+        </h4>
+      <h3 class="ui header">Probably the most simple SQL relations out there! </h3>
+      <p>Based on sqlalchemy.
+          With PythonOnWheels you simply add a class decorator like this to your SQL Post-model 
+          and every Post can have comments. It will be automatically mapped to the DB 
+          (SQLite, Postgres, MySQL, MariaDb, Oracle, MSSQL ...) and to all related comment Models. 
+          DB Migrations are created automatically in the background. 
+      </p>
+      <a class="ui large button" href="https://www.pythononwheels.org/article/ca01d640-ecfa-45f1-acf8-ec2c7d975ebf">Read More</a>
+      
+      <h4 class="ui horizontal header divider">
+          REST API 
+      </h4>
+      <h3 class="ui header">Probably the most simple REST routing out there. One decorator. Done!</h3>
+      <p>With PythonOnWheels you simply add a class decorator like </p>
+          <pre><code class="python">
+              @app.add_rest_routes("basename")
+          </code></pre>
+          <p>
+            to your handler and you get all the typical REST routes mapped to the according 
+            CRUD methods of your handler class.
+          </p>
+      <a class="ui large button" href="https://www.pythononwheels.org/article/61c623e5-2dff-4745-b269-389e93fdfa3f#generatingresthandlers">Read more</a>
+    
+
+      <h4 class="ui horizontal header divider">
+          Routing
+      </h4>
+      <h3 class="ui header">Routing: RegEx and Flask routes included.</h3>
+      <p>You can set routes by simply adding a class decorator to the handler class or decorate methods directly.</p>
+          <pre><code class="python">
+              @route("/", dispatch=["get"])
+          </code></pre>
+          <p>
+            PythonOnWheels will then call the index method of your handler if the route and the HTTP method matches.
+          </p>
+          <pre><code>
+              @app.make_method_routes()
+              class HelloHandler(BaseHandler):
+                  @route(r'/hello/<int:identifier>', dispatch=["get"])
+                  def hello(self, identifier=None):
+                      self.write("Hello world! " + str(identifier))
+
+          </code></pre>
+        <a class="ui large button" href="https://www.pythononwheels.org/article/61c623e5-2dff-4745-b269-389e93fdfa3f#generatingresthandlers">Read more</a>
+      <h4 class="ui horizontal header divider">
+          Routing
+      </h4>
+      <h3 class="ui header">There is a lot more.</h3>
+        <div class="ui floating message">
+          <p>If you want start to develop your web-application and focus on the App, instead of the frameworks, you are in the right place. PythonOnWheels feels right if you do not recognize that you use it.</p>
+        </div>
         <p>
-          to your handler and you get all the typical REST routes mapped to the according CRUD methods of your handler class.
+          <a class="ui large youtube button" href="https://www.youtube.com/watch?v=70Y9GIW0V5M">
+            <i class="youtube icon"></i> Intro Video 
+          </a>
+          <a class="ui large primary button" href="https://www.pythononwheels.org/gettingstarted">Homepage
+            <i class="right arrow icon"></i>
+          </a>
         </p>
-        <pre><code class="python">
-            @app.make_routes()  
-            class HelloHandler(BaseHandler):  
-                @route('/hello', dispatch=["get"])  
-                def hello(self):  
-                    self.write("Hello world!") 
-                </code></pre>
-    <a class="ui large button">I'm Still Quite Interested</a>
+    </div>
   </div>
 </div>
 

@@ -1,4 +1,4 @@
-{% import config as cfg %} 
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,73 +8,209 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <!-- Site Properties -->
-    <title>Welcome to PythonOnWheels.</title>
-    <link rel="stylesheet" href="{{ static_url("css/semantic.css")}}" />
-    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/components/icon.min.css'>
-    <script src="{{ static_url("js/jquery.min.js")}}"></script>
-    <script src="{{ static_url("js/semantic.js")}}"></script>
+  <title>Homepage - Semantic</title>
+  <link rel="shortcut icon" type="image/x-icon" href="{{ static_url("images/pow_favicon-16x16.png")}}">
+  <link rel="stylesheet" type="text/css" href="{{ static_url("sui/components/reset.css")}}">
+  <link rel="stylesheet" type="text/css" href="{{ static_url("sui/components/site.css")}}">
+
+  <link rel="stylesheet" type="text/css" href="{{ static_url("sui/components/container.css")}}">
+  <link rel="stylesheet" type="text/css" href="{{ static_url("sui/components/grid.css")}}">
+  <link rel="stylesheet" type="text/css" href="{{ static_url("sui/components/header.css")}}">
+  <link rel="stylesheet" type="text/css" href="{{ static_url("sui/components/image.css")}}">
+  <link rel="stylesheet" type="text/css" href="{{ static_url("sui/components/menu.css")}}">
+
+  <link rel="stylesheet" type="text/css" href="{{ static_url("sui/components/divider.css")}}">
+  <link rel="stylesheet" type="text/css" href="{{ static_url("sui/components/dropdown.css")}}">
+  <link rel="stylesheet" type="text/css" href="{{ static_url("sui/components/segment.css")}}">
+  <link rel="stylesheet" type="text/css" href="{{ static_url("sui/components/button.css")}}">
+  <link rel="stylesheet" type="text/css" href="{{ static_url("sui/components/list.css")}}">
+  <link rel="stylesheet" type="text/css" href="{{ static_url("sui/components/icon.css")}}">
+  <link rel="stylesheet" type="text/css" href="{{ static_url("sui/components/sidebar.css")}}">
+  <link rel="stylesheet" type="text/css" href="{{ static_url("sui/components/transition.css")}}">
+  
   <style type="text/css">
-  body {
-      background-color: #FFFFFF;
-    }
-    .ui.menu .item img.logo {
-      margin-right: 1.5em;
-    }
-    .main.container {
-      margin-top: 7em;
-    }
-    .wireframe {
-      margin-top: 2em;
-  }
-  .ui.footer.segment {
-    margin: 5em 0em 0em;
-    padding: 5em 0em;
-  }
-</style>
-    {% block include_css %}
-    {% end %}
-    {% block view_css %}
-    {% end %}
 
-    {% block include_js %}
-    {% end %}
+    .hidden.menu {
+      display: none;
+    }
 
-    {% block view_js %}
-    {% end %}
-    <script>
-    $(document).ready(function(){  
-      if (typeof docready === "function") { 
-         docready();
+    .masthead.segment {
+      min-height: 700px;
+      padding: 1em 0em;
+    }
+    .masthead .logo.item img {
+      margin-right: 1em;
+    }
+    .masthead .ui.menu .ui.button {
+      margin-left: 0.5em;
+    }
+    .masthead h1.ui.header {
+      margin-top: 3em;
+      margin-bottom: 0em;
+      font-size: 4em;
+      font-weight: normal;
+    }
+    .masthead h2 {
+      font-size: 1.7em;
+      font-weight: normal;
+    }
+
+    .ui.vertical.stripe {
+      padding: 8em 0em;
+    }
+    .ui.vertical.stripe h3 {
+      font-size: 2em;
+    }
+    .ui.vertical.stripe .button + h3,
+    .ui.vertical.stripe p + h3 {
+      margin-top: 3em;
+    }
+    .ui.vertical.stripe .floated.image {
+      clear: both;
+    }
+    .ui.vertical.stripe p {
+      font-size: 1.33em;
+    }
+    .ui.vertical.stripe .horizontal.divider {
+      margin: 3em 0em;
+    }
+
+    .quote.stripe.segment {
+      padding: 0em;
+    }
+    .quote.stripe.segment .grid .column {
+      padding-top: 5em;
+      padding-bottom: 5em;
+    }
+
+    .footer.segment {
+      padding: 5em 0em;
+    }
+
+    .secondary.pointing.menu .toc.item {
+      display: none;
+    }
+
+    @media only screen and (max-width: 700px) {
+      .ui.fixed.menu {
+        display: none !important;
       }
-       
+      .secondary.pointing.menu .item,
+      .secondary.pointing.menu .menu {
+        display: none;
+      }
+      .secondary.pointing.menu .toc.item {
+        display: block;
+      }
+      .masthead.segment {
+        min-height: 350px;
+      }
+      .masthead h1.ui.header {
+        font-size: 2em;
+        margin-top: 1.5em;
+      }
+      .masthead h2 {
+        margin-top: 0.5em;
+        font-size: 1.5em;
+      }
+    }
+
+  </style>
+  {% block css %}
+
+  {% end %}
+
+  {% block js %}
+
+  {% end %}
+  <script src="{{ static_url("js/jquery.min.js")}}"></script>
+  <script src="{{ static_url("sui/components/visibility.js")}}"></script>
+  <script src="{{ static_url("sui/components/sidebar.js")}}"></script>
+  <script src="{{ static_url("sui/components/transition.js")}}"></script>
+  <script>
+  $(document)
+    .ready(function() {
+
+      // fix menu when passed
+      $('.masthead')
+        .visibility({
+          once: false,
+          onBottomPassed: function() {
+            $('.fixed.menu').transition('fade in');
+          },
+          onBottomPassedReverse: function() {
+            $('.fixed.menu').transition('fade out');
+          }
+        })
+      ;
+
+      // create sidebar and attach to menu open
+      $('.ui.sidebar')
+        .sidebar('attach events', '.toc.item');
+      
+      {% block document_ready %}
+
+      {% end %}
     });
-    </script>
-    
+  </script>
 </head>
+
 <body>
 
-  <div class="ui stackable fixed inverted menu">
-    <div class="ui container">
-      <a href="/" class="header item">
-        <img class="logo" src="{{ static_url("images/pow_logo_128.png")}}">
-        PythonOnWheels
-      </a>
-      <a href="http://www.pythononwheels.org/getting_started" class="item">Geting started</a>
-      <a href="http://www.pythononwheels.org/documentation" class="item">documentation</a>
+<!-- Following Menu -->
+<!--div class="ui large top fixed hidden menu">
+  <div class="ui container">
+    <a class="active item">Home</a>
+    <a class="item">Work</a>
+    <a class="item">Company</a>
+    <a class="item">Careers</a>
+    <div class="right menu">
+      <div class="item">
+        <a class="ui button">Log in</a>
+      </div>
+      <div class="item">
+        <a class="ui primary button">Sign Up</a>
+      </div>
     </div>
   </div>
+</div-->
 
-  <div class="ui main container">
-    {% block content %}
-    {% end %}
-  </div>
+<!-- Sidebar Menu -->
+<div class="ui vertical inverted sidebar menu">
+  <a class="active item" href="/">Home</a>
+  <a class="item" href="https://www.pythononwheels.org/documentation">Documentation</a>
+</div>
 
-  <div class="ui center aligned  vertical footer segment">
-      <div class="ui section divider"></div>
-      <a href="http://www.pythononwheels.org">
-        <span class="ui centered"><img src="/static/images/pow_logo_128.png" class="ui centered mini image">powered by pythononwheels</span>
-      </a>
-  </div>
+
+<!-- Page Contents -->
+<div class="pusher">
+  <div class="ui inverted vertical masthead center aligned segment">
+
+    <div class="ui container">
+      <div class="ui large secondary inverted pointing menu">
+        <a class="toc item">
+          <i class="sidebar icon"></i>
+        </a>
+        <a class="item" href="/">
+            <img src="{{static_url("images/pow_logo_blue_transparent_bg.png")}}">
+            <span style="padding-left:10px">pythononwheels</span>
+        </a>
+        <!--a class="item" href="https://www.pythononwheels.org/documentation">Documentation</a-->
+        <div class="right item">
+          <a class="item" href="https://www.pythononwheels.org/documentation">Documentation</a>
+          <a class="ui inverted button" href="https://semantic-ui.com/">Semantic UI</a>
+          <!--a class="ui inverted button">Sign Up</a-->
+        </div>
+      </div>
+    </div>
+{% block content %}
+
+{% end %}
+
+{% include footer.sui %}
+  
+</div>  
+
 </body>
 
 </html>
