@@ -50,7 +50,7 @@ class PyTestHandler(BaseHandler):
         """
             this action will show the pytest from test/runtests.py 
         """
-        self.render("result.html")
+        self.render("testreport.html")
     
     @route(r'/test/<uuid:identifier>', dispatch=["get"])
     def testuuid(self, identifier=None):
@@ -59,6 +59,13 @@ class PyTestHandler(BaseHandler):
         """
         print(" Calling Indexhandler.tetuuid Indentifier: {}, format: {}".format(str(identifier)))
         self.render("index.tmpl")
+    
+    @route(r'/test/<int:id>', dispatch=["get"])
+    def testuuid(self, id=None):
+        """
+            Testcase: dont delete (see tests/run_tests.py)
+        """
+        self.write("12")
     
 # this will be the last route since it has the lowest pos.
 @app.add_route(r".*", pos=0)

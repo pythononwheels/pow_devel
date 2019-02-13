@@ -38,9 +38,11 @@ if __name__ == "__main__":
     print(" ... ")
     if sys.platform.startswith("darwin"):
         # osx
-        ret = pytest.main(["-k-notonosx", "--junitxml=result.xml", "pow_tests.py"])
+        #ret = pytest.main(["-k-notonosx", "--junitxml=result.xml", "pow_tests.py"])
+        ret = pytest.main(["-k-notonosx", "--html=../views/testreport.html", "--self-contained-html", "pow_tests.py"])
     else:
-        ret = pytest.main(["--junitxml=result.xml", "pow_tests.py"])
+        # OLD: ret = pytest.main(["--junitxml=result.xml", "pow_tests.py"])
+        ret = pytest.main(["--html=../views/testreport.html", "--self-contained-html", "pow_tests.py"])
     
     print(" Failures: " +str(ret))
     print()

@@ -552,12 +552,14 @@ class BaseHandler(tornado.web.RequestHandler):
             If this error was caused by an uncaught exception 
             (including HTTPError), an exc_info triple will be available as 
             kwargs["exc_info"]. Note that this exception may not be the 
-            currentÃÂ exception for purposes of methods like sys.exc_info() 
+            current exception for purposes of methods like sys.exc_info() 
             or traceback.format_exc.
         """
-        #if status_code == 404:
+        if status_code == 404:
+            return self.render("404.tmpl")
+        
         try:
             message=kwargs["exc_info"]
         except:
             message=""
-        return self.render("404.tmpl", message=message, status=status_code)
+        return self.render("error.tmpl", message=message, status=status_code)
