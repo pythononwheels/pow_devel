@@ -16,7 +16,7 @@ def pow_json_serializer(obj):
 
     if isinstance(obj, datetime):
         #serial = obj.isoformat()
-        serial = obj.strftime(todo.config.myapp["date_format"])
+        serial = obj.strftime({{appname}}.config.myapp["date_format"])
         return serial
     if isinstance(obj, uuid.UUID):
         return str(obj)

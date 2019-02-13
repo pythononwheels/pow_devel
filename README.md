@@ -16,7 +16,7 @@ class HelloHandler(BaseHandler):
 
 ## Installation:
 
-`pip install pythononwheels`
+`pip install -U pythononwheels`
 
 # Everything you need on board. Batteries included.
 [PythonOnWheels](https://www.pythononwheels.org/) is a generative, Rapid Application Development, non intrusive web framework for python. You need no extra tools to start. Everything from DB to Webserver and template engine is included. But you are not forced to use them and can go raw or easily include the modules and tools of your choice tools whenever you want.

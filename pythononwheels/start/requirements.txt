@@ -17,6 +17,8 @@ py==1.4.33
 pymongo==3.6.0
 pyparsing==2.2.0
 pytest==3.0.7
+pytest-html==1.20.0
+pytest-metadata==1.8.0
 pytest-ordering==0.5
 python-dateutil==2.6.1
 python-editor==1.0.3

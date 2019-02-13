@@ -1,0 +1,49 @@
+#
+# Sample requests for VSCode
+# Rest Client extension
+# CMD+ALT+R
+#
+
+GET http://localhost:8080/todo HTTP/1.1
+Accept: application/json
+
+###
+
+GET http://localhost:8080/todo HTTP/1.1
+Accept: application/xml
+
+###
+
+GET http://localhost:8080/todo HTTP/1.1
+Accept: application/csv
+
+###
+
+GET http://localhost:8080/todo.json HTTP/1.1
+
+###
+
+GET http://localhost:8080/todo.xml HTTP/1.1
+
+###
+
+GET http://localhost:8080/todo.csv HTTP/1.1
+
+###
+
+POST http://localhost:8080/todo HTTP/1.1
+Content-Type: application/json
+
+{
+    "title" :  "new from POST",
+    "text"  :  "Anythning goes!"
+}
+
+###
+
+PUT http://localhost:8080/todo/44d51976-1839-4cb9-8fd4-a7adab14b60d HTTP/1.1
+Content-Type: application/json
+
+{
+    "text"  :  "Anything goes! Wohooo !!"
+}

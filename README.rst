@@ -24,7 +24,7 @@ Hello World
 Installation:
 -------------
 
-``pip install pythononwheels``
+``pip install -U pythononwheels``
 
 Everything you need on board. Batteries included.
 =================================================
