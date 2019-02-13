@@ -484,7 +484,22 @@ class ModelObject():
                 if val:
                     d[elem] = val
         return d
-        
+    
+    def res_to_dict(self, res):
+        """
+            returns a list of results in a list of dicts.
+        """
+        if not isinstance(res, list):
+            try:
+                res = list(res)
+            except:
+                return res.to_dict()
+          
+        reslist =  [x.to_dict() for x in res]
+        if len(reslist) == 1:
+            return reslist[0]
+        else:
+            return reslist
 
 
     def print_full(self):
