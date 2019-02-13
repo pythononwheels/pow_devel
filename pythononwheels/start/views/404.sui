@@ -1,4 +1,4 @@
-{% extends "base.sui" %}
+    {% extends "base.sui" %}
 {% block content %}
     
     <div class="ui grid">
@@ -19,11 +19,22 @@
                     <h1 class="alert-heading">Oh no-This URL cannot be Found. </h1> 
                 </div>
                 
-                
-                <div class="ui header message"><b>HTTP Status:</b>  {{status}} </div>
-                <div class="ui error message"><b>Message:</b> {{message}} </div>
-                <div class="ui warning message"><b>URI:</b> {{request.path}} </div>
-                <div class="ui message"><b>Request:</b> {{request}} </div>
+                {% try %}
+                    <div class="ui header message"><b>HTTP Status:</b>  {{status}} </div>
+                {% except %}
+                {% end %}
+                {% try %}
+                    <div class="ui error message"><b>Message:</b> {{message}} </div>
+                {% except %}
+                {% end %}
+                {% try %}
+                    <div class="ui warning message"><b>URI:</b> {{request.path}} </div>
+                {% except %}
+                {% end %}
+                {% try %}
+                    <div class="ui message"><b>Request:</b> {{request}} </div>
+                {% except %}
+                {% end %}
             </div>
             <div class="one wide column">
                 &nbsp;

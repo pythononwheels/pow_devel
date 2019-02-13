@@ -297,7 +297,7 @@ class BaseHandler(tornado.web.RequestHandler):
 
 
     def success(self, message="", pure=False, data=None, succ=None, prev=None,
-        http_code=200, format=None, encoder=None, model=None, raw_data=False, 
+        http_status=200, format=None, encoder=None, model=None, raw_data=False, 
         login=None, template=None, **kwargs):
         """
             Sending an Successful reply (HTTP_STATUS 2xx) back to the client.
@@ -340,14 +340,18 @@ class BaseHandler(tornado.web.RequestHandler):
         #if not login:
         #    login=self.get_current_user()
         self.application.log_request(self, message="base.success:" + message)
-        self.set_status(http_code)
+        self.set_status(http_status)
         
+        #
+        # pure
+        #
         if pure == True:
             # pure => just send the data given in pure= probably a dict untouched.
             # most often direct json
             # this function is for sending self defined json responses without any
             # changes from pow.
             self.application.log_request(self, message="Sending pure data: {}".format(data))
+            # if  pure AND format are given, try to convert to the given format.
             if format:
                 try:
                     encoder = cfg.myapp["encoder"][format]
@@ -367,14 +371,14 @@ class BaseHandler(tornado.web.RequestHandler):
         
         # set the model. if there used to convert the data (if raw_data==False)
         # also handed over to the view. Used there to iterate over  schema, keys, etc
-        if model:
-            model = model
-        else:
+        if not model:
             try:
                 model=self.model
             except:
                 model=None
-
+        #
+        # html
+        #
         if format.lower() == "html":
             # special case where we render the classical html templates
             # if not isinstance(data, (list)):
@@ -398,42 +402,41 @@ class BaseHandler(tornado.web.RequestHandler):
                 base_route_rest=getattr(self, "base_route_rest", "None")
                 return self.render( viewname, data=data, message=message, 
                     handler_name = self.__class__.__name__.lower(), base_route_rest=base_route_rest, 
-                    model=model, status=http_code, next=succ, prev=prev, model_name=model.__class__.__name__.lower(),
+                    model=model, status=http_status, next=succ, prev=prev, model_name=model.__class__.__name__.lower(),
                     show_list=show_list, hide_list=hide_list,**kwargs )
             else:
                 self.error(message="Sorry, View: " + viewname +  " can not be found.", 
                     format=format, data=data)
+        
+        #
+        # set the encoder (custom or config.py)
+        #
+        if not encoder:
+            encoder = cfg.myapp["encoder"][format]
+        
         #
         # if not format == html convert the model or [model] to json 
         # the encoders can convert json to any requested target format.
         # 
-        if not raw_data:
-            # if you want PoW to convert the data you have to have a model here.
-            # either as instance attribute (also via class) or as an arguent to success(model=m)
-            #if not data == None and isinstance(data,self.model.__class__):
-            if not data == None:
-                try:
-                    data = self.model.res_to_json(data)
-                except:
-                    self.application.log(
-                        message="Error: base handler: {} has no method res_to_json".format(str(type(data))),
-                        status="ERROR" 
-                    )
-        if encoder:
-            encoder = encoder
+        if raw_data:
+            self.write(encoder.dumps(data))
         else:
-            encoder = cfg.myapp["encoder"][format]
+            try:
+                data = model.res_to_dict(data)
+            except:
+                pass # just take the data as is.
+            
+            self.write(encoder.dumps(data))
 
         # write the result
-        self.write(encoder.dumps({
-            "status"    : http_code,
-            "message"   : message,
-            "data"      : data,
-            "next"      : succ,
-            "prev"      : prev
-        }))
+        #self.write(encoder.dumps({
+        #    "status"    : http_code,
+        #    "message"   : message,
+        #    "data"      : data,
+        #    "next"      : succ,
+        #    "prev"      : prev
+        #}))
 
-        return
 
     def error(self, pure=False, message=None, data=None, succ=None, prev=None,
         http_code=500, format=None, encoder=None, template=None, login=None, raw_data=False, **kwargs):
@@ -553,4 +556,8 @@ class BaseHandler(tornado.web.RequestHandler):
             or traceback.format_exc.
         """
         #if status_code == 404:
-        return self.render("404.tmpl")
+        try:
+            message=kwargs["exc_info"]
+        except:
+            message=""
+        return self.render("404.tmpl", message=message, status=status_code)

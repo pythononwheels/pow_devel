@@ -9,13 +9,14 @@ import dicttoxml
 from datetime import datetime
 import uuid
 import {{appname}}
+import simplejson as json
 
 def pow_json_serializer(obj):
     """JSON serializer for objects not serializable by default json code"""
 
     if isinstance(obj, datetime):
         #serial = obj.isoformat()
-        serial = obj.strftime({{appname}}.config.myapp["date_format"])
+        serial = obj.strftime(todo.config.myapp["date_format"])
         return serial
     if isinstance(obj, uuid.UUID):
         return str(obj)
@@ -23,7 +24,16 @@ def pow_json_serializer(obj):
 
     raise TypeError ("Type not serializable")
 
-class JsonToCsv():
+class json_to_json:
+    """
+        receives a list of json and returns a string
+    """
+    def dumps(self, data):
+        return json.dumps(data, default=pow_json_serializer) 
+        
+    
+
+class json_to_csv:
     """ flattens json and converts the flattened
         data to csv
     """
@@ -62,13 +72,14 @@ class JsonToCsv():
         """ dumps data to csv.
             data will be flattened before
         """
-        flat_json = self.flattenjson(data)
         output = io.StringIO()
-        writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
-        writer.writerow(flat_json)
+        #writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
+        writer = csv.DictWriter(output, data[0].keys())
+        writer.writeheader()
+        writer.writerows(data)
         return output.getvalue()
 
-class JsonToXml():
+class json_to_xml:
     def dumps(self, data, root="pow_model"):
         """ 
             returns the xml representation of a dict input data
@@ -78,9 +89,21 @@ class JsonToXml():
 
             usage: encoder.dumps(model.to_dict, root="some custom root name")
         """
-        #print(data)
+        print(data)
         #print(dicttoxml.dicttoxml(data))
-        return dicttoxml.dicttoxml(data, custom_root=root)
-
-
-
+        if not isinstance(data, list):
+            try:
+                res = list(data)
+            except:
+                return dicttoxml.dicttoxml(str(data), custom_root=root)
+        
+        try:
+            reslist =  [str(dicttoxml.dicttoxml(x, custom_root=root)) for x in data]
+            
+        except Exception as e:
+            print("ERRRR  : " + str(e))
+        if len(reslist) == 1:
+            return reslist[0]
+        else:
+            return "".join(reslist)
+        #return dicttoxml.dicttoxml(data, custom_root=root)

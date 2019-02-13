@@ -40,9 +40,9 @@ myapp = {
     "default_format"    :   "json",
     "supported_formats" :   ["json", "csv", "xml", "html"],
     "encoder"           :   {
-            "json"  :   json,
-            "csv"   :   {{appname}}.encoders.JsonToCsv(),
-            "xml"   :   {{appname}}.encoders.JsonToXml()
+           "json"   :   {{appname}}.encoders.json_to_json(),
+            "csv"   :   {{appname}}.encoders.json_to_csv(),
+            "xml"   :   {{appname}}.encoders.json_to_xml()
     },
     "upload_path"       :   os.path.join(server_settings["static_path"], "upload"), #this is just a demo.
     "page_size"         :   5,
