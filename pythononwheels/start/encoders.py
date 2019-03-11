@@ -22,14 +22,17 @@ def pow_json_serializer(obj):
         return str(obj)
     # add your own additions below here.
 
-    raise TypeError ("Type not serializable")
+    raise TypeError ("Type not serializable" + str(ojb))
 
 class json_to_json:
     """
         receives a list of json and returns a string
     """
     def dumps(self, data):
-        return json.dumps(data, default=pow_json_serializer) 
+        try:
+            return json.dumps(data, default=pow_json_serializer) 
+        except Exception as e:
+            raise
         
     
 

@@ -16,7 +16,7 @@
           <a href="/">home</a>
         </div>
         <div class="col-md-4 text-right">
-          <a href="http://www.pythononwheels.org/gettingstarted">getting started</a>
+          <a href="https://www.pythononwheels.org/article/8a729647-47cd-4547-a56e-ee884e3daaef">getting started</a>
         </div>
       </div>
       <div class="row">
@@ -43,16 +43,26 @@
           &nbsp;
         </div>
         <div class="col-md-8">
-               <p class="lead">The quick and easy generative Webframework for python.
-        
-        Follow on twitter for updates: <a href="https://twitter.com/pythononwheels" class="twitter-follow-button" data-show-count="false">Follow @pythononwheels</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-        You can <a href="https://github.com/pythononwheels/pow_devel">check the current state on github</a>
-        <!-- Place this tag where you want the button to render. -->
-<a class="github-button" href="https://github.com/pythononwheels/pow_devel" data-icon="octicon-star" data-style="mega" data-count-href="/pythononwheels/pow_devel/stargazers" data-count-api="/repos/pythononwheels/pow_devel#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star pythononwheels/pow_devel on GitHub">Star</a>
-        
-
-          
+          <div class="text-center">
+            <h3>Hey! Welcome aboard PythonOnWheels!</h3>
+              <h4> The easiest start is to watch the 10 Minute intro video</h4>
+              <p></p>
+              <iframe width="560" height="315" src="https://www.youtube.com/embed/70Y9GIW0V5M" frameborder="0" 
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+            </iframe>
+            <p class="lead">
+              If you need more info and want to dive deeper just check the <a href="https://www.pythononwheels.org/documentation">documentation</a>
+            </p>
+            <div>
+              Follow on twitter for updates: <a href="https://twitter.com/pythononwheels" class="twitter-follow-button" data-show-count="false">Follow @pythononwheels</a>
+              <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+              Or give it a star if you like. <a class="github-button" href="https://github.com/pythononwheels/pow_devel" data-icon="octicon-star" data-show-count="true" aria-label="Star pythononwheels/pow_devel on GitHub">Star</a>
+              <p>
+                If you encounter any problems feel very welcome to tweet @pythononwheels or open an <!-- Place this tag where you want the button to render. -->
+                <a class="github-button" href="https://github.com/pythononwheels/pow_devel/issues" data-icon="octicon-issue-opened" data-show-count="true" aria-label="Issue pythononwheels/pow_devel on GitHub">Issue</a>
+              </p>
+            </div>
+          </div>
       <div class="col-md-2">
         &nbsp;
       </div>

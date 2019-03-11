@@ -418,15 +418,33 @@ class BaseHandler(tornado.web.RequestHandler):
         # if not format == html convert the model or [model] to json 
         # the encoders can convert json to any requested target format.
         # 
+
+        #
+        # the outdata dict contains the fields:
+        #   outdata["data"] = data
+        #   outdata[<name>] = kwargs.get(<name>) for every additional field in kwargs
+        #   Try to convert the kwargs paramter with res_to_dict if it's a model..
+        # 
+        outdata={}
+        for elem in kwargs:
+            oelem = kwargs.get(elem,None)
+            try:
+                outdata[elem]=model.res_to_dict(oelem)
+            except:
+                outdata[elem]=oelem
+        
         if raw_data:
-            self.write(encoder.dumps(data))
+            outdata["data"]=data    
+            self.write(encoder.dumps(outdata))
+            
         else:
             try:
                 data = model.res_to_dict(data)
             except:
                 pass # just take the data as is.
-            
-            self.write(encoder.dumps(data))
+            finally:
+                outdata["data"]=data    
+                self.write(encoder.dumps(outdata))
 
         # write the result
         #self.write(encoder.dumps({
