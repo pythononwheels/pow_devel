@@ -18,6 +18,9 @@ class {{model_class_name}}(MongoModel):
         "votes" :   { "type" : "integer", "default" : 0 }   
         }
 
+    # define class attributes/variables here that should be included in to_dict() 
+    # conversion and also handed to the encoders but that are NOT part of the schema.
+    include_attributes=[]
     #
     # init
     #

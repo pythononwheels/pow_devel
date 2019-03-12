@@ -103,7 +103,7 @@ class SqlBaseModel(ModelObject):
                 if key in self.schema:
                     setattr(self, key, kwargs[key])
         self.init_observers()
-        self.setup_dirty_model()
+        #elf.setup_dirty_model()
         
 
     @declared_attr

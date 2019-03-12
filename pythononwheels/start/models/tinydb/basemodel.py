@@ -80,7 +80,7 @@ class TinyBaseModel(ModelObject):
                     setattr(self, key, kwargs[key])
         #self._uuid = str(uuid.uuid4())
         self.init_observers()
-        self.setup_dirty_model()
+        #self.setup_dirty_model()
 
 
     def json_load_from_db(self, data, keep_id=False):

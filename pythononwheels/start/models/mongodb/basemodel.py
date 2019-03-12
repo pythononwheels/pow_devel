@@ -83,7 +83,7 @@ class MongoBaseModel(ModelObject):
         self._uuid = self.id
         #print("new id is: " + self.id) 
         self.init_observers()
-        self.setup_dirty_model()
+        #self.setup_dirty_model()
                            
     #
     # These Methods should be implemented by every subclass

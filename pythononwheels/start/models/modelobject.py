@@ -34,60 +34,60 @@ class ModelObject():
         if "format" in kwargs:
             self.setup_from_format( args, kwargs)
     
-    def setup_dirty_model(self):
-        """
-            Tracks changes in the instance relative to last save to DB
-            Rails: see: https://apidock.com/rails/ActiveRecord/Dirty
-        """
-        # will hold last value before change + a flag if this attribute is dirty.
-        self.dirty = {}
-        self.is_dirty = False
+    # def setup_dirty_model(self):
+    #     """
+    #         Tracks changes in the instance relative to last save to DB
+    #         Rails: see: https://apidock.com/rails/ActiveRecord/Dirty
+    #     """
+    #     # will hold last value before change + a flag if this attribute is dirty.
+    #     self.dirty = {}
+    #     self.is_dirty = False
 
-    def rollback_dirty(self, name=None):
-        """
-            Rolls back the changes made to the object since last save operation to DB
-            see: https://apidock.com/rails/ActiveRecord/Dirty
-            This is NOT a DB rollback.
-            Look at session.rollback() Bfor SQL or accordinug for mongoDB > 4 or other transation capable DBs
-        """
-        if self.is_dirty:
-            if name in self.dirty:
-                # only rollback attribute changes for name
-                try:
-                    setattr(self, name, self.dirty[name]["value"])
-                    self.dirty.pop(name, None)
-                    # check if still elements in dirty
-                    if not self.dirty:
-                        self.is_dirty = False
-                except Exception as e:
-                    print("ERROR Dirty rollback : {}".format(str(e)))
-            # else: rollback all changes
-            for elem in self.dirty:
-                try:
-                    setattr(self, elem, self.dirty[elem]["value"])
-                except Exception as e:
-                    print("ERROR Dirty rollback : {}".format(str(e)))
+    # def rollback_dirty(self, name=None):
+    #     """
+    #         Rolls back the changes made to the object since last save operation to DB
+    #         see: https://apidock.com/rails/ActiveRecord/Dirty
+    #         This is NOT a DB rollback.
+    #         Look at session.rollback() Bfor SQL or accordinug for mongoDB > 4 or other transation capable DBs
+    #     """
+    #     if self.is_dirty:
+    #         if name in self.dirty:
+    #             # only rollback attribute changes for name
+    #             try:
+    #                 setattr(self, name, self.dirty[name]["value"])
+    #                 self.dirty.pop(name, None)
+    #                 # check if still elements in dirty
+    #                 if not self.dirty:
+    #                     self.is_dirty = False
+    #             except Exception as e:
+    #                 print("ERROR Dirty rollback : {}".format(str(e)))
+    #         # else: rollback all changes
+    #         for elem in self.dirty:
+    #             try:
+    #                 setattr(self, elem, self.dirty[elem]["value"])
+    #             except Exception as e:
+    #                 print("ERROR Dirty rollback : {}".format(str(e)))
     
-    def was(self,name):
-        """
-            returns the value that attribute name had before the last save to DB operation (dirty object)
-            see: https://apidock.com/rails/ActiveRecord/Dirty
-        """
-        try:
-            return self.dirty[name]["value"]
-        except Exception as e:
-            raise e
+    # def was(self,name):
+    #     """
+    #         returns the value that attribute name had before the last save to DB operation (dirty object)
+    #         see: https://apidock.com/rails/ActiveRecord/Dirty
+    #     """
+    #     try:
+    #         return self.dirty[name]["value"]
+    #     except Exception as e:
+    #         raise e
     
-    def changed(self,name):
-        """
-            returns the value and changed value that attribute name had before the last save to 
-            DB operation (dirty object)
-            see: https://apidock.com/rails/ActiveRecord/Dirty
-        """
-        try:
-            return [self.dirty[name]["value"], getattr(self,name)]
-        except Exception as e:
-            raise e
+    # def changed(self,name):
+    #     """
+    #         returns the value and changed value that attribute name had before the last save to 
+    #         DB operation (dirty object)
+    #         see: https://apidock.com/rails/ActiveRecord/Dirty
+    #     """
+    #     try:
+    #         return [self.dirty[name]["value"], getattr(self,name)]
+    #     except Exception as e:
+    #         raise e
 
     def __setattr__(self, name, value):
         #print("trying to set attribute: {} -> to {}".format(str(name), str(value)))
@@ -98,15 +98,15 @@ class ModelObject():
         d[name]=value
         d=pow_init_from_dict_deserializer(d, self.schema, simple_conversion=myapp["simple_conversion"])
         # check if dirty mark has to be set.
-        if name in self.schema:
-            try:
-                current_value = getattr(self, name)
-                if value != current_value and not name in self.dirty:
-                    #has changed, so save the old val and mark as dirty:
-                    self.dirty[name] =  { "value" : current_value, "dirty" : True }
-                    self.is_dirty = True
-            except:
-                pass
+        # if name in self.schema:
+        #     try:
+        #         current_value = getattr(self, name)
+        #         if value != current_value and not name in self.dirty:
+        #             #has changed, so save the old val and mark as dirty:
+        #             self.dirty[name] =  { "value" : current_value, "dirty" : True }
+        #             self.is_dirty = True
+        #     except:
+        #         pass
         # set the value
         super().__setattr__(name, d[name])
     
@@ -476,7 +476,9 @@ class ModelObject():
         """
         d = {}
         # return just the attributes that are defined in the schema 
-        for elem in self.schema.keys():
+        # + those define in include_attrs model class variable.
+        include_attrs = getattr(self, "include_attributes", [])
+        for elem in list(self.schema.keys()) + include_attrs:
             val = getattr(self,elem, None)
             if lazy:
                 d[elem] = val

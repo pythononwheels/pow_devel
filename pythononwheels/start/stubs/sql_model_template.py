@@ -44,6 +44,11 @@ class {{model_class_name}}(Base):
     #     }
     # }
 
+    # define class attributes/variables here that should be included in to_dict() 
+    # conversion and also handed to the encoders but that are NOT part of the schema.
+    include_attributes=[]
+
+    # Add sqlalchemy table_args here.
     #__table_args__ = { "autoload" : True  }
 
     # init

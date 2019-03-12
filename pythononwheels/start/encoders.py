@@ -13,7 +13,7 @@ import simplejson as json
 
 def pow_json_serializer(obj):
     """JSON serializer for objects not serializable by default json code"""
-
+    from {{appname}}.models.modelobject import ModelObject
     if isinstance(obj, datetime):
         #serial = obj.isoformat()
         serial = obj.strftime({{appname}}.config.myapp["date_format"])
@@ -22,7 +22,15 @@ def pow_json_serializer(obj):
         return str(obj)
     # add your own additions below here.
 
-    raise TypeError ("Type not serializable" + str(ojb))
+    if isinstance(obj, ModelObject ):
+        try:
+            return obj.to_dict()
+        except:
+            return str(obj)
+    try:
+        return str(obj)
+    except:
+        raise TypeError ("Type not serializable" + str(ojb))
 
 class json_to_json:
     """

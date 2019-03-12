@@ -345,6 +345,7 @@ class powDecNew():
             #print(cls_name)
             setattr(cls, "parent_id", Column(Integer, ForeignKey(pluralize(cls_name)+".id")))
             setattr(cls, "children_list", relationship(cls_name.capitalize()))
+            setattr(cls, "include_attributes", getattr(cls,"include_attributes", []) + ["children_list", "parent_id"]  )
             ##print(dir(rel))
             print("RELATION: I see a tree: " + cls_name.capitalize() )
             return cls
