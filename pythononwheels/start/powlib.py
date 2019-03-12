@@ -206,13 +206,13 @@ class powDecNew():
             #print(sorted(locals().keys()))
             #print(sorted(globals().keys()))
             import sys
-            if "{{appname}}.models.sql." + child_module_name in sys.modules.keys():
-                #print(dir(sys.modules["{{appname}}.models.sql." + child_module_name]))
-                child_klass = getattr(sys.modules["{{appname}}.models.sql." + child_module_name], child_class_name)
+            if "testapp2.models.sql." + child_module_name in sys.modules.keys():
+                #print(dir(sys.modules["testapp2.models.sql." + child_module_name]))
+                child_klass = getattr(sys.modules["testapp2.models.sql." + child_module_name], child_class_name)
             else:
                 import importlib
-                mod = importlib.import_module('{{appname}}.models.sql.' + child_module_name)
-                #mod = __import__('{{appname}}.models.sql.'+rel_module_name, fromlist=[rel_class_name])
+                mod = importlib.import_module('testapp2.models.sql.' + child_module_name)
+                #mod = __import__('testapp2.models.sql.'+rel_module_name, fromlist=[rel_class_name])
                 child_klass = getattr(mod, child_class_name)
             if backref:
                 setattr(parent_class, child_as_str, relationship(child_class_name, 
@@ -220,16 +220,20 @@ class powDecNew():
                     back_populates=parent_name))
             else:
                 setattr(parent_class, child_as_str, relationship(child_class_name))
+            # prepare the include_attributes additions for the auto generated attrs
+            setattr(parent_class, "include_attributes", getattr(parent_class,"include_attributes", []) + [child_as_str]  )
 
             setattr(child_klass, parent_name + "_id", Column(Integer, ForeignKey(pluralize(parent_name)+".id")))
+            setattr(child_klass, "include_attributes", getattr(child_klass,"include_attributes", []) + [parent_name+"_id"]  )
             if backref:
                 setattr(child_klass, parent_name, relationship(parent_class_name, back_populates=child_as_str))
+                setattr(child_klass, "include_attributes", getattr(child_klass,"include_attributes", []) + [parent_name]  )
             ##print(dir(rel))
             print("RELATION: I see a: " + parent_class_name + " has many: " + child_as_str )
             if backref:
                 print( "  .. and " + child_as_str + " belongs_to " + parent_name)
             return parent_class
-        return decorator    
+        return decorator     
     
     def belongs_to(self, parent_as_str):
         # cls is the class that has many of the related models (e.g. User, Post)
