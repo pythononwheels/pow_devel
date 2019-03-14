@@ -258,7 +258,8 @@ class powDecNew():
             #print(dir(klass))
             setattr(parent_class, child_name, relationship(child_class.__name__))
             setattr(parent_class, child_name + "_id", Column(Integer, ForeignKey(pluralize(child_name)+".id")))
-            
+            setattr(parent_class, "include_attributes", 
+                getattr(parent_class,"include_attributes", []) + [child_name, child_name+"_id"]  )
             ##print(dir(rel))
             print("RELATION: I see a: " + child_name + " belongs_to: " + parent_as_str)
             return child_class
@@ -284,8 +285,12 @@ class powDecNew():
             setattr(parent, child_as_str, relationship(child_class_name, 
                 uselist=False,
                 back_populates=parent_name))
+            setattr(parent, "include_attributes", 
+                getattr(parent,"include_attributes", []) + [child_as_str]  )
             setattr(klass, parent_name + "_id", Column(Integer, ForeignKey(parent_name+".id")))
             setattr(klass, parent_name, relationship(parent_name.capitalize(), back_populates=child_as_str))
+            setattr(klass, "include_attributes", 
+                getattr(klass,"include_attributes", []) + [parent_name, parent_name + "_id"]  )
             ##print(dir(rel))
             print("RELATION: I see a: " + parent_name.capitalize() + " has many: " + child_as_str)
             return parent
@@ -319,6 +324,9 @@ class powDecNew():
             setattr(parent_class, children, relationship(child_class_name, 
                 secondary=assoc_table,
                 back_populates=pluralize(parent_name)))
+            # include_attrributes for to_dict() conversion
+            setattr(parent_class, "include_attributes", 
+                getattr(parent_class,"include_attributes", []) + [children]  )
 
             import sys
             if "{{appname}}.models.sql." + child_module_name in sys.modules.keys():
@@ -335,6 +343,9 @@ class powDecNew():
             setattr(child_klass, pluralize(parent_name), 
                 relationship(parent_class_name, 
                     secondary=assoc_table, back_populates=children ))
+            # include_attributes
+            #setattr(child_klass, "include_attributes", 
+            #    getattr(child_klass,"include_attributes", []) + [pluralize(parent_name)]  )
             ##print(dir(rel))
             print("RELATION: I see a: " + parent_class_name + " has many-to-many: " + children)
             return parent_class
@@ -373,8 +384,12 @@ class powDecNew():
             #print(dir(klass))
             setattr(parent, child_table_name + "_id", Column(Integer, ForeignKey(child_table_name + '.id')))
             setattr(parent, child_table_name, relationship(child_class_name))
+            setattr(parent, "include_attributes", 
+                getattr(parent,"include_attributes", []) + [child_table_name + "_id", child_table_name]  )
             if backref:
                 setattr(klass, pluralize(parent_name), relationship(parent.__name__, back_populates=child_class_name))
+                setattr(klass, "include_attributes", 
+                    getattr(klass,"include_attributes", []) + [pluralize(parent_name)]  )
             ##print(dir(rel))
             print("RELATION: I see a: " + parent_name.capitalize() + " many to one: " + child_as_str)
             return parent
@@ -397,6 +412,11 @@ class powDecNew():
             #print(dir(klass))
             setattr(parent, child_as_str, relationship(child_class_name))
             setattr(klass, parent_name + "_id", Column(Integer, ForeignKey(pluralize(parent_name)+".id")))
+            # include_attributes
+            setattr(parent, "include_attributes", 
+                    getattr(parent,"include_attributes", []) + [child_as_str]  )
+            setattr(klass, "include_attributes", 
+                    getattr(klass,"include_attributes", []) + [parent_name + "_id"]  )
             ##print(dir(rel))
             print("RELATION: I see a: " + parent_name.capitalize() + " has many: " + child_as_str)
             return parent
