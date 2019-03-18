@@ -8,6 +8,9 @@
 # this uses the first data element in a given json file to create
 # a model(cerberus) schema from it. Trying to guess the right types (without too much effort)
 #
+# khz 2018
+# update: 18.3.2019: nicer schema output.
+
 
 import simplejson as json
 import re
@@ -26,8 +29,9 @@ def is_date(string):
 
 @click.command()
 @click.option('--infile', help='json file to read')
+@click.option('--usepprint', default=False, is_flag=True, help='use generic pprint to print schema. ')
 @click.option('--start_element', default=0, help="Element to process, if json file contains a list. Default=0")
-def json_to_cerberus(infile, start_element):
+def json_to_cerberus(infile, start_element, usepprint):
     cerberus_schema = {}
     # sample output schema format:
     # schema = {'name': {'type': 'string'} }
@@ -50,7 +54,7 @@ def json_to_cerberus(infile, start_element):
     for elem in mydata:
         #print("{0} : {2} : {1}".format(elem, str(type(elem)), str(elem), end=''))
         #print("Checking Elem: {}".format(elem))
-    
+
         if isinstance(mydata[elem], bool):
             cerberus_schema[elem] = {"type" : "boolean" }
         elif isinstance(mydata[elem], int):
@@ -79,12 +83,23 @@ def json_to_cerberus(infile, start_element):
     from pprint import PrettyPrinter
     pp = PrettyPrinter(indent=4)
     print(70*"-")
-    print("|  Model schema for: {}".format(infile) )
+    print("  Model schema for: {}".format(infile) )
     print(70*"-")
-    print("schema=", end="")
-    pp.pprint(cerberus_schema)
+    if usepprint:
+        print("schema=", end="")
+        pp.pprint(cerberus_schema)
+        print(70*"-")
+    else:
+        print("schema={")
+        for index,(key,val) in enumerate(cerberus_schema.items()):
+            if index < len(cerberus_schema.keys())-1:
+                print( "        {0:<25s} : {1:<50s}".format(key,str(val)+","))
+            else:
+                print( "        {0:<25s} : {1:<50s}".format(key,str(val)))
+            #print(" {}  {} {}".format(str(index), key, val))
+        print("        }")
     print(70*"-")
-    print("|   you can copy&paste this right into any PythonOnWheels model schema"  )
+    print("   you can copy&paste this right into any PythonOnWheels model schema"  )
     print(70*"-")
 
 if __name__ == "__main__":
