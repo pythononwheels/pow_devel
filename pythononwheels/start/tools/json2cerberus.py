@@ -93,9 +93,9 @@ def json_to_cerberus(infile, start_element, usepprint):
         print("schema={")
         for index,(key,val) in enumerate(cerberus_schema.items()):
             if index < len(cerberus_schema.keys())-1:
-                print( "        {0:<25s} : {1:<50s}".format(key,str(val)+","))
+                print( "        {0:<25s} : {1:<50s}".format("'"+key+"'",str(val)+","))
             else:
-                print( "        {0:<25s} : {1:<50s}".format(key,str(val)))
+                print( "        {0:<25s} : {1:<50s}".format("'"+key+"'",str(val)))
             #print(" {}  {} {}".format(str(index), key, val))
         print("        }")
     print(70*"-")
