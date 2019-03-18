@@ -15,8 +15,11 @@ import click
 @click.command()
 @click.option('--infile', help='csv input filename')
 @click.option('--convstr', default=False, is_flag=True, help='try to convert strings to numbers first')
+@click.option('--skipcol', multiple=True, help='skip a column by column name')
+@click.option('--startrow', default=1, help='set the startrow number. [first=1]')
+@click.option('--skiprow', multiple=True, help='skip row by rownumber')
 @click.option('--delimiter', default=",", help='csv delimiter')
-def csv_to_json(infile, convstr, delimiter):
+def csv_to_json(infile, convstr, delimiter, skipcol,startrow, skiprow):
     csvfile = open(infile, 'r')
     jsonfile = open(infile + '.json', 'w')
 
@@ -24,25 +27,37 @@ def csv_to_json(infile, convstr, delimiter):
     i = next(reader)
     columns=i
     print(columns)
+    #for col in skipcol:
+    #    columns.remove(col)
+    #print(columns)
     reader = csv.DictReader( csvfile, columns)
     olist=[]
+    rowcount=1
     for row in reader:
-        #print(row)
-        if convstr: 
-            # try to convert str types to int,float
-            for elem in row:
-                #print(" {} -> {} ".format(elem, row[elem]))
-                if isinstance(row[elem], str):
-                    try:
-                        row[elem] = int(row[elem])
-                        print("converted to int: {}".format(str(row[elem])))
-                    except:
+        if rowcount > startrow:
+            print(row)
+            if convstr: 
+                # try to convert str types to int,float
+                for elem in row:
+                    #print(" {} -> {} ".format(elem, row[elem]))
+                    if isinstance(row[elem], str):
                         try:
-                            row[elem] = float(row[elem])
-                            print("converted to float: {}".format(str(row[elem])))
+                            row[elem] = int(row[elem])
+                            #print("converted to int: {}".format(str(row[elem])))
                         except:
-                            pass
-        olist.append(dict(row))
+                            try:
+                                row[elem] = float(row[elem])
+                                #print("converted to float: {}".format(str(row[elem])))
+                            except:
+                                pass
+            drow = dict(row)
+            for col in skipcol:
+                try:
+                    del drow[col]
+                except:
+                    pass
+            olist.append(drow)
+        rowcount+=1
         #json.dump(row, jsonfile)
         #jsonfile.write('')
     json.dump(olist, jsonfile)

@@ -73,23 +73,23 @@
             
                 {% for elem in data %}
                     <tr id="{{elem.get("id")}}">
-                    {% for key in elem.schema.keys() %}
-                        {% if key not in hide_list %}
-                            <td>{{getattr(elem, key)}}</td>
-                        {% end %}  
-                    {% end %}
-                    <td>                           
-                        <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 
-                        <a href='/{{base_route_rest}}/{{getattr(elem, "id")}}' class="btn btn-primary">Show</a>
-                    </td>
-                    <td>
-                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                        <a href='/{{base_route_rest}}/{{getattr(elem, "id")}}/edit'class="btn btn-warning">Edit</a>
-                    </td>
-                    <td>
-                        <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
-                        <button type="button" class="btn btn-danger btn-delete" value="{{elem.get("id")}}">Delete</a>
-                    </td>
+                        <td>                           
+                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 
+                            <a href='/{{base_route_rest}}/{{getattr(elem, "id")}}' class="btn btn-primary">Show</a>
+                        </td>
+                        <td>
+                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                            <a href='/{{base_route_rest}}/{{getattr(elem, "id")}}/edit'class="btn btn-warning">Edit</a>
+                        </td>
+                        <td>
+                            <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
+                            <button type="button" class="btn btn-danger btn-delete" value="{{elem.get("id")}}">Delete</a>
+                        </td>
+                        {% for key in elem.schema.keys() %}
+                            {% if key not in hide_list %}
+                                <td>{{getattr(elem, key)}}</td>
+                            {% end %}  
+                        {% end %}
                     </tr>
                 {% end %}
            
