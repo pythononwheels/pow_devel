@@ -57,6 +57,8 @@ class BaseHandler(tornado.web.RequestHandler):
                 print("calling before_handler for " +  str(self.__class__))
             before_handler()
         self.format = self.get_accept_format()
+        # set the http header
+        self.set_header("Content-Type", cfg.myapp["supported_formats"][self.format])
 
     
     def get_format_list(self, h=None):

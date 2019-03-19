@@ -37,8 +37,10 @@ templates = {
 
 myapp = {
     "app_name"          :   "{{appname}}",
+    #                           Format : Content-Type Header
+    "supported_formats" :   {   "json" : "application/json", "csv" : "text/csv", 
+                                "xml" : "application/xml", "html" : "text/html" },
     "default_format"    :   "json",
-    "supported_formats" :   ["json", "csv", "xml", "html"],
     "encoder"           :   {
            "json"   :   {{appname}}.encoders.json_to_json(),
             "csv"   :   {{appname}}.encoders.json_to_csv(),
