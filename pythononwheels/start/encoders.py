@@ -83,11 +83,19 @@ class json_to_csv:
         """ dumps data to csv.
             data will be flattened before
         """
+        print(data)
+        if not isinstance(data["data"], list):  
+            try:
+                data["data"]=[data["data"]]
+            except:
+                raise
+        print(data)
         output = io.StringIO()
         #writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
-        writer = csv.DictWriter(output, data[0].keys())
+        #writer = csv.DictWriter(output, data[0].keys())
+        writer = csv.DictWriter(output, data["data"][0].keys())
         writer.writeheader()
-        writer.writerows(data)
+        writer.writerows(data["data"])
         return output.getvalue()
 
 class json_to_xml:
@@ -100,19 +108,18 @@ class json_to_xml:
 
             usage: encoder.dumps(model.to_dict, root="some custom root name")
         """
-        print(data)
+        #print(data)
         #print(dicttoxml.dicttoxml(data))
-        if not isinstance(data, list):
+        reslist=[]
+        if not isinstance(data, list):  
             try:
-                res = list(data)
+                return dicttoxml.dicttoxml(data, custom_root=root)
             except:
-                return dicttoxml.dicttoxml(str(data), custom_root=root)
-        
+                raise
         try:
             reslist =  [str(dicttoxml.dicttoxml(x, custom_root=root)) for x in data]
-            
         except Exception as e:
-            print("ERRRR  : " + str(e))
+            raise
         if len(reslist) == 1:
             return reslist[0]
         else:
