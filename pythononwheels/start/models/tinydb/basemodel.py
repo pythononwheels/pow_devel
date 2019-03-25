@@ -366,16 +366,12 @@ class TinyBaseModel(ModelObject):
     
     def find_one(self, *criterion):
         """ find only one result. Raise Excaption if more than one was found"""
-        print("criterion: " + str(criterion))
-        try:
-            res = self.table.get(*criterion)
-            if len(res) <= 1:
-                return self.dict_result_to_object(res)
-            #return self._return_find(res)
-            else:
-                raise Exception("used find_one / find_first but more than on result found.")
-        except Exception as e:
-            raise e
+        #print("criterion: " + str(criterion))
+        res = self.table.search(*criterion)
+        if len(res) <= 1:
+            return self.dict_result_to_object(res)
+        else:
+            raise Exception("used find_one / find_first but more than on result found.")
 
     def find_first(self, *criterion):
         """ return the first hit, or None"""

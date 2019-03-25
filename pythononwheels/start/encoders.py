@@ -10,6 +10,10 @@ from datetime import datetime
 import uuid
 import {{appname}}
 import simplejson as json
+import logging
+import logging
+
+dicttoxml.LOG.setLevel(logging.ERROR)
 
 def pow_json_serializer(obj):
     """JSON serializer for objects not serializable by default json code"""
@@ -117,7 +121,7 @@ class json_to_xml:
             except:
                 raise
         try:
-            reslist =  [str(dicttoxml.dicttoxml(x, custom_root=root)) for x in data]
+            reslist =  [dicttoxml.dicttoxml(x, custom_root=root) for x in data]
         except Exception as e:
             raise
         if len(reslist) == 1:
