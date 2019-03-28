@@ -23,14 +23,17 @@ def csv_to_json(infile, convstr, delimiter, skipcol,startrow, skiprow):
     csvfile = open(infile, 'r')
     jsonfile = open(infile + '.json', 'w')
 
-    reader = csv.reader(csvfile)
+    reader = csv.reader(csvfile, delimiter=delimiter)
     i = next(reader)
     columns=i
     print(columns)
     #for col in skipcol:
     #    columns.remove(col)
     #print(columns)
-    reader = csv.DictReader( csvfile, columns)
+    try:
+        reader = csv.DictReader( csvfile, columns, delimiter=delimiter )
+    except:
+        raise
     olist=[]
     rowcount=1
     for row in reader:
