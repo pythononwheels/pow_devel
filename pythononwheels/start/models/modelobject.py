@@ -261,7 +261,10 @@ class ModelObject():
         from {{appname}}.decoders import pow_init_from_dict_deserializer
         #print("init from dict")
         #print(d)
-        d=pow_init_from_dict_deserializer(d,self.schema, simple_conversion)
+        try:
+            d=pow_init_from_dict_deserializer(d,self.schema, simple_conversion)
+        except:
+            raise
         #print("after conversion: ")
         #for elem in d:
         #    print(str(elem) + "->" + str(type(elem)))
@@ -307,13 +310,19 @@ class ModelObject():
         """
             returns a generator that yields models instances per row
             of the json file.
+            ignore = True => set the attribute even if it is not in the schema
+            simple_conversion => try to convert the values to their schema definitions.
         """
         with open(json_file) as f:
             data = json.load(f)
             for d in data:
                 m = self.__class__()
-                m.init_from_dict(d, ignore, simple_conversion=simple_conversion)
-                yield m
+                try:
+                    m.init_from_dict(d, ignore, simple_conversion=simple_conversion)
+                    yield m
+                except:
+                    raise
+                
 
 
     def init_from_json(self, data, ignore=True, simple_conversion=False):
@@ -323,6 +332,8 @@ class ModelObject():
             sets the attributes on self if len(data) == 1
             returns a generator if len(data)>1
         """
+        if isinstance(data, bytes):
+            data=data.decode(myapp["default_decoding"])
         d=json.loads(data,object_hook=pow_json_deserializer)
         return self.init_from_dict(d, ignore, simple_conversion=simple_conversion)
         #else:
@@ -417,7 +428,7 @@ class ModelObject():
                 for elem in data:
                     counter += 1
                     if counter < length:
-                        outfile.write(elem.to_json() + "," + "\\n" )
+                        outfile.write(elem.to_json() + "," + "\n" )
                     else:
                         outfile.write(elem.to_json() ) 
                 outfile.write("]")
@@ -460,7 +471,7 @@ class ModelObject():
         
         with open(filename, "w") as outf:
             # write the header
-            #outfile.write(",".join([str(x) for x in self.schema.keys()]) +"\\n")
+            #outfile.write(",".join([str(x) for x in self.schema.keys()]) +"\n")
             writer = csv.DictWriter(outf, self.schema.keys())
             writer.writeheader()
             for row in data:

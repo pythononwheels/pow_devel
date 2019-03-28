@@ -213,7 +213,7 @@ class BaseHandler(tornado.web.RequestHandler):
                 )
         else:
              self.error(
-                message=" HTTP Method: PUT not supported for this route. ",
+                message=" HTTP Method: POST not supported for this route. ",
                 data = { "request" : str(self.request )},
                 http_code = 405
                 )
@@ -352,7 +352,7 @@ class BaseHandler(tornado.web.RequestHandler):
             # most often direct json
             # this function is for sending self defined json responses without any
             # changes from pow.
-            self.application.log_request(self, message="Sending pure data: {}".format(data))
+            #self.application.log_request(self, message="Sending pure data: {}".format(data))
             # if  pure AND format are given, try to convert to the given format.
             odata={ "data" : data, "message" : message }
             if format:
@@ -397,15 +397,21 @@ class BaseHandler(tornado.web.RequestHandler):
                 viewname=os.path.normpath(template)
             if cfg.server_settings["debug_print"]:
                 print(" ... looking for view: " + viewname)
+            model_name=None
             if self.view is not None:
                 if not model:
-                    model=self.__class__.model
+                    try:
+                        model=self.__class__.model
+                        model_name=model.__class__.__name__.lower()
+                    except:
+                        model=None
+                        model_name = None
                 show_list=getattr(self.__class__, "show_list", [])
                 hide_list=getattr(self.__class__, "hide_list", [])
                 base_route_rest=getattr(self, "base_route_rest", "None")
                 return self.render( viewname, data=data, message=message, 
                     handler_name = self.__class__.__name__.lower(), base_route_rest=base_route_rest, 
-                    model=model, status=http_status, next=succ, prev=prev, model_name=model.__class__.__name__.lower(),
+                    model=model, status=http_status, next=succ, prev=prev, model_name=model_name,
                     show_list=show_list, hide_list=hide_list,**kwargs )
             else:
                 self.error(message="Sorry, View: " + viewname +  " can not be found.", 
@@ -429,6 +435,8 @@ class BaseHandler(tornado.web.RequestHandler):
         #   Try to convert the kwargs paramter with res_to_dict if it's a model..
         # 
         outdata={}
+        outdata["message"] = message
+        outdata["http_status"] = http_status
         for elem in kwargs:
             oelem = kwargs.get(elem,None)
             try:
