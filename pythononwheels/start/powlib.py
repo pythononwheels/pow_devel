@@ -474,7 +474,12 @@ class powDecNew():
                         if "maxlength" in cls.schema[elem]:
                             setattr(cls, elem, Column(elem, String(length=cls.schema[elem]["maxlength"]), **sql))
                         else:
-                            setattr(cls, elem, Column(elem, String, **sql))
+                            if "allowed" in cls.schema[elem]:
+                                strmax = max(cls.schema[elem]["allowed"], key=len)
+                                print("setting max stringlength to: "+ str(len(strmax)))
+                                setattr(cls, elem, Column(elem, String(length=len(strmax)), **sql))
+                            else:
+                                setattr(cls, elem, Column(elem, String, **sql))
                 elif cls.schema[elem]["type"] == "boolean":
                     setattr(cls, elem, Column(elem, Boolean, **sql))
                 elif cls.schema[elem]["type"] == "date":

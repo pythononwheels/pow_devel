@@ -98,6 +98,17 @@ database = {
         # "user"      :   "postgres",
         # "passwd"    :   "postgres",
         # "enabled"   :   True          # switch currently unused
+        #
+        # this is an example for MariaDB / MySQL
+        #
+        # "type"      :   "mysql",
+        # "dbname"    :   "test",   # just a name for non file based DBs
+        # "host"      :   "127.0.0.1",     
+        # "port"      :   3306,     
+        # "user"      :   "root",                   # or replace root with you db user
+        # "passwd"    :   "<your db pwd here>",        
+        # "enabled"   :   True          # switch currently unused
+
     },
     "tinydb" : {
         "dbname"    :   os.path.join(BASE_DIR, 'tiny.db'),

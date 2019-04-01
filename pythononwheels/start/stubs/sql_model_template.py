@@ -28,11 +28,15 @@ class {{model_class_name}}(Base):
         "votes" :   { "type" : "integer", "default" : 0 }  
     }
 
-    # you can also use special sqlalchemy attributes which are handed raw ro sqlalchemy
+    # you can also use special sqlalchemy attributes which are handed raw ro sqlalchemy. 
+    #       => (see "sql" parameter)
+    # and for type string (default varchar) you can specify the concrete sql type 
+    # currently text or unicode =>   (see "sqltype")
     # like this:
+    #
     # schema = {        
     #     'title': {'type': 'string', 'maxlength' : 35},
-    #     'text': {'type': 'string'},
+    #     'text': {'type': 'string', "sqltype" : "text" }, 
     #     'likes': {
     #         'type': 'integer',
     #          "sql" : {          # sql attributes are handed raw to sqlalchemy Column
@@ -44,6 +48,7 @@ class {{model_class_name}}(Base):
     #     }
     # }
 
+    
     # define class attributes/variables here that should be included in to_dict() 
     # conversion and also handed to the encoders but that are NOT part of the schema.
     include_attributes=[]
