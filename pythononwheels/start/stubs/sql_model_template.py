@@ -10,9 +10,9 @@ from {{appname}}.database.sqldblib import Base
 @relation.setup_sql_schema()
 class {{model_class_name}}(Base):
     
-
     #
     # cerberus style schema
+    #
     schema = {        
         'title' :   { 'type' : 'string', 'maxlength' : 35 },
         'text'  :   { 'type' : 'string' },
@@ -31,8 +31,10 @@ class {{model_class_name}}(Base):
 
     # Add sqlalchemy table_args here. Add "autoload" : True for reflection
     __table_args__ = { "extend_existing": True  }
-
+    
+    #
     # init
+    #
     def __init__(self, **kwargs):
         self.setup_instance_values()
         self.init_on_load(**kwargs)

@@ -36,13 +36,13 @@ class SqlBaseModel(ModelObject):
     """
     #__table_args__ = { "extend_existing": True }
     
-    # id =  Column(Integer, primary_key=True)
+    id =  Column(Integer, primary_key=True)
     # #_uuid = Column(String, default=make_uuid)
     # # create_date column will be populated with the result of the now() SQL function 
     # #(which, depending on backend, compiles into NOW() or CURRENT_TIMESTAMP in most cases
     # # see: http://docs.sqlalchemy.org/en/latest/core/defaults.html
-    # created_at = Column(DateTime, default=func.now())
-    # last_updated = Column(DateTime, onupdate=func.now(), default=func.now())
+    created_at = Column(DateTime, default=func.now())
+    last_updated = Column(DateTime, onupdate=func.now(), default=func.now())
     session = session
 
     @orm.reconstructor
@@ -81,12 +81,12 @@ class SqlBaseModel(ModelObject):
         # if _use_pow_schema_attrs ==  False (in the model class definition)
         # dont use the id, created_at, last_updated attributes
         #
-        _use_pow_schema_attrs = getattr(self.__class__, "_use_pow_schema_attrs", True)
+        #_use_pow_schema_attrs = getattr(self.__class__, "_use_pow_schema_attrs", True)
         #print ( "use pow schema: " +str(use_pow_schema_attrs))
-        if use_pow_schema_attrs:
-            setattr(self.__class__, "id", Column(Integer, primary_key=True))
-            setattr(self.__class__, "created_at", Column(DateTime, default=func.now()))
-            setattr(self.__class__, "last_updated", Column(DateTime, onupdate=func.now(), default=func.now()))
+        if not getattr(self.__class__, "_use_pow_schema_attrs", True):
+            delattr(self.__class__, "id")
+            delattr(self.__class__, "created_at")
+            delattr(self.__class__, "last_updated")
         
         #
         # if there is a schema (cerberus) set it in the instance
