@@ -79,7 +79,7 @@ database = {
     "sql"   : {
         "loglevel"  :   logging.INFO,
         #
-        # this is an example for sqlite
+        # this is an example for SQlite
         #
         "type"      :   "sqlite", #or: "db+driver" e.g. => "postgres+psycopg2" ...
         "dbname"    :   os.path.join(BASE_DIR, 'db.sqlite'),   # just a name for non file based DBs
@@ -87,9 +87,9 @@ database = {
         "port"      :   None,     
         "user"      :   None,     
         "passwd"    :   None,
-        "enabled"   :   True          # switch currently unused
+        "enabled"   :   True            # switch currently unused
         #
-        # this is an example for postgres (psycopg2 driver) you can use your preferred driver of course 
+        # this is an example for Postgres (psycopg2 driver) you can use your preferred driver of course 
         #     
         # "type"      :   "postgres+psycopg2",
         # "dbname"    :   "powdb",   
@@ -97,17 +97,17 @@ database = {
         # "port"      :   5432,   
         # "user"      :   "postgres",
         # "passwd"    :   "postgres",
-        # "enabled"   :   True          # switch currently unused
+        # "enabled"   :   True              # switch currently unused
         #
         # this is an example for MariaDB / MySQL
         #
-        # "type"      :   "mysql",
-        # "dbname"    :   "test",   # just a name for non file based DBs
+        # "type"      :   "mysql+pymysql",
+        # "dbname"    :   "test",           # just a name for non file based DBs
         # "host"      :   "127.0.0.1",     
         # "port"      :   3306,     
-        # "user"      :   "root",                   # or replace root with you db user
-        # "passwd"    :   "<your db pwd here>",        
-        # "enabled"   :   True          # switch currently unused
+        # "user"      :   "<you db user here>",
+        # "passwd"    :   "<your db pwd here>",
+        # "enabled"   :   True              # switch currently unused
 
     },
     "tinydb" : {

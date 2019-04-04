@@ -34,16 +34,15 @@ class SqlBaseModel(ModelObject):
         all the stuff you dont need to implement.
 
     """
-    __table_args__ = { "extend_existing": True }
-
-    id =  Column(Integer, primary_key=True)
-    #_uuid = Column(String, default=make_uuid)
-
-    # create_date column will be populated with the result of the now() SQL function 
-    #(which, depending on backend, compiles into NOW() or CURRENT_TIMESTAMP in most cases
-    # see: http://docs.sqlalchemy.org/en/latest/core/defaults.html
-    created_at = Column(DateTime, default=func.now())
-    last_updated = Column(DateTime, onupdate=func.now(), default=func.now())
+    #__table_args__ = { "extend_existing": True }
+    
+    # id =  Column(Integer, primary_key=True)
+    # #_uuid = Column(String, default=make_uuid)
+    # # create_date column will be populated with the result of the now() SQL function 
+    # #(which, depending on backend, compiles into NOW() or CURRENT_TIMESTAMP in most cases
+    # # see: http://docs.sqlalchemy.org/en/latest/core/defaults.html
+    # created_at = Column(DateTime, default=func.now())
+    # last_updated = Column(DateTime, onupdate=func.now(), default=func.now())
     session = session
 
     @orm.reconstructor
@@ -69,7 +68,25 @@ class SqlBaseModel(ModelObject):
             )
         setattr(self, "marshmallow_schema", jschema_class())
         self.session=session
-        self.table = self.metadata.tables[pluralize(self.__class__.__name__.lower())]
+        #
+        # set the tablename
+         
+        if getattr(self.__class__, "_tablename", None):
+            self.table = self.metadata.tables[getattr(self.__class__, "_tablename")]
+        else:    
+            self.table = self.metadata.tables[pluralize(self.__class__.__name__.lower())]
+        self.__class__._tablename = self.table.name
+        
+        #
+        # if _use_pow_schema_attrs ==  False (in the model class definition)
+        # dont use the id, created_at, last_updated attributes
+        #
+        _use_pow_schema_attrs = getattr(self.__class__, "_use_pow_schema_attrs", True)
+        #print ( "use pow schema: " +str(use_pow_schema_attrs))
+        if use_pow_schema_attrs:
+            setattr(self.__class__, "id", Column(Integer, primary_key=True))
+            setattr(self.__class__, "created_at", Column(DateTime, default=func.now()))
+            setattr(self.__class__, "last_updated", Column(DateTime, onupdate=func.now(), default=func.now()))
         
         #
         # if there is a schema (cerberus) set it in the instance
@@ -109,7 +126,12 @@ class SqlBaseModel(ModelObject):
     @declared_attr
     def __tablename__(cls):
         """ returns the tablename for this model """
-        return pluralize(cls.__name__.lower())
+        return cls._tablename
+        
+    #def set_table(self, name):
+    #    """  setting the table for this model directly. (Not used: see _custom_tablename parameter) """
+    #    # setting the tablename
+    #    self.table = self.metadata.tables[name]
     
     def setup_instance_values(self):
         """ fills the instance with defined default values"""
