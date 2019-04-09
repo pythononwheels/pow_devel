@@ -93,8 +93,9 @@ rule_tuple = (
     ('ife$', 'ife$', 'ives'),
     ('eau$', 'eau$', 'eaux'),
     ('lf$', 'lf$', 'lves'),
+    ('ees$', 'ees$', 'es'),
     ('[sxz]$', '$', 'es'),
-    ('[^aeioudgkprt]h$', '$', 'es'),
+    ('[^aeioudgkprt]h$', '$', 'ees'),
     ('(qu|[^aeiou])y$', 'y$', 'ies'),
     ('$', '$', 's')
     )
@@ -495,7 +496,7 @@ class powDecNew():
                 #print("  .. removing the schema (raw) sql key(s)")
                 cls.schema[elem].pop("sql", None)
                 cls.schema[elem].pop("sqltype", None)
-
+        
             return cls
         return decorator
 

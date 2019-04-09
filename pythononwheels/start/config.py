@@ -78,6 +78,7 @@ database = {
     },
     "sql"   : {
         "loglevel"  :   logging.INFO,
+        "yield_per" :   100,
         #
         # this is an example for SQlite
         #

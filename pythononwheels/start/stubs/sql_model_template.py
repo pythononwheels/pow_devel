@@ -20,10 +20,7 @@ class {{model_class_name}}(Base):
     }
 
     # define a custom tablename to link for this model:
-    _tablename = "{{model_name_plural}}"
-    
-    # Toggle using the pow schema extensions (id, created_at, last_updated)
-    _use_pow_schema_attrs = True
+    #__tablename__ = "{{model_name_plural}}"
     
     # define class attributes/variables here that should be included in to_dict() 
     # conversion and also handed to the encoders but that are NOT part of the schema.

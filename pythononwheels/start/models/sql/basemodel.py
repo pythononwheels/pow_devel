@@ -15,6 +15,7 @@ import datetime, decimal
 from {{appname}}.config import myapp
 import {{appname}}.config as cfg
 from {{appname}}.models.modelobject import ModelObject
+from testapp.config import database as dbcfg
 #print ('importing module %s' % __name__)
 
 def make_uuid():
@@ -68,25 +69,16 @@ class SqlBaseModel(ModelObject):
             )
         setattr(self, "marshmallow_schema", jschema_class())
         self.session=session
-        #
-        # set the tablename
-         
-        if getattr(self.__class__, "_tablename", None):
-            self.table = self.metadata.tables[getattr(self.__class__, "_tablename")]
-        else:    
-            self.table = self.metadata.tables[pluralize(self.__class__.__name__.lower())]
-        self.__class__._tablename = self.table.name
         
         #
-        # if _use_pow_schema_attrs ==  False (in the model class definition)
-        # dont use the id, created_at, last_updated attributes
+        # set the tablename
         #
-        #_use_pow_schema_attrs = getattr(self.__class__, "_use_pow_schema_attrs", True)
-        #print ( "use pow schema: " +str(use_pow_schema_attrs))
-        if not getattr(self.__class__, "_use_pow_schema_attrs", True):
-            delattr(self.__class__, "id")
-            delattr(self.__class__, "created_at")
-            delattr(self.__class__, "last_updated")
+        #if getattr(self.__class__, "_tablename", None):
+        #    self.table = self.metadata.tables[getattr(self.__class__, "_tablename")]
+        #else:    
+        #    self.table = self.metadata.tables[pluralize(self.__class__.__name__.lower())]
+        #self.__class__._tablename = self.table.name
+        self.table = self.metadata.tables[self.__class__.__tablename__]
         
         #
         # if there is a schema (cerberus) set it in the instance
@@ -125,8 +117,12 @@ class SqlBaseModel(ModelObject):
 
     @declared_attr
     def __tablename__(cls):
-        """ returns the tablename for this model """
-        return cls._tablename
+        """ 
+            returns the tablename for this model. Convention: pluralized Modelname
+            You can overwrite this by just setting the __tablename__ = <yourtablename> in the
+            model class.
+        """
+        return pluralize(cls.__name__.lower())
         
     #def set_table(self, name):
     #    """  setting the table for this model directly. (Not used: see _custom_tablename parameter) """
@@ -289,6 +285,14 @@ class SqlBaseModel(ModelObject):
         self.session.expire(self)
         self.session.refresh(self)
     
+    def new_session(self):
+        """
+            create an entirely new session
+        """
+        from sqlalchemy.orm import sessionmaker
+        self.session = sessionmaker(bind=engine)()
+
+
     def _rep_model_as_str(self):
         """
             returns a string with the models columns 
@@ -381,10 +385,9 @@ class SqlBaseModel(ModelObject):
                     ret = observer.before_upsert(self)
                 except:
                     pass
-        if not session:
-            session = self.session
-        session.add(self)
-        session.commit()
+        
+        self.session.add(self)
+        self.session.commit()
         if self.observers_initialized:
             for observer in self.observers:
                 try:
@@ -392,8 +395,8 @@ class SqlBaseModel(ModelObject):
                 except Exception as e:
                     print(str(e))    
         # clean the dirty marks. 
-        self.dirty = {}
-        self.is_dirty = False    
+        #self.dirty = {}
+        #self.is_dirty = False    
         #session.flush()
     
     def delete(self, session=None):
@@ -406,15 +409,14 @@ class SqlBaseModel(ModelObject):
                     ret = observer.before_delete(self)
                 except:
                     pass
-        if not session:
-            session = self.session
-        session.delete(self)
-        session.commit()        
+        
+        self.session.delete(self)
+        self.session.commit()        
         #session.flush()
         
         # clean the dirty marks. 
-        self.dirty = {}
-        self.is_dirty = False 
+        #self.dirty = {}
+        #self.is_dirty = False 
 
         if self.observers_initialized:
             for observer in self.observers:
@@ -458,14 +460,14 @@ class SqlBaseModel(ModelObject):
                      p.find(Post.title=="first")
         """
         self.session.expire_all()
-        return session.query(self.__class__).filter(*criterion)
+        return self.session.query(self.__class__).filter(*criterion).yield_per(dbcfg["sql"]["yield_per"])
     
     def find_by_id(self, id):
         """
             Searches the DB by id
         """
         self.session.expire_all()
-        return session.query(self.__class__).get(id)
+        return self.session.query(self.__class__).get(id)
 
     def find_all(self, *criterion, raw=True, limit=None, offset=None):
         """
@@ -477,10 +479,24 @@ class SqlBaseModel(ModelObject):
         """
         self.session.expire_all()
         if raw:
-            return session.query(self.__class__).filter(*criterion).limit(limit).offset(offset)
-        res = session.query(self.__class__).filter(*criterion).limit(limit).offset(offset).all()
+            return self.session.query(self.__class__).filter(*criterion).yield_per(dbcfg["sql"]["yield_per"]).limit(limit).offset(offset)
+        res = self.session.query(self.__class__).filter(*criterion).limit(limit).offset(offset).yield_per(dbcfg["sql"]["yield_per"]).all()
         return res
     
+    def count(self,*criterion):
+        """ same as model.find_all(criterion).count()   """
+        return self.find_all(*criterion).count()
+    
+    def get_max(self, column, as_scalar=True):
+        """
+            returns the max val of a column as scalar()
+            or as a query (if as_scalar == False )
+        """
+        if as_scalar:
+            return self.session.query(func.max(column)).scalar()
+        else:
+            return self.session.query(func.max(column))
+
     def get_all(self):
         """ returns all elements without any filters as a list of PoW models"""
         return self.find_all(raw=True)
@@ -490,7 +506,7 @@ class SqlBaseModel(ModelObject):
             returns one or none
         """
         self.session.expire_all()
-        res = session.query(self.__class__).filter(*criterion).one()
+        res = self.session.query(self.__class__).filter(*criterion).one()
         return res
 
     def find_first(self, *criterion):
@@ -498,12 +514,12 @@ class SqlBaseModel(ModelObject):
             return the first match (if any)
         """
         self.session.expire_all()
-        res = session.query(self.__class__).filter(*criterion).first()
+        res = self.session.query(self.__class__).filter(*criterion).first()
         return res
 
     def q(self):
         """ return a raw sqlalchemy query object """
-        return session.query(self.__class__)
+        return self.session.query(self.__class__)
 
     def find_dynamic(self, filter_condition = [('name', 'eq', 'klaas')]):
         """
