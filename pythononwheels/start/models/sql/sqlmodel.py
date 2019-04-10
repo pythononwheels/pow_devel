@@ -12,6 +12,6 @@ class SqlModel(SqlBaseModel):
          control:       pow             pow             user/extension
                     modelobject ->    (SQL)basemodel      ->  sqlmodel
     """
-    id =  Column(Integer, primary_key=True)
-    created_at = Column(DateTime, default=func.now())
-    last_updated = Column(DateTime, onupdate=func.now(), default=func.now())
+    #id =  Column(Integer, primary_key=True)
+    #created_at = Column(DateTime, default=func.now())
+    #last_updated = Column(DateTime, onupdate=func.now(), default=func.now())

@@ -8,6 +8,34 @@ from sqlalchemy import Column, Integer, String, Date, DateTime, Float
 from sqlalchemy import Unicode, Text, Boolean, Numeric, BigInteger, LargeBinary
 import werkzeug.security
 from {{appname}}.config import myapp 
+from sqlalchemy.ext.declarative.api import DeclarativeMeta
+
+class PowBaseMeta(DeclarativeMeta):
+    """
+        Base Metaclass for PoW SQL Models.
+        Main purpose is to add or remove the default attirbutes on class level        
+        (toggle with _use_pow_schema_attrs = Fasle | True in the model)
+    """
+    def __init__(cls, name, bases, dct):
+        print("cls: {}, name: {}".format(str(cls), str(name)))
+        print(cls.__dict__.keys())
+        # if '_use_pow_schema_attrs' not in cls.__dict__:
+        #     print("has _use_pow_schema_attrs = No")
+        # else:
+        #     print("has _use_pow_schema_attrs = Yes")
+        from sqlalchemy.sql.expression import func 
+        if hasattr(cls, '_use_pow_schema_attrs'):
+            if getattr(cls,'_use_pow_schema_attrs'):
+                setattr(cls,"id", Column(Integer, primary_key=True))
+                setattr(cls,"created_at",Column(DateTime, default=func.now()))
+                setattr(cls, "last_updated", Column(DateTime, onupdate=func.now(), default=func.now()))
+            else:
+                print("not adding pow schema attrs")
+        else:
+            setattr(cls,"id", Column(Integer, primary_key=True))
+            setattr(cls,"created_at",Column(DateTime, default=func.now()))
+            setattr(cls, "last_updated", Column(DateTime, onupdate=func.now(), default=func.now()))
+        super().__init__(name, bases, dct)
 
 def check_password_hash(pwhash, password ):
     """

@@ -37,13 +37,13 @@ class SqlBaseModel(ModelObject):
     """
     #__table_args__ = { "extend_existing": True }
     
-    id =  Column(Integer, primary_key=True)
+    #id =  Column(Integer, primary_key=True)
     # #_uuid = Column(String, default=make_uuid)
     # # create_date column will be populated with the result of the now() SQL function 
     # #(which, depending on backend, compiles into NOW() or CURRENT_TIMESTAMP in most cases
     # # see: http://docs.sqlalchemy.org/en/latest/core/defaults.html
-    created_at = Column(DateTime, default=func.now())
-    last_updated = Column(DateTime, onupdate=func.now(), default=func.now())
+    #created_at = Column(DateTime, default=func.now())
+    #last_updated = Column(DateTime, onupdate=func.now(), default=func.now())
     session = session
 
     @orm.reconstructor
