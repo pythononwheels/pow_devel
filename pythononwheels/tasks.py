@@ -52,7 +52,7 @@ def build(c, path="../..", name="testapp"):
             sys.exit()
     else:
         # start the build and check
-        do_build_all(c,name, path)
+        build_all(c,name, path)
 
 def build_all(c,name, path, force=False):
     """

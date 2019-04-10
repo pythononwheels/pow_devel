@@ -5,7 +5,7 @@ from sqlalchemy import Column, Integer, String, Boolean, Sequence
 from sqlalchemy import BigInteger, Date, DateTime, Float, Numeric, Unicode, Text
 from {{appname}}.powlib import relation
 from {{appname}}.database.sqldblib import Base 
-from {{appname}}.powlib PowBaseMeta
+from {{appname}}.powlib import PowBaseMeta
 
 #@relation.has_many("<plural_other_models>")
 @relation.setup_sql_schema()
