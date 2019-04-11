@@ -346,7 +346,7 @@ class Application(tornado.web.Application):
             except Exception as e:
                 print("Error in add_rest_routes")
                 raise e
-            print("ROUTING: added RESTful routes for: " + cls.__name__ +  " as /" + action_part)
+            print("ROUTING: RESTful ROUTE (+): " + cls.__name__ +  " as /" + action_part)
             #print(dir())
             return cls
         return decorator
@@ -430,8 +430,10 @@ class Application(tornado.web.Application):
                         handlers.append((route_tuple,pos))
                     #print("handlers: " + str(self.handlers))
                     #print("ROUTING: added route for: " + cls.__name__ +  ": " + route + " -> " + fin_route +  " dispatch")
-                    print("ROUTING: METHOD ROUTE (+) : handler: {}, route: {}, fin_route: {}, dispatch(lower): {} ".format( 
-                        str(cls.__name__), route, fin_route, str(dispatch_lower)))
+                    #print("ROUTING: METHOD ROUTE (+) : handler: {}, route: {}, fin_route: {}, dispatch(lower): {} ".format( 
+                    #    str(cls.__name__), route, fin_route, str(dispatch_lower)))
+                    print("ROUTING: METHOD ROUTE (+) : handler: {:20} route: {:30} dispatch: {:15} ".format( 
+                        str(cls.__name__), route, str(list(dispatch_lower.keys()))))
             return cls
         return decorator
     
@@ -494,8 +496,10 @@ class Application(tornado.web.Application):
                 handlers.append((route_tuple,pos))
             #print("handlers: " + str(self.handlers))
             #print("ROUTING: added route for: " + cls.__name__ +  ": " + route + " -> " + fin_route +  " dispatch")
-            print("ROUTING:  CLASS ROUTE (+) : handler: {}, route: {}, fin_route: {}, dispatch(lower): {} ".format( 
-                str(cls.__name__), route, fin_route, str(dispatch_lower)))
+            #print("ROUTING:  CLASS ROUTE (+) : handler: {}, route: {}, fin_route: {}, dispatch(lower): {} ".format( 
+            #   str(cls.__name__), route, fin_route, str(dispatch_lower)))
+            print("ROUTING:  CLASS ROUTE (+) : handler: {:20} route: {:30} dispatch: {:15} ".format( 
+               str(cls.__name__), route, str(list(dispatch_lower.keys()))))
             return cls
         return decorator
     

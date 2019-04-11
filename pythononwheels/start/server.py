@@ -16,8 +16,14 @@ from {{appname}}.powlib import merge_two_dicts
 from {{appname}}.application import Application, log_handler
 import logging
 
-app=Application()
+
+
 def main(stdout=False):    
+    print()
+    print(40*"-")
+    print("Collection the routes")
+    print(40*"-")
+    app=Application()
     if stdout:
         print() 
     #tornado.options.parse_command_line()
@@ -46,13 +52,13 @@ def main(stdout=False):
     app_logger.addHandler(log_handler)
 
     #app = tornado.web.Application(handlers=routes, **app_settings)
-    if stdout:
-        for idx, elem in enumerate(db_settings.keys()):
-            if elem != "default_values":
-                if elem.lower() == "sql":
-                    print("  DB #" +str(idx) + ": " + db_settings[elem]["type"] + "  enabled: " + str(db_settings[elem]["enabled"]) )
-                else:
-                    print("  DB #" +str(idx) + ": " + elem + " enabled: " + str(db_settings[elem]["enabled"]))
+    # if stdout:
+    #     for idx, elem in enumerate(db_settings.keys()):
+    #         if elem != "default_values":
+    #             if elem.lower() == "sql":
+    #                 print("  DB #" +str(idx) + ": " + db_settings[elem]["type"] + "  enabled: " + str(db_settings[elem]["enabled"]) )
+    #             else:
+    #                 print("  DB #" +str(idx) + ": " + elem + " enabled: " + str(db_settings[elem]["enabled"]))
     #app.listen(app_settings["port"], **server_settings)#
     #app=Application()
     #print(app)
@@ -62,14 +68,16 @@ def main(stdout=False):
         print("Final routes (order matters from here on ;) " )
         print(50*"-")
         for idx,elem in enumerate(app.handlers[0][1]):
-            print("#"+str(idx)+": " + str(elem.regex) + " --> " + str(elem.handler_class))
-        
+            #print("#"+str(idx)+": " + str(elem.regex.pattern) + " --> " + str(elem.handler_class))
+            print("ROUTE {:2}: pattern: {:50}  handler: {:20} ".format( 
+                str(idx), str(elem.regex.pattern)[0:48], str(elem.handler_class.__name__) ))
+                        
         print()
         print(50*"-")
         print("starting the pow server Server ")
         print(50*"-")
         print("visit: http://localhost:" + str(app_settings["port"]))
-        print("running...")
+        print("starting...")
     http_server = tornado.httpserver.HTTPServer(app)
     http_server.listen(app_settings["port"])
     ioloop = tornado.ioloop.IOLoop.instance()
