@@ -432,8 +432,8 @@ class Application(tornado.web.Application):
                     #print("ROUTING: added route for: " + cls.__name__ +  ": " + route + " -> " + fin_route +  " dispatch")
                     #print("ROUTING: METHOD ROUTE (+) : handler: {}, route: {}, fin_route: {}, dispatch(lower): {} ".format( 
                     #    str(cls.__name__), route, fin_route, str(dispatch_lower)))
-                    print("ROUTING: METHOD ROUTE (+) : handler: {:20} route: {:30} dispatch: {:15} ".format( 
-                        str(cls.__name__), route, str(list(dispatch_lower.keys()))))
+                    print("ROUTING: METHOD ROUTE (+) : route: {:30} handler: {:20} dispatch: {:15} ".format( 
+                        route, str(cls.__name__), str(list(dispatch_lower.keys()))))
             return cls
         return decorator
     
@@ -498,8 +498,8 @@ class Application(tornado.web.Application):
             #print("ROUTING: added route for: " + cls.__name__ +  ": " + route + " -> " + fin_route +  " dispatch")
             #print("ROUTING:  CLASS ROUTE (+) : handler: {}, route: {}, fin_route: {}, dispatch(lower): {} ".format( 
             #   str(cls.__name__), route, fin_route, str(dispatch_lower)))
-            print("ROUTING:  CLASS ROUTE (+) : handler: {:20} route: {:30} dispatch: {:15} ".format( 
-               str(cls.__name__), route, str(list(dispatch_lower.keys()))))
+            print("ROUTING:  CLASS ROUTE (+) : route: {:30} handler: {:20} dispatch: {:15} ".format( 
+               route, str(cls.__name__), str(list(dispatch_lower.keys()))))
             return cls
         return decorator
     

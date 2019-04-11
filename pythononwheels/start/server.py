@@ -21,7 +21,7 @@ import logging
 def main(stdout=False):    
     print()
     print(40*"-")
-    print("Collection the routes")
+    print("Collecting the routes")
     print(40*"-")
     app=Application()
     if stdout:
