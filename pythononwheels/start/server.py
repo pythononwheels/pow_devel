@@ -16,13 +16,22 @@ from {{appname}}.powlib import merge_two_dicts
 from {{appname}}.application import Application, log_handler
 import logging
 
-
+powstr="""
+  _____       _   _                  ____    __          ___               _     
+ |  __ \     | | | |                / __ \   \ \        / / |             | |    
+ | |__) |   _| |_| |__   ___  _ __ | |  | |_ _\ \  /\  / /| |__   ___  ___| |___ 
+ |  ___/ | | | __| '_ \ / _ \| '_ \| |  | | '_ \ \/  \/ / | '_ \ / _ \/ _ \ / __|
+ | |   | |_| | |_| | | | (_) | | | | |__| | | | \  /\  /  | | | |  __/  __/ \__ \\ 
+ |_|    \__, |\__|_| |_|\___/|_| |_|\____/|_| |_|\/  \/   |_| |_|\___|\___|_|___/
+         __/ |                                                                   
+        |___/                                                                    
+"""
 
 def main(stdout=False):    
-    print()
-    print(40*"-")
+    print(powstr)
+    print(60*"-")
     print("Collecting the routes")
-    print(40*"-")
+    print(60*"-")
     app=Application()
     if stdout:
         print() 
@@ -52,30 +61,35 @@ def main(stdout=False):
     app_logger.addHandler(log_handler)
 
     #app = tornado.web.Application(handlers=routes, **app_settings)
-    # if stdout:
-    #     for idx, elem in enumerate(db_settings.keys()):
-    #         if elem != "default_values":
-    #             if elem.lower() == "sql":
-    #                 print("  DB #" +str(idx) + ": " + db_settings[elem]["type"] + "  enabled: " + str(db_settings[elem]["enabled"]) )
-    #             else:
-    #                 print("  DB #" +str(idx) + ": " + elem + " enabled: " + str(db_settings[elem]["enabled"]))
-    #app.listen(app_settings["port"], **server_settings)#
+    if stdout:
+        print(60*"-")
+        print("Databases: " )
+        print(60*"-")
+        #for idx, elem in enumerate(db_settings["sql"]):
+        print("  SQL-DB     : enabled: {} type: {}".format(
+                str(db_settings["sql"]["enabled"]), db_settings["sql"]["type"] ))
+        print("  TinyDB     : enabled: {}".format( str(db_settings["tinydb"]["enabled"])))
+        print("  MongoDB    : enabled: {}".format( str(db_settings["mongodb"]["enabled"])))
+        for idx, elem in enumerate(db_settings["mongodb"]["indexes"]):
+            print("      Index #{:2}: collection: {:12} def: {} ".format(
+                str(idx), elem, db_settings["mongodb"]["indexes"][elem] ))
+        print("  Elastic    : enabled: {}".format( str(db_settings["elastic"]["enabled"])))
     #app=Application()
     #print(app)
     if stdout:
         print()
-        print(50*"-")
+        print(60*"-")
         print("Final routes (order matters from here on ;) " )
-        print(50*"-")
+        print(60*"-")
         for idx,elem in enumerate(app.handlers[0][1]):
             #print("#"+str(idx)+": " + str(elem.regex.pattern) + " --> " + str(elem.handler_class))
             print("ROUTE {:2}: pattern: {:50}  handler: {:20} ".format( 
                 str(idx), str(elem.regex.pattern)[0:48], str(elem.handler_class.__name__) ))
                         
         print()
-        print(50*"-")
-        print("starting the pow server Server ")
-        print(50*"-")
+        print(60*"-")
+        print("starting the PythonOnWheels server Server ")
+        print(60*"-")
         print("visit: http://localhost:" + str(app_settings["port"]))
         print("starting...")
     http_server = tornado.httpserver.HTTPServer(app)
