@@ -1,6 +1,6 @@
 import tornado.ioloop
 import tornado.web
-from {{appname}}.handlers.base import BaseHandler
+from {{appname}}.handlers.powhandler import PowHandler
 from {{appname}}.application import app, route
 
 # ROUTING:
@@ -19,7 +19,7 @@ from {{appname}}.application import app, route
 @app.add_route(r"/", dispatch={"get" : "index"}, pos=1)
 #@app.add_route(r"/index/([0-9]+)", dispatch={"get" : "index_identifier", "params" : ["identifier"] })
 @app.make_routes()
-class IndexdHandler(BaseHandler):
+class IndexdHandler(PowHandler):
     def index(self, year=None):
         """
             Example Method with class attached routing (see above "/" )
@@ -44,7 +44,7 @@ class IndexdHandler(BaseHandler):
         self.write("int: " + str(identifier))
 
 @app.make_routes()
-class PyTestHandler(BaseHandler):
+class PyTestHandler(PowHandler):
     @route(r"/testresults", dispatch=["get"])
     def show_results(self):
         """
@@ -69,7 +69,7 @@ class PyTestHandler(BaseHandler):
     
 # this will be the last route since it has the lowest pos.
 @app.add_route(r".*", pos=0)
-class ErrorHandler(BaseHandler):
+class ErrorHandler(PowHandler):
     def get(self):
         return self.error( template="404.tmpl", http_code=404  )
 
