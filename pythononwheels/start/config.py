@@ -46,6 +46,7 @@ myapp = {
             "csv"   :   {{appname}}.encoders.json_to_csv(),
             "xml"   :   {{appname}}.encoders.json_to_xml()
     },
+    "byte_decoding"     :   "utf-8",
     "upload_path"       :   os.path.join(server_settings["static_path"], "upload"), #this is just a demo.
     "page_size"         :   5,
     "enable_auth"       :   False,   # False, simple or custom

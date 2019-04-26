@@ -10,10 +10,10 @@
     <!--script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/2.8.1/jquery.serializejson.js"></script-->
 {% end %}
 
-{% block js %}
+{% block view_js %}
 
 <script>
-    $(document).ready(function(){   
+    function view_docready(){   
         $(".btn-delete").click(function(e)
             {
                 console.log( "btn_delete: " + $(e.currentTarget).attr("value"));
@@ -27,10 +27,10 @@
                         success: function(data, textStatus, jqXHR)
                         {
                             
-                            var od = JSON.stringify(data);
-                            var obj = JSON.parse(data);
+                            //var od = JSON.stringify(data);
+                            //var obj = JSON.parse(data);
                             //alert("success sending put: " + data + textStatus)
-                            console.log(obj);
+                            //console.log(data);
                             var curr_tr = $("#"+id);
                             curr_tr.fadeOut();                            
                             
@@ -46,7 +46,7 @@
                     });   // <--- end ajax
                 
             });
-    });
+    };
 </script>
 {% end %}
 

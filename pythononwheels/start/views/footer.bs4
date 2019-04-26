@@ -40,17 +40,17 @@
 
 {% end %}
 
-{% block js %}
+{% block view_js %}
   
 {% end %}
 
 <script>
-  $(document).ready(function(){   
-   
-
-    {% block document_ready %}
-
-    {% end %}
+  $(document).ready(function(){  
+    if (typeof view_docready === "function") { 
+      // this calls the views docready function if there is one defined.
+      view_docready();
+    }
+    
   });
 </script>
 

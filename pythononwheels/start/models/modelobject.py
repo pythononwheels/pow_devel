@@ -333,7 +333,7 @@ class ModelObject():
             returns a generator if len(data)>1
         """
         if isinstance(data, bytes):
-            data=data.decode(myapp["default_decoding"])
+            data=data.decode(myapp["byte_decoding"])
         d=json.loads(data,object_hook=pow_json_deserializer)
         return self.init_from_dict(d, ignore, simple_conversion=simple_conversion)
         #else:

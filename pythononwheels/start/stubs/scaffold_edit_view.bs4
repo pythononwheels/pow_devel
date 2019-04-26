@@ -4,10 +4,10 @@
     <!--script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/2.8.1/jquery.serializejson.js"></script-->
 {% end %}
 
-{% block js %}
+{% block view_js %}
 
 <script>
-    $(document).ready(function(){   
+    function view_docready(){   
         $("#message-div").hide();
         $(".btn-delete").click(function(e)
             {
@@ -34,16 +34,16 @@
                         success: function(data, textStatus, jqXHR)
                         {
                             $("#message-div").hide();
-                            var od = JSON.stringify(data);
-                            var obj = JSON.parse(data);
+                            //var od = JSON.stringify(data);
+                            //var obj = JSON.parse(data);
                             //alert("success sending put: " + data + textStatus)
-                            console.log(obj);
+                            //console.log(data);
                             $("#message-div").attr("class", "alert alert-success alert-dismissible fade show");
                             $("#message-div").html(`
                                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
                                 <span aria-hidden='true'>&times;</span>
                                 </button>
-                                <strong>Well done!</strong> You successfully updated:` + od
+                                <strong>Well done!</strong> You successfully updated:` + data["message"]
                             );
                             $("#message-div").show();
                             
@@ -53,7 +53,7 @@
                             console.log(jqXHR);
                             $("#message-div").hide();
                             $("#message-div").attr("class", "alert alert-error");
-                            $("#message-div").text("Problems");
+                            $("#message-div").text("Problems updating the {{handler_name}}");
                             $("#message-div").show();
                         }
                     });  
@@ -62,7 +62,7 @@
             //}, 10000); // <-- time in milliseconds
             return false;   
         });
-    });
+    };
 </script>
 
 {% end %}
