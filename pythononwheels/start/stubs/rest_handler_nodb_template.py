@@ -1,4 +1,4 @@
-from {{appname}}.handlers.base import BaseHandler
+from {{appname}}.handlers.powhandler import PowHandler
 from {{appname}}.config import myapp
 from {{appname}}.application import app
 import tornado.web
@@ -15,7 +15,7 @@ data = [
 }]
 
 @app.add_rest_routes("{{handler_name}}")
-class {{handler_class_name}}(BaseHandler):
+class {{handler_class_name}}(PowHandler):
     """ 
     every pow handler automatically gets these RESTful routes
     when you add the : app.add_rest_routes() decorator.

@@ -32,12 +32,15 @@ def build(c, path="../..", name="testapp"):
     if not os.name in ["nt", "posix"]:
         print("Sorry. this only supports Posix (e.g. Linux, OSX) and Windows OS. ")
         sys.exit()
+    if os.name == "posix":
+        print("Sorry. this only supports windows so far. working on posix right now ..")
+        sys.exit()
 
     path=os.path.normpath(path)
     print("Building : -n {} -p {} ".format(name, path))
     if os.path.exists(os.path.join(path, name)):
         print("sorry, path / name exists")
-        r=input(" .. type y or yes, to go ahead deleting the existing: {} ?".format(os.path.join(path,name)))
+        r=input(" .. type y or yes, to go ahead deleting the existing: {} ? : ".format(os.path.join(path,name)))
         if r in ["y", "yes"]:
             import shutil
             r=shutil.rmtree(os.path.join(path,name))
@@ -70,14 +73,29 @@ def build_all(c,name, path, force=False):
     print(" .. generated the PythonOnWheels app.")
     # switch the current dir for invoke. every c.run starts from that dir.
     app_path=os.path.abspath(os.path.join(path, name))
-    with c.cd(app_path):
-        # create a venv
-        if os.name == "nt":
+    # create a venv
+    if os.name == "nt":
+        with c.cd(app_path):
             print(" .. creating a virtualenv")
             c.run("virtualenv ./venv")
             print(" .. Installing the PoW requirements")
             c.run("cd ./venv/Scripts && pip.exe install -r {}".format(
                 os.path.normpath(os.path.join("..\..", "requirements.txt"))))
+    elif os.name == "posix":
+        with c.cd(app_path):
+            print(" .. creating a virtualenv")
+            c.run("virtualenv ./venv")
+        with c.cd(os.path.join(app_path, "venv/bin")):
+            print(" .. Installing the PoW requirements")
+            #pipath= os.path.abspath(os.path.join(app_path, "./venv/bin/pip"))
+            #print("venv pip path: {}".format( pipath ))
+            reqpath = os.path.normpath(os.path.join( app_path, "requirements.txt"))
+            print("requirements.txt: {}".format(reqpath))
+            c.run("pip install -r {}".format( reqpath ))
+            c.run("pip freeze")
+    else:
+        print("only posix and windows compatible OS are supported, sorry!")
+        sys.exit()
     test(c,path,name)
     runserver(c,path,name)
 
@@ -87,11 +105,21 @@ def test(c,  path="../..", name="testapp"):
     app_path=os.path.abspath(os.path.join(path, name))
     print("app_path: " + app_path)
     with c.cd(os.path.join(app_path, "tests")):
-        print("cwd: " + c.cwd)
-        print(" .. running the tests .. ")
-        pypath=os.path.normpath(os.path.join(app_path,"./venv/Scripts/python.exe"))
-        print("pyhton.exe path:" + pypath)
-        c.run("{} runtests.py".format(pypath))
+        if os.name == "nt":
+            print("cwd: " + c.cwd)
+            print(" .. running the tests .. ")
+            pypath=os.path.normpath(os.path.join(app_path,"./venv/Scripts/python.exe"))
+            print("pyhton.exe path:" + pypath)
+            c.run("{} runtests.py".format(pypath))
+        elif os.name == "posix":
+            print("cwd: " + c.cwd)
+            print(" .. running the tests .. ")
+            pypath=os.path.normpath(os.path.join(app_path,"./venv/bin/python"))
+            print("pyhton path:" + pypath)
+            c.run("{} runtests.py".format(pypath))
+        else:
+            print("only posix and windows compatible OS are supported, sorry!")
+            sys.exit()
 
 @task
 def runserver(c, path="../..", name="testapp"):
@@ -99,10 +127,19 @@ def runserver(c, path="../..", name="testapp"):
     app_path=os.path.abspath(os.path.join(path, name))
     print("app_path: " + app_path)
     with c.cd(app_path):
-        print(" .. starting the server .. ")
-        print(" .. check testresults at: localhost:8080/testresults")
-        pypath=os.path.normpath(os.path.join(app_path,"./venv/Scripts/python.exe"))
-        c.run("{} server.py".format(pypath))
+        if os.name == "nt":
+            print(" .. starting the server .. ")
+            print(" .. check testresults at: localhost:8080/testresults")
+            pypath=os.path.normpath(os.path.join(app_path,"./venv/Scripts/python.exe"))
+            c.run("{} server.py".format(pypath))
+        elif os.name == "posix":
+            print(" .. starting the server .. ")
+            print(" .. check testresults at: localhost:8080/testresults")
+            pypath=os.path.normpath(os.path.join(app_path,"./venv/bin/python"))
+            c.run("{} server.py".format(pypath))
+        else:
+            print("only posix and windows compatible OS are supported, sorry!")
+            sys.exit()
         
 
 @task

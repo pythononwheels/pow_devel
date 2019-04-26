@@ -89,7 +89,7 @@ database = {
         "port"      :   None,     
         "user"      :   None,     
         "passwd"    :   None,
-        "enabled"   :   True            # switch currently unused
+        "enabled"   :   False            
         #
         # this is an example for Postgres (psycopg2 driver) you can use your preferred driver of course 
         #     
@@ -99,7 +99,7 @@ database = {
         # "port"      :   5432,   
         # "user"      :   "postgres",
         # "passwd"    :   "postgres",
-        # "enabled"   :   True              # switch currently unused
+        # "enabled"   :   False              
         #
         # this is an example for MariaDB / MySQL
         #
@@ -109,7 +109,7 @@ database = {
         # "port"      :   3306,     
         # "user"      :   "<you db user here>",
         # "passwd"    :   "<your db pwd here>",
-        # "enabled"   :   True              # switch currently unused
+        # "enabled"   :   False              
 
     },
     "tinydb" : {
@@ -118,7 +118,7 @@ database = {
         "port"      :   None,   
         "user"      :   None,
         "passwd"    :   None,
-        "enabled"   :   True       # switch currently unused
+        "enabled"   :   True       
     },
     "mongodb" : {
         "dbname"    :   "testdb",  
@@ -131,7 +131,9 @@ database = {
         "port"      :   27017,   
         "user"      :   None,
         "passwd"    :   None,
-        "enabled"   :   False       # switch currently unused
+        #"indexes"   :   { "collection" : ([("field", pymongo.ASCENDING)], { "unique" : True } )},
+        "indexes"   :   {},
+        "enabled"   :   False       
     },
     "elastic" : {
         "dbname"    :   "testdb",   # == elasticsearch index 
@@ -139,7 +141,7 @@ database = {
         "port"      :   9200,   
         "user"      :   None,
         "passwd"    :   None,
-        "enabled"   :   False       # switch currently unused
+        "enabled"   :   False       
     }
 }
 
