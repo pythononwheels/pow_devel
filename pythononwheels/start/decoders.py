@@ -13,7 +13,7 @@ def pow_json_deserializer(dct):
         
         if "created_at" in dct:
             print("json deserializer found: created at: " + str(dct["created_at"]))
-            #dct["created_at"]=datetime.datetime.strptime(dct["created_at"], myapp["date_format"])
+            #dct["created_at"]=datetime.datetime.strptime(dct["created_at"], myapp["datetime_format"])
         
         
         return dct
@@ -41,7 +41,7 @@ def pow_init_from_dict_deserializer(dct, schema, simple_conversion=False):
                     #print(str(type(dct[elem])) + str(dct[elem]))
                     try:
                         # expecting primarily a string
-                        dat = datetime.datetime.strptime(dct[elem], myapp["date_format"])
+                        dat = datetime.datetime.strptime(dct[elem], myapp["datetime_format"])
                         dat = dat.replace(tzinfo=None)
                         #print("date: str -> setting: {} to {}".format(elem, str(dct[elem])))
                         dct[elem]=dat

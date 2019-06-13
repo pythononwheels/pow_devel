@@ -152,7 +152,7 @@
                     <div class="form-group row">
                     <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
                     <div class="col-10">
-                        <input class="form-control" type="datetime-local" value="{{data.get(key).strftime(cfg.myapp["html_date_format"])}}" 
+                        <input class="form-control" type="datetime-local" value="{{data.get(key).strftime(cfg.myapp["html_datetime_format"])}}" 
                         id="{{key}}" name="{{key}}">
                     </div>
                     </div>
@@ -185,6 +185,6 @@
         <h2>Raw Data: </h2>
         {{data}}
         <hr>
-        Date format: {{cfg.myapp["date_format"] }} (see config.myapp["date_format"])
+        Date format: {{cfg.myapp["datetime_format"] }} (see config.myapp["datetime_format"])
     </div>
 {% end %}

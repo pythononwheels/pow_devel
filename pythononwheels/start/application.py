@@ -164,14 +164,14 @@ class Application(tornado.web.Application):
         #log_method("%d %s %.2fms", handler.get_status(),
         #           handler._request_summary(), request_time)
         log_method("%s %d %s %.2fms %s", handler.request.remote_ip, handler.get_status(),
-                handler._request_summary(), request_time, datetime.datetime.utcnow().strftime(myapp["date_format"]) 
+                handler._request_summary(), request_time, datetime.datetime.utcnow().strftime(myapp["datetime_format"]) 
             )
         if message:
             log_method("%s %d %s %s", 
                 handler.request.remote_ip, 
                 handler.get_status(), 
                 str(message), 
-                datetime.datetime.utcnow().strftime(myapp["date_format"])  
+                datetime.datetime.utcnow().strftime(myapp["datetime_format"])  
             )
 
     def log(self, message, status="INFO"):
@@ -199,7 +199,7 @@ class Application(tornado.web.Application):
             log_method("%s %s %s", 
                 status, 
                 message, 
-                datetime.datetime.utcnow().strftime(myapp["date_format"]))
+                datetime.datetime.utcnow().strftime(myapp["datetime_format"]))
         else:
             log_method = access_log.info
             status="INFO"
@@ -228,7 +228,7 @@ class Application(tornado.web.Application):
                 request.method,
                 request.uri, 
                 1000.0 * request.request_time(),
-                datetime.datetime.utcnow().strftime(myapp["date_format"])
+                datetime.datetime.utcnow().strftime(myapp["datetime_format"])
                 )
             
     def import_all_handlers(self):

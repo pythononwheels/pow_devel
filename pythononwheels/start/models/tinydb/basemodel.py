@@ -179,7 +179,7 @@ class TinyBaseModel(ModelObject):
             print("update by eid:" + str(self.eid))
             Q = Query()
             #self.last_updated = datetime.datetime.now()
-            #self.last_updated = datetime.datetime.utcnow().strftime(myapp["date_format"])
+            #self.last_updated = datetime.datetime.utcnow().strftime(myapp["datetime_format"])
             self.last_updated = datetime.datetime.utcnow()
             self.table.update(self.to_dict(),Q.id==self.id)
         else:
@@ -189,7 +189,7 @@ class TinyBaseModel(ModelObject):
             if res:
                 #update. object is already in db
                 print("update by id:" + str(self.id))
-                #self.last_updated = datetime.datetime.utcnow().strftime(myapp["date_format"])
+                #self.last_updated = datetime.datetime.utcnow().strftime(myapp["datetime_format"])
                 self.last_updated = datetime.datetime.utcnow()
                 self.eid = self.table.update(self.to_dict(),Q.id==self.id)
             else:
