@@ -20,7 +20,7 @@ def pow_json_serializer(obj):
     from {{appname}}.models.modelobject import ModelObject
     if isinstance(obj, datetime):
         #serial = obj.isoformat()
-        serial = obj.strftime({{appname}}.config.myapp["date_format"])
+        serial = obj.strftime({{appname}}.config.myapp["datetime_format"])
         return serial
     if isinstance(obj, uuid.UUID):
         return str(obj)

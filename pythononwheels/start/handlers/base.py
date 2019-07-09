@@ -298,9 +298,9 @@ class BaseHandler(tornado.web.RequestHandler):
     
 
 
-    def success(self, message="", pure=False, data=None, succ=None, prev=None,
-        http_status=200, format=None, encoder=None, model=None, raw_data=False, 
-        login=None, template=None, **kwargs):
+    def success(self, data=None, message="", pure=False, succ=None, prev=None,
+        http_status=200, format=None, encoder=None, header=None, model=None, raw_data=False, 
+        login=None, template=None, error=False, **kwargs):
         """
             Sending an Successful reply (HTTP_STATUS 2xx) back to the client.
             Returns data and http_code.
@@ -319,10 +319,17 @@ class BaseHandler(tornado.web.RequestHandler):
                     => blog_show.tmpl 
 
             data input is model or list of models.
-
+            
+            http header:
+                * for all supported formats the content type is specified in config.py and set in 
+                    the prepare() method.
+                * you can give a dictioary here containing http header fields and values which will be
+                    set instead for this response.
+                example: success( ..., header = { "Content-Type" : "application/json" })
+                info see: https://en.wikipedia.org/wiki/List_of_HTTP_header_fields
             
             Reply Structure:
-                "status"    : http_code,
+                "status"    : http_status,
                 "message"   : message,
                 "data"      : data,
                 "next"      : succ,
@@ -437,6 +444,9 @@ class BaseHandler(tornado.web.RequestHandler):
         outdata={}
         outdata["message"] = message
         outdata["http_status"] = http_status
+        outdata["prev"] = prev
+        outdata["next"] = succ
+        # include all kwargs.
         for elem in kwargs:
             oelem = kwargs.get(elem,None)
             try:
@@ -444,9 +454,13 @@ class BaseHandler(tornado.web.RequestHandler):
             except:
                 outdata[elem]=oelem
         
+
+        #
+        # handle the data 
+        #
         if raw_data:
             outdata["data"]=data    
-            self.write(encoder.dumps(outdata))
+            #self.write(encoder.dumps(outdata))
             
         else:
             try:
@@ -455,20 +469,22 @@ class BaseHandler(tornado.web.RequestHandler):
                 pass # just take the data as is.
             finally:
                 outdata["data"]=data    
-                self.write(encoder.dumps(outdata))
+        
+        #
+        # set custom header (if header != None )
+        #  
+        if header:
+            # set the http header
+            self.set_header("Content-Type", cfg.myapp["supported_formats"][self.format])
+        
+        # 
+        # respond
+        #
+        self.write(encoder.dumps(outdata))
 
-        # write the result
-        #self.write(encoder.dumps({
-        #    "status"    : http_code,
-        #    "message"   : message,
-        #    "data"      : data,
-        #    "next"      : succ,
-        #    "prev"      : prev
-        #}))
 
-
-    def error(self, pure=False, message=None, data=None, succ=None, prev=None,
-        http_code=500, format=None, encoder=None, template=None, login=None, raw_data=False, **kwargs):
+    def error(self,  data=None, message=None, pure=False,  succ=None, prev=None,
+        http_status=500, format=None, encoder=None, template=None, login=None, raw_data=False, **kwargs):
         """
             Sending an error (HTTP_CODE (3xx?),4xx, 5xx) back to the client.
             You can set the status_code as a parameter. Default is 500.

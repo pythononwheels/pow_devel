@@ -4,10 +4,10 @@
     <!--script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/2.8.1/jquery.serializejson.js"></script-->
 {% end %}
 
-{% block js %}
+{% block view_js %}
 
 <script>
-    $(document).ready(function(){   
+    function view_docready(){   
         $("#message-div").hide();
         $(".btn-delete").click(function(e)
             {
@@ -34,16 +34,16 @@
                         success: function(data, textStatus, jqXHR)
                         {
                             $("#message-div").hide();
-                            var od = JSON.stringify(data);
-                            var obj = JSON.parse(data);
+                            //var od = JSON.stringify(data);
+                            //var obj = JSON.parse(data);
                             //alert("success sending put: " + data + textStatus)
-                            console.log(obj);
+                            //console.log(data);
                             $("#message-div").attr("class", "alert alert-success alert-dismissible fade show");
                             $("#message-div").html(`
                                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
                                 <span aria-hidden='true'>&times;</span>
                                 </button>
-                                <strong>Well done!</strong> You successfully updated:` + od
+                                <strong>Well done!</strong> You successfully updated:` + data["message"]
                             );
                             $("#message-div").show();
                             
@@ -53,7 +53,7 @@
                             console.log(jqXHR);
                             $("#message-div").hide();
                             $("#message-div").attr("class", "alert alert-error");
-                            $("#message-div").text("Problems");
+                            $("#message-div").text("Problems updating the {{handler_name}}");
                             $("#message-div").show();
                         }
                     });  
@@ -62,7 +62,7 @@
             //}, 10000); // <-- time in milliseconds
             return false;   
         });
-    });
+    };
 </script>
 
 {% end %}
@@ -152,7 +152,7 @@
                     <div class="form-group row">
                     <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
                     <div class="col-10">
-                        <input class="form-control" type="datetime-local" value="{{data.get(key).strftime(cfg.myapp["html_date_format"])}}" 
+                        <input class="form-control" type="datetime-local" value="{{data.get(key).strftime(cfg.myapp["html_datetime_format"])}}" 
                         id="{{key}}" name="{{key}}">
                     </div>
                     </div>
@@ -185,6 +185,6 @@
         <h2>Raw Data: </h2>
         {{data}}
         <hr>
-        Date format: {{cfg.myapp["date_format"] }} (see config.myapp["date_format"])
+        Date format: {{cfg.myapp["datetime_format"] }} (see config.myapp["datetime_format"])
     </div>
 {% end %}

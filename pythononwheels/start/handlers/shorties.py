@@ -61,7 +61,7 @@ class PyTestHandler(PowHandler):
         self.render("index.tmpl")
     
     @route(r'/test/<int:id>', dispatch=["get"])
-    def testuuid(self, id=None):
+    def testuuid2(self, id=None):
         """
             Testcase: dont delete (see tests/run_tests.py)
         """

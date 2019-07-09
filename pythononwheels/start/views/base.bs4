@@ -25,10 +25,13 @@
     <link href="{{ static_url("css/pow.css") }}" rel="stylesheet">
     <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
     
-    {% block css %}
+    {% block include_css %}
       
     {% end %}
 
+    {% block view_css %}
+      
+    {% end %}
   </head>
 
   <body>

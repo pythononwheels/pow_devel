@@ -10,11 +10,11 @@
     <!--script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/2.8.1/jquery.serializejson.js"></script-->
 {% end %}
 
-{% block js %}
+{% block view_js %}
 
 
 <script>
-    $(document).ready(function(){   
+    function view_docready(){ 
         $("#message-div").hide();
 
         $("#create_form").submit(function()
@@ -29,14 +29,16 @@
                         data : jsonString,
                         success: function(data, textStatus, jqXHR)
                         {
+                            console.log("success:");
+                            console.log(data);
                             $("#message-div").hide();
-                            var od = JSON.stringify(data);
-                            var obj = JSON.parse(data);
+                            //var od = JSON.stringify(data);
+                            //var obj = JSON.parse(data);
                             //alert("success sending put: " + data + textStatus)
-                            console.log(obj);
+                            //console.log(obj);
                             $("#message-div").attr("class", "alert alert-success alert-dismissible fade show");
                             $("#message-div").append(
-                                "<strong>Well done!</strong> You successfully created:" + od
+                                "<strong>Well done!</strong>" + data["message"]
                             );
                             $("#message-div").show();
                         },
@@ -46,14 +48,14 @@
                             $("#message-div").hide();
                             $("#message-div").attr("class", "alert alert-error alert-dismissible fade show");
                             $("#message-div").append(
-                                "<strong>Oh NO! Error!</strong> creating:"
+                                "<strong>Oh NO! Error!</strong> creating the new {{handler_name}}"
                             );
                             $("#message-div").show();
                         }
-                    });  
+                    });
             return false;   
         });
-    });
+    };
 </script>
 
 {% end %}
@@ -133,7 +135,7 @@
                     <div class="form-group row">
                     <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
                     <div class="col-10">
-                        <input class="form-control" type="datetime-local" value="{{datetime.datetime.now().strftime(cfg.myapp["html_date_format"])}}" 
+                        <input class="form-control" type="datetime-local" value="{{datetime.datetime.now().strftime(cfg.myapp["html_datetime_format"])}}" 
                         id="{{key}}" name="{{key}}">
                     </div>
                     </div>

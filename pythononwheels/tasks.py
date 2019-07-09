@@ -33,7 +33,7 @@ def build(c, path="../..", name="testapp"):
         print("Sorry. this only supports Posix (e.g. Linux, OSX) and Windows OS. ")
         sys.exit()
     if os.name == "posix":
-        print("Sorry. this only supports windows so far. working on posix right now ..")
+        print("Sorry. Due to a bug posix currently unavailable ... working on a fix for right now ..")
         sys.exit()
 
     path=os.path.normpath(path)
