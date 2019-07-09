@@ -159,7 +159,7 @@ class SqlBaseModel(ModelObject):
             #  Column('id', Integer(), table=<comments>, primary_key=True, 
             #     nullable=False))
             col_type = col[1].type.python_type
-            col_name = str(col[0]).lower()
+            col_name = str(col[0])
             exclude_list = [elem for elem in self.schema.keys()]
             #exclude_list.append( ["id", "created_at", "last_updated"] )
             #print("    #" + str(idx) + "->" + str(col_name) + " -> " + str(col_type))
