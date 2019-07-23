@@ -77,14 +77,15 @@ def main(stdout=False):
     #app=Application()
     #print(app)
     if stdout:
+        #print(app.handlers)
         print()
         print(60*"-")
         print("Final routes (order matters from here on ;) " )
         print(60*"-")
-        for idx,elem in enumerate(app.handlers[0][1]):
-            #print("#"+str(idx)+": " + str(elem.regex.pattern) + " --> " + str(elem.handler_class))
+        
+        for idx,elem in enumerate(app.handlers):
             print("ROUTE {:2}: pattern: {:50}  handler: {:20} ".format( 
-                str(idx), str(elem.regex.pattern)[0:48], str(elem.handler_class.__name__) ))
+               str(idx), str(elem[0])[0:48], str(elem[1].__name__) ))
                         
         print()
         print(60*"-")

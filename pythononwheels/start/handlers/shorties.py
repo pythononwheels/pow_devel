@@ -71,6 +71,6 @@ class PyTestHandler(PowHandler):
 @app.add_route(r".*", pos=0)
 class ErrorHandler(PowHandler):
     def get(self):
-        return self.error( template="404.tmpl", http_code=404  )
+        return self.error( template="404.tmpl", http_status=404  )
 
 

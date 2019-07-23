@@ -39,7 +39,9 @@ myapp = {
     "app_name"          :   "{{appname}}",
     #                           Format : Content-Type Header
     "supported_formats" :   {   "json" : "application/json", "csv" : "text/csv", 
-                                "xml" : "application/xml", "html" : "text/html" },
+                                "xml" : "application/xml", "html" : "text/html",
+                                "js" : "application/javascript",
+                                "map" : "text/plain"},
     "default_format"    :   "json",
     "encoder"           :   {
            "json"   :   {{appname}}.encoders.json_to_json(),

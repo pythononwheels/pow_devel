@@ -15,7 +15,7 @@ import datetime, decimal
 from {{appname}}.config import myapp
 import {{appname}}.config as cfg
 from {{appname}}.models.modelobject import ModelObject
-from testapp.config import database as dbcfg
+from {{appname}}.config import database as dbcfg
 #print ('importing module %s' % __name__)
 
 def make_uuid():

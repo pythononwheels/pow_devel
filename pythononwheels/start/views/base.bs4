@@ -55,5 +55,45 @@
     </div>
   </div><!-- /container -->
 
+  <!-- Bootstrap core JavaScript
+      ================================================== -->
+      <!-- Placed at the end of the document so the pages load faster -->
+      <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
+      <script src="{{ static_url("js/tether.min.js") }}" integrity="sha384-Plbmg8JY28KFelvJVai01l8WyZzrYWG825m+cZ0eDDS1f7d/js6ikvy1+X+guPIB" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/2.8.1/jquery.serializejson.js"></script>
+      <script src="{{ static_url("js/prism.js")}}"></script>
+      <script src="{{ static_url("js/holder.min.js")}}"></script>
+      <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+      <script src="{{static_url("js/ie10-viewport-bug-workaround.js")}}"></script>
+      <!-- Place this tag in your head or just before your close body tag. -->
+      <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+      <!--script src="{{ static_url("js/bootstrap.min.js") }}"></script-->    
+      <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
+
+      <script>
+          $(function () {
+                $('[data-toggle="tooltip"]').tooltip();
+              })
+        </script>
+      {% block include_js %}
+
+      {% end %}
+
+      {% block view_js %}
+        
+      {% end %}
+
+      <script>
+        $(document).ready(function(){  
+          if (typeof view_docready === "function") { 
+            // this calls the views docready function if there is one defined.
+            view_docready();
+          }
+          
+        });
+      </script>
   </body>
 </html>

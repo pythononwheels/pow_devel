@@ -510,7 +510,7 @@ class BaseHandler(tornado.web.RequestHandler):
         """
         # some global preparations 
         self.application.log_request(self, message="base.error:" + str(message))
-        self.set_status(http_code)
+        self.set_status(http_status)
         #if not login:
         #    login=self.get_current_user()
 
@@ -533,7 +533,7 @@ class BaseHandler(tornado.web.RequestHandler):
             
         if template != None:
             return self.render(template, message=message, data=data, succ=succ, prev=prev,
-                        status=http_code, request=self.request, **kwargs)
+                        status=http_status, request=self.request, **kwargs)
         
         if not format:
             try:
@@ -568,7 +568,7 @@ class BaseHandler(tornado.web.RequestHandler):
             encoder = cfg.myapp["encoder"][format]
         if cfg.server_settings["debug_print"]:
             print("  .. Encoded reply: " + encoder.dumps({
-                "status"    : http_code,
+                "status"    : http_status,
                 "data"      : data,
                 "error"     : {
                     "message"   : message
@@ -579,7 +579,7 @@ class BaseHandler(tornado.web.RequestHandler):
 
         # write the result
         self.write(encoder.dumps({
-            "status"    : http_code,
+            "status"    : http_status,
             "data"      : data,
             "error"     : {
                 "message"   : message

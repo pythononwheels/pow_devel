@@ -37,7 +37,6 @@ def generate_dash():
         #
         # render the dash index view 
         #
-        
         try:
             shutil.copy( os.path.join(templates["stubs_path"],"dash_index.tmpl"), 
                 os.path.join(templates["views_path"],"dash_index.tmpl"))
@@ -45,6 +44,18 @@ def generate_dash():
         except Exception as e: 
             print(str(e))
 
+        
+        #
+        # render the dash server 
+        # 
+        try:
+            shutil.copy( os.path.join(templates["stubs_path"],"dash_server.py"), 
+                os.path.join("./","dash_server.py"))
+            print(" {:15}: {:30}".format("Copied", "the file: dash_server.py"))
+        except Exception as e: 
+            print(str(e))
+
+        
         #
         # render the dash handler 
         # 

@@ -1,4 +1,4 @@
-from testapp.models.elastic.testelastic import Testelastic
+from {{appname}}.models.elastic.testelastic import Testelastic
 from datetime import datetime
 
 # create the mappings in elasticsearch

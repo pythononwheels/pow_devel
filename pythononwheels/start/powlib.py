@@ -235,13 +235,13 @@ class powDecNew():
             #print(sorted(locals().keys()))
             #print(sorted(globals().keys()))
             import sys
-            if "testapp2.models.sql." + child_module_name in sys.modules.keys():
-                #print(dir(sys.modules["testapp2.models.sql." + child_module_name]))
-                child_klass = getattr(sys.modules["testapp2.models.sql." + child_module_name], child_class_name)
+            if "{{appname}}.models.sql." + child_module_name in sys.modules.keys():
+                #print(dir(sys.modules["{{appname}}.models.sql." + child_module_name]))
+                child_klass = getattr(sys.modules["{{appname}}.models.sql." + child_module_name], child_class_name)
             else:
                 import importlib
-                mod = importlib.import_module('testapp2.models.sql.' + child_module_name)
-                #mod = __import__('testapp2.models.sql.'+rel_module_name, fromlist=[rel_class_name])
+                mod = importlib.import_module('{{appname}}.models.sql.' + child_module_name)
+                #mod = __import__('{{appname}}.models.sql.'+rel_module_name, fromlist=[rel_class_name])
                 child_klass = getattr(mod, child_class_name)
             if backref:
                 setattr(parent_class, child_as_str, relationship(child_class_name, 

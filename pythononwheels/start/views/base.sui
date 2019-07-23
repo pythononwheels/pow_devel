@@ -125,36 +125,7 @@
   {% block js %}
 
   {% end %}
-  <script src="{{ static_url("js/jquery.min.js")}}"></script>
-  <script src="{{ static_url("sui/components/visibility.js")}}"></script>
-  <script src="{{ static_url("sui/components/sidebar.js")}}"></script>
-  <script src="{{ static_url("sui/components/transition.js")}}"></script>
-  <script>
-  $(document)
-    .ready(function() {
-
-      // fix menu when passed
-      $('.masthead')
-        .visibility({
-          once: false,
-          onBottomPassed: function() {
-            $('.fixed.menu').transition('fade in');
-          },
-          onBottomPassedReverse: function() {
-            $('.fixed.menu').transition('fade out');
-          }
-        })
-      ;
-
-      // create sidebar and attach to menu open
-      $('.ui.sidebar')
-        .sidebar('attach events', '.toc.item');
-      
-      {% block document_ready %}
-
-      {% end %}
-    });
-  </script>
+ 
 </head>
 
 <body>
@@ -210,6 +181,52 @@
 {% end %}
 
 {% include footer.sui %}
+
+<script src="{{ static_url("js/jquery.min.js")}}"></script>
+<script src="{{ static_url("sui/components/visibility.js")}}"></script>
+<script src="{{ static_url("sui/components/sidebar.js")}}"></script>
+<script src="{{ static_url("sui/components/transition.js")}}"></script>
+<script>
+
+{% block include_js %}
+
+{% end %}
+
+{% block view_js %}
+  
+{% end %}
+
+$(document)
+  .ready(function() {
+
+    // fix menu when passed
+    $('.masthead')
+      .visibility({
+        once: false,
+        onBottomPassed: function() {
+          $('.fixed.menu').transition('fade in');
+        },
+        onBottomPassedReverse: function() {
+          $('.fixed.menu').transition('fade out');
+        }
+      })
+    ;
+
+    // create sidebar and attach to menu open
+    $('.ui.sidebar')
+      .sidebar('attach events', '.toc.item');
+    
+      if (typeof view_docready === "function") { 
+      // this calls the views docready function if there is one defined.
+      view_docready();
+      }
+  });
+</script>
+
+
+
+
+
   
 </div>  
 

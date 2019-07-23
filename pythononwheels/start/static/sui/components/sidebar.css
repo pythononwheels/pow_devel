@@ -1,6 +1,6 @@
 /*!
- * # Semantic UI 2.4.0 - Sidebar
- * http://github.com/semantic-org/semantic-ui/
+ * # Fomantic-UI - Sidebar
+ * http://github.com/fomantic/Fomantic-UI/
  *
  *
  * Released under the MIT license
@@ -21,7 +21,6 @@
   left: 0;
   -webkit-backface-visibility: hidden;
           backface-visibility: hidden;
-  -webkit-transition: none;
   transition: none;
   will-change: transform;
   -webkit-transform: translate3d(0, 0, 0);
@@ -30,8 +29,8 @@
   -webkit-overflow-scrolling: touch;
   height: 100% !important;
   max-height: 100%;
-  border-radius: 0em !important;
-  margin: 0em !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
   overflow-y: auto !important;
   z-index: 102;
 }
@@ -48,15 +47,15 @@
 
 .ui.left.sidebar {
   right: auto;
-  left: 0px;
+  left: 0;
   -webkit-transform: translate3d(-100%, 0, 0);
           transform: translate3d(-100%, 0, 0);
 }
 .ui.right.sidebar {
-  right: 0px !important;
+  right: 0 !important;
   left: auto !important;
-  -webkit-transform: translate3d(100%, 0%, 0);
-          transform: translate3d(100%, 0%, 0);
+  -webkit-transform: translate3d(100%, 0, 0);
+          transform: translate3d(100%, 0, 0);
 }
 .ui.top.sidebar,
 .ui.bottom.sidebar {
@@ -64,14 +63,14 @@
   height: auto !important;
 }
 .ui.top.sidebar {
-  top: 0px !important;
+  top: 0 !important;
   bottom: auto !important;
   -webkit-transform: translate3d(0, -100%, 0);
           transform: translate3d(0, -100%, 0);
 }
 .ui.bottom.sidebar {
   top: auto !important;
-  bottom: 0px !important;
+  bottom: 0 !important;
   -webkit-transform: translate3d(0, 100%, 0);
           transform: translate3d(0, 100%, 0);
 }
@@ -83,12 +82,15 @@
 .pushable {
   height: 100%;
   overflow-x: hidden;
-  padding: 0em !important;
+  padding: 0 !important;
 }
 
 /* Whole Page */
 body.pushable {
-  background: #545454 !important;
+  background: #545454;
+}
+body.pushable.dimmed {
+  background: inherit;
 }
 
 /* Page Context */
@@ -110,7 +112,6 @@ body.pushable {
   position: fixed;
   -webkit-backface-visibility: hidden;
           backface-visibility: hidden;
-  -webkit-transition: -webkit-transform 500ms ease;
   transition: -webkit-transform 500ms ease;
   transition: transform 500ms ease;
   transition: transform 500ms ease, -webkit-transform 500ms ease;
@@ -128,19 +129,16 @@ body.pushable {
           backface-visibility: hidden;
   overflow: hidden;
   min-height: 100%;
-  -webkit-transition: -webkit-transform 500ms ease;
   transition: -webkit-transform 500ms ease;
   transition: transform 500ms ease;
   transition: transform 500ms ease, -webkit-transform 500ms ease;
   z-index: 2;
+  
+/* Pusher should inherit background from context */
+  background: inherit;
 }
 body.pushable > .pusher {
   background: #FFFFFF;
-}
-
-/* Pusher should inherit background from context */
-.pushable > .pusher {
-  background: inherit;
 }
 
 /*--------------
@@ -149,13 +147,12 @@ body.pushable > .pusher {
 
 .pushable > .pusher:after {
   position: fixed;
-  top: 0px;
-  right: 0px;
+  top: 0;
+  right: 0;
   content: '';
   background-color: rgba(0, 0, 0, 0.4);
   overflow: hidden;
   opacity: 0;
-  -webkit-transition: opacity 500ms;
   transition: opacity 500ms;
   will-change: opacity;
   z-index: 1000;
@@ -166,7 +163,7 @@ body.pushable > .pusher {
 ---------------*/
 
 .ui.sidebar.menu .item {
-  border-radius: 0em !important;
+  border-radius: 0 !important;
 }
 
 
@@ -206,13 +203,11 @@ body.pushable > .pusher {
 /* Shadow Direction */
 .ui.left.visible.sidebar,
 .ui.right.visible.sidebar {
-  -webkit-box-shadow: 0px 0px 20px rgba(34, 36, 38, 0.15);
-          box-shadow: 0px 0px 20px rgba(34, 36, 38, 0.15);
+  box-shadow: 0 0 20px rgba(34, 36, 38, 0.15);
 }
 .ui.top.visible.sidebar,
 .ui.bottom.visible.sidebar {
-  -webkit-box-shadow: 0px 0px 20px rgba(34, 36, 38, 0.15);
-          box-shadow: 0px 0px 20px rgba(34, 36, 38, 0.15);
+  box-shadow: 0 0 20px rgba(34, 36, 38, 0.15);
 }
 
 /* Visible On Load */
@@ -346,12 +341,12 @@ body.pushable > .pusher {
 
 /* Initial */
 .ui.left.overlay.sidebar {
-  -webkit-transform: translate3d(-100%, 0%, 0);
-          transform: translate3d(-100%, 0%, 0);
+  -webkit-transform: translate3d(-100%, 0, 0);
+          transform: translate3d(-100%, 0, 0);
 }
 .ui.right.overlay.sidebar {
-  -webkit-transform: translate3d(100%, 0%, 0);
-          transform: translate3d(100%, 0%, 0);
+  -webkit-transform: translate3d(100%, 0, 0);
+          transform: translate3d(100%, 0, 0);
 }
 .ui.top.overlay.sidebar {
   -webkit-transform: translate3d(0%, -100%, 0);
@@ -365,7 +360,6 @@ body.pushable > .pusher {
 /* Animation */
 .animating.ui.overlay.sidebar,
 .ui.visible.overlay.sidebar {
-  -webkit-transition: -webkit-transform 500ms ease;
   transition: -webkit-transform 500ms ease;
   transition: transform 500ms ease;
   transition: transform 500ms ease, -webkit-transform 500ms ease;
@@ -373,20 +367,20 @@ body.pushable > .pusher {
 
 /* End - Sidebar */
 .ui.visible.left.overlay.sidebar {
-  -webkit-transform: translate3d(0%, 0%, 0);
-          transform: translate3d(0%, 0%, 0);
+  -webkit-transform: translate3d(0%, 0, 0);
+          transform: translate3d(0%, 0, 0);
 }
 .ui.visible.right.overlay.sidebar {
-  -webkit-transform: translate3d(0%, 0%, 0);
-          transform: translate3d(0%, 0%, 0);
+  -webkit-transform: translate3d(0%, 0, 0);
+          transform: translate3d(0%, 0, 0);
 }
 .ui.visible.top.overlay.sidebar {
-  -webkit-transform: translate3d(0%, 0%, 0);
-          transform: translate3d(0%, 0%, 0);
+  -webkit-transform: translate3d(0%, 0, 0);
+          transform: translate3d(0%, 0, 0);
 }
 .ui.visible.bottom.overlay.sidebar {
-  -webkit-transform: translate3d(0%, 0%, 0);
-          transform: translate3d(0%, 0%, 0);
+  -webkit-transform: translate3d(0%, 0, 0);
+          transform: translate3d(0%, 0, 0);
 }
 
 /* End - Pusher */
@@ -403,7 +397,6 @@ body.pushable > .pusher {
 
 /* Initial */
 .ui.push.sidebar {
-  -webkit-transition: -webkit-transform 500ms ease;
   transition: -webkit-transform 500ms ease;
   transition: transform 500ms ease;
   transition: transform 500ms ease, -webkit-transform 500ms ease;
@@ -450,7 +443,6 @@ body.pushable > .pusher {
 .ui.visible.uncover.sidebar {
   -webkit-transform: translate3d(0, 0, 0);
           transform: translate3d(0, 0, 0);
-  -webkit-transition: -webkit-transform 500ms ease;
   transition: -webkit-transform 500ms ease;
   transition: transform 500ms ease;
   transition: transform 500ms ease, -webkit-transform 500ms ease;
@@ -486,7 +478,6 @@ body.pushable > .pusher {
 
 /* Animation */
 .ui.animating.slide.along.sidebar {
-  -webkit-transition: -webkit-transform 500ms ease;
   transition: -webkit-transform 500ms ease;
   transition: transform 500ms ease;
   transition: transform 500ms ease, -webkit-transform 500ms ease;
@@ -528,7 +519,6 @@ body.pushable > .pusher {
 
 /* Animation */
 .ui.animating.slide.out.sidebar {
-  -webkit-transition: -webkit-transform 500ms ease;
   transition: -webkit-transform 500ms ease;
   transition: transform 500ms ease;
   transition: transform 500ms ease, -webkit-transform 500ms ease;
@@ -547,7 +537,6 @@ body.pushable > .pusher {
 
 /* Initial */
 .ui.scale.down.sidebar {
-  -webkit-transition: -webkit-transform 500ms ease;
   transition: -webkit-transform 500ms ease;
   transition: transform 500ms ease;
   transition: transform 500ms ease, -webkit-transform 500ms ease;
@@ -592,7 +581,6 @@ body.pushable > .pusher {
 
 /* Animation */
 .ui.animating.scale.down > .visible.ui.sidebar {
-  -webkit-transition: -webkit-transform 500ms ease;
   transition: -webkit-transform 500ms ease;
   transition: transform 500ms ease;
   transition: transform 500ms ease, -webkit-transform 500ms ease;

@@ -1,60 +1,58 @@
 {% extends "base.bs4" %}
 {% block content %}
     
-    <div class="row top-buffer-60">
+    <div class="row">
         <div class="col-md-2">
-            &nbsp;
+            <img src={{ static_url("images/bug.png")}} width="80%"/>
         </div>
-        <div class="col-md-4 text-right" >
-          <img src={{ static_url("images/bug.png")}} width="75%"/>
-        </div>
-        
-        <div class="col-md-4 top-buffer-40 text-left">
+        <div class="col-md-9">
             
             <div class="alert alert-danger" role="alert">
-                <h1 class="alert-heading">Oh no! An Error occured. </h1> 
+                <h1 class="alert-heading">
+                    Oh no! An Error occured. 
+                </h1> 
             </div>
             <p class="lead">    
                 Sorry, this should not have happended!
             </p>
-            
-            <p>
-                <table class="table">
+            <div class="table-responsive">
+                <table class="table table-striped" style="table-layout: fixed; width: 100%">
                     {% try %}
                     <tr>
-                        <td><b>Status:</b></td><td> {{status}} </td>
+                        <td width="20%"><b>Status:</b></td><td width="80%"> {{status}} </td>
                     </tr>
                     {% except %}
                     {% end %}
                     {% try %}
                     <tr>
-                        <td><b>Message:</b></td><td> {{message}} </td>
+                        <td width="20%"><b>Message:</b></td><td width="80%"> {{message}} </td>
                     </tr>
                     {% except %}
                     {% end %}
                     {% try %}
                     <tr>
-                        <td><b>Data:</b></td><td> {{data}} </td>
+                        <td width="20%"><b>Data:</b></td><td width="80%"> {{data}} </td>
                     </tr>
                     {% except %}
                     {% end %}
                     {% try %}
                     <tr>
-                        <td><b>URI:</b></td><td> {{request.path}} </td>
+                        <td width="20%"><b>URI:</b></td><td width="80%"> {{request.path}} </td>
                     </tr>
                     {% except %}
                     {% end %}
                     {% try %}
                     <tr>
-                        <td><b>Request:</b></td><td> {{request}} </td>
+                        <td width="20%"><b>Request:</b></td><td width="80%"> {{request}} </td>
                     </tr>
                     {% except %}
                     {% end %}
                 </table>
+            </div>
+            
         </div>
-        <div class="col-md-2">
-            &nbsp;
-        </div>
+
+    </div>
 
 
 {% end %}

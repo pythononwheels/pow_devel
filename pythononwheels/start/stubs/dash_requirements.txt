@@ -1,8 +1,7 @@
-dash==0.28.5
-dash-core-components==0.35.1
-dash-dangerously-set-inner-html==0.0.1
-dash-html-components==0.13.2
-dash-renderer==0.14.3
-dash-table==3.1.5
+dash==1.0.2
+dash-core-components==1.0.0
+dash-html-components==1.0.0
+dash-renderer==1.0.0
+dash-table==4.0.2
 numpy==1.15.3
 pandas==0.23.4

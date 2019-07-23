@@ -1,64 +1,55 @@
 {% extends "base.bs4" %}
 {% block content %}
-    <style>
-        table {
-            table-layout: fixed;
-            width: 100%;
-        }
 
-        table td {
-            word-wrap: break-word;         /* All browsers since IE 5.5+ */
-            overflow-wrap: break-word;     /* Renamed property in CSS3 draft spec */
-        }
-    </style>
-    <div class="row top-buffer-60">
-
-        <div class="col-md-4 text-right top-buffer-40" >
-          <img src={{ static_url("images/404_4.png")}} width="75%"/>
+   
+    <div class="row">
+        <div class="col-md-4">
+                <img src={{ static_url("images/404_4.png")}} width="80%"/>
         </div>
-        
-        <div class="col-md-8 top-buffer-40 text-left">
+        <div class="col-md-7">
             
-            <div class="alert alert-danger" role="alert">
-                <h1 class="alert-heading">Oh no HTTP 404! This URL cannot be Found. </h1> 
+            <div class="alert alert-danger top-buffer-60" role="alert">
+                <h1 class="alert-heading">
+                        Oh no HTTP 404! This URL cannot be Found.
+                </h1> 
             </div>
             <p class="lead">    
                 Hm, maybe you want to restart from here:  <a href="/">Home</a>
             </p>
-            
-            <p>
-                <table class="table">
+            <div class="table-responsive">
+                <table class="table table-striped" style="table-layout: fixed; width: 100%">
                     {% try %}
                     <tr>
-                        <td><b>Status:</b></td><td> {{status}} </td>
+                        <td width="20%"><b>Status:</b></td><td width="80%"> {{status}} </td>
                     </tr>
                     {% except %}
                     {% end %}
                     {% try %}
                     <tr>
-                        <td><b>Message:</b></td><td> {{message}} </td>
+                        <td width="20%"><b>Message:</b></td><td width="80%"> {{message}} </td>
                     </tr>
                     {% except %}
                     {% end %}
                     {% try %}
                     <tr>
-                        <td><b>Data:</b></td><td> {{data}} </td>
+                        <td width="20%"><b>Data:</b></td><td width="80%"> {{data}} </td>
                     </tr>
                     {% except %}
                     {% end %}
                     {% try %}
                     <tr>
-                        <td><b>URI:</b></td><td> {{request.path}} </td>
+                        <td width="20%"><b>URI:</b></td><td width="80%"> {{request.path}} </td>
                     </tr>
                     {% except %}
                     {% end %}
                     {% try %}
                     <tr>
-                        <td><b>Request:</b></td><td> {{request}} </td>
+                        <td width="20%"><b>Request:</b></td><td width="80%"> {{request}} </td>
                     </tr>
                     {% except %}
                     {% end %}
                 </table>
+            </div>
         </div>
     </div>
 
