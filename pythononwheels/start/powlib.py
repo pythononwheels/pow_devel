@@ -17,8 +17,8 @@ class PowBaseMeta(DeclarativeMeta):
         (toggle with _use_pow_schema_attrs = Fasle | True in the model)
     """
     def __init__(cls, name, bases, dct):
-        print("cls: {}, name: {}".format(str(cls), str(name)))
-        print(cls.__dict__.keys())
+        #print("cls: {}, name: {}".format(str(cls), str(name)))
+        #print(cls.__dict__.keys())
         # if '_use_pow_schema_attrs' not in cls.__dict__:
         #     print("has _use_pow_schema_attrs = No")
         # else:
