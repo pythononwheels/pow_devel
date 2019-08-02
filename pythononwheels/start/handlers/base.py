@@ -31,7 +31,7 @@ class BaseHandler(tornado.web.RequestHandler):
         """
         # log analytics (ip, method, timestamp, uri)
         # see pow_analytics.log
-        if cfg["server_settings"]["analytics_logging"]:
+        if cfg.server_settings["analytics_logging"]:
             self.application.log_analytics(self.request)
         
         #print(self.request)

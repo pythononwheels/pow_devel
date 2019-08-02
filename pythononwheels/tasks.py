@@ -32,9 +32,9 @@ def build(c, path="../..", name="testapp"):
     if not os.name in ["nt", "posix"]:
         print("Sorry. this only supports Posix (e.g. Linux, OSX) and Windows OS. ")
         sys.exit()
-    if os.name == "posix":
-        print("Sorry. Due to a bug posix currently unavailable ... working on a fix for right now ..")
-        sys.exit()
+    #if os.name == "posix":
+    #    print("Sorry. Due to a bug posix currently unavailable ... working on a fix for right now ..")
+    #    sys.exit()
 
     path=os.path.normpath(path)
     print("Building : -n {} -p {} ".format(name, path))
@@ -87,12 +87,13 @@ def build_all(c,name, path, force=False):
             c.run("virtualenv ./venv")
         with c.cd(os.path.join(app_path, "venv/bin")):
             print(" .. Installing the PoW requirements")
+            print("cwd: " + c.cwd)
             #pipath= os.path.abspath(os.path.join(app_path, "./venv/bin/pip"))
             #print("venv pip path: {}".format( pipath ))
             reqpath = os.path.normpath(os.path.join( app_path, "requirements.txt"))
             print("requirements.txt: {}".format(reqpath))
-            c.run("pip install -r {}".format( reqpath ))
-            c.run("pip freeze")
+            c.run("./pip install -r {}".format( reqpath ))
+            c.run("./pip freeze")
     else:
         print("only posix and windows compatible OS are supported, sorry!")
         sys.exit()
