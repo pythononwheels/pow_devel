@@ -90,7 +90,7 @@ def dispatcher(request, index=True, **kwargs):
     '''
         Dispatch the Dash and Dash Ajax requests
     '''
-    kwargs["external_stylesheets"] = mydash["external_stylesheets"]
+    #kwargs["external_stylesheets"] = mydash["external_stylesheets"]
     #
     # only serve the base layout once. 
     # 

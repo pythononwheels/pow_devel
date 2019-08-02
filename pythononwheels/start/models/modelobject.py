@@ -350,15 +350,19 @@ class ModelObject():
     #     d=json.loads(data,object_hook=pow_json_deserializer)
     #     return self.init_from_dict(d, ignore, simple_conversion=simple_conversion)
 
-    def init_from_csv_file(self, csv_file=None, newline='', ignore=True):
+    def init_from_csv_file(self, csv_file=None, newline='', delimiter=",", ignore=True):
         """
             inits instances of this model from the given csv
             returns a generator that yields models instances per row
             of the csv file.
+
+            delimiter = delimiter of the csv file (e.g.: , or ;)
+            ignore = True => also set attribute if model hasn't the specified attribute
+            
         """
         import csv
         with open(csv_file, newline=newline) as csvfile:
-            reader = csv.DictReader(csvfile)
+            reader = csv.DictReader(csvfile, delimiter=delimiter)
             for row in reader:
                 #print(row)
                 m = self.__class__()

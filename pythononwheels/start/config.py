@@ -17,6 +17,7 @@ server_settings = {
     #Logs a stack trace if the IOLoop is blocked for more than s seconds. so 0.050 means 50ms
     "IOLoop.set_blocking_log_threshold" : 0, 
     "logging"           :   True,
+    "analytics_logging" :   True,
     "https"             :   False,
     "template_path"     :   os.path.join(os.path.dirname(__file__), "views"),
     "static_url_prefix" :   "/static/",
@@ -150,7 +151,8 @@ database = {
 
 mydash={
     # see: https://dash.plot.ly/getting-started
-    "external_stylesheets"  :   ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+    "external_stylesheets"  :   [],
+    "external_scripts"      :   []
 }
 
 beta_settings = {

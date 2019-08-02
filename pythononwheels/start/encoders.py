@@ -93,11 +93,16 @@ class json_to_csv:
                 data["data"]=[data["data"]]
             except:
                 raise
-        print(data)
+        #print(data)
         output = io.StringIO()
         #writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
         #writer = csv.DictWriter(output, data[0].keys())
-        writer = csv.DictWriter(output, data["data"][0].keys())
+        try:
+            writer = csv.DictWriter(output, data["data"][0].keys())
+        except IndexError:
+            # list empty:
+            writer = csv.DictWriter(output, [])
+            #print("Empty result")
         writer.writeheader()
         writer.writerows(data["data"])
         return output.getvalue()
