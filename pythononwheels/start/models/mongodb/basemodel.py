@@ -31,6 +31,8 @@ class MongoBaseModel(ModelObject):
         """
         #print("executin init_on_load")
         
+        super().init_on_load()
+        
         #create an index for our own id field.
         
         #

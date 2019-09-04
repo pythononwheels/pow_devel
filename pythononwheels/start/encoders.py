@@ -112,7 +112,6 @@ class json_to_xml:
         """ 
             returns the xml representation of a dict input data
             root / custom_root is the root node name of the xml document.
-
             data is a dict.
 
             usage: encoder.dumps(model.to_dict, root="some custom root name")

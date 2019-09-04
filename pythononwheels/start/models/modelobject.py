@@ -27,12 +27,14 @@ class ModelObject():
             should be called from instances or BaseModels __init__
             will be called by sqlalchemy automatically on model creation
         """
-        self.tablename = pluralize(self.__class__.__name__.lower())
+        #self.tablename = pluralize(self.__class__.__name__.lower())
         
-        self.setup_instance_schema()        
+        #self.setup_instance_schema()        
         
-        if "format" in kwargs:
-            self.setup_from_format( args, kwargs)
+        #if "format" in kwargs:
+        #    self.setup_from_format( args, kwargs)
+        
+        self.validator = Validator()
     
     # def setup_dirty_model(self):
     #     """
@@ -223,32 +225,33 @@ class ModelObject():
 
     def validate(self):
         """
-            checks the instance against a schema.
-            validatees the current values
-        """            
-        if getattr(self,"schema", False):
-            # if instance has a schema. (also see init_on_load)
-            #v = cerberus.Validator(self.schema)
-            v = Validator(self.schema)
-
-            if self.observers_initialized:
-                for observer in self.observers:
-                    try:
-                        ret = observer.before_validate(self, v)
-                    except:
-                        pass
-            
-            res = v.validate(self.to_dict(lazy=False))
-            if self.observers_initialized:
-                for observer in self.observers:
-                    try:
-                        ret = observer.after_validate(self, res)
-                    except:
-                        pass
-            if v.validate(self.to_dict(lazy=False)):
-                return (True, None)
-            else:
-                return (False,v)
+            checks the instance against it's schema.
+            validates the current values
+            and returns True if validation is ok, False otherwise.
+            Access to errors via
+                model.validator.errors
+        """                    
+        self.validator.schema=self.schema
+        if self.observers_initialized:
+            for observer in self.observers:
+                try:
+                    ret = observer.before_validate(self, v)
+                except:
+                    pass
+        
+        res = self.validator.validate(self.to_dict(lazy=False))
+        
+        if self.observers_initialized:
+            for observer in self.observers:
+                try:
+                    ret = observer.after_validate(self, self.validator)
+                except:
+                    pass
+        #if v.validate(self.to_dict(lazy=False)):
+        #    return (True, None)
+        #else:
+        #    return (False,v)
+        return res
     
     def init_from_dict(self, d, ignore=True, simple_conversion=False):
         """

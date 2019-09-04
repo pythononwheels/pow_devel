@@ -28,17 +28,18 @@ log_handler.setFormatter(formatter)
 #
 # analytics_log_handler 
 #
-LOG_FILENAME = './pow_analytics.log'
+if cfg.server_settings["analytics_logging"] == True:
+    LOG_FILENAME = './pow_analytics.log'
 
-# Set up a specific logger with our desired output level
-analytics_logger = logging.getLogger('PowAnalyticsLogger')
-analytics_logger.setLevel(logging.INFO)
+    # Set up a specific logger with our desired output level
+    analytics_logger = logging.getLogger('PowAnalyticsLogger')
+    analytics_logger.setLevel(logging.INFO)
 
-# Add the log message handler to the logger
-handler = logging.handlers.RotatingFileHandler(
-              LOG_FILENAME, maxBytes=20000, backupCount=5)
+    # Add the log message handler to the logger
+    handler = logging.handlers.RotatingFileHandler(
+                LOG_FILENAME, maxBytes=20000, backupCount=5)
 
-analytics_logger.addHandler(handler)
+    analytics_logger.addHandler(handler)
 
 #
 # the direct method decorator

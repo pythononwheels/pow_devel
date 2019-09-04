@@ -26,6 +26,8 @@ class ElasticBaseModel(ModelObject):
             constructor
         """
         #super(ModelObject, self).init_on_load(*args, **kwargs)
+        super().init_on_load()
+        
         self.tablename = pluralize(self.__class__.__name__.lower())
         self.doc_type = self.tablename
         self.dbname = dbname

@@ -28,6 +28,8 @@ class TinyBaseModel(ModelObject):
     db=tinydb
     def init_on_load(self, *args, **kwargs):
         
+        super().init_on_load()
+        
         #self.id = uuid.uuid4()
         #self.created_at = datetime.datetime.now()
         #self.last_updated = datetime.datetime.now()

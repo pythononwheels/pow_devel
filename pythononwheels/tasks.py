@@ -6,6 +6,7 @@
 
 from invoke import task
 import os,sys
+import argparse
 
 @task
 def build(c, path="../..", name="testapp"):
@@ -39,7 +40,7 @@ def build(c, path="../..", name="testapp"):
     path=os.path.normpath(path)
     print("Building : -n {} -p {} ".format(name, path))
     if os.path.exists(os.path.join(path, name)):
-        print("sorry, path / name exists")
+        print("sorry, path {} exists".format(os.path.abspath(os.path.join(path, name))))
         r=input(" .. type y or yes, to go ahead deleting the existing: {} ? : ".format(os.path.join(path,name)))
         if r in ["y", "yes"]:
             import shutil
@@ -57,7 +58,10 @@ def build(c, path="../..", name="testapp"):
         # start the build and check
         build_all(c,name, path)
 
-def build_all(c,name, path, force=False):
+
+
+
+def build_all(c, name, path, force=False):
     """
         the actual function that does the job
     """
@@ -155,3 +159,11 @@ def clean(c, path="../..", name="testapp", force=False):
         print(40*"-")
 
     
+@task
+def testcliparams(c, name="def"):
+    """
+        handing over cli arguments using --parameter_name=value
+        try:
+                invoke test --name="somethingelse"
+    """
+    print(name)

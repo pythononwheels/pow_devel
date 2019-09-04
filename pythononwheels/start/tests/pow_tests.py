@@ -74,7 +74,9 @@ class TestClass:
     
     @pytest.mark.run(order=5)
     def test_sql_migration(self):
-        """ test the setup of the alembic environment """
+        """ test the setup of the alembic environment 
+            generate a migration
+        """
         print(" .. Test SQL: generate_migration")
         import {{appname}}.generate_migration
         import os
@@ -85,7 +87,9 @@ class TestClass:
     
     @pytest.mark.run(order=6)
     def test_sql_dbupdate(self):
-        """ test the setup of the alembic environment """
+        """ test the setup of the alembic environment 
+            actually migrate the DB schema up
+        """
         print(" .. Test SQL: update_db -d up")
         import {{appname}}.update_db
         import os, time
@@ -101,9 +105,31 @@ class TestClass:
         os.chdir(os.path.abspath(os.path.dirname(__file__)))
     
     @pytest.mark.run(order=7)
+    def test_if_sql_model_validation_works(self):
+        """ 
+            check if validation works
+        """ 
+        print(" .. Test SQL: model.upsert() and model.find()")
+        from {{appname}}.models.sql.pow_test_model import PowTestModel
+        m = PowTestModel()
+        assert m.validate() == True
+    
+    @pytest.mark.run(order=8)
+    def test_if_sql_model_validation_fails_successfully(self):
+        """ 
+            check if validation fails if type is wrong
+        """ 
+        print(" .. Test SQL: model.upsert() and model.find()")
+        from {{appname}}.models.sql.pow_test_model import PowTestModel
+        m = PowTestModel()
+        m.title="123456789123456789123456789123456789"
+        assert m.validate() == False
+
+    @pytest.mark.run(order=9)
     def test_sql_insert_and_find(self):
-        """ based on test_generate_model. Tests if a model can insert values 
-            and can be found back.
+        """ based on test_generate_model. 
+            Tests if a model can insert values in the DB 
+            and can be found by title attribute.
         """ 
         print(" .. Test SQL: model.upsert() and model.find()")
         from {{appname}}.models.sql.pow_test_model import PowTestModel
@@ -119,7 +145,7 @@ class TestClass:
     #
     # tinyDB tests
     #
-    @pytest.mark.run(order=8)
+    @pytest.mark.run(order=10)
     @pytest.mark.minimal
     def test_tinydb_generate_model(self):
         """ test if sql model is generated"""
@@ -132,7 +158,30 @@ class TestClass:
         assert ret is True
         assert os.path.exists(os.path.normpath("../models/tinydb/" + MODELNAME + ".py"))
 
-    @pytest.mark.run(order=9)
+    @pytest.mark.run(order=11)
+    @pytest.mark.minimal
+    def test_if_tinydb_model_validation_works(self):
+        """ 
+            check if validation works
+        """ 
+        print(" .. Test SQL: model.upsert() and model.find()")
+        from {{appname}}.models.tinydb.pow_test_model import PowTestModel
+        m = PowTestModel()
+        assert m.validate() == True
+    
+    @pytest.mark.run(order=12)
+    @pytest.mark.minimal
+    def test_if_tinydb_model_validation_fails_successfully(self):
+        """ 
+            check if validation fails if type is wrong
+        """ 
+        print(" .. Test SQL: model.upsert() and model.find()")
+        from {{appname}}.models.tinydb.pow_test_model import PowTestModel
+        m = PowTestModel()
+        m.title="123456789123456789123456789123456789"
+        assert m.validate() == False
+    
+    @pytest.mark.run(order=13)
     @pytest.mark.minimal
     def test_tinydb_model_type(self):
         """ based on test_generate_model. Tests if a model can insert values 
@@ -143,7 +192,7 @@ class TestClass:
         m = PowTestModel()
         assert isinstance(m, PowTestModel)
     
-    @pytest.mark.run(order=10)
+    @pytest.mark.run(order=14)
     def test_tinydb_insert_and_find(self):
         """ based on test_generate_model. Tests if a model can insert values 
             and can be found back.

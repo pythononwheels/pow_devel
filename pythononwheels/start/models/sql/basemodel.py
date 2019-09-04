@@ -56,6 +56,9 @@ class SqlBaseModel(ModelObject):
         # this enables the model to load / dump json
         # 
         #print(kwargs)
+
+        super().init_on_load()
+        
         self.class_name = self.__class__.__name__.capitalize()
         from marshmallow_sqlalchemy import ModelSchema
         cls_meta=type("Meta", (object,),{"model" : self.__class__})
