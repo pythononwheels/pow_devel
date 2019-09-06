@@ -46,13 +46,15 @@ def generate_dash():
 
         
         #
-        # render the dash server 
+        # render the dash server
         # 
+        ofile = open( os.path.join("./","dash_server.py") , "wb")
         try:
-            shutil.copy( os.path.join(templates["stubs_path"],"dash_server.py"), 
-                os.path.join("./","dash_server.py"))
-            print(" {:15}: {:30}".format("Copied", "the file: dash_server.py"))
-        except Exception as e: 
+            res = loader.load("dash_server.py").generate( appname=appname )
+            ofile.write(res)
+            ofile.close()
+            print(" {:15}: {:30}".format("rendered", "dash_server.py"))
+        except Exception as e:
             print(str(e))
 
         

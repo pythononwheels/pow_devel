@@ -19,9 +19,9 @@ Mako==1.0.7
 MarkupSafe==0.23
 marshmallow==2.19.2
 marshmallow-sqlalchemy==0.10.0
-numpy==1.16.4
+#numpy==1.16.4
 packaging==16.8
-pandas==0.24.2
+#pandas==0.24.2
 plotly==4.0.0
 py==1.4.33
 pymongo==3.6.0
