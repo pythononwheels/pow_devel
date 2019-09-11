@@ -146,6 +146,13 @@ database = {
         "user"      :   None,
         "passwd"    :   None,
         "enabled"   :   False       
+    },
+    "redis" : {
+        "dbname"    :   0,  # zero starting numeric index for redis
+        "host"      :   "localhost",
+        "port"      :   6379,
+        "passwd"    :   "",
+        "strict"    :   True
     }
 }
 
