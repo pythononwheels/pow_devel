@@ -120,11 +120,11 @@ class ModelObject():
             if there is a schema (cerberus) set it in the instance
         """
         if "schema" in self.__class__.__dict__:
-            print(" .. found a schema for: " +str(self.__class__.__name__) + " in class dict")
+            #print(" .. found a schema for: " +str(self.__class__.__name__) + " in class dict")
             self.schema = merge_two_dicts(
                 self.__class__.__dict__["schema"],
                 basic_schema)
-        print("  .. Schema is now: " + str(self.schema))
+        #print("  .. Schema is now: " + str(self.schema))
 
     def setup_instance_values(self):
         """ fills the instance with defined default values"""
@@ -155,12 +155,16 @@ class ModelObject():
             f = getattr(self, "init_from_" + kwargs["format"], None)
             if f:
                 f(kwargs)
-        else:
-            # initializes the instanmce with the given kwargs values:
-            # e.g.: Model(test="sometext", title="sometitle")
-            for key in kwargs.keys():
-                if key in self.schema:
-                    setattr(self, key, kwargs[key])
+    
+    def setup_from_kwargs(self, *args, **kwargs):
+        """
+            init from the kwargs if some are given.
+        """
+        # initializes the instanmce with the given kwargs values:
+        # e.g.: Model(test="sometext", title="sometitle")
+        for key in kwargs.keys():
+            if key in self.schema:
+                setattr(self, key, kwargs[key])
 
     def init_observers(self):
         #
@@ -178,7 +182,8 @@ class ModelObject():
             #   before & after:  save, create, commit, validation, delete.
             pass
         from pydoc import locate
-        print("trying to find possible observer in {}".format(
+        if cfg.server_settings["debug_print"]:
+            print("trying to find possible observer in {}".format(
             str(self.__class__.__module__)+"_observer."+ str(self.__class__.__name__)+ "Observer"
             )
         )

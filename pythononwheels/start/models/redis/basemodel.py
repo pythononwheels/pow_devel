@@ -9,8 +9,7 @@ class RedisBaseModel(ModelObject):
     """
     
     basic_schema = {
-        "id"    :   { "type" : "string" },
-        "_uuid" :  { "type" : "string" },
+        "_uuid" :  { "type" : "string", "default" : str(uuid.uuid4()) },
         #"eid"   :   { "type" : "string" },
         "created_at"    : { "type" : "datetime" },
         "last_updated"    : { "type" : "datetime" },
@@ -25,9 +24,10 @@ class RedisBaseModel(ModelObject):
         """
         self.setup_instance_schema()
         self.setup_instance_values()
-        self.init_from_format(**kwargs)
-        self.init_from_kwargs(**kwargs)
+        self.setup_from_format(**kwargs)
+        self.setup_from_kwargs(**kwargs)
         self.init_observers()
+        self.key=None 
 
 
     def json_load_from_db(self, data, keep_id=False):
@@ -66,11 +66,29 @@ class RedisBaseModel(ModelObject):
     
     def upsert(self, session=None):
         """ insert oro update intelligently """
-        raise NotImplementedError("Subclasses should overwrite this Method.")
-
-    def find_by_id(self, id):
+        if self.key != None:
+            self.db.set(self.key, self.to_json())
+        else:
+            raise Exception("Error: no key set!")
+    
+    
+    def find_by_id(self, id=None):
         """ return result by id (only)"""
-        raise NotImplementedError("Subclasses should overwrite this Method.")
+        if id != None:
+            return self.db.get(id)
+        else:
+            # take this instance's key
+            if self.key != None:
+                return self.db.get(self.key)
+            else:
+                raise Exception("Error: no key set!")
+    
+    def get_keys(self):
+        """
+            careful: runs O(n) for large datasets maybe very slow
+        """
+        return self.db.keys()
+        
 
     def from_statement(self, statement):
         """ execute a given DB statement raw """
@@ -80,9 +98,9 @@ class RedisBaseModel(ModelObject):
         """ return the next page of results. See config["myapp"].page_size """
         raise NotImplementedError("Subclasses should overwrite this Method.")
 
-    def find(self,*criterion):
+    def find(self, id=None):
         """ Find something given a query or criterion """
-        raise NotImplementedError("Subclasses should overwrite this Method.")
+        return self.find_by_id(id)
     
     def find_all(self, *criterion, raw=False, limit=None, offset=None):
         """ Find something given a query or criterion and parameters """
@@ -105,4 +123,3 @@ class RedisBaseModel(ModelObject):
             for tinyDB return Query
         """
         raise NotImplementedError("Subclasses should overwrite this Method.")
-        

@@ -22,3 +22,5 @@ class {{model_class_name}}(RedisBaseModel):
     #
     # your model's methods down here
     #
+    def __init__(self, *args, **kwargs):
+        self.init_on_load()
