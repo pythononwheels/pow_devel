@@ -15,14 +15,6 @@ from {{appname}}.encoders import pow_json_serializer
 #print ('importing module %s' % __name__)
 class TinyBaseModel(ModelObject):
     
-    basic_schema = {
-        "id"    :   { "type" : "string" },
-        "_uuid" :  { "type" : "string" },
-        #"eid"   :   { "type" : "string" },
-        "created_at"    : { "type" : "datetime" },
-        "last_updated"    : { "type" : "datetime" },
-    }
-    
     where=where
     Query=Query()
     db=tinydb
@@ -42,15 +34,23 @@ class TinyBaseModel(ModelObject):
         self.table = tinydb.table(self.tablename)
         self.where = where
 
+        self.basic_schema = {
+            "id"    :   { "type" : "string" },
+            "_uuid" :  { "type" : "string", "default" : uuid.uuid4()},
+            #"eid"   :   { "type" : "string" },
+            "created_at"    : { "type" : "datetime" },
+            "last_updated"    : { "type" : "datetime" },
+        }
+        self.setup_instance_schema()
         #
         # if there is a schema (cerberus) set it in the instance
         #
-        if "schema" in self.__class__.__dict__:
-            #print(" .. found a schema for: " +str(self.__class__.__name__) + " in class dict")
-            self.schema = merge_two_dicts(
-                self.__class__.__dict__["schema"],
-                self.__class__.basic_schema)
-            #print("  .. Schema is now: " + str(self.schema))
+        # if "schema" in self.__class__.__dict__:
+        #     #print(" .. found a schema for: " +str(self.__class__.__name__) + " in class dict")
+        #     self.schema = merge_two_dicts(
+        #         self.__class__.__dict__["schema"],
+        #         self.__class__.basic_schema)
+        #     #print("  .. Schema is now: " + str(self.schema))
 
         # setup  the instance attributes from schema
         #for key in self.schema.keys():

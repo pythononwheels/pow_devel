@@ -1,6 +1,7 @@
 from {{appname}}.database.redisdblib import redisdb 
 from {{appname}}.models.modelobject import ModelObject
 from {{appname}}.powlib import merge_two_dicts
+import uuid
 
 class RedisBaseModel(ModelObject):
     """
@@ -8,12 +9,7 @@ class RedisBaseModel(ModelObject):
         Keep this as simple as possible
     """
     
-    basic_schema = {
-        "_uuid" :  { "type" : "string", "default" : str(uuid.uuid4()) },
-        #"eid"   :   { "type" : "string" },
-        "created_at"    : { "type" : "datetime" },
-        "last_updated"    : { "type" : "datetime" },
-    }
+   
 
     # set the db
     db=redisdb
@@ -22,13 +18,19 @@ class RedisBaseModel(ModelObject):
         """
             make the neccessary basic inits
         """
+        self.basic_schema = {
+            "_uuid" :  { "type" : "string", "default" : str(uuid.uuid4()) },
+            #"eid"   :   { "type" : "string" },
+            "created_at"    : { "type" : "datetime" },
+            "last_updated"    : { "type" : "datetime" },
+        }
+        
         self.setup_instance_schema()
         self.setup_instance_values()
         self.setup_from_format(**kwargs)
         self.setup_from_kwargs(**kwargs)
         self.init_observers()
         self.key=None 
-
 
     def json_load_from_db(self, data, keep_id=False):
         """  refresh the object from db and return json """

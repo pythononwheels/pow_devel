@@ -123,7 +123,7 @@ class ModelObject():
             #print(" .. found a schema for: " +str(self.__class__.__name__) + " in class dict")
             self.schema = merge_two_dicts(
                 self.__class__.__dict__["schema"],
-                basic_schema)
+                self.basic_schema)
         #print("  .. Schema is now: " + str(self.schema))
 
     def setup_instance_values(self):
@@ -534,6 +534,29 @@ class ModelObject():
         """
         raise NotImplementedError("Subclasses should overwrite this Method.")
 
+    def print_schema(self):
+        """
+            print instance schema using json.dumps
+        """
+        print(50*"-")
+        print("Schema for: " + str(self.__class__))
+        print(50*"-")
+        #from pprint import PrettyPrinter
+        #pp=PrettyPrinter(indent=+4)
+        #pp.pprint(self.schema)
+        print(json.dumps(self.schema, indent=4))
+
+    def pprint_schema(self):
+        """
+            print instance schema using pprint
+        """
+        print(50*"-")
+        print("Schema for: " + str(self.__class__))
+        print(50*"-")
+        from pprint import PrettyPrinter
+        pp=PrettyPrinter(indent=+4)
+        pp.pprint(self.schema)
+    
     def __repr__(self):
         """
             __repr__ method is what happens when you look at it with the interactive prompt

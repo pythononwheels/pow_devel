@@ -18,12 +18,7 @@ class MongoBaseModel(ModelObject):
         The Raw BaseModel Class
     """    
 
-    basic_schema = {
-        "id"    :   { "type" : "string", "default" : None },
-        "_uuid"    :   { "type" : "string", "default" : None },
-        "created_at"    : { "type" : "datetime", "default" : None },
-        "last_updated"    : { "type" : "datetime", "default" : None },
-    }
+    
 
     def init_on_load(self, *args, **kwargs):
         """
@@ -33,16 +28,23 @@ class MongoBaseModel(ModelObject):
         
         super().init_on_load()
         
+        self.basic_schema = {
+            "id"    :   { "type" : "string", "default" : None },
+            "_uuid"    :   { "type" : "string", "default" : None },
+            "created_at"    : { "type" : "datetime", "default" : None },
+            "last_updated"    : { "type" : "datetime", "default" : None },
+        }
         #create an index for our own id field.
+        self.setup_instance_schema()
         
         #
         # if there is a schema (cerberus) set it in the instance
         #
-        if "schema" in self.__class__.__dict__:
-            #print(" .. found a schema for: " +str(self.__class__.__name__) + " in class dict")
-            self.schema = merge_two_dicts(
-                self.__class__.__dict__["schema"],
-                self.__class__.basic_schema)
+        # if "schema" in self.__class__.__dict__:
+        #     #print(" .. found a schema for: " +str(self.__class__.__name__) + " in class dict")
+        #     self.schema = merge_two_dicts(
+        #         self.__class__.__dict__["schema"],
+        #         self.__class__.basic_schema)
             #print("  .. Schema is now: " + str(self.schema))
 
         # setup  the instance attributes from schema
