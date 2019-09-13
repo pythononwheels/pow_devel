@@ -402,6 +402,13 @@ class SqlBaseModel(ModelObject):
         #self.is_dirty = False    
         #session.flush()
     
+    def bulk_upsert(self, datalist ):
+        """
+            data = list of models to be saved or updated
+        """
+        self.session.bulk_save_objects(datalist)
+        self.session.commit()
+    
     def delete(self, session=None):
         """
             deltest the element from the db
