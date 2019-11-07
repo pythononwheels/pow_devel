@@ -9,8 +9,8 @@ import argparse
 import tornado.template as template
 import os.path
 import timeit
-import {{appname}}.powlib as lib
-import {{appname}}.config as cfg
+import {{appname}}.lib.powlib as lib
+import {{appname}}.conf.config as cfg
 import shutil
 
 def camel_case(name):

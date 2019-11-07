@@ -3,7 +3,7 @@
 #
 from elasticsearch_dsl import Date, Boolean, Text, Integer, Byte, Float, Keyword
 from {{appname}}.models.elastic.dsl_basemodel import ElasticDSLBaseModel
-from {{appname}}.powlib import relation
+from {{appname}}.lib.powlib import relation
 from elasticsearch_dsl import DocType
 from {{appname}}.database.elasticdblib import dbname
 from datetime import datetime

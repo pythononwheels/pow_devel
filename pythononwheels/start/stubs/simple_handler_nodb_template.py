@@ -1,7 +1,7 @@
 #from {{appname}}.handlers.base import BaseHandler
 from {{appname}}.handlers.powhandler import PowHandler
-from {{appname}}.config import myapp
-from {{appname}}.application import app
+from {{appname}}.conf.config import myapp
+from {{appname}}.lib.application import app
 import simplejson as json
 import tornado.web
 from tornado import gen

@@ -1,7 +1,7 @@
 #
 # base connection for TinyDB 
 #
-from {{appname}}.config import database
+from {{appname}}.conf.config import database
 #from pymongo import MongoClient
 import pymongo
 import urllib

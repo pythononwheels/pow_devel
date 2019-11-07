@@ -1,7 +1,7 @@
 #
 # base connection for TinyDB 
 #
-from {{appname}}.config import database
+from {{appname}}.conf.config import database
 from tinydb import TinyDB, Query
 from tinydb.storages import JSONStorage
 from tinydb_serialization import SerializationMiddleware

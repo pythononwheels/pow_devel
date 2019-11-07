@@ -7,7 +7,7 @@ import sys
 import pytest
 import os
 import shutil
-import {{appname}}.config as cfg
+import {{appname}}.conf.config as cfg
 
 # possible sys.platform results:
 # http://stackoverflow.com/questions/446209/possible-values-from-sys-platform

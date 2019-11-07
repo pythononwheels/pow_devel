@@ -7,11 +7,11 @@ import os.path
 import sys
 from werkzeug.routing import Rule, Map, _rule_re
 
-import {{appname}}.config as cfg
-from {{appname}}.powlib import merge_two_dicts
+import {{appname}}.conf.config as cfg
+from {{appname}}.lib.powlib import merge_two_dicts
 from {{appname}}.database.sqldblib import Base, Session, engine
-from {{appname}}.config import myapp
-from {{appname}}.config import routes
+from {{appname}}.conf.config import myapp
+from {{appname}}.conf.config import routes
 from tornado.log import access_log
 import logging
 import datetime
@@ -244,7 +244,9 @@ class Application(tornado.web.Application):
         # to be loaded or inspected to exclude_list above.)
         #
         mods=[]
-        module_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'handlers'))
+        module_path = os.path.abspath(
+                os.path.join(os.path.join(os.path.dirname( __file__ ), ".."), 'handlers')
+            )
         #print("importing handlers from: " + module_path)
         for mod in os.listdir( module_path ):
             mod = mod.split(".")[0]

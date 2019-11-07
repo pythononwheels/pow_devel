@@ -1,11 +1,11 @@
-from {{appname}}.powlib import pluralize
+from {{appname}}.lib.powlib import pluralize
 import datetime
 import xmltodict
 import simplejson as json
 import datetime, decimal
-from {{appname}}.config import myapp
-from {{appname}}.powlib import merge_two_dicts
-from {{appname}}.encoders import pow_json_serializer
+from {{appname}}.conf.config import myapp
+from {{appname}}.lib.powlib import merge_two_dicts
+from {{appname}}.lib.encoders import pow_json_serializer
 from {{appname}}.models.modelobject import ModelObject
 
 class <DBNAME>BaseModel(ModelObject):

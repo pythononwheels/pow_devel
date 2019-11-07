@@ -1,5 +1,5 @@
 import datetime
-from {{appname}}.config import myapp
+from {{appname}}.conf.config import myapp
 import re
 import dateutil.parser
 

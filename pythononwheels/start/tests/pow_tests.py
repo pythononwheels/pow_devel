@@ -27,7 +27,7 @@ class TestClass:
         from multiprocessing import Process
         import {{appname}}.server
         import requests
-        import {{appname}}.config as cfg
+        import {{appname}}.conf.config as cfg
         import time
         p = Process(target={{appname}}.server.main)
         p.start()

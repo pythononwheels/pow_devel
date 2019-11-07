@@ -3,7 +3,7 @@ import tornado.escape
 import json
 import werkzeug.security 
 import os
-from {{appname}}.config import myapp 
+from {{appname}}.conf.config import myapp 
 from {{appname}}.handlers.base import BaseHandler
 
 class PowHandler(BaseHandler):

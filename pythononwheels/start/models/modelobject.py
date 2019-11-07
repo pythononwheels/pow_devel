@@ -1,15 +1,15 @@
-from {{appname}}.powlib import pluralize
+from {{appname}}.lib.powlib import pluralize
 import datetime
 from cerberus import Validator
 import xmltodict
 import simplejson as json
 import datetime, decimal
-from {{appname}}.config import myapp
-from {{appname}}.powlib import merge_two_dicts
-from {{appname}}.encoders import pow_json_serializer
-from {{appname}}.decoders import pow_json_deserializer
-import {{appname}}.config as cfg
-from {{appname}}.decoders import pow_init_from_dict_deserializer
+from {{appname}}.conf.config import myapp
+from {{appname}}.lib.powlib import merge_two_dicts
+from {{appname}}.lib.encoders import pow_json_serializer
+from {{appname}}.lib.decoders import pow_json_deserializer
+import {{appname}}.conf.config as cfg
+from {{appname}}.lib.decoders import pow_init_from_dict_deserializer
 
 class ModelObject():
     """
@@ -266,7 +266,7 @@ class ModelObject():
                 for example "a b c" will be model.attribute = "a b c".split(myapp["list_separator"])
                 Mainly used for handling request from simple html form scaffolding 
         """
-        from {{appname}}.decoders import pow_init_from_dict_deserializer
+        from {{appname}}.lib.decoders import pow_init_from_dict_deserializer
         #print("init from dict")
         #print(d)
         try:

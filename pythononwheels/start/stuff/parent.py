@@ -1,7 +1,7 @@
 #
 # Model
 #
-from {{appname}}.powlib import relation
+from {{appname}}.lib.powlib import relation
 from {{appname}}.sqldblib import Base 
 
 #@relation.has_many('childs')

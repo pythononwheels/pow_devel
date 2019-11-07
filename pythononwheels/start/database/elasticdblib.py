@@ -1,7 +1,7 @@
 #
 # base connection for Elasticsearch
 #
-from {{appname}}.config import database
+from {{appname}}.conf.config import database
 from elasticsearch import Elasticsearch
 import requests
 #from elasticsearch_dsl.connections import connections

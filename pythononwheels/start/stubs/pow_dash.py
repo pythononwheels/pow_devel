@@ -6,8 +6,8 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from {{appname}}.dash_components import Col, Row
-from {{appname}}.config import myapp
-from {{appname}}.config import mydash
+from {{appname}}.conf.config import myapp
+from {{appname}}.conf.config import mydash
 import pandas as pd 
 import datetime
 from dash.dependencies import Input, Output 

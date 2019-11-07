@@ -5,8 +5,8 @@
 import argparse
 import tornado.template as template
 import os
-from {{appname}}.config import templates
-from {{appname}}.powlib import pluralize
+from {{appname}}.conf.config import templates
+from {{appname}}.lib.powlib import pluralize
 from pydoc import locate
 import shutil
 

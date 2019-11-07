@@ -7,7 +7,7 @@ import copy
 from sqlalchemy import Column, Integer, String, Date, DateTime, Float
 from sqlalchemy import Unicode, Text, Boolean, Numeric, BigInteger, LargeBinary
 import werkzeug.security
-from {{appname}}.config import myapp 
+from {{appname}}.conf.config import myapp 
 from sqlalchemy.ext.declarative.api import DeclarativeMeta
 
 class PowBaseMeta(DeclarativeMeta):

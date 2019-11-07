@@ -1,7 +1,7 @@
 
 from flask import Flask
 from dash import Dash
-from {{appname}}.config import mydash
+from {{appname}}.conf.config import mydash
 
 # should start and end with a '/'
 URL_BASE_PATHNAME = '/'

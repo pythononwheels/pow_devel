@@ -1,7 +1,7 @@
 import tornado.ioloop
 import tornado.web
 from {{appname}}.handlers.powhandler import PowHandler
-from {{appname}}.application import app, route
+from {{appname}}.lib.application import app, route
 
 # ROUTING:
 # You can decorate routes on the handler classes or on the methods directly.

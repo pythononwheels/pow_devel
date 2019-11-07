@@ -1,7 +1,7 @@
 #
 # base connection for Redis 
 #
-from {{appname}}.config import database
+from {{appname}}.conf.config import database
 import redis
 
 

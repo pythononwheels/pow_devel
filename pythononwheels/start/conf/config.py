@@ -3,7 +3,7 @@
 # pow settings file
 # 
 import simplejson as json
-import {{appname}}.encoders
+import {{appname}}.lib.encoders
 import os
 import logging
 import datetime
@@ -45,9 +45,9 @@ myapp = {
                                 "map" : "text/plain"},
     "default_format"    :   "json",
     "encoder"           :   {
-           "json"   :   {{appname}}.encoders.json_to_json(),
-            "csv"   :   {{appname}}.encoders.json_to_csv(),
-            "xml"   :   {{appname}}.encoders.json_to_xml()
+           "json"   :   {{appname}}.lib.encoders.json_to_json(),
+            "csv"   :   {{appname}}.lib.encoders.json_to_csv(),
+            "xml"   :   {{appname}}.lib.encoders.json_to_xml()
     },
     "byte_decoding"     :   "utf-8",
     "upload_path"       :   os.path.join(server_settings["static_path"], "upload"), #this is just a demo.

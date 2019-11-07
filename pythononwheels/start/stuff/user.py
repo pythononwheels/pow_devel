@@ -2,7 +2,7 @@
 # Model
 #
 from sqlalchemy import Column, Integer, String, Sequence, Text
-from {{appname}}.powlib import relation
+from {{appname}}.lib.powlib import relation
 from {{appname}}.database.sqldblib import Base 
 
 #@relation.many_to_many("groups")

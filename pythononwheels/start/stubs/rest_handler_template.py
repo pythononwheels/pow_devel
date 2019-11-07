@@ -1,8 +1,8 @@
 #from {{appname}}.handlers.base import BaseHandler
 from {{appname}}.handlers.powhandler import PowHandler
 from {{appname}}.models.{{model_type}}.{{handler_name}} import {{handler_model_class_name}} as Model
-from {{appname}}.config import myapp, database
-from {{appname}}.application import app
+from {{appname}}.conf.config import myapp, database
+from {{appname}}.lib.application import app
 import simplejson as json
 import tornado.web
 

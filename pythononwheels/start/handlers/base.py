@@ -1,7 +1,7 @@
 import tornado.web
 import tornado.escape
 import json
-from {{appname}} import config as cfg
+from {{appname}}.conf import config as cfg
 import os
 #from {{appname}}.models.sql.user import User
 

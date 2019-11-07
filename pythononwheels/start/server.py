@@ -9,11 +9,11 @@ import os
 import os.path
 import sys
 
-from {{appname}}.config import server_settings as app_settings
-from {{appname}}.config import myapp 
-from {{appname}}.config import database as db_settings
-from {{appname}}.powlib import merge_two_dicts
-from {{appname}}.application import Application, log_handler
+from {{appname}}.conf.config import server_settings as app_settings
+from {{appname}}.conf.config import myapp 
+from {{appname}}.conf.config import database as db_settings
+from {{appname}}.lib.powlib import merge_two_dicts
+from {{appname}}.lib.application import Application, log_handler
 import logging
 
 powstr="""

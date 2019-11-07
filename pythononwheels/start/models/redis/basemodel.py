@@ -1,6 +1,6 @@
 from {{appname}}.database.redisdblib import redisdb 
 from {{appname}}.models.modelobject import ModelObject
-from {{appname}}.powlib import merge_two_dicts
+from {{appname}}.lib.powlib import merge_two_dicts
 import uuid
 
 class RedisBaseModel(ModelObject):

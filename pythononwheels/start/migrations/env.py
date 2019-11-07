@@ -2,9 +2,9 @@ from __future__ import with_statement
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 from logging.config import fileConfig
-from {{appname}}.powlib import get_class_name
-from {{appname}}.config import myapp
-from {{appname}}.application import log_handler
+from {{appname}}.lib.powlib import get_class_name
+from {{appname}}.conf.config import myapp
+from {{appname}}.lib.application import log_handler
 import logging
 
 # this is the Alembic Config object, which provides

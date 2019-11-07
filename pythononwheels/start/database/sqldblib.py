@@ -1,7 +1,7 @@
 #
 # base connection for sql DBs
 #
-from {{appname}}.config import database, myapp
+from {{appname}}.conf.config import database, myapp
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import MetaData

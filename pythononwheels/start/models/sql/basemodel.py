@@ -3,7 +3,7 @@ from sqlalchemy import Column, Integer, String, DateTime, Float
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.sql.expression import func 
 from {{appname}}.database.sqldblib import engine,session
-from {{appname}}.powlib import pluralize
+from {{appname}}.lib.powlib import pluralize
 import datetime
 import uuid
 from sqlalchemy import orm
@@ -12,10 +12,10 @@ from cerberus import Validator
 import xmltodict
 import simplejson as json
 import datetime, decimal
-from {{appname}}.config import myapp
-import {{appname}}.config as cfg
+from {{appname}}.conf.config import myapp
+import {{appname}}.conf.config as cfg
 from {{appname}}.models.modelobject import ModelObject
-from {{appname}}.config import database as dbcfg
+from {{appname}}.conf.config import database as dbcfg
 #print ('importing module %s' % __name__)
 
 def make_uuid():
