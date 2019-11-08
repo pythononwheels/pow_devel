@@ -8,6 +8,8 @@ import os
 import logging
 import datetime
 
+BASEDIR=os.path.join(os.path.dirname(__file__), "..")
+
 server_settings = {
     "protocol"          :   "http://",
     "host"              :   "localhost",
@@ -19,9 +21,9 @@ server_settings = {
     "logging"           :   True,
     "analytics_logging" :   False,
     "https"             :   False,
-    "template_path"     :   os.path.join(os.path.dirname(__file__), "views"),
+    "template_path"     :   os.path.join(BASEDIR, "views"),
     "static_url_prefix" :   "/static/",
-    "static_path"       :   os.path.join(os.path.dirname(__file__), "static"),
+    "static_path"       :   os.path.join(BASEDIR, "static"),
     "login_url"         :   "/login",
     "xsrf_cookies"      :   False,
     #"log_function"      :   you can give your own log function here.
@@ -30,10 +32,10 @@ server_settings = {
 
 templates = {
     "template_path"     :   server_settings["template_path"],
-    "handler_path"      :   os.path.join(os.path.dirname(__file__), "handlers"),
-    "model_path"        :   os.path.join(os.path.dirname(__file__), "models"),
-    "stubs_path"        :   os.path.join(os.path.dirname(__file__), "stubs"),
-    "views_path"        :   os.path.join(os.path.dirname(__file__), "views")
+    "handler_path"      :   os.path.join(BASEDIR, "handlers"),
+    "model_path"        :   os.path.join(BASEDIR, "models"),
+    "stubs_path"        :   os.path.join(BASEDIR, "stubs"),
+    "views_path"        :   os.path.join(BASEDIR, "views")
 }
 
 myapp = {
@@ -54,7 +56,7 @@ myapp = {
     "page_size"         :   5,
     "enable_auth"       :   False,   # False, simple or custom
     "sql_auto_schema"   :   True,
-    "logfile"           :   os.path.join(os.path.dirname(__file__),"pow.log"),
+    "logfile"           :   os.path.join(BASEDIR,"pow.log"),
     "logformat"         :   logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'),
     "id_pattern"        :   "[0-9\-a-zA-Z]+",       # the regex used to math IDs in URLs (uuid in this case)
     "date_format"       :   "%Y-%m-%d",
@@ -68,7 +70,6 @@ myapp = {
     #"environment"      :   "development"       # set the current environment (also see the db section)
 }
 
-BASE_DIR = os.path.dirname(__file__)
 database = {
     "default_values": {
         "string"    :   "",
@@ -88,7 +89,7 @@ database = {
         # this is an example for SQlite
         #
         "type"      :   "sqlite", #or: "db+driver" e.g. => "postgres+psycopg2" ...
-        "dbname"    :   os.path.join(BASE_DIR, 'db.sqlite'),   # just a name for non file based DBs
+        "dbname"    :   os.path.join(BASEDIR, 'db.sqlite'),   # just a name for non file based DBs
         "host"      :   None,     
         "port"      :   None,     
         "user"      :   None,     
@@ -117,7 +118,7 @@ database = {
 
     },
     "tinydb" : {
-        "dbname"    :   os.path.join(BASE_DIR, 'tiny.db'),
+        "dbname"    :   os.path.join(BASEDIR, 'tiny.db'),
         "host"      :   None,       
         "port"      :   None,   
         "user"      :   None,
