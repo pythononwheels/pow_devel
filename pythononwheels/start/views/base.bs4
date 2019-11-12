@@ -25,10 +25,16 @@
     <link href="{{ static_url("css/pow.css") }}" rel="stylesheet">
     <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
     
+    <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- the stylesheets from the view will be included here -->
+    <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++ -->
     {% block include_css %}
       
     {% end %}
 
+    <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- the directly embedded css from the view will be included here -->
+    <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
     {% block view_css %}
       
     {% end %}
@@ -42,10 +48,17 @@
           &nbsp;
       </div>
       <div class="col-md-10"-->
+        
+      
+        <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+        <!-- the View content will be rendered here -->
+        <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
         {% block content %}
 
         {% end %}
-      <!--/div>
+      
+      
+        <!--/div>
       <div class="col-md-1">
         &nbsp;
       </div>
@@ -77,11 +90,18 @@
           $(function () {
                 $('[data-toggle="tooltip"]').tooltip();
               })
-        </script>
+      </script>
+
+      <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+      <!-- included view javascript files go here -->
+      <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
       {% block include_js %}
 
       {% end %}
 
+      <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+      <!-- the embedded View javascript content will be added here -->
+      <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
       {% block view_js %}
         
       {% end %}
@@ -89,7 +109,9 @@
       <script>
         $(document).ready(function(){  
           if (typeof view_docready === "function") { 
+            // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             // this calls the views docready function if there is one defined.
+            // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             view_docready();
           }
           
