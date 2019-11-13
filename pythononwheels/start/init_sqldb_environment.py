@@ -4,13 +4,14 @@
 #
 from {{appname}}.database.sqldblib import conn_str
 import configparser
+from {{appname}}.conf.config import database
 
 def init_migrations(stdout=False):
     #config= configparser.ConfigParser.RawConfigParser()
-    config= configparser.ConfigParser()
-    config.read(r'alembic.ini')
+    config= configparser.ConfigParser()    
+    config.read(database["sql"]["alembic.ini"])
     config.set('alembic','sqlalchemy.url',conn_str)
-    with open(r'alembic.ini', 'w') as configfile:
+    with open(database["sql"]["alembic.ini"], 'w') as configfile:
         config.write(configfile)
     if stdout:
         print(70*"-")

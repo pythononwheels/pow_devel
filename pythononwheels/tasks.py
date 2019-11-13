@@ -8,7 +8,7 @@ from invoke import task
 import os,sys
 import argparse
 
-@task
+@task(help={'name': "Name of the test application. Default = testapp"})
 def build(c, path="../..", name="testapp"):
     """
         Create a testapp from the current git version
@@ -33,9 +33,6 @@ def build(c, path="../..", name="testapp"):
     if not os.name in ["nt", "posix"]:
         print("Sorry. this only supports Posix (e.g. Linux, OSX) and Windows OS. ")
         sys.exit()
-    #if os.name == "posix":
-    #    print("Sorry. Due to a bug posix currently unavailable ... working on a fix for right now ..")
-    #    sys.exit()
 
     path=os.path.normpath(path)
     print("Building : -n {} -p {} ".format(name, path))

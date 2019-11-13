@@ -8,7 +8,7 @@ import os
 import logging
 import datetime
 
-BASEDIR=os.path.join(os.path.dirname(__file__), "..")
+BASEDIR=os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
 
 server_settings = {
     "protocol"          :   "http://",
@@ -83,8 +83,9 @@ database = {
 
     },
     "sql"   : {
-        "loglevel"  :   logging.INFO,
-        "yield_per" :   100,
+        "alembic.ini"   :   os.path.normpath(os.path.join(os.path.dirname(__file__), "alembic.ini")),
+        "loglevel"      :   logging.INFO,
+        "yield_per"     :   100,
         #
         # this is an example for SQlite
         #

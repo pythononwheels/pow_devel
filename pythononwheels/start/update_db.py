@@ -11,6 +11,7 @@ import argparse
 import logging
 import warnings
 from sqlalchemy import exc as sa_exc
+from {{appname}}.conf.config import database
 #
 # this will execute 
 # alembic upgrade head
@@ -29,7 +30,7 @@ def migrate(direction, revision=None, number=1, path=None):
         if path:
             alembic_cfg = Config(os.path.join(path, "alembic.ini"))
         else:
-            alembic_cfg = Config(os.path.join(os.path.dirname(__file__), "alembic.ini"))
+            alembic_cfg = Config(database["sql"]["alembic.ini"])
         if direction == "up":
             # upgrade
             if revision:

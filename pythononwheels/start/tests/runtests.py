@@ -103,11 +103,11 @@ if __name__ == "__main__":
     if curr_path == "":
         curr_path=os.getcwd()
     print("  .. curr_path: {}".format(curr_path))
-    try:
-        from junit2htmlreport import runner
-        runner.run([os.path.join(curr_path,"result.xml"), os.path.join(curr_path,"../views/result.html")])
-    except Exception as e:
-        print(e)
+    #try:
+    #    from junit2htmlreport import runner
+    #    runner.run([os.path.join(curr_path,"result.xml"), os.path.join(curr_path,"../views/result.html")])
+    #except Exception as e:
+    #    print(e)
     print("  .. done.")
     print(SPACES*"*")
     print("  To see the test results run the server ad go to localhost:8080/testresults ")

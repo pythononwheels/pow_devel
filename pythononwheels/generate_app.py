@@ -55,9 +55,8 @@ def copy_or_pump(src, dest, copy=False, appname=None, sqlite_path=None,
 
 
 def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=False, view_type=None):
-    """ generates a small model with the given modelname
-        also sets the right db and table settings and further boilerplate configuration.
-        Template engine = tornado.templates
+    """ 
+        generates the base PoW App enviroment
     """    
     print("  generating app:" + str(appname))
     import os,sys
@@ -76,6 +75,9 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
     # excluded from template processing.
     exclude_dirs = ["static", "stubs", "views"]
     skip_dirs= ["stuff", "werkzeug"]
+
+    if view_type != "sui":
+        skip_dirs.append("sui")
     exclude_files=[]
     if update_only:
         # only update pow versions. Leave all non pow or possibly changed stuff untouched
