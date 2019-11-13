@@ -26,10 +26,10 @@ def copy_or_pump(src, dest, copy=False, appname=None, sqlite_path=None,
         just copy files or pump them through the template engine before copying to out dir
     """
     if not force and os.path.exists(dest):
-        print("    skipping copy_or_pump: exists AND force = False ")
+        print("    skipping copy_or_pump: exists AND force == False ")
     else:
         if not copy:
-            print("    pumping to ----->", dest)
+            #print("    pumping to ----->", dest)
             f = open(src, "r", encoding="utf-8")
             instr = f.read()
             f.close()
@@ -46,12 +46,14 @@ def copy_or_pump(src, dest, copy=False, appname=None, sqlite_path=None,
                     data=data
                     )
             f = open(dest, "w", encoding="utf-8")
-            f.write(out.decode("unicode_escape"))
+            f.write(out.decode("utf-8"))
             f.close()
         else:
             # just copy file
-            print("    copying to ----->", dest )
-            print("    .. :" + str(shutil.copy( src, dest )))
+            #print("    copying to ----->", dest )
+            #print("    .. :" + str(shutil.copy( src, dest )))
+            shutil.copy( src, dest )
+        print(" done!")
 
 
 def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=False, view_type=None):
@@ -62,22 +64,26 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
     import os,sys
     base=os.path.normpath(outpath)
 
-    print("  base: " + base)
+    print("  base for app: " + base)
     root=os.path.join(os.path.dirname(os.path.abspath(__file__)), "start")
     print("  root: " +  root)
     
     outdir=os.path.normpath(os.path.join(base, appname))
     #outdir = os.path.join(outdir, appname)
-    print("  ..creating in: " +  outdir)
-    
+    print(50*"-")
+    print("  ..creating in: " +  os.path.abspath(outdir))
+    print(50*"-")
     os.makedirs(outdir, exist_ok=True)
     template_exts = [".py", ".tmpl"]
+    skip_extensions=[]
     # excluded from template processing.
     exclude_dirs = ["static", "stubs", "views"]
     skip_dirs= ["stuff", "werkzeug"]
 
-    if view_type != "sui":
+    if view_type.lower() != "sui":
         skip_dirs.append("sui")
+        skip_extensions.append(".sui")
+
     exclude_files=[]
     if update_only:
         # only update pow versions. Leave all non pow or possibly changed stuff untouched
@@ -108,23 +114,30 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
         sqlite_path="Unknown system platform (" + sys.platform + "). Please set sqlite connection string yourself accordingly"
     
     cookie_secret = uuid.uuid4()
-
+    #print(skip_dirs)
+    #x=input("press key to go on .... ")
     for dirname, dirs, files in os.walk(root):
+        dirs[:] = [d for d in dirs if d not in skip_dirs]
+        #print(dirs)
+        #x=input("press key to go on .... ")
         for f in files:
             # skipping the exclude_files in update_only mode
             if not (f in exclude_files and update_only):
-                print(" processing: " + f)
-                print("  in: " + dirname)
+                filename, file_extension = os.path.splitext(f)
+                if file_extension in skip_extensions:
+                    continue
+                print(f"   processing: {f:<40} ....", end=" " )
+                #print("  in: " + dirname)
                 path=Path(dirname)
                 index = path.parts.index("start")
                 opath = Path(outdir).joinpath(*path.parts[index+1:])
-                print("  out: " + str(opath))
+                #print("  out: " + str(opath))
                 filename, file_extension = os.path.splitext(f)
-                print("  filename: " + filename)
-                print("  file ext: " + file_extension)
-                print("  path.parts-1: " + path.parts[-1])
+                #print("  filename: " + filename)
+                #print("  file ext: " + file_extension)
+                #print("  path.parts-1: " + path.parts[-1])
                 if path.parts[-1] in skip_dirs:
-                    print("skipped: " + str(f))    
+                    print(f"   skipped: {f} ..." )    
                 else:
                     if not os.path.exists(str(opath)):
                         os.makedirs(str(opath), exist_ok=True)
@@ -157,8 +170,8 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
                             force=force
                             )
             else:
-                print("skipped in update_only: " + str(f))
-    print(" DB path: " + sqlite_path)
+                print("   skipped in update_only: " + str(f))
+    #print("   DB path: " + sqlite_path)
     #
     # rename the view file extension according the --view paramter
     #
@@ -276,13 +289,14 @@ def main():
         print(50*"-")
         print(" UPDATED YOUR APP!!!")
         print(50*"-")
-        print(" Successfully updated your application")   
+        print(" Successfully updated your application !")   
         sys.exit()
     else:
-        print(" Successfully created your application")
+        print(" Successfully created your application !")
     print()
     print(50*"-")
     print("Your next steps: ")
+    print(50*"-")
     print("  1. [Optional step: create a virtualenv in you app directory]")
     print("      virtualenv " + apppath )
     print("  2. cd to you new apps directory: " + apppath)
@@ -290,10 +304,10 @@ def main():
     print("  3. pip install -r requirements.txt")
     print("  4. run: python server.py")
     print("  5. open your browser with http://localhost:8080")
-    print(50*"-")
     print()
     print(50*"-")
     print("Remark:")
+    print(50*"-")
     print("  You can move your app subdir to wherever you want")
     print("  as long as its on the pythonpath")
     print("  Windows: set PYTHONPATH=%PYTHONPATH%;"+base)

@@ -8,7 +8,7 @@ with open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 
 setup(name='pythononwheels',
-      version='0.914',
+      version='0.916',
       description='The simple, quick and easy generative web framework for python',
       long_description=long_description,
       classifiers=[
@@ -32,6 +32,8 @@ setup(name='pythononwheels',
       package_data={'pythononwheels': [
             'start/*',
             "start/database/*",
+            "start/conf/*",
+            "start/lib/*",
             "start/handlers/*",
             "start/migrations/*",
             "start/migrations/versions/*",
@@ -42,6 +44,8 @@ setup(name='pythononwheels',
             "start/models/mongodb/*",
             "start/static/*",
             "start/static/css/*",
+            "start/static/css/highlight-styles/*",
+            "start/static/css/spectre/*",
             "start/static/js/*",
             "start/static/images/*",
             "start/static/svg/*",
