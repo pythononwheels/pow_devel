@@ -41,8 +41,8 @@ retrying
 simplejson
 six
 SQLAlchemy
-tinydb==3.2.1
-tinydb-serialization==1.0.3
+tinydb
+tinydb-serialization
 tornado
 urllib3
 Werkzeug

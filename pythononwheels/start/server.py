@@ -68,19 +68,19 @@ def main(stdout=False):
     app_logger.addHandler(log_handler)
 
     #app = tornado.web.Application(handlers=routes, **app_settings)
-    if stdout:
-        print(60*"-")
-        print("Databases: " )
-        print(60*"-")
-        #for idx, elem in enumerate(db_settings["sql"]):
-        print("  SQL-DB     : enabled: {} type: {}".format(
-                str(db_settings["sql"]["enabled"]), db_settings["sql"]["type"] ))
-        print("  TinyDB     : enabled: {}".format( str(db_settings["tinydb"]["enabled"])))
-        print("  MongoDB    : enabled: {}".format( str(db_settings["mongodb"]["enabled"])))
-        for idx, elem in enumerate(db_settings["mongodb"]["indexes"]):
-            print("      Index #{:2}: collection: {:12} def: {} ".format(
-                str(idx), elem, db_settings["mongodb"]["indexes"][elem] ))
-        print("  Elastic    : enabled: {}".format( str(db_settings["elastic"]["enabled"])))
+    #if stdout:
+    #    print(60*"-")
+    #    print("Databases: " )
+    #    print(60*"-")
+    #    #for idx, elem in enumerate(db_settings["sql"]):
+    #    print("  SQL-DB     : enabled: {} type: {}".format(
+    #            str(db_settings["sql"]["enabled"]), db_settings["sql"]["type"] ))
+    #    print("  TinyDB     : enabled: {}".format( str(db_settings["tinydb"]["enabled"])))
+    #    print("  MongoDB    : enabled: {}".format( str(db_settings["mongodb"]["enabled"])))
+    #    for idx, elem in enumerate(db_settings["mongodb"]["indexes"]):
+    #        print("      Index #{:2}: collection: {:12} def: {} ".format(
+    #            str(idx), elem, db_settings["mongodb"]["indexes"][elem] ))
+    #    print("  Elastic    : enabled: {}".format( str(db_settings["elastic"]["enabled"])))
     #app=Application()
     #print(app)
     if stdout:
@@ -100,6 +100,7 @@ def main(stdout=False):
         print(60*"-")
         print("visit: http://localhost:" + str(app_settings["port"]))
         print("starting...")
+        
     http_server = tornado.httpserver.HTTPServer(app)
     http_server.listen(app_settings["port"])
     ioloop = tornado.ioloop.IOLoop.instance()
