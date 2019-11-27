@@ -6,9 +6,8 @@ here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
-
 setup(name='pythononwheels',
-      version='0.914',
+      version="0.917",
       description='The simple, quick and easy generative web framework for python',
       long_description=long_description,
       classifiers=[
@@ -31,6 +30,8 @@ setup(name='pythononwheels',
       package_dir={'pythononwheels': 'pythononwheels'},
       package_data={'pythononwheels': [
             'start/*',
+            "start/data/*",
+            "start/log/*",
             "start/database/*",
             "start/handlers/*",
             "start/migrations/*",

@@ -15,8 +15,15 @@ from {{appname}}.conf.config import database as db_settings
 from {{appname}}.lib.powlib import merge_two_dicts
 from {{appname}}.lib.application import Application, log_handler
 import logging
+import asyncio
+import sys
 
-powstr="""
+# asyncio issue 
+# see: https://github.com/tornadoweb/tornado/issues/2751
+if sys.platform == 'win32':
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
+powstr=r"""
   _____       _   _                  ____    __          ___               _     
  |  __ \     | | | |                / __ \   \ \        / / |             | |    
  | |__) |   _| |_| |__   ___  _ __ | |  | |_ _\ \  /\  / /| |__   ___  ___| |___ 
