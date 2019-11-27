@@ -252,14 +252,7 @@ def main():
     parser.add_argument("-t", "--type", 
         action="store", dest="view_type", default="bs4",
         help="set the default view framework. (semanticui = sui || bootstrap 4 = bs4 (default))")
-    #
-    # db type
-    # 
-    #parser.add_argument('-d', "--db", action="store", 
-    #                    dest="db", help='-d which_db (mongo || tiny || peewee_sqlite) default = sql',
-    #                    default="sql", required=False)
-    
-    
+
     
     args = parser.parse_args()
     #
@@ -268,8 +261,6 @@ def main():
     #print("all args: ", args)
     #print(dir(args))
     #print("pluralized model name: ", pluralize(args.name))
-   
-
     print(50*"-")
     print(" Generating your app: " + args.name)
     print(50*"-")

@@ -9,6 +9,8 @@ import logging
 import datetime
 
 BASEDIR=os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
+DATADIR=os.path.join(BASEDIR, "data")
+LOGDIR=os.path.join(BASEDIR, "log")
 
 server_settings = {
     "protocol"          :   "http://",
@@ -56,7 +58,7 @@ myapp = {
     "page_size"         :   5,
     "enable_auth"       :   False,   # False, simple or custom
     "sql_auto_schema"   :   True,
-    "logfile"           :   os.path.join(BASEDIR,"pow.log"),
+    "logfile"           :   os.path.join(LOGDIR,"pow.log"),
     "logformat"         :   logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'),
     "id_pattern"        :   "[0-9\-a-zA-Z]+",       # the regex used to math IDs in URLs (uuid in this case)
     "date_format"       :   "%Y-%m-%d",
@@ -90,7 +92,7 @@ database = {
         # this is an example for SQlite
         #
         "type"      :   "sqlite", #or: "db+driver" e.g. => "postgres+psycopg2" ...
-        "dbname"    :   os.path.join(BASEDIR, 'db.sqlite'),   # just a name for non file based DBs
+        "dbname"    :   os.path.join(DATADIR, 'db.sqlite'),   # just a name for non file based DBs
         "host"      :   None,     
         "port"      :   None,     
         "user"      :   None,     
@@ -119,7 +121,7 @@ database = {
 
     },
     "tinydb" : {
-        "dbname"    :   os.path.join(BASEDIR, 'tiny.db'),
+        "dbname"    :   os.path.join(DATADIR, 'tiny.db'),
         "host"      :   None,       
         "port"      :   None,   
         "user"      :   None,
@@ -174,5 +176,5 @@ beta_settings = {
 
 #from handlers.very_raw_own_handler import VeryRawOwnHandler
 routes = [
-            #(r'.*', VeryRawOwnHandler)
+            #(r'.*', VeryRawOwnHandler)  # make sure to enable and adapt the import above as well
 ]

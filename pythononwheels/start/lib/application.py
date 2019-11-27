@@ -405,7 +405,7 @@ class Application(tornado.web.Application):
                         c=m.bind(cfg.server_settings["host"]+":"+cfg.server_settings["host"], "/")
                         r.compile()
                         #print("r1: " +  str(r._regex.pattern))
-                        pattern = r._regex.pattern.replace('^\|', "")
+                        pattern = r._regex.pattern.replace(r'^\|', "")
                         #print("r1: " +  str(pattern))
                         fin_route = pattern
                         # convert the HTTP Methods in dispatch to lowercase
@@ -471,7 +471,7 @@ class Application(tornado.web.Application):
                 c=m.bind(cfg.server_settings["host"]+":"+cfg.server_settings["host"], "/")
                 r.compile()
                 #print("r1: " +  str(r._regex.pattern))
-                pattern = r._regex.pattern.replace('^\|', "")
+                pattern = r._regex.pattern.replace(r'^\|', "")
                 #print("r1: " +  str(pattern))
                 fin_route = pattern
                 # convert the HTTP Methods in dispatch to lowercase
