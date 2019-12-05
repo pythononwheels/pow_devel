@@ -6,7 +6,8 @@ import xmltodict
 import simplejson as json
 import datetime, decimal
 from {{appname}}.conf.config import myapp
-from {{appname}}.database.tinydblib import tinydb
+#from {{appname}}.database.tinydblib import tinydb
+from {{appname}}.database.tinydblib import generate_connection
 from {{appname}}.lib.powlib import merge_two_dicts
 from {{appname}}.models.modelobject import ModelObject
 import uuid
@@ -17,11 +18,31 @@ class TinyBaseModel(ModelObject):
     
     where=where
     Query=Query()
-    db=tinydb
+    db=None
+    # override this in the model as a class attribute to NOT include the 
+    # pow schema extensions (created_at, ...)
+    _use_pow_schema_attrs = True
+
+    def set_connection(self, db_conf=None):
+        """
+             format of the dict is the same as in config.py
+             
+        """
+        try:
+            Dbinfo = generate_connection(db_conf=db_conf)
+            self.__class__.db=Dbinfo.db
+        except Exception as e:
+            raise e
+    
     def init_on_load(self, *args, **kwargs):
-        
+        """
+            Everything that needs to be initialized for the model.
+            By default the configured connection from the 
+            conf.config["database"] section is taken
+        """
+
         super().init_on_load()
-        
+        self.set_connection()
         #self.id = uuid.uuid4()
         #self.created_at = datetime.datetime.now()
         #self.last_updated = datetime.datetime.now()
@@ -31,7 +52,7 @@ class TinyBaseModel(ModelObject):
         #
         # all further Db operations will work on the table
         #
-        self.table = tinydb.table(self.tablename)
+        self.table = self.db.table(self.tablename)
         self.where = where
 
         self.basic_schema = {
@@ -41,7 +62,9 @@ class TinyBaseModel(ModelObject):
             "created_at"    : { "type" : "datetime" },
             "last_updated"    : { "type" : "datetime" },
         }
-        self.setup_instance_schema()
+        if self.__class__._use_pow_schema_attrs:
+            self.setup_instance_schema()
+        
         #
         # if there is a schema (cerberus) set it in the instance
         #
@@ -135,13 +158,13 @@ class TinyBaseModel(ModelObject):
             created the physical table in the DB
         """
         if not self.table:
-            self.table = tinydb.table(self.tablename)
+            self.table = self.db.table(self.tablename)
 
     def drop_table(self):
         """
             drop the physical table from the DB
         """
-        tinydb.purge_table(self.tablename)
+        self.db.purge_table(self.tablename)
     
     def delete(self):
         """

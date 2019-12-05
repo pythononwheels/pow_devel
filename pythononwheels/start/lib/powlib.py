@@ -1,6 +1,5 @@
 import re
 import os
-
 from sqlalchemy import Table
 import logging
 import copy
@@ -9,6 +8,10 @@ from sqlalchemy import Unicode, Text, Boolean, Numeric, BigInteger, LargeBinary
 import werkzeug.security
 from {{appname}}.conf.config import myapp 
 from sqlalchemy.ext.declarative.api import DeclarativeMeta
+
+
+import collections
+Dbinfo = collections.namedtuple('Dbinfo', 'db collection')
 
 class PowBaseMeta(DeclarativeMeta):
     """

@@ -23,6 +23,7 @@ marshmallow-sqlalchemy
 packaging
 #pandas==0.24.2
 plotly
+#progressbar2
 py
 pymongo
 PyMySQL
