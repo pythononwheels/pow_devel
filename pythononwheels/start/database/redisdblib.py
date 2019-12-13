@@ -8,7 +8,7 @@ from powlib import Dbinfo
 
 def generate_connection(redis_conf=None):
     if not redis_conf:
-        from {{appname}}.config import database
+        from {{appname}}.conf.config import database
         redis_conf= database.get("redis", None)
     conn_str = " host:{}, port:{}".format(redis_conf["host"], redis_conf["port"])
     try:
