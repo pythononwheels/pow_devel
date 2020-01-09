@@ -21,7 +21,7 @@ from {{appname}}.models.tinydb.serializer import DateTimeSerializer
 #     raise Exception("I had a problem setting up tinyDB")
 
 from {{appname}}.lib.powlib import Dbinfo
-    
+
 def generate_connection(db_conf=None):
     """
         create a connection from th given conf
@@ -37,7 +37,7 @@ def generate_connection(db_conf=None):
 
     if tinydb:
         conn_str = tinydb["dbname"]
-        print(" ... setting it up for tinyDB: " + conn_str)
+        #print(" ... setting it up for tinyDB: " + conn_str)
         tdb=  TinyDB(conn_str, storage=serialization)
         return Dbinfo(db=tdb, collection=None)
     else:

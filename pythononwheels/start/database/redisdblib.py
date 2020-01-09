@@ -30,8 +30,8 @@ def generate_connection(redis_conf=None):
                     decode_responses=True,
                     socket_connect_timeout=5
                 )
-        print(" ... setting it up for RedisDB: " + conn_str )
-        print(f"redis ping... {redisdb.ping()}")
+        #print(" ... setting it up for RedisDB: " + conn_str )
+        #print(f"redis ping... {redisdb.ping()}")
         return Dbinfo(db=redisdb, collection=None)
     except Exception as e:
         print(f" Exception: {str(e)}")

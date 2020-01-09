@@ -1,9 +1,11 @@
 
 ![Pow logo](http://www.pythononwheels.org/static/images/pow_logo_300.png)
 
-# The quick and easy generative Webframework for python3. Ready to go!
+# Just do your thing!
 
-> Based on the ruby on rails principles. Generators for models/controllers/views/migrations..., convention  over configuration, and PoW gets out of the way if you want it.
+> A python web framework, build on the Ruby on Rails principles. 
+
+ Generators for models, controllers, scaffolding views and database migrations. Validation, convention over configuration..and much more. Focus on your thing instead of the boilerplate.
 
 # Hello World
 ~~~~
