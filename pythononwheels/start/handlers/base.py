@@ -60,6 +60,8 @@ class BaseHandler(tornado.web.RequestHandler):
         self.format = self.get_accept_format()
         # set the http header
         self.set_header("Content-Type", cfg.myapp["supported_formats"][self.format])
+        # add the full_path to the request
+        self.request.full_path=self.request.protocol+ "://" + self.request.host+self.request.uri
 
     
     def get_format_list(self, h=None):
@@ -547,7 +549,7 @@ class BaseHandler(tornado.web.RequestHandler):
         if not format:
             format = cfg.myapp["default_format"]
         if format.lower() == "html":
-            return self.render("error.tmpl", data=data, message=message, status=http_code, **kwargs)
+            return self.render("error.tmpl", data=data, message=message, status=http_status, **kwargs)
         
         # encode the data to json.
         # the encoders convert the json to any requested output format then.
