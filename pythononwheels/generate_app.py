@@ -238,8 +238,8 @@ def main():
         required=True)
 
     parser.add_argument('-p', "--path", action="store", 
-        dest="path", help='-p out_path', default="..",
-        required=False)
+        dest="path", help='-p out_path',
+        required=True)
 
     parser.add_argument("-f", "--force", 
         action="store_true", dest="force", default=False,

@@ -10,6 +10,8 @@ __pycache__/
 #
 migrations/versions/
 pow.log.*
+venv/
+.venv/
 
 # Distribution / packaging
 .Python

@@ -13,6 +13,81 @@ from sqlalchemy.ext.declarative.api import DeclarativeMeta
 import collections
 Dbinfo = collections.namedtuple('Dbinfo', 'db collection')
 
+def __setup_sql_schema(cls):
+    if cls._setup_sql_schema_done:
+        # when already initiated (see powlib.PowBaseMeta.__init__)
+        # we can skip the sql schema setup here.
+        return cls
+    
+    print("__setup_sql_schema:" + cls.__name__.lower())
+    #
+    # create a sqlalchemy model from the schema
+    #
+    # there are two special keys you can use additionally to the
+    # standard cerberus syntx:
+    # "sql" :   add any Column __init__ kwargs here, they will be handed raw
+    #           to the Column __init__
+    # "sqltype":    specify a more precise SQL subtype.
+    #               e.g. cerberus has integer. SQL has INTEGER, BIGINTEGER
+    # the two special keys will be removed from the schema at the end of this
+    # decorator.
+    #    
+    colclass = None
+    
+    from sqlalchemy import Column, Integer, String, Date, DateTime, Float
+    from sqlalchemy import Unicode, Text, Boolean, Numeric, BigInteger, LargeBinary
+    #
+    # now set the right sqlalchemy type for the column
+    #
+    for elem in cls.schema.keys():
+        #print(elem)
+        # the raw Column __init__ parameters dict
+        sql=cls.schema[elem].get("sql", {})
+        if cls.schema[elem]["type"] == "integer":
+            if "sqltype" in cls.schema[elem]:
+                if cls.schema[elem]["sqltype"].lower() == "biginteger":
+                    setattr(cls, elem, Column(elem, BigInteger, **sql))
+            else:
+                setattr(cls, elem, Column(elem, Integer, **sql))
+        elif cls.schema[elem]["type"] == "float":
+            setattr(cls, elem, Column(elem, Float, **sql))
+        elif cls.schema[elem]["type"] == "string":
+            if "sqltype" in cls.schema[elem]:
+                if cls.schema[elem]["sqltype"].lower() == "text":
+                        setattr(cls, elem, Column(elem, Text, **sql))
+                elif cls.schema[elem]["sqltype"].lower() == "unicode":
+                    if "maxlength" in cls.schema[elem]:
+                        setattr(cls, elem, Column(elem, Unicode(length=cls.schema[elem]["maxlength"]), **sql))
+                    else:
+                        setattr(cls, elem, Column(elem, Unicode, **sql))
+            else:    
+                if "maxlength" in cls.schema[elem]:
+                    setattr(cls, elem, Column(elem, String(length=cls.schema[elem]["maxlength"]), **sql))
+                else:
+                    if "allowed" in cls.schema[elem]:
+                        strmax = max(cls.schema[elem]["allowed"], key=len)
+                        print(f"setting max stringlength for FIELD:{elem} to: "+ str(len(strmax)))
+                        setattr(cls, elem, Column(elem, String(length=len(strmax)), **sql))
+                    else:
+                        setattr(cls, elem, Column(elem, String, **sql))
+        elif cls.schema[elem]["type"] == "boolean":
+            setattr(cls, elem, Column(elem, Boolean, **sql))
+        elif cls.schema[elem]["type"] == "date":
+            setattr(cls, elem, Column(elem, Date, **sql))
+        elif cls.schema[elem]["type"] == "datetime":
+            setattr(cls, elem, Column(elem, DateTime, **sql))
+        elif cls.schema[elem]["type"] == "number":
+            setattr(cls, elem, Column(elem, Numeric, **sql))
+        elif cls.schema[elem]["type"] == "binary":
+            setattr(cls, elem, Column(elem, LargeBinary, **sql))
+        else:
+            raise Exception("Wrong Datatype in schema") 
+        #print("  .. removing the schema (raw) sql key(s)")
+        cls.schema[elem].pop("sql", None)
+        cls.schema[elem].pop("sqltype", None)
+        cls._setup_sql_schema_done = True
+    return cls
+
 class PowBaseMeta(DeclarativeMeta):
     """
         Base Metaclass for PoW SQL Models.
@@ -27,6 +102,9 @@ class PowBaseMeta(DeclarativeMeta):
         # else:
         #     print("has _use_pow_schema_attrs = Yes")
         from sqlalchemy.sql.expression import func 
+        from sqlalchemy import Column, Integer, String, Date, DateTime, Float
+        from sqlalchemy import Unicode, Text, Boolean, Numeric, BigInteger, LargeBinary
+        #setup_sql_schema()
         if hasattr(cls, '_use_pow_schema_attrs'):
             if getattr(cls,'_use_pow_schema_attrs'):
                 setattr(cls,"id", Column(Integer, primary_key=True))
@@ -34,12 +112,84 @@ class PowBaseMeta(DeclarativeMeta):
                 setattr(cls, "last_updated", Column(DateTime, onupdate=func.now(), default=func.now()))
             else:
                 print("not adding pow schema attrs")
+                print("creating sql-schema")
+                print("__setup_sql_schema:" + cls.__name__.lower())
+                #
+                # create a sqlalchemy model from the schema
+                #
+                # there are two special keys you can use additionally to the
+                # standard cerberus syntx:
+                # "sql" :   add any Column __init__ kwargs here, they will be handed raw
+                #           to the Column __init__
+                # "sqltype":    specify a more precise SQL subtype.
+                #               e.g. cerberus has integer. SQL has INTEGER, BIGINTEGER
+                # the two special keys will be removed from the schema at the end of this
+                # decorator.
+                #    
+                colclass = None
+                
+                from sqlalchemy import Column, Integer, String, Date, DateTime, Float
+                from sqlalchemy import Unicode, Text, Boolean, Numeric, BigInteger, LargeBinary, Enum
+                #
+                # now set the right sqlalchemy type for the column
+                #
+                for elem in cls.schema.keys():
+                    #print(elem)
+                    # the raw Column __init__ parameters dict
+                    sql=cls.schema[elem].get("sql", {})
+                    if cls.schema[elem]["type"] == "integer":
+                        if "sqltype" in cls.schema[elem]:
+                            if cls.schema[elem]["sqltype"].lower() == "biginteger":
+                                setattr(cls, elem, Column(elem, BigInteger, **sql))
+                        else:
+                            setattr(cls, elem, Column(elem, Integer, **sql))
+                    elif cls.schema[elem]["type"] == "float":
+                        setattr(cls, elem, Column(elem, Float, **sql))
+                    elif cls.schema[elem]["type"] == "string":
+                        if "sqltype" in cls.schema[elem]:
+                            if cls.schema[elem]["sqltype"].lower() == "text":
+                                    setattr(cls, elem, Column(elem, Text, **sql))
+                            elif cls.schema[elem]["sqltype"].lower() == "unicode":
+                                if "maxlength" in cls.schema[elem]:
+                                    setattr(cls, elem, Column(elem, Unicode(length=cls.schema[elem]["maxlength"]), **sql))
+                                else:
+                                    setattr(cls, elem, Column(elem, Unicode, **sql))
+                            elif cls.schema[elem]["sqltype"].lower() == "enum":
+                                #Column('some_enum', ENUM('a', 'b', 'c', name='myenum'))
+                                setattr(cls, elem, Column(elem, Enum(",".join(cls.schema[elem]["allowed"]))))
+                        else:    
+                            if "maxlength" in cls.schema[elem]:
+                                setattr(cls, elem, Column(elem, String(length=cls.schema[elem]["maxlength"]), **sql))
+                            else:
+                                if "allowed" in cls.schema[elem]:
+                                    strmax = max(cls.schema[elem]["allowed"], key=len)
+                                    print(f"setting max stringlength for FIELD:{elem} to: "+ str(len(strmax)))
+                                    setattr(cls, elem, Column(elem, String(length=len(strmax)), **sql))
+                                else:
+                                    setattr(cls, elem, Column(elem, String, **sql))
+                    elif cls.schema[elem]["type"] == "boolean":
+                        setattr(cls, elem, Column(elem, Boolean, **sql))
+                    elif cls.schema[elem]["type"] == "date":
+                        setattr(cls, elem, Column(elem, Date, **sql))
+                    elif cls.schema[elem]["type"] == "datetime":
+                        setattr(cls, elem, Column(elem, DateTime, **sql))
+                    elif cls.schema[elem]["type"] == "number":
+                        setattr(cls, elem, Column(elem, Numeric, **sql))
+                    elif cls.schema[elem]["type"] == "binary":
+                        setattr(cls, elem, Column(elem, LargeBinary, **sql))
+                    else:
+                        raise Exception("Wrong Datatype in schema") 
+                    #print("  .. removing the schema (raw) sql key(s)")
+                    cls.schema[elem].pop("sql", None)
+                    cls.schema[elem].pop("sqltype", None)
+                    cls._setup_sql_schema_done = True   
+                    print("Done setting up sql schema")
         else:
             setattr(cls,"id", Column(Integer, primary_key=True))
             setattr(cls,"created_at",Column(DateTime, default=func.now()))
             setattr(cls, "last_updated", Column(DateTime, onupdate=func.now(), default=func.now()))
         super().__init__(name, bases, dct)
-
+            
 def check_password_hash(pwhash, password ):
     """
         uses werkzeug.security.check_password_hash
@@ -461,7 +611,15 @@ class powDecNew():
     # 
     def setup_sql_schema(self, what=""):
         def decorator(cls):
-            print("setup_schema:" + cls.__name__.lower())
+            try:
+                if cls._setup_sql_schema_done:
+                    # when already initiated (see powlib.PowBaseMeta.__init__)
+                    # we can skip the sql schema setup here.
+                    return cls
+            except:
+                pass
+
+            print("__setup_sql_schema:" + cls.__name__.lower())
             #
             # create a sqlalchemy model from the schema
             #
@@ -477,7 +635,7 @@ class powDecNew():
             colclass = None
             
             from sqlalchemy import Column, Integer, String, Date, DateTime, Float
-            from sqlalchemy import Unicode, Text, Boolean, Numeric, BigInteger, LargeBinary
+            from sqlalchemy import Unicode, Text, Boolean, Numeric, BigInteger, LargeBinary, Enum
             #
             # now set the right sqlalchemy type for the column
             #
@@ -502,13 +660,16 @@ class powDecNew():
                                 setattr(cls, elem, Column(elem, Unicode(length=cls.schema[elem]["maxlength"]), **sql))
                             else:
                                 setattr(cls, elem, Column(elem, Unicode, **sql))
+                        elif cls.schema[elem]["sqltype"].lower() == "enum":
+                            #Column('some_enum', ENUM('a', 'b', 'c', name='myenum'))
+                            setattr(cls, elem, Column(elem, Enum(",".join(cls.schema[elem]["allowed"]))))
                     else:    
                         if "maxlength" in cls.schema[elem]:
                             setattr(cls, elem, Column(elem, String(length=cls.schema[elem]["maxlength"]), **sql))
                         else:
                             if "allowed" in cls.schema[elem]:
                                 strmax = max(cls.schema[elem]["allowed"], key=len)
-                                print("setting max stringlength to: "+ str(len(strmax)))
+                                print(f"setting max stringlength for FIELD:{elem} to: "+ str(len(strmax)))
                                 setattr(cls, elem, Column(elem, String(length=len(strmax)), **sql))
                             else:
                                 setattr(cls, elem, Column(elem, String, **sql))
@@ -527,7 +688,7 @@ class powDecNew():
                 #print("  .. removing the schema (raw) sql key(s)")
                 cls.schema[elem].pop("sql", None)
                 cls.schema[elem].pop("sqltype", None)
-        
+                cls.setup_sql_schema_done = True
             return cls
         return decorator
 

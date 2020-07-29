@@ -80,8 +80,8 @@ def main():
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", category=sa_exc.SAWarning)
 
-        alembic_cfg = Config(os.path.join(os.path.dirname(__file__), "alembic.ini"))
-        
+        #alembic_cfg = Config(os.path.join(os.path.dirname(__file__), "alembic.ini"))
+        alembic_cfg = Config(database["sql"]["alembic.ini"])
         # show the current version
         if args.current:
             print(50*"-")
