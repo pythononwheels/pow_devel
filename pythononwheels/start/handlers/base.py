@@ -364,7 +364,8 @@ class BaseHandler(tornado.web.RequestHandler):
             # changes from pow.
             #self.application.log_request(self, message="Sending pure data: {}".format(data))
             # if  pure AND format are given, try to convert to the given format.
-            odata={ "data" : data, "message" : message }
+            #odata={ "data" : data, "message" : message }
+            odata=data
             if format:
                 try:
                     encoder = cfg.myapp["encoder"][format]

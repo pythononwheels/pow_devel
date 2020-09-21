@@ -8,7 +8,7 @@
 
 import sys
 import pytest
-
+import time
 # possible sys.platform results:
 # http://stackoverflow.com/questions/446209/possible-values-from-sys-platform
 
@@ -32,7 +32,7 @@ class TestClass:
         p = Process(target={{appname}}.server.main)
         p.start()
         testurl=cfg.server_settings["protocol"] + cfg.server_settings["host"] + ":" + str(cfg.server_settings["port"]) + "/test/12"  
-
+        time.sleep(10)
         r = requests.get(testurl)
         p.terminate()
         assert int(r.text)==12

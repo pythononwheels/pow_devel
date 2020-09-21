@@ -10,10 +10,11 @@ import datetime
 
 BASEDIR=os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
 DATADIR=os.path.join(BASEDIR, "data")
+CERTDIR=os.path.join(DATADIR, "certs")
 LOGDIR=os.path.join(BASEDIR, "log")
 
 server_settings = {
-    "protocol"          :   "http://",
+    "protocol"          :   "http://",      #changed automatically to https depending on ssl: True or False
     "host"              :   "localhost",
     "port"              :   8080,
     "debug"             :   True,
@@ -22,14 +23,18 @@ server_settings = {
     "IOLoop.set_blocking_log_threshold" : 0, 
     "logging"           :   True,
     "analytics_logging" :   False,
-    "https"             :   False,
     "template_path"     :   os.path.join(BASEDIR, "views"),
     "static_url_prefix" :   "/static/",
     "static_path"       :   os.path.join(BASEDIR, "static"),
     "login_url"         :   "/login",
     "xsrf_cookies"      :   False,
     #"log_function"      :   you can give your own log function here.
-    "cookie_secret"     :   "{{cookie_secret}}"
+    "cookie_secret"     :   "{{cookie_secret}}",
+    "ssl"               :   False,
+    "ssl_options"       :   {
+        "certfile"  :   os.path.abspath(os.path.join(CERTDIR, "localhost.crt")),
+        "keyfile"   :   os.path.abspath(os.path.join(CERTDIR, "localhost.key"))
+    }
 }
 
 templates = {
