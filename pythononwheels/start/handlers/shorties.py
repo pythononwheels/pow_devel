@@ -74,3 +74,18 @@ class ErrorHandler(PowHandler):
         return self.error( template="404.tmpl", http_status=404  )
 
 
+# @app.add_route('/image/upload', dispatch={"post" : "upload"})
+# class ImageUploadSample(PowHandler):
+#     #
+#     # Sample file upload handler
+#     #
+#     def upload(self, testval=0):
+#         """
+#             handle image uploads
+#         """ 
+#         for field_name, files in self.request.files.items():
+#             print(field_name)
+
+#         print(str(self.request.files))
+#         file_info = self.get_post_file()
+#         print(str(file_info))

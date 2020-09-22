@@ -78,14 +78,14 @@ def build_all(c, name, path, force=False):
     if os.name == "nt":
         with c.cd(app_path):
             print(" .. creating a virtualenv")
-            c.run("virtualenv ./venv")
+            c.run("python -m venv ./venv")
             print(" .. Installing the PoW requirements")
             c.run("cd ./venv/Scripts && pip.exe install -r {}".format(
                 os.path.normpath(os.path.join("..\..", "requirements.txt"))))
     elif os.name == "posix":
         with c.cd(app_path):
             print(" .. creating a virtualenv")
-            c.run("virtualenv ./venv")
+            c.run("python -m venv ./venv")
         with c.cd(os.path.join(app_path, "venv/bin")):
             print(" .. Installing the PoW requirements")
             print("cwd: " + c.cwd)

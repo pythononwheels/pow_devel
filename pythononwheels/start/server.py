@@ -17,6 +17,7 @@ from {{appname}}.lib.application import Application, log_handler
 import logging
 import asyncio
 import sys
+import ssl
 
 # asyncio issue 
 # see: https://github.com/tornadoweb/tornado/issues/2751
@@ -94,14 +95,26 @@ def main(stdout=False):
             print("ROUTE {:2}: pattern: {:50}  handler: {:20} ".format( 
                str(idx), str(elem[0])[0:48], str(elem[1].__name__) ))
                         
-        print()
-        print(60*"-")
-        print("starting the PythonOnWheels server Server ")
-        print(60*"-")
-        print("visit: http://localhost:" + str(app_settings["port"]))
-        print("starting...")
-        
-    http_server = tornado.httpserver.HTTPServer(app)
+    
+    
+
+    if app_settings["ssl"]:
+        ssl_ctx = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+        ssl_ctx.load_cert_chain(app_settings["ssl_options"]["certfile"], app_settings["ssl_options"]["keyfile"])
+        app_settings["protocol"] = "https"
+        http_server = tornado.httpserver.HTTPServer(app,ssl_options = ssl_ctx)
+    else:
+        app_settings["protocol"] = "http"
+        http_server = tornado.httpserver.HTTPServer(app)
+
+    print()
+    print(60*"-")
+    print("starting the PythonOnWheels server Server ")
+    print(60*"-")
+    print(f"visit: {app_settings['protocol']}://{app_settings['host']}:{app_settings['port']}")
+    print("starting...")
+
+    
     http_server.listen(app_settings["port"])
     ioloop = tornado.ioloop.IOLoop.instance()
     if app_settings["IOLoop.set_blocking_log_threshold"]:

@@ -77,7 +77,8 @@ class Application(tornado.web.Application):
 
     #routing list to handle absolute route positioning
     handlers_tmp = []
-
+    #used to respond the final_routes as JSON per /admin/routes API call.
+    final_routes={}     
      
     def __init__(self):
         self.handlers = routes
@@ -343,9 +344,11 @@ class Application(tornado.web.Application):
                 routes = [(x[0]+ r"(?:/?\.\w+)?/?", x[1]) for x in routes]  
             #print("added the following routes: " + r)
             handlers=getattr(self.__class__, "handlers", None)
+            final_routes=getattr(self.__class__, "final_routes", None)
             try:
                 for elem in routes:
                     handlers.append( ((elem[0],cls, elem[1]), pos) )
+                    #final_routes[elem[0]]={""}
             except Exception as e:
                 print("Error in add_rest_routes")
                 raise e
