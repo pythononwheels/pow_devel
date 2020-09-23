@@ -14,7 +14,13 @@
                 </h1> 
             </div>
             <p class="lead">    
-                Hm, maybe you want to restart from here:  <a href="/">Home</a>
+                <p class="lead">    
+                    Hm, maybe you want to restart from 
+                    <ul>
+                        <li>Where you came from: <a href="{{referer}}">{{referer}}</a> </li>
+                        <li>or Home:  <a href="/">Home</a></li>
+                    </ul>
+                </p>
             </p>
             <div class="table-responsive">
                 <table class="table table-striped" style="table-layout: fixed; width: 100%">

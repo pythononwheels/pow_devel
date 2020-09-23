@@ -9,7 +9,11 @@
             <div class="seven wide column" >
                 <img src={{ static_url("images/404_4.png")}} width="75%"/>
                 <p class="ui header">    
-                    Hm, maybe you want to restart from here:  <a href="/">Home</a>
+                    Hm, maybe you want to restart from 
+                    <ul>
+                        <li>Where you came from: <a href="{{referer}}">{{referer}}</a> </li>
+                        <li>or Home:  <a href="/">Home</a></li>
+                    </ul>
                 </p>
             </div>
             

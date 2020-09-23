@@ -302,7 +302,7 @@ class BaseHandler(tornado.web.RequestHandler):
 
 
     def success(self, data=None, message="", pure=False, succ=None, prev=None,
-        http_status=200, format=None, encoder=None, header=None, model=None, raw_data=False, 
+        http_status=200, format=None, encoder=None, header=False, model=None, raw_data=False, 
         login=None, template=None, error=False, **kwargs):
         """
             Sending an Successful reply (HTTP_STATUS 2xx) back to the client.
@@ -487,7 +487,7 @@ class BaseHandler(tornado.web.RequestHandler):
         self.write(encoder.dumps(outdata))
 
 
-    def error(self,  data=None, message=None, pure=False,  succ=None, prev=None,
+    def error(self,  data=None, message=None, pure=False,  succ=None, prev=None, model=None,
         http_status=500, format=None, encoder=None, template=None, login=None, raw_data=False, **kwargs):
         """
             Sending an error (HTTP_CODE (3xx?),4xx, 5xx) back to the client.
@@ -554,22 +554,36 @@ class BaseHandler(tornado.web.RequestHandler):
         
         # encode the data to json.
         # the encoders convert the json to any requested output format then.
-        if not data == None and isinstance(data,self.model.__class__):
-            data = self.model.res_to_json(data)
+        #if not data == None and isinstance(data,self.model.__class__):
+        #    data = self.model.res_to_json(data)
         if cfg.server_settings["debug_print"]:
             print(" In base.error:")
             print("  .. data: " + str(data))
             print("  .. Encoding reply into: " + format)
         
+        # set the model. if there used to convert the data (if raw_data==False)
+        # also handed over to the view. Used there to iterate over  schema, keys, etc
+        if not model:
+            try:
+                model=self.model
+            except:
+                model=None
+
         if not raw_data:
             # if you want PoW to convert the data you have to have a model here.
             # either as instance attribute (also via class) or as an arguent to success(model=m)
-            if not data == None:
-                data = self.model.res_to_json(data)
-        if encoder:
-            encoder = encoder
-        else:
+            try:
+                if not data == None:
+                    # if data is a model class try to conver this model to json first.
+                    if hasattr(self, "model"):
+                        if isinstance(data,self.model.__class__):
+                            data = self.model.res_to_json(data)
+            except:
+                pass
+
+        if not encoder:
             encoder = cfg.myapp["encoder"][format]
+        
         if cfg.server_settings["debug_print"]:
             print("  .. Encoded reply: " + encoder.dumps({
                 "status"    : http_status,

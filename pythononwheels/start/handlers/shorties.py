@@ -68,10 +68,21 @@ class PyTestHandler(PowHandler):
         self.write("12")
     
 # this will be the last route since it has the lowest pos.
-@app.add_route(r".*", pos=0)
+@app.make_routes()
 class ErrorHandler(PowHandler):
-    def get(self):
-        return self.error( template="404.tmpl", http_status=404  )
+    @route(r".*", dispatch=["get", "post", "put", "delete"], pos=0)
+    def handle_all(self):
+        self.error( 
+            template="404.tmpl", 
+            http_status=404,
+            data={ 
+                "next"      : None,
+                "prev"      : self.request.headers.get("Referer"),
+                "message"   : "URL not found error"
+                }, 
+            message="URL not found error",
+            referer=self.request.headers.get("Referer")
+        )
 
 
 # @app.add_route('/image/upload', dispatch={"post" : "upload"})

@@ -32,7 +32,7 @@ class TestClass:
         p = Process(target={{appname}}.server.main)
         p.start()
         testurl=cfg.server_settings["protocol"] + cfg.server_settings["host"] + ":" + str(cfg.server_settings["port"]) + "/test/12"  
-        time.sleep(10)
+        time.sleep(5)
         r = requests.get(testurl)
         p.terminate()
         assert int(r.text)==12
