@@ -32,7 +32,7 @@ def generate_scaffold(handler_name, appname=None, view_type=None):
     #
     #rest_methods = ["show", "list", "page",  "new", "create", "edit", "update", "destroy"]
 
-    views = ["show", "list", "page", "edit","new"]
+    views = ["show", "list", "page", "edit", "new"]
     print(40*"-")
     print(" generating Scaffolds for: " + handler_name)
     print(" view_type: " +view_type)

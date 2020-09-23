@@ -29,7 +29,7 @@ class PowHandler(BaseHandler):
             # u=User()
             # u=u.find_one(User.id==user_id)
             # return u
-            raise NotImplementedError("USer Authentication not implemented, yet")
+            raise NotImplementedError("User Authentication not implemented, yet")
         else:
             # if authentication is disabled return a dummy guest user
             return True

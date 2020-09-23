@@ -82,6 +82,7 @@
                     {% set _type = model.schema[key]["type"] %}
                     {% if  _type == "string" %}
                         {% if  "allowed" in model.schema[key].keys() %}
+                            <!-- make it an option / select field -->
                             <div class="form-group row">
                                 <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
                                 <div class="col-10">
@@ -93,7 +94,18 @@
                                 </div>
                             </div>    
                         {% else %}
-                            {% if "maxlength" in model.schema[key].keys() and model.schema[key]["maxlength"] > 40 %}
+                            {% if str.lower(key) in ["password", "passwd", "pwd"] %}
+                            <!-- make it a password field -->
+                            <div class="form-group row">
+                                <!-- make it a standard text input field-->
+                                <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
+                                <div class="col-10">
+                                    <input  type="password" class="form-control" name="{{key}}" id="{{key}}" 
+                                        value="" />
+                                </div>
+                            </div>    
+                            {% elif "maxlength" in model.schema[key].keys() and model.schema[key]["maxlength"] > 40 %}
+                            <!-- make it a textarea fiting the maxlenght size -->
                             <div class="form-group row">
                                 <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
                                 <div class="col-10">
@@ -103,6 +115,7 @@
                             </div>    
                             {% else %}
                             <div class="form-group row">
+                                <!-- make it a standard text input field-->
                                 <label for="{{key}}" class="col-2 col-form-label">{{key}}</label>
                                 <div class="col-10">
                                     <input  type="text" class="form-control" name="{{key}}" id="{{key}}" 
