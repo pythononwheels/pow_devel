@@ -164,7 +164,7 @@ class TestClass:
         """ 
             check if validation works
         """ 
-        print(" .. Test SQL: model.upsert() and model.find()")
+        print(" .. Test SQL: model validation() method")
         from {{appname}}.models.tinydb.pow_test_model import PowTestModel
         m = PowTestModel()
         assert m.validate() == True
@@ -173,9 +173,9 @@ class TestClass:
     @pytest.mark.minimal
     def test_if_tinydb_model_validation_fails_successfully(self):
         """ 
-            check if validation fails if type is wrong
+            check if validation fails if constraint is violated 
         """ 
-        print(" .. Test SQL: model.upsert() and model.find()")
+        print(" .. Test SQL: modelcheck if validation fails if constraint is violated (maxlength)")
         from {{appname}}.models.tinydb.pow_test_model import PowTestModel
         m = PowTestModel()
         m.title="123456789123456789123456789123456789"
@@ -184,8 +184,8 @@ class TestClass:
     @pytest.mark.run(order=13)
     @pytest.mark.minimal
     def test_tinydb_model_type(self):
-        """ based on test_generate_model. Tests if a model can insert values 
-            DB sqlite by default.
+        """ 
+            Tests if generated Model has the right type
         """ 
         print(" .. Test model tinyDB is correct type")
         from {{appname}}.models.tinydb.pow_test_model import PowTestModel
@@ -194,7 +194,8 @@ class TestClass:
     
     @pytest.mark.run(order=14)
     def test_tinydb_insert_and_find(self):
-        """ based on test_generate_model. Tests if a model can insert values 
+        """ 
+            based on test_generate_model. Tests if a model can insert values 
             and can be found back.
         """ 
         print(" .. Test tinyDB: model.upsert() and model.find()")
@@ -207,6 +208,24 @@ class TestClass:
         assert res
         m.db.close()
         os.chdir(os.path.abspath(os.path.dirname(__file__)))
+    
+    #
+    # MongoDB tests
+    #
+    @pytest.mark.run(order=15)
+    @pytest.mark.minimal
+    def test_tinydb_generate_model(self):
+        """ 
+            test if MongoDB model is generated
+        """
+        print(" .. Test MongoDB generate_model")
+        import {{appname}}.generate_model as gm
+        import uuid
+        import os.path
+        ret = gm.generate_model(MODELNAME, "mongodb", appname="{{appname}}")
+        # generate model returns true in case of success
+        assert ret is True
+        assert os.path.exists(os.path.normpath("../models/mongodb/" + MODELNAME + ".py"))
 
 if __name__ == "__main__":
     

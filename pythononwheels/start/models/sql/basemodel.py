@@ -81,8 +81,10 @@ class SqlBaseModel(ModelObject):
         #else:    
         #    self.table = self.metadata.tables[pluralize(self.__class__.__name__.lower())]
         #self.__class__._tablename = self.table.name
-        self.table = self.metadata.tables[self.__class__.__tablename__]
-        
+        #
+        # see issue #42 => https://github.com/pythononwheels/pow_devel/issues/42
+        # self.table = self.metadata.tables[self.__class__.__tablename__]
+        self.table = self.metadata.tables[self._class_.__table_args__["schema"] + "." + self.__class__.__tablename__]
         #
         # if there is a schema (cerberus) set it in the instance
         #
@@ -154,6 +156,10 @@ class SqlBaseModel(ModelObject):
             Constructs a cerberus definition schema 
             from a given sqlalchemy column definition
             for this model.
+
+            Also called when DB reflection is used.
+            __table_args__ = {"extend_existing":True, "autoload":True,  ...} 
+
         """
         #print(" .. setup schema from sql for : " + str(self.class_name))
         for idx,col in enumerate(self.table.columns.items()):
@@ -161,8 +167,17 @@ class SqlBaseModel(ModelObject):
             # ('id', 
             #  Column('id', Integer(), table=<comments>, primary_key=True, 
             #     nullable=False))
-            col_type = col[1].type.python_type
+            #
+
+            # if / else added as of issue #42 https://github.com/pythononwheels/pow_devel/issues/42
             col_name = str(col[0])
+            if str.lower(colum.type) in ["uniqueidentifier", "uuid", "guid"]:
+                import uuid
+                col_type = uuid.UUID
+                self.schema[col_name] = { "type" : "uuid" }
+            else:
+                col_type = col[1].type.python_type
+            
             exclude_list = [elem for elem in self.schema.keys()]
             #exclude_list.append( ["id", "created_at", "last_updated"] )
             #print("    #" + str(idx) + "->" + str(col_name) + " -> " + str(col_type))
@@ -212,8 +227,9 @@ class SqlBaseModel(ModelObject):
                     # python: bytes
                     self.schema[col_name] = { "type" : "binary" }
             else:
-                #print("  .. skipping: " + col_name )
-                pass
+                if cfg.server_settings["debug_print"]:
+                    print("  .. skipping: " + col_name )
+                
                 
     # def init_from_json(self, data, ignore=False, autoconvert=True):
     #     """

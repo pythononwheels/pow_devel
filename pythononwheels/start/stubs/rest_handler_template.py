@@ -2,10 +2,12 @@
 from {{appname}}.handlers.powhandler import PowHandler
 from {{appname}}.models.{{model_type}}.{{handler_name}} import {{handler_model_class_name}} as Model
 from {{appname}}.conf.config import myapp, database
-from {{appname}}.lib.application import app
+from {{appname}}.lib.application import app, route, authenticated_with_role
 import simplejson as json
 import tornado.web
 
+
+#@app.make_routes()
 @app.add_rest_routes("{{handler_name}}")
 class {{handler_class_name}}(PowHandler):
     """
@@ -99,7 +101,7 @@ class {{handler_class_name}}(PowHandler):
             self.error(message="{{handler_name}}, error updating: " + str(m.id) + "msg: " + str(e), data=data_json, format="json")
 
 
-
+    #@authenticated_with_role("admin") => example: only admins can delete items. Make sure user-model has attribute "role"
     @tornado.web.authenticated
     def destroy(self, id=None):
         try:

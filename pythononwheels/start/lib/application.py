@@ -67,6 +67,51 @@ def route(route, dispatch=[], params=[], pos=-1):
         return method
     return decorator
 
+#
+# the authenticated with role check
+#
+def authenticated_with_role(role):
+    """Decorate methods with this to require that the user be logged in.
+        
+        AND to have a role attribute that equals the required role.
+
+        If the user is not logged in or the role does not match
+        , they will be redirected to the configured `login url <RequestHandler.get_login_url>`.
+        If you configure a login url with a query parameter, Tornado will
+        assume you know what you're doing and use it as-is.  If not, it
+        will add a `next` parameter so the login page knows where to send
+        you once you're logged in.
+
+        see: https://github.com/tornadoweb/tornado/blob/master/tornado/web.py#L3141
+
+        and: https://stackoverflow.com/questions/10176226/how-do-i-pass-extra-arguments-to-a-python-decorator
+        """
+    def authenticated( method ):
+        
+        required_role=str.lower(role)
+        @functools.wraps(method)
+        def wrapper( self, *args, **kwargs):
+            # role "any" will let any logged in user through.
+            # so it acts the same as @tornado.web.authenticated
+            if current_role :=  required_role != "any" and self.current_user.role != required_role:
+                if self.request.method in ("GET", "HEAD"):
+                    url = self.get_login_url()
+                    if "?" not in url:
+                        if urllib.parse.urlsplit(url).scheme:
+                            # if login url is absolute, make next absolute too
+                            next_url = self.request.full_url()
+                        else:
+                            assert self.request.uri is not None
+                            next_url = self.request.uri
+                        url += "?" + urlencode(dict(next=next_url))
+                    self.redirect(url)
+                    return None
+                raise HTTPError(403)
+            return method(self, *args, **kwargs)
+        return wrapper
+    return authenticated
+
+
 class Application(tornado.web.Application):
     #
     # handlers class variable is filled by the @add_route decorator.

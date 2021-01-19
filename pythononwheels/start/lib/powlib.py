@@ -6,7 +6,7 @@ import copy
 from sqlalchemy import Column, Integer, String, Date, DateTime, Float
 from sqlalchemy import Unicode, Text, Boolean, Numeric, BigInteger, LargeBinary
 import werkzeug.security
-from {{appname}}.conf.config import myapp 
+from {{appname}}.conf.config import myapp, server_settings
 from sqlalchemy.ext.declarative.api import DeclarativeMeta
 
 
@@ -18,8 +18,8 @@ def __setup_sql_schema(cls):
         # when already initiated (see powlib.PowBaseMeta.__init__)
         # we can skip the sql schema setup here.
         return cls
-    
-    print("__setup_sql_schema:" + cls.__name__.lower())
+    if server_settings["debug_print"]:
+        print("__setup_sql_schema:" + cls.__name__.lower())
     #
     # create a sqlalchemy model from the schema
     #

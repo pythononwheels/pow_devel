@@ -7,6 +7,7 @@ import {{appname}}.lib.encoders
 import os
 import logging
 import datetime
+import uuid
 
 BASEDIR=os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
 DATADIR=os.path.join(BASEDIR, "data")
@@ -86,7 +87,8 @@ database = {
         "boolean"   :   False,
         "datetime"  :   datetime.datetime.utcnow(),
         "dict"      :   {},
-        "binary"    :   None
+        "binary"    :   None,
+        "uuid"      :   None
 
     },
     "sql"   : {

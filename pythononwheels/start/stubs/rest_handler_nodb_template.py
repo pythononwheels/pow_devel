@@ -1,6 +1,6 @@
 from {{appname}}.handlers.powhandler import PowHandler
 from {{appname}}.conf.config import myapp
-from {{appname}}.lib.application import app
+from {{appname}}.lib.application import app, route, authenticated_with_role
 import tornado.web
 
 # sample data
