@@ -12,18 +12,14 @@ Flask
 Flask-Compress
 idna
 itsdangerous
-#Jinja2==2.10.1
 jsonschema
 junit2html
 Mako
 MarkupSafe
 marshmallow
 marshmallow-sqlalchemy
-#numpy==1.16.4
 packaging
-#pandas==0.24.2
 plotly
-#progressbar2
 py
 pymongo
 PyMySQL
@@ -47,4 +43,5 @@ tinydb-serialization
 tornado
 urllib3
 Werkzeug
+wheel
 xmltodict

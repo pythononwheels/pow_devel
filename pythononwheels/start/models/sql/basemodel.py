@@ -82,9 +82,12 @@ class SqlBaseModel(ModelObject):
         #    self.table = self.metadata.tables[pluralize(self.__class__.__name__.lower())]
         #self.__class__._tablename = self.table.name
         #
-        # see issue #42 => https://github.com/pythononwheels/pow_devel/issues/42
+        # fix see issue #42 => https://github.com/pythononwheels/pow_devel/issues/42
         # self.table = self.metadata.tables[self.__class__.__tablename__]
-        self.table = self.metadata.tables[self._class_.__table_args__["schema"] + "." + self.__class__.__tablename__]
+        try:
+            self.table = self.metadata.tables[self.__class__.__table_args__["schema"] + "." + self.__class__.__tablename__]
+        except:
+            self.table = self.metadata.tables[self.__class__.__tablename__]
         #
         # if there is a schema (cerberus) set it in the instance
         #
@@ -169,9 +172,10 @@ class SqlBaseModel(ModelObject):
             #     nullable=False))
             #
 
+            # fix: issue 42
             # if / else added as of issue #42 https://github.com/pythononwheels/pow_devel/issues/42
             col_name = str(col[0])
-            if str.lower(colum.type) in ["uniqueidentifier", "uuid", "guid"]:
+            if str.lower(col.type) in ["uniqueidentifier", "uuid", "guid"]:
                 import uuid
                 col_type = uuid.UUID
                 self.schema[col_name] = { "type" : "uuid" }

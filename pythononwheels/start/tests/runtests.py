@@ -13,7 +13,11 @@ import {{appname}}.conf.config as cfg
 # http://stackoverflow.com/questions/446209/possible-values-from-sys-platform
 SPACES=90
 
-if __name__ == "__main__":
+def prep():
+    """
+        doing some preparations before running the tests
+
+    """
     migs_before=os.listdir(os.path.join("..", "migrations/versions"))
     # save the old sqlite db 
     dbname=cfg.database["sql"]["dbname"]
@@ -33,6 +37,11 @@ if __name__ == "__main__":
         backed_up_tinydb=True
     except:
         print(" no tinyDB so far")
+
+def run():
+    """
+        calling the actual test set
+    """
     print(SPACES*"-")
     print(" running pow Tests on: " + sys.platform)
     print(" ... ")
@@ -46,12 +55,22 @@ if __name__ == "__main__":
     else:
         # OLD: ret = pytest.main(["--junitxml=result.xml", "pow_tests.py"])
         ret = pytest.main([
-            "--html=../views/testreport.html", "--self-contained-html", "pow_tests.py",
+            "--html=../views/testreport.html", "--self-contained-html",
             '-c', 'pytest.ini'
         ])
     
     print(" Failures: " +str(ret))
     print()
+    
+    print("  .. done.")
+    print(SPACES*"*")
+    print("  To see the test results run the server ad go to localhost:8080/testresults ")
+    print(SPACES*"*")
+
+def cleanup():
+    """
+        cleaning up temp test stuff
+    """
     print(SPACES*"*")
     print("  cleaning up:")
     print(SPACES*"*")
@@ -114,7 +133,9 @@ if __name__ == "__main__":
     #    runner.run([os.path.join(curr_path,"result.xml"), os.path.join(curr_path,"../views/result.html")])
     #except Exception as e:
     #    print(e)
-    print("  .. done.")
-    print(SPACES*"*")
-    print("  To see the test results run the server ad go to localhost:8080/testresults ")
-    print(SPACES*"*")
+
+if __name__ == "__main__":
+    prep()
+    run()
+    cleanup()
+   
