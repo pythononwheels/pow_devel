@@ -60,10 +60,12 @@ class SqlBaseModel(ModelObject):
         super().init_on_load()
         
         self.class_name = self.__class__.__name__.capitalize()
-        from marshmallow_sqlalchemy import ModelSchema
+        from marshmallow_sqlalchemy import ModelSchema, ModelConverter
         cls_meta=type("Meta", (object,),{"model" : self.__class__})
         
-        jschema_class = type(self.class_name+'Schema', (ModelSchema,),
+        #jschema_class = type(self.class_name+'Schema', (ModelSchema,),
+        # fix issue42:
+        jschema_class = type(self.class_name+'Schema',(ModelConverter,),#modelSchema,),
                 {
                     "Meta": cls_meta,
                     "model" : self.__class__,
@@ -175,7 +177,7 @@ class SqlBaseModel(ModelObject):
             # fix: issue 42
             # if / else added as of issue #42 https://github.com/pythononwheels/pow_devel/issues/42
             col_name = str(col[0])
-            if str.lower(col.type) in ["uniqueidentifier", "uuid", "guid"]:
+            if str.lower(str(col[1].type)) in ["uniqueidentifier", "uuid", "guid"]:
                 import uuid
                 col_type = uuid.UUID
                 self.schema[col_name] = { "type" : "uuid" }

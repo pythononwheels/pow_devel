@@ -37,8 +37,18 @@ def prep():
         backed_up_tinydb=True
     except:
         print(" no tinyDB so far")
+    
+    return {
+        "migs_before" : migs_before,
+        "dbname" : dbname,
+        "backup_path" : backup_path,
+        "backed_up_sqlite" : backed_up_sqlite,
+        "dbname_tiny" : dbname_tiny,
+        "backup_path_tiny" : backup_path_tiny,
+        "backed_up_tinydb" : backed_up_tinydb
+    }
 
-def run():
+def run(conf):
     """
         calling the actual test set
     """
@@ -66,8 +76,11 @@ def run():
     print(SPACES*"*")
     print("  To see the test results run the server ad go to localhost:8080/testresults ")
     print(SPACES*"*")
+    conf["testresult"] = ret
+    return conf
 
-def cleanup():
+
+def cleanup(conf):
     """
         cleaning up temp test stuff
     """
@@ -76,7 +89,7 @@ def cleanup():
     print(SPACES*"*")
     print("  .. removing the Test migrations")
     migs_after=os.listdir(os.path.join("..", "migrations/versions"))
-    del_migs=list(set(migs_after) - set(migs_before))
+    del_migs=list(set(migs_after) - set(conf["migs_before"]))
     print("    .. Migrationss to delete: {}".format(str(del_migs)))
     for elem in del_migs:
         try:
@@ -91,11 +104,11 @@ def cleanup():
     print("  removing the Test DBs")
     print(SPACES*"-")
     try:
-        os.remove(dbname)
+        os.remove(conf["dbname"])
     except Exception as e:
         print(e)
     try:
-        os.remove(dbname_tiny)
+        os.remove(conf["dbname_tiny"])
     except Exception as e:
         print(e)
     print("  .. done.")
@@ -105,16 +118,16 @@ def cleanup():
     print(SPACES*"-")
     print("  restoring the original DBs")
     print(SPACES*"-")
-    if backed_up_sqlite:
-        print("  .. I save your sqlite DB to: {}".format(backup_path))
-        print("    .. restoring it now ..... back to: {}".format(dbname))
-        shutil.copy(backup_path, dbname)
+    if conf["backed_up_sqlite"]:
+        print("  .. I save your sqlite DB to: {}".format(conf["backup_path"]))
+        print("    .. restoring it now ..... back to: {}".format(conf["dbname"]))
+        shutil.copy(conf["backup_path"], conf["dbname"])
     else:
         print("  .. You did not have a sqlite DB so nothing to restore")
-    if backed_up_tinydb:
-        print("  .. I save your tinyDB to: {}".format(backup_path_tiny))
-        print("    .. restoring it now ..... back to: {}".format(dbname_tiny))
-        shutil.copy(backup_path_tiny, dbname_tiny)
+    if conf["backed_up_tinydb"]:
+        print("  .. I save your tinyDB to: {}".format(conf["backup_path_tiny"]))
+        print("    .. restoring it now ..... back to: {}".format(conf["dbname_tiny"]))
+        shutil.copy(conf["backup_path_tiny"], conf["dbname_tiny"])
     else:
         print("  .. You did not have a tinyDB so nothing to restore")
     print(SPACES*"-")
@@ -135,7 +148,7 @@ def cleanup():
     #    print(e)
 
 if __name__ == "__main__":
-    prep()
-    run()
-    cleanup()
+    conf = prep()
+    conf = run(conf)
+    conf = cleanup(conf)
    

@@ -34,6 +34,9 @@ if sqldb["port"]:
     conn_str += ":" +str(sqldb["port"]) 
 if sqldb["dbname"]:
     conn_str += "/" + sqldb["dbname"]
+# optional:
+if "driver" in sqldb:
+    conn_str += "?driver=" + sqldb["driver"]
 
 engine = create_engine(conn_str, echo=False)
 metadata = MetaData(engine)

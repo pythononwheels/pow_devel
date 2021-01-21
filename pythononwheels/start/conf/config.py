@@ -104,7 +104,7 @@ database = {
         "port"      :   None,     
         "user"      :   None,     
         "passwd"    :   None,
-        "enabled"   :   False            
+        "enabled"   :   True            
         #
         # this is an example for Postgres (psycopg2 driver) you can use your preferred driver of course 
         #     
@@ -122,9 +122,20 @@ database = {
         # "dbname"    :   "test",           # just a name for non file based DBs
         # "host"      :   "127.0.0.1",     
         # "port"      :   3306,     
-        # "user"      :   "<you db user here>",
+        # "user"      :   "<your db user here>",
         # "passwd"    :   "<your db pwd here>",
-        # "enabled"   :   False              
+        # "enabled"   :   False    
+        # 
+
+        # # this is an example for MSSQL / pyodbc
+        # "type"      :   "mssql+pyodbc",
+        # "dbname"    :   "<your dbname here>",        # just a name for non file based DBs
+        # "host"      :   "127.0.0.1",     
+        # "port"      :   1433,     
+        # "user"      :   "<your db user here>",
+        # "passwd"    :   "<your db pwd here>",
+        # "driver"    :   "ODBC Driver 17 for SQL Server", # adapt to the driver you installed
+        # "enabled"   :   True                     
 
     },
     "tinydb" : {
