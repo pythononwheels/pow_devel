@@ -10,7 +10,7 @@ from {{appname}}.lib.powlib import PowBaseMeta
 
 #@relation.has_many("<plural_other_models>")
 @relation.setup_sql_schema()
-class Uidtest(Base, metaclass=PowBaseMeta):
+class {{model_class_name}}(Base, metaclass=PowBaseMeta):
     
     schema = {}
     

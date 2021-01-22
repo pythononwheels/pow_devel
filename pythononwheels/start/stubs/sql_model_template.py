@@ -27,6 +27,7 @@ class {{model_class_name}}(Base, metaclass=PowBaseMeta):
     __tablename__ = "{{model_name_plural}}"
     
     # if you dont want to use the pow schema extension, set this to: False
+    # when using reflection you probably want to set this to False. 
     _use_pow_schema_attrs= True
 
     # define class attributes/variables here that should be included in to_dict() 

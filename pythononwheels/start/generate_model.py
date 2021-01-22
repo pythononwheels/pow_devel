@@ -15,7 +15,7 @@ def camel_case(name):
     """
     return "".join([x.capitalize() for x in name.split("_")])
 
-def generate_model(model_name=None, model_type=None, appname=None):
+def generate_model(model_name=None, model_type=None, appname=None, reflect=False):
     """ generates a small model with the given modelname
         also sets the right db and table settings and further boilerplate configuration.
         Template engine = tornado.templates
@@ -37,13 +37,18 @@ def generate_model(model_name=None, model_type=None, appname=None):
         #
         ofilePath = os.path.join(templates["model_path"], model_type)
         ofile = open(os.path.join(ofilePath, model_name+".py"), "wb")
-        res = loader.load(model_type + "_model_template.py").generate( 
+        
+        filename = model_type + "_model_template.py"
+        if str.lower(model_type) == "sql" and reflect:
+            filename = "sql_model_reflection_template.py"
+        
+        res = loader.load(filename).generate( 
             model_name=model_name, 
             model_name_plural=model_name_plural, 
             model_class_name=model_class_name,
             appname=appname,
             model_type=model_type
-            )
+        )
         ofile.write(res)
         ofile.close()
     except:
@@ -63,6 +68,10 @@ def main():
     parser.add_argument('-t', "--type", action="store", 
                         dest="type", help='-d dbtype   -> Example: -d sql  OR -d tinydb ...',
                         default="sql", required=True)
+                    
+    parser.add_argument('-r', "--reflect", action="store_true", 
+                        dest="reflect", help="-r | --reflect to generate a model prepared for SQL DB reflection. ",
+                        default=False, required=False)
     #
     # db type
     # 
@@ -76,7 +85,7 @@ def main():
     #print("all args: ", args)
     #print(dir(args))
     #print("pluralized model name: ", pluralize(args.name))
-    generate_model(args.name, args.type, appname="{{appname}}")
+    generate_model(model_name = args.name, model_type = args.type, appname="{{appname}}", reflect=args.reflect)
 
 if __name__ == "__main__":
     main()
