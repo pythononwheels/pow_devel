@@ -1,0 +1,114 @@
+{% extends "base.bs4" %}
+
+{% block include_css %}
+    <!-- include your css stylesheets here -->
+
+    <!--link href="{{static_url("css/prism.css")}}" rel="stylesheet" /-->
+    <link href="{{static_url("css/highlight-styles/hopscotch.css")}}" rel="stylesheet" />
+   
+    
+{% end %}
+
+{% block view_css %}
+    <style>
+        /* add styles for this view here */
+    </style>
+
+{% end %}
+
+{% block content %}
+    
+    <!-- 
+        *************
+        the cli 
+        *************
+    -->
+    <div class="container" id="cli_div">
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-lg-7">
+                <div class="input-group">  
+                    <input type="text" class="form-control" name="input_cli" id="input_cli"
+                        data-toggle="tooltip" data-placement="top">
+                    <span class="input-group-btn">
+                            <button class="btn btn-success btn-sm btn-cli" id="fire_cli"><i class="fas fa-chevron-right"></i></button>
+                    </span>
+                    <span class="input-group-btn">
+                        <button class="btn btn-info btn-sm btn-cli" id="help_cli"><i class="fas fa-question-circle"></i></button>
+                    </span>
+                </div>
+                <div class="" style="width: 100%; overflow-y: auto !important;
+                            overflow-x: auto !important; max-height: 850px">
+                    <pre>
+                        <code id="feedback_cli"> </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="card scroll_card" id="help_card" style="width: 100%;">
+                    <div class="card-body">
+                        <h5 class="card-title" id="help_card_title">Adapted Help</h5>
+                        <h6 class="card-subtitle mb-2 text-muted" id="help_card_subtitle">[Patterns], Sections</h6>
+                        <p class="card-text" id="help_card_text">For Redis commands</p>
+                        <p class="card-text" id="help_card_details"> 
+                            And the full help text details with examples will be displayed here when you select a command 
+                            from the autocomplete list...
+                        </p>
+                        <a href="https://redis.io/commands" class="card-link" id="help_card_link">
+                           ..all commands</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% end %}
+
+{% block include_js %}
+    <!--Include your js libs here -->
+{% end %}
+
+{% block view_js %}
+    <script>
+        
+    var clientId = generateUUID();
+
+	// 
+	// open the websocket
+	//
+    var loc = window.location, new_uri;
+	if (loc.protocol === "https:") {
+	    new_uri = "wss:";
+	} else {
+	    new_uri = "ws:";
+	}
+	new_uri += "//" + loc.host + "/websocket";
+	console.log(new_uri);
+    var ws = new WebSocket(new_uri);
+    var current_connection = "{{connection_id}}";
+
+    ws.onopen = function() {
+        data={
+            "client_id"     : clientId,
+            "connection_id" : current_connection,
+            "method"        : "welcome",
+            "data"          : "hello world."
+        }
+
+        ws.send(JSON.stringify(data));
+    };
+
+    ws.onmessage = function (evt) {
+        //
+        // checking the message type and 
+        // generate the appropriate output        
+        data=JSON.parse(evt.data);
+        console.log("I received: " + JSON.stringify(data, null, 2));
+        console.log( data["data"]);
+        // if info 
+        console.log("I received: data['type'] :" + data["type"])
+        
+    };
+        
+    </script>
+
+{% end %}
