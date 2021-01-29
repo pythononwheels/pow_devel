@@ -51,9 +51,7 @@
 {% include footer.spc %}
 
 <script src="{{ static_url("js/jquery.min.js")}}"></script>
-<script src="{{ static_url("sui/components/visibility.js")}}"></script>
-<script src="{{ static_url("sui/components/sidebar.js")}}"></script>
-<script src="{{ static_url("sui/components/transition.js")}}"></script>
+<script async defer src="https://buttons.github.io/buttons.js"></script>
 
 <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 <!-- included view javascript files go here -->
