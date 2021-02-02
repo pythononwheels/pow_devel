@@ -2,8 +2,12 @@
 from {{appname}}.handlers.powwshandler import PowWsHandler
 import simplejson as json
 import datetime
-from {{appname}}.config import myapp
+from {{appname}}.conf.config import myapp, database
+from {{appname}}.lib.application import app, route
 
+
+@app.add_route(r"/websocket", dispatch={"ws" : None})
+@app.make_routes()
 class {{handler_class_name}}(PowWsHandler):
     """ 
         This is an example WebSocket Handler.

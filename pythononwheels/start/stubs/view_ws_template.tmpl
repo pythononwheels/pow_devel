@@ -1,4 +1,4 @@
-{% extends "base.bs4" %}
+{% extends "base.spc" %}
 
 {% block include_css %}
     <!-- include your css stylesheets here -->
@@ -24,41 +24,8 @@
         *************
     -->
     <div class="container" id="cli_div">
-        <div class="row" style="margin-top: 20px;">
-            <div class="col-lg-7">
-                <div class="input-group">  
-                    <input type="text" class="form-control" name="input_cli" id="input_cli"
-                        data-toggle="tooltip" data-placement="top">
-                    <span class="input-group-btn">
-                            <button class="btn btn-success btn-sm btn-cli" id="fire_cli"><i class="fas fa-chevron-right"></i></button>
-                    </span>
-                    <span class="input-group-btn">
-                        <button class="btn btn-info btn-sm btn-cli" id="help_cli"><i class="fas fa-question-circle"></i></button>
-                    </span>
-                </div>
-                <div class="" style="width: 100%; overflow-y: auto !important;
-                            overflow-x: auto !important; max-height: 850px">
-                    <pre>
-                        <code id="feedback_cli"> </code>
-                    </pre>
-                </div>
-            </div>
-            <div class="col-lg-5">
-                <div class="card scroll_card" id="help_card" style="width: 100%;">
-                    <div class="card-body">
-                        <h5 class="card-title" id="help_card_title">Adapted Help</h5>
-                        <h6 class="card-subtitle mb-2 text-muted" id="help_card_subtitle">[Patterns], Sections</h6>
-                        <p class="card-text" id="help_card_text">For Redis commands</p>
-                        <p class="card-text" id="help_card_details"> 
-                            And the full help text details with examples will be displayed here when you select a command 
-                            from the autocomplete list...
-                        </p>
-                        <a href="https://redis.io/commands" class="card-link" id="help_card_link">
-                           ..all commands</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        Hello Websocket container.
+
     </div>
 
 {% end %}
@@ -69,7 +36,7 @@
 
 {% block view_js %}
     <script>
-        
+
     var clientId = generateUUID();
 
 	// 
@@ -81,6 +48,10 @@
 	} else {
 	    new_uri = "ws:";
 	}
+    //
+    // adapt this to your websocket handler's route.
+    // for the generated example this is: /websocket
+    //
 	new_uri += "//" + loc.host + "/websocket";
 	console.log(new_uri);
     var ws = new WebSocket(new_uri);
