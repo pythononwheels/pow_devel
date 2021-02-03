@@ -17,7 +17,7 @@ def camel_case(name):
     """
     return "".join([x.capitalize() for x in name.split("_")])
 
-def generate_handler(handler_name, model_type, rest, appname=None):
+def generate_handler(handler_name, model_type, rest=False, websocket=False, appname=None):
     """ 
         generates a small handler
     """
@@ -41,6 +41,10 @@ def generate_handler(handler_name, model_type, rest, appname=None):
             template_file =  "rest_handler_nodb_template.py"
         else:
             template_file = "rest_handler_template.py"
+    elif websocket:
+        # this is going to be a websocket handler. 
+        print("... WebSocket Handler")
+        template_file =  "ws_handler_template.py"
     else:
         print("... SIMPLE Handler")
         # this will generate a simple handler with only two example routes and actions.
@@ -74,11 +78,16 @@ def main():
     # db type
     # 
     parser.add_argument('-t', "--type", action="store", 
-                        dest="type", help="-t type (" + "|| ".join(cfg.database.keys()) + " || none) default=none",
+                        dest="type", 
+                        help="-t type (" + "|| ".join(cfg.database.keys()) + " || none) default=none",
                         default="none", required=False)
     
     parser.add_argument('-r', "--rest", action="store_true", 
                         dest="rest", help="-r | --rest to generate a handler with full rest routes and actions. ",
+                        default=False, required=False)
+    
+    parser.add_argument('-ws', "--websocket", action="store_true", 
+                        dest="websocket", help="-ws | --websocket to generate a websocket handler. ",
                         default=False, required=False)
     
     args = parser.parse_args()
@@ -88,7 +97,8 @@ def main():
     #print("all args: ", args)
     #print(dir(args))
     print("CamelCased handler name: ", camel_case(args.name))
-    generate_handler(args.name, args.type, args.rest, appname="{{appname}}")
+    generate_handler(args.name, args.type, rest=args.rest, 
+        websocket=args.websocket, appname="{{appname}}")
 
 if __name__ == "__main__":
     main()

@@ -12,7 +12,7 @@
   <!-- Site Properties -->
   <title>Homepage - Semantic</title>
   <link rel="shortcut icon" type="image/x-icon" href="{{ static_url("images/pow_favicon-16x16.png")}}">
-  <link rel="stylesheet" type="text/css" href="{{ static_url("spectre/spectre.css")}}">
+  <link rel="stylesheet" type="text/css" href="{{ static_url("css/spectre/spectre.css")}}">
   
   
   <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++ -->

@@ -490,7 +490,7 @@ class Application(tornado.web.Application):
     
     # 
     #
-    # the direct route decorator
+    # the direct class route decorator
     #
     def add_route(self, route, dispatch={}, pos=-1):
         """
@@ -524,7 +524,11 @@ class Application(tornado.web.Application):
                 fin_route = pattern
                 # convert the HTTP Methods in dispatch to lowercase
                 dispatch_lower=dict((k.lower(), v) for k,v in dispatch.items())
-                route_tuple = (fin_route,cls, dispatch_lower)
+                if "ws" in dispatch_lower:
+                    #websocket => do not add http verbs
+                    route_tuple = (fin_route,cls)
+                else:
+                    route_tuple = (fin_route,cls, dispatch_lower)
                 handlers.append((route_tuple,pos))
             else:
                 ###################################
@@ -542,7 +546,11 @@ class Application(tornado.web.Application):
                     fin_route = route
                 # convert the HTTP Methods in dispatch to lowercase
                 dispatch_lower=dict((k.lower(), v) for k,v in dispatch.items())
-                route_tuple = (fin_route,cls, dispatch_lower)
+                if "ws" in dispatch_lower:
+                    #websocket => do not add http verbs
+                    route_tuple = (fin_route,cls)
+                else:
+                    route_tuple = (fin_route,cls, dispatch_lower)
                 #route_tuple = (fin_route,cls, dispatch)
                 handlers.append((route_tuple,pos))
             #print("handlers: " + str(self.handlers))
