@@ -91,9 +91,9 @@ def authenticated_with_role(role):
         required_role=str.lower(role)
         @functools.wraps(method)
         def wrapper( self, *args, **kwargs):
-            # role "any" will let any logged in user through.
+            # role =="any" will let any logged in user through.
             # so it acts the same as @tornado.web.authenticated
-            if current_role :=  required_role != "any" and self.current_user.role != required_role:
+            if required_role != "any" and self.current_user.role != required_role:
                 if self.request.method in ("GET", "HEAD"):
                     url = self.get_login_url()
                     if "?" not in url:
