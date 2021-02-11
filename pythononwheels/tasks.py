@@ -155,7 +155,15 @@ def clean(c, path="../..", name="testapp", force=False):
         print(" ..... deleted dir tree: {}".format(app_path))
         print(40*"-")
 
-    
+@task
+def py_versiontest(c):
+    """
+        - build the current wheel / dist
+        - run the container (image: pow-ubuntu-python-versiontest) with mounted dist volume
+        - container runs tests automatically
+    """
+    pass
+
 @task
 def testcliparams(c, name="def"):
     """
