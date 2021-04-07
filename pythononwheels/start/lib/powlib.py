@@ -7,7 +7,7 @@ from sqlalchemy import Column, Integer, String, Date, DateTime, Float
 from sqlalchemy import Unicode, Text, Boolean, Numeric, BigInteger, LargeBinary
 import werkzeug.security
 from {{appname}}.conf.config import myapp, server_settings
-from sqlalchemy.ext.declarative.api import DeclarativeMeta
+from sqlalchemy.orm.decl_api import DeclarativeMeta
 
 
 import collections

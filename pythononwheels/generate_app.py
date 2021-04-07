@@ -268,11 +268,11 @@ def main():
     #generate_app(args.name, args.force, args.path, dbtype=args.db, update_only=args.update_only)
     generate_app(args.name, force=args.force, outpath=args.path, update_only=args.update_only, view_type=args.view_type)
 
-    base = os.path.normpath(os.path.join(os.getcwd(), args.path))
-    apppath = os.path.normpath(os.path.join(base, args.name))
-    tpath = os.path.normpath(os.path.join(base, "migrations"))
+    #base = os.path.normpath(os.path.join( args.path))
+    #apppath = os.path.normpath(os.path.join(base, args.name))
+    #tpath = os.path.normpath(os.path.join(base, "migrations"))
     # create the versions directory
-    os.makedirs(os.path.normpath(os.path.join(tpath, "versions")), exist_ok=True)
+    #os.makedirs(os.path.normpath(os.path.join(tpath, "versions")), exist_ok=True)
     # create the views directory
     #os.makedirs(os.path.normpath(os.path.join(base, "migrations")), exist_ok=True)
     print()
