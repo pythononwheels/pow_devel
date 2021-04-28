@@ -43,6 +43,26 @@ class IndexdHandler(PowHandler):
         print(" Calling Indexhandler.get_story Indentifier: {}".format(str(identifier)))
         self.write("int: " + str(identifier))
 
+
+@app.make_routes()
+class DataHandler(PowHandler):
+    """ Sample DataHandler ..."""
+    @route(r"/jsondata/([0-9]+)", dispatch=["get"], params=["identifier"])
+    def index_identifier(self, identifier=None):
+        """
+            Example method with Method attached route and Flask style route
+        """
+        print(" Calling DataHandler.get_story Indentifier: {}".format(str(identifier)))
+        self.success( 
+            data= {
+                "satus"   : "Success",
+                "value "    : str(identifier),
+                "type"      : "integer",
+                "message"   : "This is just a test json response"
+            },
+            format="json"
+        )
+
 @app.make_routes()
 class PyTestHandler(PowHandler):
     @route(r"/testresults", dispatch=["get"])
