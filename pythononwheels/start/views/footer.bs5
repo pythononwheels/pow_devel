@@ -1,0 +1,15 @@
+
+<!-- Begin page footer -->
+<footer class="footer">
+    <div class="container text-center">
+      <!--div class="container" -->
+      <p class="text-muted">PythonOnWheels 2021 by khz. <a href="https://en.wikipedia.org/wiki/Open_source_model">Open source</a> AND 
+        <a href="https://en.wikipedia.org/wiki/Free_software">free</a> for any use. 
+        Licence: <a href="http://choosealicense.com/licenses/mit/">MIT Licence</a>.
+      </p>
+        </p>
+    <!--/div -->
+    </div>
+  </footer>
+  
+  <!-- End page footer -->

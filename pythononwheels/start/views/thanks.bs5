@@ -1,0 +1,40 @@
+{% extends "base.bs5" %}
+  {% block content %}
+    <div class="container">
+    <div class="m-t-1">
+        <h1>Thank you!</h1>
+      </div>
+      <p class="lead">
+      PythonOnWheels is based on the extraordinary well and reliable frameworks, modules and libraries below.
+      They are full of features from which PoW only uses a few but you can use all in raw mode. They are also 
+      all heavily supported by a strong community which gives PoW based Apps a very reliable, long living and evoluting 
+      future.
+      </p>
+     
+      <p class="lead">
+      <h2>Thank you all very much.</h2>
+      </p>
+      <div class="row">
+        <div class="col-md-2">
+          &nbsp;
+        </div>
+        <div class="col-md-8">
+        <img src="{{ static_url("images/thanks.png") }}" >
+        </div>
+        <div class="col-md-2">
+          &nbsp;
+        </div>
+      </div> <!-- row -->
+        <hr>
+         <p class="lead">
+          Even if this is in python a <strong> very big thank you </strong> goes to: <a href="http://rubyonrails.org/"> 
+          <img src="{{ static_url("images/rails-logo.svg") }}" width="220" height="78" alt="Ruby on Rails"></a>. 
+          This framework was and is really inspiring.
+          </p>  
+        <br>
+        <p class="lead">
+            Images and Icons:
+            
+        </p>
+  {% end %}
+

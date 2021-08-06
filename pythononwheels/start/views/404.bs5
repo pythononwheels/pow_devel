@@ -1,0 +1,62 @@
+{% extends "base.bs5" %}
+{% block content %}
+
+   
+    <div class="row">
+        <div class="col-md-4">
+                <img src={{ static_url("images/404_4.png")}} width="80%"/>
+        </div>
+        <div class="col-md-7">
+            
+            <div class="alert alert-danger top-buffer-60" role="alert">
+                <h1 class="alert-heading">
+                        Oh no HTTP 404! This URL cannot be Found.
+                </h1> 
+            </div>
+            <p class="lead">    
+                <p class="lead">    
+                    Hm, maybe you want to restart from 
+                    <ul>
+                        <li>Where you came from: <a href="{{referer}}">{{referer}}</a> </li>
+                        <li>or Home:  <a href="/">Home</a></li>
+                    </ul>
+                </p>
+            </p>
+            <div class="table-responsive">
+                <table class="table table-striped" style="table-layout: fixed; width: 100%">
+                    {% try %}
+                    <tr>
+                        <td width="20%"><b>Status:</b></td><td width="80%"> {{status}} </td>
+                    </tr>
+                    {% except %}
+                    {% end %}
+                    {% try %}
+                    <tr>
+                        <td width="20%"><b>Message:</b></td><td width="80%"> {{message}} </td>
+                    </tr>
+                    {% except %}
+                    {% end %}
+                    {% try %}
+                    <tr>
+                        <td width="20%"><b>Data:</b></td><td width="80%"> {{data}} </td>
+                    </tr>
+                    {% except %}
+                    {% end %}
+                    {% try %}
+                    <tr>
+                        <td width="20%"><b>URI:</b></td><td width="80%"> {{request.path}} </td>
+                    </tr>
+                    {% except %}
+                    {% end %}
+                    {% try %}
+                    <tr>
+                        <td width="20%"><b>Request:</b></td><td width="80%"> {{request}} </td>
+                    </tr>
+                    {% except %}
+                    {% end %}
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% end %}

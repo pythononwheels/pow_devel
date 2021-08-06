@@ -114,6 +114,8 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
     else:
         sqlite_path="Unknown system platform (" + sys.platform + "). Please set sqlite connection string yourself accordingly"
     
+    # this is just a default.
+    # create your own secret in a prod app.
     cookie_secret = uuid.uuid4()
     #print(skip_dirs)
     #x=input("press key to go on .... ")
@@ -252,15 +254,15 @@ def main():
 
     parser.add_argument("-t", "--type", 
         action="store", dest="view_type", default="bs4",
-        help="set the default view framework. (spectre.css = spc || semanticui = sui || bootstrap 4 = bs4 (default))")
+        help="set the default view framework. (spectre.css = spc || semanticui = sui || bootstrap 4 = bs4 (default) || bootstrap 5 = bs5)")
 
     
     args = parser.parse_args()
     #
     # show some args
     #
-    #print("all args: ", args)
-    #print(dir(args))
+    print("all args: ", args)
+    print(dir(args))
     #print("pluralized model name: ", pluralize(args.name))
     print(50*"-")
     print(" Generating your app: " + args.name)
@@ -268,8 +270,8 @@ def main():
     #generate_app(args.name, args.force, args.path, dbtype=args.db, update_only=args.update_only)
     generate_app(args.name, force=args.force, outpath=args.path, update_only=args.update_only, view_type=args.view_type)
 
-    #base = os.path.normpath(os.path.join( args.path))
-    #apppath = os.path.normpath(os.path.join(base, args.name))
+    base = os.path.normpath(os.path.join( args.path))
+    apppath = os.path.normpath(os.path.join(base, args.name))
     #tpath = os.path.normpath(os.path.join(base, "migrations"))
     # create the versions directory
     #os.makedirs(os.path.normpath(os.path.join(tpath, "versions")), exist_ok=True)

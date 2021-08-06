@@ -7,7 +7,7 @@ with open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(name='pythononwheels',
-      version="0.925.2",
+      version="0.925.4",
       description='The simple, quick and easy generative web framework for python',
       long_description=long_description,
       classifiers=[
@@ -48,7 +48,11 @@ setup(name='pythononwheels',
             "start/static/css/*",
             "start/static/css/highlight-styles/*",
             "start/static/css/spectre/*",
+            "start/static/css/bs4/*",
+            "start/static/css/bs5/*",
             "start/static/js/*",
+            "start/static/js/bs4/*",
+            "start/static/js/bs5/*",
             "start/static/images/*",
             "start/static/svg/*",
             "start/static/sui/*",

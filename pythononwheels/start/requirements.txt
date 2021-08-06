@@ -37,7 +37,7 @@ requests
 retrying
 simplejson
 six
-SQLAlchemy
+SQLAlchemy==1.4.10
 tinydb
 tinydb-serialization
 tornado
