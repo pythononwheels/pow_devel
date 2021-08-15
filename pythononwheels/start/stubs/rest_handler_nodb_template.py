@@ -12,7 +12,7 @@ data = [
     {"5" : "five", "name" : "name_5"},
     {"6" : "six", "name" : "name_6"},
     {"7" : "seven", "name" : "name_7"}
-}]
+]
 
 @app.add_rest_routes("{{handler_name}}")
 class {{handler_class_name}}(PowHandler):

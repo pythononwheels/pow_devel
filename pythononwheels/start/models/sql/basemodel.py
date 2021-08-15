@@ -60,7 +60,11 @@ class SqlBaseModel(ModelObject):
         super().init_on_load()
         
         self.class_name = self.__class__.__name__.capitalize()
-        from marshmallow_sqlalchemy import ModelSchema, ModelConverter
+        #from marshmallow_sqlalchemy import ModelSchema, ModelConverter
+        ## ModelSchema was removed from marshmallow_sqlalchemy and is not
+        ## needed in PythonOnWheels anymore.
+        ## see: https://github.com/marshmallow-code/marshmallow-sqlalchemy/pull/382
+        from marshmallow_sqlalchemy import ModelConverter
         cls_meta=type("Meta", (object,),{"model" : self.__class__})
         
         #jschema_class = type(self.class_name+'Schema', (ModelSchema,),
@@ -234,7 +238,7 @@ class SqlBaseModel(ModelObject):
                     self.schema[col_name] = { "type" : "binary" }
             else:
                 if cfg.server_settings["debug_print"]:
-                    print("  .. skipping: " + col_name )
+                    print("  .. basemodel.py => setup_schema_from_sql => skipping: " + col_name )
                 
                 
     # def init_from_json(self, data, ignore=False, autoconvert=True):

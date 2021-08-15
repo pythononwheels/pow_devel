@@ -65,7 +65,7 @@ transaction = session
 
 # session.commit() # commits u1 and u2
 
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base
 #from {{appname}}.models.sql.basemodel import SqlBaseModel
 from {{appname}}.models.sql.sqlmodel import SqlModel
 Base = declarative_base(cls=SqlModel, metadata=metadata)
