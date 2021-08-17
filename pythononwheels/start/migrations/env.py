@@ -59,7 +59,7 @@ def combine_metadata(*args):
     m = MetaData()
     for metadata in args:
         for t in metadata.tables.values():
-            t.tometadata(m)
+            t.to_metadata(m)
     return m
 
 # hand over the model class list to combine_metadata
