@@ -6,15 +6,16 @@ import {{appname}}.conf.config as cfg
 import shutil 
 
 @click.command()
-@click.option('--name', help='set the view name')
+@click.option('--name', help='set the view name', required=True)
 #@click.option('--base', default="base.bs4", help='set the base view ')
-#@click.option('--type', default="simple", help='simple skeleton or full template')
+@click.option('--type', type=click.Choice(["simple", "full", "websocket"], 
+                case_sensitive=False), default="simple", help='set the view type')
 @click.option('--dir', default=".", help='set the output directory (join(views_path,dir) )')
 #@click.option('--convstr', default=False, is_flag=True, help='try to convert strings to numbers first')
 #@click.option('--skipcol', multiple=True, help='skip a column by column name')
 
 
-def generate_view(name, dir):
+def generate_view(name, dir, type):
     """ 
         generates plain tmpl views
         simple (skeleton only)
@@ -29,7 +30,10 @@ def generate_view(name, dir):
     #print(" view_type: " + type)
     print(40*"-")
 
-    template_file =  os.path.join(cfg.templates["stubs_path"], "view_template.tmpl" )
+    if type == "simple":
+        template_file =  os.path.join(cfg.templates["stubs_path"], "view_template.tmpl" )
+    elif type == "websocket":
+        template_file =  os.path.join(cfg.templates["stubs_path"], "view_ws_template.tmpl" )
     #
     # copy to dest dir first
     #
