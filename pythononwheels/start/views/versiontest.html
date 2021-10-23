@@ -1,0 +1,52 @@
+
+<!-- change your base view as needed or delete the reference -->
+{% extends "base.bs4" %}
+
+{% block include_css %}
+    <!-- your view specific css includes here -->
+{% end %}
+
+{% block view_css %}
+    <!-- put your directly embedded view css here -->
+    <style>
+      
+    </style>
+
+{% end %}
+
+{% block content %}
+    <!-- your view's main content here -->
+    <div class="container">
+        <ul>
+            <li>
+                <a href="/static/testresults36.html">test results python 3.6</a>
+            </li>
+            <li>
+                <a href="/static/testresults37.html">test results python 3.7</a>
+            </li>
+            <li>
+                <a href="/static/testresults38.html">test results python 3.8</a>
+            </li>
+        </ul>
+        
+        
+    </div>  
+
+{% end %}
+
+{% block include_js %}
+    <!-- your view specific js includes here -->
+    
+{% end %}
+
+{% block view_js %}
+    <script>
+        
+        function view_docready(){    
+            // this will be automatically 
+            // called from the parent view's docready function.
+            
+        }
+    </script>
+
+{% end %}

@@ -3,33 +3,35 @@ import os
 
 here = os.path.abspath(os.path.dirname(__file__))
 
-with open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
+with open(os.path.join(here, "README.rst"), encoding="utf-8") as f:
     long_description = f.read()
 
-setup(name='pythononwheels',
-      version="0.925.51",
-      description='The simple, quick and easy generative web framework for python',
-      long_description=long_description,
-      classifiers=[
-        'Development Status :: 4 - Beta',
+setup(
+    name="pythononwheels",
+    version="0.925.52",
+    description="The simple, quick and easy generative web framework for python",
+    long_description=long_description,
+    classifiers=[
+        "Development Status :: 4 - Beta",
         "Environment :: Web Environment",
         "Intended Audience :: Developers",
-        'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python :: 3 :: Only',
+        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python :: 3 :: Only",
         "Topic :: Internet :: WWW/HTTP",
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
         "Topic :: Software Development :: Libraries :: Application Frameworks",
         "Topic :: Software Development :: Libraries :: Python Modules ",
-      ],
-      keywords='framework web development',
-      url='http://www.pythononwheels.org',
-      author='khz',
-      author_email='khz@tzi.org',
-      license='MIT',
-      packages=['pythononwheels'],
-      package_dir={'pythononwheels': 'pythononwheels'},
-      package_data={'pythononwheels': [
-            'start/*',
+    ],
+    keywords="framework web development",
+    url="http://www.pythononwheels.org",
+    author="khz",
+    author_email="khz@tzi.org",
+    license="MIT",
+    packages=["pythononwheels"],
+    package_dir={"pythononwheels": "pythononwheels"},
+    package_data={
+        "pythononwheels": [
+            "start/*",
             "start/data/*",
             "start/log/*",
             "start/database/*",
@@ -38,12 +40,12 @@ setup(name='pythononwheels',
             "start/handlers/*",
             "start/migrations/*",
             "start/migrations/versions/*",
-            "start/models/*", 
+            "start/models/*",
             "start/models/tinydb/*",
             "start/models/elastic/*",
             "start/models/sql/*",
             "start/models/mongodb/*",
-             "start/models/redis/*",
+            "start/models/redis/*",
             "start/static/*",
             "start/static/css/*",
             "start/static/css/highlight-styles/*",
@@ -69,15 +71,15 @@ setup(name='pythononwheels',
             "start/tests/*",
             "start/tools/*",
             "start/views/*",
-            "./update_conf.py"
-        ]},
-      install_requires=[
-        "tornado"
-      ],
-      entry_points={
-        'console_scripts': [
-            'generate_app = pythononwheels.generate_app:main',
+            "./update_conf.py",
         ]
-      },
-      #scripts=['bin/generate_app'],
-      zip_safe=False)
+    },
+    install_requires=["tornado"],
+    entry_points={
+        "console_scripts": [
+            "generate_app = pythononwheels.generate_app:main",
+        ]
+    },
+    # scripts=['bin/generate_app'],
+    zip_safe=False,
+)
