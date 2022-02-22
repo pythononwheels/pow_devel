@@ -111,9 +111,10 @@ class PowBaseMeta(DeclarativeMeta):
                 setattr(cls,"created_at",Column(DateTime, default=func.now()))
                 setattr(cls, "last_updated", Column(DateTime, onupdate=func.now(), default=func.now()))
             else:
-                print("not adding pow schema attrs")
-                print("creating sql-schema")
-                print("__setup_sql_schema:" + cls.__name__.lower())
+                if server_settings["debug_print"]:
+                    print("not adding pow schema attrs")
+                    print("creating sql-schema")
+                    print("__setup_sql_schema:" + cls.__name__.lower())
                 #
                 # create a sqlalchemy model from the schema
                 #
@@ -618,8 +619,8 @@ class powDecNew():
                     return cls
             except:
                 pass
-
-            print("__setup_sql_schema:" + cls.__name__.lower())
+            if server_settings["debug_print"]:
+                print("__setup_sql_schema:" + cls.__name__.lower())
             #
             # create a sqlalchemy model from the schema
             #
