@@ -34,7 +34,7 @@ def pow_json_serializer(obj):
     try:
         return str(obj)
     except:
-        raise TypeError ("Type not serializable" + str(ojb))
+        raise TypeError ("Type not serializable" + str(obj))
 
 class json_to_json:
     """
