@@ -1,8 +1,9 @@
-dash==1.6.0
+dash==2.4.1
 dash-core-components
 dash-html-components
 dash-renderer
 dash-table
 dash-daq==0.2.1
-pandas==0.24.2
-numpy==1.16.4
+pandas==1.4.2
+numpy==1.22.4
+Werkzeug==2.0.3
