@@ -6,4 +6,4 @@ dash-table
 dash-daq==0.2.1
 pandas==1.4.2
 numpy==1.22.4
-Werkzeug==2.0.3
+Werkzeug==2.2.3
