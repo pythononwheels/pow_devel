@@ -9,7 +9,7 @@ import os,sys
 import argparse
 
 @task(help={'name': "Name of the test application. Default = testapp"})
-def build(c, path="../..", name="testapp"):
+def generate_and_test(c, path="../..", name="testapp"):
     """
         Create a testapp from the current git version
             generate_app -n <name> -p <path>
@@ -56,11 +56,9 @@ def build(c, path="../..", name="testapp"):
         build_all(c,name, path)
 
 
-
-
 def build_all(c, name, path, force=False):
     """
-        the actual function that does the job
+        the actual function that does the job. 
     """
     print(40*"-")
     print(" starting the build and check...")
@@ -103,6 +101,9 @@ def build_all(c, name, path, force=False):
 
 @task
 def test(c,  path="../..", name="testapp"):
+    """
+        running test in testapp. Or any app given: path and name
+    """
     path=os.path.normpath(path)
     app_path=os.path.abspath(os.path.join(path, name))
     print("app_path: " + app_path)
@@ -125,6 +126,9 @@ def test(c,  path="../..", name="testapp"):
 
 @task
 def runserver(c, path="../..", name="testapp"):
+    """
+     running the pow server in testapp. Or any app given: path and name
+    """
     path=os.path.normpath(path)
     app_path=os.path.abspath(os.path.join(path, name))
     print("app_path: " + app_path)
@@ -156,19 +160,25 @@ def clean(c, path="../..", name="testapp", force=False):
         print(40*"-")
 
 @task
-def py_versiontest(c):
+def py_versiontest(c, path="../"):
     """
         - build the current wheel / dist
         - run the container (image: pow-ubuntu-python-versiontest) with mounted dist volume
         - container runs tests automatically
     """
-    pass
+    path = os.path.join(path, "testcontainer")
+    print(f"path: {path}")
+    with c.cd(path):
+        c.run("docker build")
 
 @task
-def testcliparams(c, name="def"):
+def testcliparams(c, name="PythonOnWheels" ):
     """
-        handing over cli arguments using --parameter_name=value
+        test parameter handover for invoke cli arguments using --parameter_name=value
         try:
                 invoke test --name="somethingelse"
     """
-    print(name)
+    print(f"hello {name}")
+    print(" try: invoke test --name='somethingelse' ")
+
+

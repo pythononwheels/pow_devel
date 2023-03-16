@@ -18,7 +18,7 @@ RUN apt-get -y install python3-pip
 RUN apt-get -y install python3-venv
 RUN apt-get -y install python3.6-venv
 RUN apt-get -y install python3.7-venv
-# python 3.8 is laready the default python3 in focal (20.04)
+# python 3.8 is already the default python3 in focal (20.04)
 RUN mkdir /devel
 RUN mkdir /results
 WORKDIR /devel
@@ -29,7 +29,6 @@ ARG POW_WHEEL
 COPY ./${POW_WHEEL} .
 # install the wheel
 RUN pip3 install ${POW_WHEEL}
-
 ENV PYTHONPATH=/devel
 
 #

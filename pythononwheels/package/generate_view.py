@@ -1,0 +1,52 @@
+import click
+import tornado.template as template
+import os.path
+#import timeit
+import {{appname}}.conf.config as cfg
+import shutil 
+
+@click.command()
+@click.option('--name', help='set the view name', required=True)
+#@click.option('--base', default="base.bs4", help='set the base view ')
+@click.option('--type', type=click.Choice(["simple", "full", "websocket"], 
+                case_sensitive=False), default="simple", help='set the view type')
+@click.option('--dir', default=".", help='set the output directory (join(views_path,dir) )')
+#@click.option('--convstr', default=False, is_flag=True, help='try to convert strings to numbers first')
+#@click.option('--skipcol', multiple=True, help='skip a column by column name')
+
+
+def generate_view(name, dir, type):
+    """ 
+        generates plain tmpl views
+        simple (skeleton only)
+        or full fledgded bootstrap or semantic
+    """
+    loader = template.Loader(cfg.templates["stubs_path"])
+    #
+    # generate the view
+    #
+    print(40*"-")
+    print(" generating view: " + name)
+    #print(" view_type: " + type)
+    print(40*"-")
+
+    if type == "simple":
+        template_file =  os.path.join(cfg.templates["stubs_path"], "view_template.tmpl" )
+    elif type == "websocket":
+        template_file =  os.path.join(cfg.templates["stubs_path"], "view_ws_template.tmpl" )
+    #
+    # copy to dest dir first
+    #
+    opath = os.path.normpath(os.path.join(cfg.templates["views_path"], str.lower(dir)))
+    # create the path if it does not exist
+    if not os.path.exists(opath):
+        os.makedirs(opath)
+    
+    ofile_name = os.path.join( opath, name + ".tmpl")
+    shutil.copy( template_file, ofile_name )
+ 
+    print("... created view: " + ofile_name)
+    print("...    -> using template: " + os.path.basename(template_file))
+
+if __name__ == "__main__":
+    generate_view()

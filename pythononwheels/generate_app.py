@@ -70,11 +70,9 @@ def copy_or_pump(
         print(" done!")
 
 
-def generate_app(
-    appname, force=False, outpath="..", dbtype="sql", update_only=False, view_type=None
-):
+def generate_app( appname, force=False, outpath="..", dbtype="sql", update_only=False, view_type=None ):
     """
-    generates the base PoW App enviroment
+        generates the base PoW App enviroment
     """
     print("  generating app:" + str(appname))
     import os, sys
@@ -170,12 +168,9 @@ def generate_app(
     # this is just a default.
     # create your own secret in a prod app.
     cookie_secret = uuid.uuid4()
-    # print(skip_dirs)
-    # x=input("press key to go on .... ")
     for dirname, dirs, files in os.walk(root):
         dirs[:] = [d for d in dirs if d not in skip_dirs]
-        # print(dirs)
-        # x=input("press key to go on .... ")
+
         for f in files:
             # skipping the exclude_files in update_only mode
             if not f in exclude_files:
@@ -183,15 +178,11 @@ def generate_app(
                 if file_extension in skip_extensions:
                     continue
                 print(f"   processing: {f:<40} ....", end=" ")
-                # print("  in: " + dirname)
                 path = Path(dirname)
                 index = path.parts.index("start")
                 opath = Path(outdir).joinpath(*path.parts[index + 1 :])
-                # print("  out: " + str(opath))
                 filename, file_extension = os.path.splitext(f)
-                # print("  filename: " + filename)
-                # print("  file ext: " + file_extension)
-                # print("  path.parts-1: " + path.parts[-1])
+
                 if path.parts[-1] in skip_dirs:
                     print(f"   skipped: {f} ...")
                 else:
@@ -229,7 +220,6 @@ def generate_app(
                         )
             else:
                 print("   skipped in update_only: " + str(f))
-    # print("   DB path: " + sqlite_path)
     #
     # rename the view file extension according the --view paramter
     #
@@ -281,8 +271,8 @@ def generate_app(
 
 def rename_extensions(folder, old_ext, new_ext, files=None):
     """
-    renames all file extension in the givben folder
-    from *.old_ext to *.new_ext
+        renames all file extension in the givben folder
+        from *.old_ext to *.new_ext
     """
     for filename in os.listdir(folder):
         infilename = os.path.join(folder, filename)
@@ -362,11 +352,7 @@ def main():
 
     base = os.path.normpath(os.path.join(args.path))
     apppath = os.path.normpath(os.path.join(base, args.name))
-    # tpath = os.path.normpath(os.path.join(base, "migrations"))
-    # create the versions directory
-    # os.makedirs(os.path.normpath(os.path.join(tpath, "versions")), exist_ok=True)
-    # create the views directory
-    # os.makedirs(os.path.normpath(os.path.join(base, "migrations")), exist_ok=True)
+
     print()
     # print(50*"-")
     if args.update_only:
