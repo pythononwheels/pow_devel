@@ -42,6 +42,6 @@ tinydb
 tinydb-serialization
 tornado
 urllib3
-Werkzeug
+Werkzeug==2.1.2
 wheel
 xmltodict
