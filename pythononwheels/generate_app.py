@@ -134,11 +134,6 @@ def generate_app(
             for l in os.listdir(os.path.join(root, "stubs"))
             if str.startswith(l, "view")
         ]
-        filelist += [
-            l
-            for l in os.listdir(os.path.join(root, "stubs"))
-            if str.startswith(l, "dash")
-        ]
         exclude_files.extend(filelist)
         print(f"API ONLY:")
         print(40 * "-")
