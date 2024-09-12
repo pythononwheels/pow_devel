@@ -82,7 +82,7 @@ def generate_app(
     base = os.path.normpath(outpath)
 
     print("  base for app: " + base)
-    root = os.path.join(os.path.dirname(os.path.abspath(__file__)), "start")
+    root = os.path.join(os.path.dirname(os.path.abspath(__file__)), "src")
     print("  root: " + root)
 
     outdir = os.path.normpath(os.path.join(base, appname))
@@ -144,7 +144,7 @@ def generate_app(
         print(40 * "-")
         print(f" .. skipping files:  {filelist}")
     #
-    # walk the root (/pow/start)
+    # walk the root (/pow/src)
     # and copy (for .py and .tmpl pump thru template engine first)
     # all files to the new app dir (appname)
     #
@@ -185,7 +185,7 @@ def generate_app(
                 print(f"   processing: {f:<40} ....", end=" ")
                 # print("  in: " + dirname)
                 path = Path(dirname)
-                index = path.parts.index("start")
+                index = path.parts.index("src")
                 opath = Path(outdir).joinpath(*path.parts[index + 1 :])
                 # print("  out: " + str(opath))
                 filename, file_extension = os.path.splitext(f)

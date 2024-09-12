@@ -23,4 +23,4 @@
 # (among others).
 
 # to make githubs linguist lib ignore the static folder
-pythononwheels/start/static/* linguist-vendored
+pythononwheels/src/static/* linguist-vendored

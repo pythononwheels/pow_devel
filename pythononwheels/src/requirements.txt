@@ -8,8 +8,8 @@ Click
 colorama
 dicttoxml
 dnspython
-Flask
-Flask-Compress
+#Flask
+#Flask-Compress
 idna
 itsdangerous
 jsonschema
